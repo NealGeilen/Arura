@@ -1,1 +1,16 @@
-/* Add here all your CSS customizations */
+.modal-content{
+    border-radius: 0;
+}
+.modal-icon > i{
+    font-size: 92px;
+}
+.modal-header{
+    border-radius: 0;
+}
+.modal-header .close{
+    text-shadow: none;
+    position: absolute;
+    color: black;
+    top: 20px;
+    right: 20px;
+}

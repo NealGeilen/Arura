@@ -1,39 +1,17 @@
 {
-  "Pages": {
-    "dashboard" : {
-      "Title" : "Dashboard",
-      "Dir": "dashboard",
-      "FileName" : "dashboard.php",
-      "Icon": "fa fa-home",
-      "Children": {}
-    },
-    "cms" : {
-      "Title" : "Cms",
-      "Dir": "",
-      "FileName" : "dashboard.php",
-      "Icon": "fa fa-home",
-      "Children": {
-        "pages" : {
-          "Title" : "Pagina's",
-          "Dir": "pages",
-          "FileName" : "dashboard.php",
-          "Icon": "fas fa-bars"
-        }
-      }
-    }
-  },
   "Js" : [
     "/assets/vendor/modernizr/modernizr.js",
     "/assets/vendor/jquery/jquery.js",
     "/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js",
     "/assets/vendor/bootstrap/js/bootstrap.js",
     "/assets/vendor/nanoscroller/nanoscroller.js",
-    "/assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.js",
-    "/assets/vendor/magnific-popup/magnific-popup.js",
-    "/assets/vendor/jquery-placeholder/jquery.placeholder.js",
     "/assets/js/theme.js",
     "/assets/js/theme.custom.js",
-    "/assets/js/theme.init.js"
+    "/assets/js/theme.init.js",
+    "/assets/js/Modals.js",
+    "/assets/vendor/bootstrap-notify/bootstrap-notify.js",
+    "/assets/js/Sections/Users.js",
+    "/assets/js/Sections/settings.js"
   ],
   "Css" : [
     "ttp://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light",
@@ -43,6 +21,7 @@
     "/assets/vendor/bootstrap-datepicker/css/datepicker3.css",
     "/assets/css/theme.css",
     "/assets/css/skins/default.css",
-    "/assets/css/theme-custom.css"
+    "/assets/css/theme-custom.css",
+    "https://fonts.googleapis.com/icon?family=Material+Icons"
   ]
 }

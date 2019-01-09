@@ -1,7 +1,7 @@
 <section class="panel">
     <header class="panel-heading">
         <div class="panel-actions">
-            <a href="#" class="far fa-plus-square"></a>
+            <a href="javascript:createUser()" class="far fa-plus-square"></a>
             <a href="#" class="fa fa-caret-down"></a>
         </div>
         <h2 class="panel-title">Gebruikers</h2>
@@ -30,12 +30,10 @@
                 <td class="td-actions text-right">
                     <button type="button" class="btn btn-primary btn-link btn-sm" onclick="callUser({$aUser.User_Id})">
                         <i class="fas fa-user-edit"></i>
-                        <div class="ripple-container"></div>
                     </button>
 
                     <button type="button" class="btn btn-danger btn-link btn-sm" onclick="deleteUser({$aUser.User_Id})">
                         <i class="fas fa-trash-alt"></i>
-                        <div class="ripple-container"></div>
                     </button>
                 </td>
             </tr>
@@ -80,3 +78,63 @@
         </table>
     </div>
 </section>
+<div style="display: none">
+    <div class="right-selector">
+        <div class="row">
+            <div class="col-12">
+                <label>Kies een recht</label>
+                <select class="form-control" required>
+                    <option value=>- Selecteer - </option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="user-interface">
+        <form class="row user-interface" data-toggle="validator">
+            <div class="col-md-6">
+                <input name="user_email" type="hidden">
+                <div class="form-group">
+                    <label>Gebruikersnaam</label>
+                    <input name="User_Username" type="text" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>E-mailadres</label>
+                    <input name="User_Email" type="email" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Voornaam</label>
+                    <input name="User_Firstname" type="text" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Achternaam</label>
+                    <input name="User_Lastname" type="text" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Wachtwoord</label>
+                    <input name="password1" type="password" class="form-control">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label>Wachtwoord (herhalen)</label>
+                    <input name="password2" type="password" class="form-control">
+                </div>
+            </div>
+            <div class="col-12 roles-section">
+                <h5>Rollen</h5>
+                <table class="roles table">
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+    </div>
+</div>

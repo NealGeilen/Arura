@@ -16,6 +16,11 @@ $aPages =
             "FileName" => "pages.php",
             "Icon" => "far fa-copy",
         ],
+        "/menu" => [
+            "Title" => "Menu",
+            "FileName" => "menu.php",
+            "Icon" => "fas fa-bars",
+        ],
         "/users" => [
             "Title" => "Gebruikers",
             "FileName" => "users.php",
@@ -25,6 +30,16 @@ $aPages =
             "Title" => "Rollen",
             "FileName" => "roles.php",
             "Icon" => "fas fa-key",
+        ],
+        "/settings" => [
+            "Title" => "Instellingen",
+            "FileName" => "settings.php",
+            "Icon" => "fas fa-wrench",
+        ],
+        "/files" => [
+            "Title" => "Bestanden",
+            "FileName" => "roles.php",
+            "Icon" => "fas fa-archive",
         ]
     ];
 
