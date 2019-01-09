@@ -1,4 +1,27 @@
 {
+  "Pages": {
+    "dashboard" : {
+      "Title" : "Dashboard",
+      "Dir": "dashboard",
+      "FileName" : "dashboard.php",
+      "Icon": "fa fa-home",
+      "Children": {}
+    },
+    "cms" : {
+      "Title" : "Cms",
+      "Dir": "",
+      "FileName" : "dashboard.php",
+      "Icon": "fa fa-home",
+      "Children": {
+        "pages" : {
+          "Title" : "Pagina's",
+          "Dir": "pages",
+          "FileName" : "dashboard.php",
+          "Icon": "fas fa-bars"
+        }
+      }
+    }
+  },
   "Js" : [
     "/assets/vendor/modernizr/modernizr.js",
     "/assets/vendor/jquery/jquery.js",

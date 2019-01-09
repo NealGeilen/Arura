@@ -1,0 +1,82 @@
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="far fa-plus-square"></a>
+            <a href="#" class="fa fa-caret-down"></a>
+        </div>
+        <h2 class="panel-title">Gebruikers</h2>
+        <p class="panel-subtitle">Alle beschikbare gebruikers die aanwezig zijn voor deze omgeving</p>
+    </header>
+    <div class="panel-body" style="display: block;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Gebruikersnaam</th>
+                    <th>Voornaam</th>
+                    <th>Achternaam</th>
+                    <th>E-mailadres</th>
+                    <th>Rechten</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {foreach from=$aUsers key=$iKey item=aUser}
+            <tr>
+                <td>{$aUser.User_Username}</td>
+                <td>{$aUser.User_Firstname}</td>
+                <td>{$aUser.User_Lastname}</td>
+                <td>{$aUser.User_Email}</td>
+                <td></td>
+                <td class="td-actions text-right">
+                    <button type="button" class="btn btn-primary btn-link btn-sm" onclick="callUser({$aUser.User_Id})">
+                        <i class="fas fa-user-edit"></i>
+                        <div class="ripple-container"></div>
+                    </button>
+
+                    <button type="button" class="btn btn-danger btn-link btn-sm" onclick="deleteUser({$aUser.User_Id})">
+                        <i class="fas fa-trash-alt"></i>
+                        <div class="ripple-container"></div>
+                    </button>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="fa fa-caret-down"></a>
+        </div>
+        <h2 class="panel-title">Sessies</h2>
+        <p class="panel-subtitle">Gebruikers die ingelogd zijn op deze omgeving</p>
+    </header>
+    <div class="panel-body" style="display: block;">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sessie id</th>
+                    <th>Sessie gebruikers id</th>
+                    <th>laatste activiteit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$aSessions item=$aSession}
+                    <tr>
+                        <td>{$aSession.Session_Id}</td>
+                        <td>{$aSession.Session_User_Id}</td>
+                        <td>{$aSession.Session_Last_Active|date_format:"%A, %B %e, %Y  %H:%M:%S"}</td>
+                        <td>
+                            <button type="button" class="btn btn-danger btn-link btn-sm" onclick="deleteUser({$aUser.User_Id})">
+                                <i class="fas fa-trash-alt"></i>
+                                <div class="ripple-container"></div>
+                            </button>
+                        </td>
+                    </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+</section>

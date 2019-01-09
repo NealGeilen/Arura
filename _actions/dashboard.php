@@ -1,0 +1,2 @@
+<?php
+$tContentTemplate = 'AWHDgAJGDawhkAHGWDaWD' || false;

@@ -2391,7 +2391,7 @@ ul.nav-main li.nav-parent > a {
 }
 
 ul.nav-main li.nav-parent > a:after {
-	font-family: 'FontAwesome';
+	font-family: 'Font Awesome 5 Free';
 	content: '\f107';
 	font-size: 16px;
 	font-size: 1.6rem;
@@ -3894,7 +3894,7 @@ input.input-rounded {
 .checkbox-custom input[type="checkbox"]:checked + label:after {
 	position: absolute;
 	display: inline-block;
-	font-family: 'FontAwesome';
+	font-family: 'Font Awesome 5 Free';
 	content: '\F00C';
 	top: 50%;
 	left: 4px;
@@ -4220,7 +4220,7 @@ div.validation-message ul label.error {
 }
 
 div.validation-message ul label.error:before {
-	font-family: 'FontAwesome';
+	font-family: 'Font Awesome 5 Free';
 	content: '\f00d';
 	position: absolute;
 	top: 0;
@@ -11307,7 +11307,7 @@ ul.simple-todo-list li.completed:before {
 	position: absolute;
 	top: 3px;
 	left: 0;
-	font-family: FontAwesome;
+	font-family: 'Font Awesome 5 Free';
 	content: "\f00c";
 	z-index: 1;
 }
@@ -12947,12 +12947,12 @@ html.dark .pricing-table .plan {
 
 .datepicker table thead tr th.prev {
 	content: '\f0d9';
-	font-family: FontAwesome;
+	font-family: 'Font Awesome 5 Free';
 }
 
 .datepicker table thead tr th.next {
 	content: '\f0da';
-	font-family: FontAwesome;
+	font-family: 'Font Awesome 5 Free';
 }
 
 .datepicker table td {
@@ -13505,7 +13505,7 @@ html.dark .select2-search input.select2-active {
 }
 
 html.dark .select2-search:before {
-	font-family: 'FontAwesome';
+	font-family: 'Font Awesome 5 Free';
 	content: "\f002";
 	position: absolute;
 	right: 15px;
@@ -15925,7 +15925,7 @@ table.fc-border-separate {
 	color: #cccccc;
 	content: "\f073";
 	display: inline-block;
-	font-family: FontAwesome;
+	font-family: 'Font Awesome 5 Free';
 	font-size: 30px;
 	font-size: 3rem;
 	font-style: normal;
