@@ -4,7 +4,7 @@ $smarty = new Smarty();
 define("__TEMPLATES__", __ROOT__ . '/_Templates/');
 $aResourceFiles = json_decode(file_get_contents(__TEMPLATES__ . 'config.json'), true);
 
-$aPages =
+$aNavBarPages =
     [
         "/dashboard" => [
             "hasRight" => true,
@@ -55,15 +55,15 @@ function isUrlValid($sUrl,$aPages){
 }
 $tContentTemplate = "";
 $db = new \NG\Database();
-if(isUrlValid($aUrl[0], $aPages)){
+if(isUrlValid($aUrl[0], $aNavBarPages)){
 
-    include __ROOT__ . '/_actions/' . $aPages['/'.$aUrl[0]]['FileName'];
+    include __ROOT__ . '/_actions/' . $aNavBarPages['/'.$aUrl[0]]['FileName'];
 } else {
     $smarty->display(__TEMPLATES__ . '404.html');
     exit;
 }
 $smarty->assign('aResourceFiles', $aResourceFiles);
-$smarty->assign('aNavPages', $aPages);
+$smarty->assign('aNavPages', $aNavBarPages);
 
 
 $smarty->assign('body_head', $smarty->fetch(__TEMPLATES__ . 'Sections/body_head.html'));

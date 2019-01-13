@@ -16,6 +16,9 @@ var Builder = {
     },
     initSortable: function(){
       //TODO
+        $('.content-blocks-editor').sortable({
+            handle: '.content-block-handler'
+        });
     },
     setStructure: function (iPageId) {
       $.ajax({
@@ -34,6 +37,7 @@ var Builder = {
                   $('.content-blocks-editor').append(Builder.generateBlock(aContentBlock).addClass('content-block'));
               });
               Builder.initQuil();
+              Builder.initSortable();
           }
       });
     },
