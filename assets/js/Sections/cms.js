@@ -17,7 +17,8 @@ var Builder = {
     initSortable: function(){
       //TODO
         $('.content-blocks-editor').sortable({
-            handle: '.content-block-handler'
+            handle: '.content-block-handler',
+            axis: 'y',
         });
     },
     setStructure: function (iPageId) {
@@ -43,10 +44,13 @@ var Builder = {
     },
     generateBlock: function (aData) {
         head = $(this.BlockHead);
-        $.each(this.Plugins, function (iKey, aPlg) {
+        $.each(this.Plugins, function (iPlgId, aPlg) {
            head.find('select').append($('<option>').val(aPlg.Plg_Id).text(aPlg.Plg_Name));
         });
-        console.log(aData);
+        if (!parseInt(this.Plugins[aData.Content_Plg_Id].Plg_Multiple_value)){
+            head.find('.add-item').css('display', 'none');
+        }
+        console.log();
         head.find('select').val(aData.Content_Plg_Id);
         block = $('<div>').append(head).append(this.generateSettingFields(aData));
         return block;
