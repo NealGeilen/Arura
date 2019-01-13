@@ -1,0 +1,38 @@
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="fa fa-caret-down"></a>
+        </div>
+        <h2 class="panel-title">Pagina's</h2>
+    </header>
+    <div class="panel-body table-responsive" style="display: block;">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Titel</th>
+                <th>Url</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$aPages key=$iKey item=aPage}
+            <tr>
+                <td>{$aPage.Page_Title}</td>
+                <td>{$aPage.Page_Url}</td>
+                <td>
+                    <div class="btn-group">
+                        <a href="/pages?p={$aPage.Page_Id}" type="button" class="btn btn-primary btn-link btn-sm" >
+                            <i class="fas fa-pen"></i>
+                        </a>
+
+                        <button type="button" class="btn btn-danger btn-link btn-sm" >
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+</section>

@@ -5,13 +5,16 @@
     "/assets/vendor/jquery-browser-mobile/jquery.browser.mobile.js",
     "/assets/vendor/bootstrap/js/bootstrap.js",
     "/assets/vendor/nanoscroller/nanoscroller.js",
+    "//cdn.quilljs.com/1.3.6/quill.min.js",
+    "/assets/vendor/jquery-ui/jquery-ui.js",
     "/assets/js/theme.js",
     "/assets/js/theme.custom.js",
     "/assets/js/theme.init.js",
     "/assets/js/Modals.js",
     "/assets/vendor/bootstrap-notify/bootstrap-notify.js",
     "/assets/js/Sections/Users.js",
-    "/assets/js/Sections/settings.js"
+    "/assets/js/Sections/settings.js",
+    "/assets/js/Sections/rolles.js"
   ],
   "Css" : [
     "ttp://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light",
@@ -19,6 +22,8 @@
     "/assets/vendor/font-awesome/css/font-awesome.css",
     "/assets/vendor/magnific-popup/magnific-popup.css",
     "/assets/vendor/bootstrap-datepicker/css/datepicker3.css",
+    "//cdn.quilljs.com/1.3.6/quill.snow.css",
+    "/assets/vendor/jquery-ui/jquery-ui.css",
     "/assets/css/theme.css",
     "/assets/css/skins/default.css",
     "/assets/css/theme-custom.css",

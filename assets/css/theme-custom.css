@@ -14,3 +14,42 @@
     top: 20px;
     right: 20px;
 }
+
+.content-blocks-editor .content-block{
+    padding: 5px;
+    margin: 2px;
+    border-radius: 5px;
+    background-color: #34495e;
+}
+.content-blocks-editor .content-head{
+    min-height: 40px;
+    position: relative;
+}
+.content-head .form-control{
+    width: 150px;
+}
+.content-head .handler{
+    position: absolute;
+    right: -12px;
+    top: 10px;
+    bottom: 10px;
+    background: red;
+    width: 25px;
+}
+.float-left{
+    float: left;
+}
+.float-right{
+    float: right;
+}
+.CMS-quil{
+    background: white;
+}
+.ql-toolbar{
+    background: white;
+}
+.CMS-quick-btns{
+    position: fixed;
+    bottom: 15px;
+    right: 10px;
+}

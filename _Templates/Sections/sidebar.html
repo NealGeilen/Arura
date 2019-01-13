@@ -13,15 +13,17 @@
         <div class="nano-content">
             <nav id="menu" class="nav-main" role="navigation">
                 <ul class="nav nav-main">
-                    {foreach from=$aPages key=$Href item=aPage}
-                    <li
-                            {if $Href === $smarty.server.REQUEST_URI} class="nav-active" {/if}
-                    >
+                    {foreach from=$aNavPages key=$Href item=aPage}
+                    {if $aPage.hasRight}
+                        <li
+                                {if $Href === $smarty.server.REQUEST_URI} class="nav-active" {/if}
+                        >
                         <a href="{$Href}" >
                             <i class="{$aPage.Icon}" aria-hidden="true"></i>
                             <span>{$aPage.Title}</span>
                         </a>
-                    </li>
+                        </li>
+                    {/if}
                     {/foreach}
                 </ul>
             </nav>

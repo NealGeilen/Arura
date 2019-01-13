@@ -31,6 +31,7 @@ $request->sandbox(function ($aData) use ($response){
             $iRoleId = htmlentities($aData['id']);
             $a = new \NG\Permissions\Role($iRoleId);
             $data['Role_Name'] = $a->getName();
+            $data['Rights'] = [];
             foreach ($a->getRights() as $oRight){
                 $data['Rights'][] = ['Right_Id' => $oRight->getId(), 'Right_Name' => $oRight->getName()];
             }

@@ -1,0 +1,124 @@
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="javascript:createRole()" class="far fa-plus-square"></a>
+            <a href="#" class="fa fa-caret-down"></a>
+        </div>
+        <h2 class="panel-title">Rollen</h2>
+    </header>
+    <div class="panel-body table-responsive" style="display: block;">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Naam</th>
+                <th>Rechten</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$aRoles key=$iKey item=aRole}
+                <tr>
+                    <td>{$aRole.Role_Name}</td>
+                    <td>
+                        <ul>
+                            {foreach from=$aRole.Role_Rights key=$iKey item=aRight}
+                                <li>{$aRight.Right_Name}</li>
+                            {/foreach}
+                        </ul>
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary btn-link btn-sm" onclick="editRole({$aRole['Role_Id']})">
+                                <i class="fas fa-pen"></i>
+                            </button>
+
+                            <button type="button" class="btn btn-danger btn-link btn-sm" onclick="deleteRole({$aRole['Role_Id']})">
+                                <i class="far fa-trash-alt"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="fa fa-caret-down"></a>
+        </div>
+        <h2 class="panel-title">Rollen</h2>
+    </header>
+    <div class="panel-body table-responsive" style="display: block;">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Naam</th>
+            </tr>
+            </thead>
+            <tbody>
+            {foreach from=$aRights key=$iKey item=aRight}
+            <tr>
+                <td>{$aRight.Right_Id}</td>
+                <td>{$aRight.Right_Name}</td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+
+
+<div style="display: none;">
+    <div class="user-edit">
+        <div class="row">
+            <table class="col-12 table">
+                <thead>
+                <tr>
+                    <th>Rol</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+    <div class="role-edit">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Naam</label>
+                    <input field="Role_Name" type="text" class="form-control" required>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Rechten</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="right-selector">
+        <div class="row">
+            <div class="col-12">
+                <label>Kies een recht</label>
+                <select class="form-control" required>
+                    <option value=>- Selecteer - </option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>

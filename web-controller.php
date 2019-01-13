@@ -7,36 +7,43 @@ $aResourceFiles = json_decode(file_get_contents(__TEMPLATES__ . 'config.json'), 
 $aPages =
     [
         "/dashboard" => [
+            "hasRight" => true,
             "Title" => "Dashboard",
             "FileName" => "dashboard.php",
             "Icon" => "fa fa-home",
         ],
         "/pages" => [
+            "hasRight" => true,
             "Title" => "Pagina's",
             "FileName" => "pages.php",
             "Icon" => "far fa-copy",
         ],
         "/menu" => [
+            "hasRight" => true,
             "Title" => "Menu",
             "FileName" => "menu.php",
             "Icon" => "fas fa-bars",
         ],
         "/users" => [
+            "hasRight" => true,
             "Title" => "Gebruikers",
             "FileName" => "users.php",
             "Icon" => "fas fa-users",
         ],
         "/roles" => [
+            "hasRight" => true,
             "Title" => "Rollen",
             "FileName" => "roles.php",
             "Icon" => "fas fa-key",
         ],
         "/settings" => [
+            "hasRight" => true,
             "Title" => "Instellingen",
             "FileName" => "settings.php",
             "Icon" => "fas fa-wrench",
         ],
         "/files" => [
+            "hasRight" => true,
             "Title" => "Bestanden",
             "FileName" => "roles.php",
             "Icon" => "fas fa-archive",
@@ -46,8 +53,6 @@ $aPages =
 function isUrlValid($sUrl,$aPages){
     return isset($aPages['/'.$sUrl]);
 }
-$smarty->assign('aResourceFiles', $aResourceFiles);
-$smarty->assign('aPages', $aPages);
 $tContentTemplate = "";
 $db = new \NG\Database();
 if(isUrlValid($aUrl[0], $aPages)){
@@ -57,6 +62,8 @@ if(isUrlValid($aUrl[0], $aPages)){
     $smarty->display(__TEMPLATES__ . '404.html');
     exit;
 }
+$smarty->assign('aResourceFiles', $aResourceFiles);
+$smarty->assign('aNavPages', $aPages);
 
 
 $smarty->assign('body_head', $smarty->fetch(__TEMPLATES__ . 'Sections/body_head.html'));
