@@ -7,15 +7,10 @@ var Builder = {
     Plugins: null,
     ContentBlocks: null,
     TinyCounter: 0,
-    initSummer: function(){
-        // $('.CMS-tiny').tinymce({
-        //     script_url : '/../../assets/vendor/tinymce/js/tinymce/tinymce.min.js',
-            // theme : "advanced",
-        // });
+    initTiny: function(){
         tinymce.init({
             selector: '.CMS-Tiny',
-            // theme: "inlite"
-            // inline: true
+            inline: true
         });
     },
     initIconPicker: function(){
@@ -24,8 +19,50 @@ var Builder = {
     initSortable: function(){
         $('.content-blocks-editor').sortable({
             handle: '.content-block-handler',
-            axis: 'y',
+            placeholder: "content-block-placeholder",
+            start: function (event,ui) {
+                $(ui.placeholder).css('width', $(ui.item).width());
+                $(ui.placeholder).css('height', $(ui.item).height());
+            }
+            // axis: 'y',
         });
+    },
+    initResizable: function(){
+        B = this;
+        $( ".content-block" ).resizable({
+            // containment: "parent"
+            start: function(event, ui){
+              B.Resizable.Permission(ui);
+            },
+            resize: function (event,ui) {
+                B.Resizable.Permission(ui);
+                B.Resizable.OnResize(ui);
+            },
+            stop: function (event,ui) {
+                B.Resizable.Permission(ui);
+                B.Resizable.OnStop();
+            }
+        });
+    },
+    Resizable: {
+        OnResize: function (ui) {
+            Element = $(ui.helper);
+            iWidth = parseInt(Element.attr('content-size'));
+            Element.removeClass('col-' + iWidth);
+            i = parseInt((Element.width() / ($('.content-blocks-editor').innerWidth() / 100 * (100/12))));
+            Element.addClass('col-' + i).css('width', (100/12*i).toFixed() + '%').attr('content-size', i);
+        },
+        Permission: function(ui){
+            Element = $(ui.item);
+            if (parseInt(Element.attr('content-size')) > 11) {
+                Element.resizable("option", "maxWidth", Element.width());
+            } else {
+                Element.resizable("option", "maxWidth", null);
+            }
+        },
+        OnStop: function () {
+
+        }
     },
     setStructure: function (iPageId) {
       $.ajax({
@@ -40,31 +77,35 @@ var Builder = {
               Builder.Plugins = returned.data.Plugins;
               Builder.ContentBlocks = returned.data.ContentBlocks;
               $.each(Builder.ContentBlocks, function (iKey, aContentBlock){
-                  $('.content-blocks-editor').append(Builder.generateBlock(aContentBlock).addClass('content-block'));
+                  console.log(aContentBlock);
+                  $('.content-blocks-editor').append(Builder.generateBlock(aContentBlock));
               });
-              Builder.initSummer();
-              Builder.initIconPicker();
+              // Builder.initSummer();
+              // Builder.initIconPicker();
               Builder.initSortable();
+              Builder.initResizable();
           }
       });
     },
     generateBlock: function (aData) {
-        head = $(this.BlockHead);
+        oBlock = $(this.Block);
         $.each(this.Plugins, function (iPlgId, aPlg) {
-           head.find('select').append($('<option>').val(aPlg.Plg_Id).text(aPlg.Plg_Name));
+           oBlock.find('select').append($('<option>').val(aPlg.Plg_Id).text(aPlg.Plg_Name));
         });
         if (!parseInt(this.Plugins[aData.Content_Plg_Id].Plg_Multiple_value)){
-            head.find('.add-item').css('display', 'none');
+            oBlock.find('.add-item').css('display', 'none');
         }
-        head.find('select').val(aData.Content_Plg_Id);
-        block = $('<div>')
-            .addClass('content-block')
+        oBlock.addClass('col-' + aData.Content_Size);
+        oBlock.find('select').val(aData.Content_Plg_Id);
+        oBlock
+            .css('background', getRandomColor())
+            .css('width', (100/12*aData.Content_Size).toFixed() + '%')
+            .attr('content-size', aData.Content_Size)
             .attr('content-id', aData.Content_Id)
             .attr('content-position', aData.Content_Position)
-            .attr('content-plg-id', aData.Content_Plg_Id)
-            .append(head)
-            .append(this.generateSettingFields(aData));
-        return block;
+            .attr('content-plg-id', aData.Content_Plg_Id);
+            // .append(this.generateSettingFields(aData));
+        return oBlock;
 
     },
     generateSettingFields(aData){
@@ -73,39 +114,39 @@ var Builder = {
         var Field = $('<div>').addClass('row');
         var construct = function (value){
             container = $('<div>').addClass('content-settings');
-            $.each(aPlg.Plg_Settings, function (sSettingKey, aSetting) {
-                var Field;
-                switch (aSetting.Setting_Type) {
-                    case 'textarea':
-                        Builder.TinyCounter++;
-                        Field = $(Builder.Fields.Quil);
-                        Field.html(value[aSetting.Setting_Tag]);
-                        Field.attr('id', 'Tiny-Editor-' + Builder.TinyCounter);
-                        Field.attr('content-type', 'Tiny');
-                        break;
-                    case 'icon':
-                        Field = $('<button>').attr('type', 'button').addClass('CMS-IconPicker');
-                        break;
-                    default :
-                        Field = $(Builder.Fields.input);
-                        Field.find('label').text(aSetting.Setting_Title);
-                        Field.find('input').val(value[aSetting.Setting_Tag]).attr('type', aSetting.Setting_Type);
-                        break
-                }
-                Field.addClass('content-settings-field');
-                Field.attr('content-tag', aSetting.Setting_Tag);
-                container.append(Field);
-            });
+            // $.each(aPlg.Plg_Settings, function (sSettingKey, aSetting) {
+            //     var Field;
+            //     switch (aSetting.Setting_Type) {
+            //         case 'textarea':
+            //             Builder.TinyCounter++;
+            //             Field = $(Builder.Fields.Quil);
+            //             Field.html(value[aSetting.Setting_Tag]);
+            //             Field.attr('id', 'Tiny-Editor-' + Builder.TinyCounter);
+            //             Field.attr('content-type', 'Tiny');
+            //             break;
+            //         case 'icon':
+            //             Field = $('<button>').attr('type', 'button').addClass('CMS-IconPicker');
+            //             break;
+            //         default :
+            //             Field = $(Builder.Fields.input);
+            //             Field.find('label').text(aSetting.Setting_Title);
+            //             Field.find('input').val(value[aSetting.Setting_Tag]).attr('type', aSetting.Setting_Type);
+            //             break
+            //     }
+            //     Field.addClass('content-settings-field');
+            //     Field.attr('content-tag', aSetting.Setting_Tag);
+            //     container.append(Field);
+            // });
             return container;
         };
         if (parseInt(aPlg.Plg_Multiple_value)){
             iWidth = 12 / aValue.length;
             $.each(aValue, function (iKey, aData) {
-                Field.append(construct(aData).addClass('col-md-' + iWidth));
+                Field.append(construct(aData).addClass('col-' + iWidth));
             });
         } else {
 
-            Field.append(construct(aValue).addClass('col-md-12'));
+            Field.append(construct(aValue).addClass('col-12'));
         }
         return Field;
 
@@ -141,7 +182,15 @@ var Builder = {
     },
     Fields: {
         input: '<div class="form-group"><label></label><input class="form-control"></div>',
-        Quil: '<textarea class="CMS-Tiny" id=""></textarea>'
+        Quil: '<div class="CMS-Tiny" id=""></div>'
     },
-    BlockHead: $('.template-content-head').html()
+    Block: $('.template-content-block').html()
 };
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}

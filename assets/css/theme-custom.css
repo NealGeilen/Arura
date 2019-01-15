@@ -14,42 +14,49 @@
     top: 20px;
     right: 20px;
 }
-
+.content-blocks-editor{
+    background: white;
+    /*padding: 2px;*/
+}
 .content-blocks-editor .content-block{
-    padding: 5px;
-    margin: 2px;
-    border-radius: 5px;
-    background-color: #34495e;
-}
-.content-blocks-editor .content-head{
-    min-height: 40px;
-    position: relative;
-}
-.content-head .form-control{
-    width: 150px;
-}
-.content-head .handler{
-    position: absolute;
-    right: -12px;
-    top: 10px;
-    bottom: 10px;
-    background: red;
-    width: 25px;
-}
-.float-left{
+    /*padding: 5px;*/
+    /*margin: 8px;*/
+    background: blue;
     float: left;
 }
-.float-right{
-    float: right;
+.content-block .content-head{
+    /*display: none;*/
+    position: relative;
 }
-.CMS-quil{
-    background: white;
+.content-head .content-head-maincontrol{
+    position: absolute;
+    top: -20px;
+    left: -20px;
 }
-.ql-toolbar{
-    background: white;
+.content-head .content-head-plugincontrol{
+    position: absolute;
+    top: -20px;
+    right: -20px;
 }
-.CMS-quick-btns{
-    position: fixed;
-    bottom: 15px;
-    right: 10px;
+.content-head .content-head-widthcontrol{
+    border-radius: 5px;
+    padding: 5px;
+    background: black;
+    position: absolute;
+    right: -15px;
+    top: 30px;
+    color: white;
+}
+.content-block .content-main{
+    min-height: 100px;
+}
+.content-block .content-main .Content-item{
+    display: block;
+    margin: 0 auto;
+}
+.content-block-placeholder{
+    background: black;
+    height: 150px;
+    width: 1000px;
+    float: left;
 }
