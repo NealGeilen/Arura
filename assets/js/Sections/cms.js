@@ -21,8 +21,12 @@ var Builder = {
             handle: '.content-block-handler',
             placeholder: "content-block-placeholder",
             start: function (event,ui) {
-                $(ui.placeholder).css('width', $(ui.item).width());
-                $(ui.placeholder).css('height', $(ui.item).height());
+                Width = (parseInt($(ui.item).attr('content-size')) *100 / 12);
+                $(ui.placeholder).css('width', Width + '%');
+                $(ui.placeholder).css('height', $(ui.item).innerHeight());
+            },
+            stop: function () {
+                Builder.Sortable.SavePositions();
             }
             // axis: 'y',
         });
@@ -30,6 +34,7 @@ var Builder = {
     initResizable: function(){
         B = this;
         $( ".content-block" ).resizable({
+            handles: "e",
             // containment: "parent"
             start: function(event, ui){
               B.Resizable.Permission(ui);
@@ -40,9 +45,39 @@ var Builder = {
             },
             stop: function (event,ui) {
                 B.Resizable.Permission(ui);
-                B.Resizable.OnStop();
+                B.Resizable.SaveWidth(ui);
             }
         });
+    },
+    Xhr: function(options){
+        var settings = $.extend({
+            url: '/_api/cms/page.php',
+            type: 'post',
+            dataType: 'json',
+            error: function () {
+                addErrorMessage('Handeling is niet opgeslagen');
+            }
+        }, options);
+
+        $.ajax(settings);
+    },
+    Sortable: {
+        SavePositions: function () {
+            aList = [];
+            $.each($('.content-blocks-editor > .content-block'), function (iPosition, oElement) {
+                iContentId = parseInt($(oElement).attr('content-id'));
+                aList[iPosition] = {Position: iPosition, Id: iContentId};
+            });
+            Builder.Xhr({
+               data: ({
+                   type: 'save-content-position',
+                   data: aList,
+                   success: function () {
+                       addSuccessMessage('Postitie opgeslagen');
+                   }
+               }),
+            });
+        }
     },
     Resizable: {
         OnResize: function (ui) {
@@ -60,8 +95,29 @@ var Builder = {
                 Element.resizable("option", "maxWidth", null);
             }
         },
-        OnStop: function () {
+        SaveWidth: function (ui) {
+            oElement = $(ui.helper);
+            console.log(parseInt(oElement.attr('content-size')));
+            Builder.Xhr({
+               data: ({
+                   type : 'save-content-width',
+                   Content_Id : parseInt(oElement.attr('content-id')),
+                   Content_Size : parseInt(oElement.attr('content-size')),
+               }),
+                success: function () {
+                    addSuccessMessage('Breete opgeslagen');
+                }
+            });
+        }
 
+    },
+    Block: {
+        enable: function (oElement) {
+            this.disable();
+            $(oElement).addClass('Active-Block').find('.content-head').css('display', 'block');
+        },
+        disable: function () {
+            $('.Active-Block').removeClass('Active-Block').find('.content-head').css('display', 'none');
         }
     },
     setStructure: function (iPageId) {
@@ -84,11 +140,15 @@ var Builder = {
               // Builder.initIconPicker();
               Builder.initSortable();
               Builder.initResizable();
+
+              $('.content-block').on('click', function () {
+                 Builder.Block.enable(this);
+              });
           }
       });
     },
     generateBlock: function (aData) {
-        oBlock = $(this.Block);
+        oBlock = $(this.BlockTemplate);
         $.each(this.Plugins, function (iPlgId, aPlg) {
            oBlock.find('select').append($('<option>').val(aPlg.Plg_Id).text(aPlg.Plg_Name));
         });
@@ -98,7 +158,6 @@ var Builder = {
         oBlock.addClass('col-' + aData.Content_Size);
         oBlock.find('select').val(aData.Content_Plg_Id);
         oBlock
-            .css('background', getRandomColor())
             .css('width', (100/12*aData.Content_Size).toFixed() + '%')
             .attr('content-size', aData.Content_Size)
             .attr('content-id', aData.Content_Id)
@@ -184,13 +243,5 @@ var Builder = {
         input: '<div class="form-group"><label></label><input class="form-control"></div>',
         Quil: '<div class="CMS-Tiny" id=""></div>'
     },
-    Block: $('.template-content-block').html()
+    BlockTemplate: $('.template-content-block').html()
 };
-function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}

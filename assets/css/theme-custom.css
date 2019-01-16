@@ -21,17 +21,19 @@
 .content-blocks-editor .content-block{
     /*padding: 5px;*/
     /*margin: 8px;*/
-    background: blue;
+    background: lightgray;
     float: left;
+    border: 2px solid lightgrey;
 }
 .content-block .content-head{
-    /*display: none;*/
+    display: none;
     position: relative;
+    z-index: 1000;
 }
 .content-head .content-head-maincontrol{
     position: absolute;
-    top: -20px;
-    left: -20px;
+    top: -15px;
+    left: -15px;
 }
 .content-head .content-head-plugincontrol{
     position: absolute;
@@ -59,4 +61,7 @@
     height: 150px;
     width: 1000px;
     float: left;
+}
+.content-block.Active-Block{
+    border: dotted 2px navy;
 }
