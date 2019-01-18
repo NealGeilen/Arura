@@ -1,6 +1,13 @@
+<header class="page-header">
+    <h2>
+        PAGE
+        <button class="btn btn-primary" onclick="Builder.Block.insert({$aPage.Page_Id})">
+            Content blok <i class="fas fa-plus"></i>
+        </button>
+    </h2>
+</header>
 <div class="row content-blocks-editor">
 </div>
-
 
 <div style="display: none">
     <div class="template-content-block">
@@ -28,7 +35,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="content-head-widthcontrol">
+                <div class="content-head-widthcontrol ui-resizable-handle ui-resizable-e">
                     <i class="fas fa-arrows-alt-h"></i>
                 </div>
             </div>

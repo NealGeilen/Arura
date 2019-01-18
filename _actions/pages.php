@@ -1,6 +1,4 @@
 <?php
-
-
 if (!isset($_GET['p'])){
     $aPages = $db ->fetchAll('SELECT * FROM tblCmsPages');
     $smarty -> assign('aPages', $aPages);

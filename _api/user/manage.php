@@ -9,7 +9,7 @@ $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
     switch ($aData['type']){
         case 'create':
-            $aUserData = $aData['InputData'];
+            $aUserData = $aData;
             $username =         htmlentities($aUserData['User_Email']);
             $firstname =        htmlentities($aUserData['User_Firstname']);
             $lastname =         htmlentities($aUserData['User_Lastname']);

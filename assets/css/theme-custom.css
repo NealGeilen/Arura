@@ -16,14 +16,11 @@
 }
 .content-blocks-editor{
     background: white;
-    /*padding: 2px;*/
 }
 .content-blocks-editor .content-block{
-    /*padding: 5px;*/
-    /*margin: 8px;*/
     background: lightgray;
     float: left;
-    border: 2px solid lightgrey;
+    /*border: 2px solid lightgrey;*/
 }
 .content-block .content-head{
     display: none;
@@ -48,6 +45,9 @@
     right: -15px;
     top: 30px;
     color: white;
+    width: unset;
+    height: unset;
+    font-size: unset;
 }
 .content-block .content-main{
     min-height: 100px;
@@ -63,5 +63,5 @@
     float: left;
 }
 .content-block.Active-Block{
-    border: dotted 2px navy;
+    background: navy;
 }

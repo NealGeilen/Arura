@@ -1,5 +1,10 @@
 $(document).ready(function () {
 Builder.setStructure(1);
+$(document).on('click', function (e) {
+    if (!($(e.target).parents('.content-block').length === 1)){
+        Builder.Block.disable();
+    }
+})
 });
 
 
@@ -33,9 +38,8 @@ var Builder = {
     },
     initResizable: function(){
         B = this;
-        $( ".content-block" ).resizable({
-            handles: "e",
-            // containment: "parent"
+        $(".content-block").resizable({
+            handles: 'e',
             start: function(event, ui){
               B.Resizable.Permission(ui);
             },
@@ -89,9 +93,11 @@ var Builder = {
         },
         Permission: function(ui){
             Element = $(ui.item);
-            if (parseInt(Element.attr('content-size')) > 11) {
+            if (parseInt(Element.attr('content-size')) > 12) {
+                console.log('PERMISSION:', false);
                 Element.resizable("option", "maxWidth", Element.width());
             } else {
+                console.log('PERMISSION:', true);
                 Element.resizable("option", "maxWidth", null);
             }
         },
@@ -118,6 +124,20 @@ var Builder = {
         },
         disable: function () {
             $('.Active-Block').removeClass('Active-Block').find('.content-head').css('display', 'none');
+        },
+        insert: function (iPageId) {
+            Builder.Xhr({
+                data : ({
+                    type: 'create-content-block',
+                    Page_Id: iPageId
+                }),
+                success: function (returned) {
+                    aData = returned.data;
+                    console.log(aData);
+                    $('.content-blocks-editor').append(Builder.generateBlock(aData));
+                }
+
+            });
         }
     },
     setStructure: function (iPageId) {
@@ -209,35 +229,6 @@ var Builder = {
         }
         return Field;
 
-    },
-    savePage: function(){
-        aList = {};
-        $.each($('.content-blocks-editor').find('.content-block'), function (iBlockPosition, oElement) {
-            iBlockId = parseInt($(oElement).attr('content-id'));
-            aList[iBlockId] = {
-                Position: iBlockPosition,
-                Plugin_Id: parseInt($(oElement).attr('content-plg-id')),
-                Settings: {}
-            };
-            $.each($(oElement).find('.content-settings'), function (iSettingsPosition, oBlock) {
-                aList[iBlockId]['Settings'][iSettingsPosition] = {};
-                $.each($(oBlock).find('.content-settings-field'), function (iFieldPosition, oField) {
-                    aList[iBlockId]['Settings'][iSettingsPosition][$(oField).attr('content-tag')] = {};
-                    value = null;
-                    switch ($(oField).attr('content-type')) {
-                        case 'Tiny':
-                            value = tinyMCE.get($(oField).attr('id')).getContent();
-                            break;
-                        default:
-                            value = $(oField).find('.form-control').val();
-                            break
-                    }
-                    aList[iBlockId]['Settings'][iSettingsPosition][$(oField).attr('content-tag')] = value;
-
-                });
-            });
-        });
-        console.log(aList);
     },
     Fields: {
         input: '<div class="form-group"><label></label><input class="form-control"></div>',

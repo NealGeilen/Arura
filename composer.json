@@ -9,6 +9,9 @@
       "email": "nealgeilen@gmail.com"
     }
   ],
+  "autoload": {
+    "psr-4": {"Arura\\": "_app/Arura"}
+  },
   "require" : {
     "NG/Framework": "dev-master"
   },

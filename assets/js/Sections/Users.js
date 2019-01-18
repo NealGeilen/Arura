@@ -96,12 +96,12 @@ function createUser() {
             $(Modals.Buttons.allow).text('Toevoegen')
         ],
         onConfirm : function (oModal) {
+            aData = oModal.find('form').serializeArray();
+            aData[7] = {name : 'type', value: 'create'};
+            console.log(aData);
             $.ajax({
                 type: 'post',
-                data : ({
-                    type : 'create',
-                    InputData: oModal.find('form').serializeArray()
-                }),
+                data : (aData),
                 dataType: 'json',
                 url : '/_api/user/manage.php',
                 success: function () {

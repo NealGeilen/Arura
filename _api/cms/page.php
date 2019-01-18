@@ -8,23 +8,20 @@ $request = new \NG\Client\RequestHandler();
 $request->setRequestMethod('POST');
 $db = new \NG\Database();
 $request->sandbox(function ($aData) use ($response){
+    $ArPages = new \Arura\CMS\Pages();
     $db = new \NG\Database();
     switch ($aData['type']){
         case 'save-content-width':
-            $db -> query('UPDATE tblCmsContentBlocks SET Content_Size = ? WHERE Content_Id = ?',
-                [
-                    (int)$aData['Content_Size'],
-                    (int)$aData['Content_Id']
-                ]);
+            $ArPages->setContentWidth((int)$aData['Content_Size'], (int)$aData['Content_Id']);
             break;
         case 'save-content-position':
-            foreach ($aData['data'] as $iKey => $aBlock){
-                $db -> query('UPDATE tblCmsContentBlocks SET Content_Position = ? WHERE Content_Id = ?',
-                    [
-                        (int)$aBlock['Position'],
-                        (int)$aBlock['Id']
-                    ]);
-            }
+            $ArPages->setContentPosition($aData['data']);
+            break;
+        case 'create-content-block':
+            $iContentId = $ArPages -> CreateContentBlock((int)$aData['Page_Id']);
+            var_dump($iContentId);
+            exit;
+            $response->exitSuccess();
             break;
         default:
             $a = NG\CMS\cms::getStructure((int)$aData['Page_Id']);
