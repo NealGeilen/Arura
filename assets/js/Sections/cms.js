@@ -1,5 +1,5 @@
 $(document).ready(function () {
-Builder.setStructure(1);
+Builder.setStructure(_Page_Id);
 $(document).on('click', function (e) {
     if (!($(e.target).parents('.content-block').length === 1)){
         Builder.Block.disable();
@@ -11,11 +11,12 @@ $(document).on('click', function (e) {
 var Builder = {
     Plugins: null,
     ContentBlocks: null,
-    TinyCounter: 0,
     initTiny: function(){
         tinymce.init({
             selector: '.CMS-Tiny',
-            inline: true
+            inline: true,
+            theme_advanced_resizing : true,
+            theme_advanced_resize_horizontal : false
         });
     },
     initIconPicker: function(){
@@ -36,10 +37,13 @@ var Builder = {
             // axis: 'y',
         });
     },
-    initResizable: function(){
+    initResizable: function(oElement = null){
+        if (oElement === null){
+            oElement = $('.content-block');
+        }
         B = this;
-        $(".content-block").resizable({
-            handles: 'e',
+        oElement.resizable({
+            handles: {e : '.content-widthcontrol'},
             start: function(event, ui){
               B.Resizable.Permission(ui);
             },
@@ -52,6 +56,7 @@ var Builder = {
                 B.Resizable.SaveWidth(ui);
             }
         });
+        $('.ui-resizable-handle').hide();
     },
     Xhr: function(options){
         var settings = $.extend({
@@ -66,21 +71,26 @@ var Builder = {
         $.ajax(settings);
     },
     Sortable: {
-        SavePositions: function () {
+        SavePositions: function (sendData = true) {
             aList = [];
             $.each($('.content-blocks-editor > .content-block'), function (iPosition, oElement) {
                 iContentId = parseInt($(oElement).attr('content-id'));
                 aList[iPosition] = {Position: iPosition, Id: iContentId};
             });
-            Builder.Xhr({
-               data: ({
-                   type: 'save-content-position',
-                   data: aList,
-                   success: function () {
-                       addSuccessMessage('Postitie opgeslagen');
-                   }
-               }),
-            });
+
+            if (sendData){
+                Builder.Xhr({
+                    data: ({
+                        type: 'save-content-position',
+                        data: aList,
+                        success: function () {
+                            addSuccessMessage('Postitie opgeslagen');
+                        }
+                    }),
+                });
+            } else {
+                return aList;
+            }
         }
     },
     Resizable: {
@@ -94,16 +104,13 @@ var Builder = {
         Permission: function(ui){
             Element = $(ui.item);
             if (parseInt(Element.attr('content-size')) > 12) {
-                console.log('PERMISSION:', false);
                 Element.resizable("option", "maxWidth", Element.width());
             } else {
-                console.log('PERMISSION:', true);
                 Element.resizable("option", "maxWidth", null);
             }
         },
         SaveWidth: function (ui) {
             oElement = $(ui.helper);
-            console.log(parseInt(oElement.attr('content-size')));
             Builder.Xhr({
                data: ({
                    type : 'save-content-width',
@@ -111,7 +118,7 @@ var Builder = {
                    Content_Size : parseInt(oElement.attr('content-size')),
                }),
                 success: function () {
-                    addSuccessMessage('Breete opgeslagen');
+                    addSuccessMessage('Breedte opgeslagen');
                 }
             });
         }
@@ -121,9 +128,12 @@ var Builder = {
         enable: function (oElement) {
             this.disable();
             $(oElement).addClass('Active-Block').find('.content-head').css('display', 'block');
+            $(oElement).find('.content-widthcontrol').css('display', 'block')
         },
         disable: function () {
-            $('.Active-Block').removeClass('Active-Block').find('.content-head').css('display', 'none');
+            oElement = $('.Active-Block');
+            oElement.find('.content-widthcontrol').css('display', 'none');
+            oElement.removeClass('Active-Block').find('.content-head').css('display', 'none');
         },
         insert: function (iPageId) {
             Builder.Xhr({
@@ -133,12 +143,83 @@ var Builder = {
                 }),
                 success: function (returned) {
                     aData = returned.data;
-                    console.log(aData);
-                    $('.content-blocks-editor').append(Builder.generateBlock(aData));
+                    oElement = Builder.generateBlock(aData);
+                    $('.content-blocks-editor').append(oElement);
+                    Builder.setEvents(oElement);
                 }
 
             });
+        },
+        delete: function (iContentId) {
+            Modals.Warning({
+               Title: 'Verwijder contentblok',
+               Message: 'Weet je zeker dat je dit block wilt verwijderen?',
+               onConfirm: function () {
+                   Builder.Xhr({
+                       data: ({
+                           type: 'delete-content-block',
+                           Content_Id: iContentId,
+                           data: Builder.Sortable.SavePositions(false)
+                       }),
+                       success: function () {
+                           $('[content-id='+iContentId+']').remove();
+                       }
+                   });
+               }
+            });
         }
+    },
+    Save: function(){
+        aList = {};
+        $.each($('.content-blocks-editor').find('.content-block'), function (iBlockPosition, oElement) {
+            iBlockId = parseInt($(oElement).attr('content-id'));
+            aList[iBlockId] = {
+                Position: iBlockPosition,
+                Plugin_Id: parseInt($(oElement).attr('content-plg-id')),
+                Settings: {}
+            };
+            $.each($(oElement).find('.content-item'), function (iSettingsPosition, oBlock) {
+                aList[iBlockId]['Settings'][iSettingsPosition] = {};
+                $.each($(oBlock).find('.content-setting'), function (iFieldPosition, oField) {
+                    aList[iBlockId]['Settings'][iSettingsPosition][$(oField).attr('content-tag')] = {};
+                    value = null;
+                    switch ($(oField).attr('content-type')) {
+                        case 'Tiny':
+                            value = tinyMCE.get($(oField).attr('id')).getContent();
+                            break;
+                        default:
+                            value = $(oField).find('.form-control').val();
+                            break
+                    }
+                    aList[iBlockId]['Settings'][iSettingsPosition][$(oField).attr('content-tag')] = value;
+
+                });
+            });
+        });
+        this.Xhr({
+           data : ({
+               type: 'save-content-values',
+               data: aList,
+               Page_Id: _Page_Id
+           }),
+           success: function () {
+               addSuccessMessage('Pagina opgeslagen');
+           }
+        });
+    },
+    setEvents: function (oElement= null){
+        if (oElement === null){
+            oElement = $('.content-block');
+        }
+
+        oElement.on('click', function () {
+            Builder.Block.enable(this);
+        });
+        oElement.find('.delete-block').on('click', function () {
+            Builder.Block.delete(parseInt($(this).parents('.content-block').attr('content-id')));
+        });
+
+        this.initResizable(oElement);
     },
     setStructure: function (iPageId) {
       $.ajax({
@@ -153,17 +234,11 @@ var Builder = {
               Builder.Plugins = returned.data.Plugins;
               Builder.ContentBlocks = returned.data.ContentBlocks;
               $.each(Builder.ContentBlocks, function (iKey, aContentBlock){
-                  console.log(aContentBlock);
                   $('.content-blocks-editor').append(Builder.generateBlock(aContentBlock));
               });
-              // Builder.initSummer();
-              // Builder.initIconPicker();
+              Builder.initTiny();
               Builder.initSortable();
-              Builder.initResizable();
-
-              $('.content-block').on('click', function () {
-                 Builder.Block.enable(this);
-              });
+              Builder.setEvents();
           }
       });
     },
@@ -182,51 +257,53 @@ var Builder = {
             .attr('content-size', aData.Content_Size)
             .attr('content-id', aData.Content_Id)
             .attr('content-position', aData.Content_Position)
-            .attr('content-plg-id', aData.Content_Plg_Id);
-            // .append(this.generateSettingFields(aData));
+            .attr('content-plg-id', aData.Content_Plg_Id)
+            .find('.content-main > .row').append(this.generateSettingFields(aData));
         return oBlock;
 
     },
     generateSettingFields(aData){
         aPlg = this.Plugins[aData.Content_Plg_Id];
         aValue = aData.Content_Value;
-        var Field = $('<div>').addClass('row');
-        var construct = function (value){
-            container = $('<div>').addClass('content-settings');
-            // $.each(aPlg.Plg_Settings, function (sSettingKey, aSetting) {
-            //     var Field;
-            //     switch (aSetting.Setting_Type) {
-            //         case 'textarea':
-            //             Builder.TinyCounter++;
-            //             Field = $(Builder.Fields.Quil);
-            //             Field.html(value[aSetting.Setting_Tag]);
-            //             Field.attr('id', 'Tiny-Editor-' + Builder.TinyCounter);
-            //             Field.attr('content-type', 'Tiny');
-            //             break;
-            //         case 'icon':
-            //             Field = $('<button>').attr('type', 'button').addClass('CMS-IconPicker');
-            //             break;
-            //         default :
-            //             Field = $(Builder.Fields.input);
-            //             Field.find('label').text(aSetting.Setting_Title);
-            //             Field.find('input').val(value[aSetting.Setting_Tag]).attr('type', aSetting.Setting_Type);
-            //             break
-            //     }
-            //     Field.addClass('content-settings-field');
-            //     Field.attr('content-tag', aSetting.Setting_Tag);
-            //     container.append(Field);
-            // });
+        var Field  = $('<div>');
+
+        var constructGroup = function (aValue) {
+            oGroup = $('<div>');
+            $.each(aValue, function (iPosition, aGroup) {
+                oGroup.append(constructField(aGroup));
+            });
+            return oGroup;
+        };
+        var constructField = function (value){
+            container = $('<div>').addClass('content-item');
+            if (value !== null){
+                $.each(aPlg.Plg_Settings, function (sSettingKey, aSetting) {
+                    var Field;
+                    switch (aSetting.Setting_Type) {
+                        case 'textarea':
+                            Field = $(Builder.Fields.Quil);
+                            Field.html(value[aSetting.Setting_Tag]);
+                            Field.attr('content-type', 'Tiny');
+                            break;
+                        case 'icon':
+                            Field = $('<button>').attr('type', 'button').addClass('CMS-IconPicker');
+                            break;
+                        default :
+                            Field = $(Builder.Fields.input);
+                            Field.find('label').text(aSetting.Setting_Title);
+                            Field.find('input').val(value[aSetting.Setting_Tag]).attr('type', aSetting.Setting_Type);
+                            break
+                    }
+                    Field.addClass('content-setting');
+                    Field.attr('content-tag', aSetting.Setting_Tag);
+                    container.append(Field);
+                });
+            }
             return container;
         };
-        if (parseInt(aPlg.Plg_Multiple_value)){
-            iWidth = 12 / aValue.length;
-            $.each(aValue, function (iKey, aData) {
-                Field.append(construct(aData).addClass('col-' + iWidth));
-            });
-        } else {
 
-            Field.append(construct(aValue).addClass('col-12'));
-        }
+        iWidth = 12 / aValue.length;
+        Field.append(constructGroup(aValue)).addClass('col-md-' + iWidth);
         return Field;
 
     },

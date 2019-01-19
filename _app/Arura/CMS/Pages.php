@@ -19,19 +19,29 @@ class Pages{
     }
 
     public function CreateContentBlock($iPageId){
-        try{
-            $iPosition = (int)$this -> oDatabase->fetchRow('SELECT MAX(Content_Position) FROM tblCmsContentBlocks WHERE Content_Page_Id = ?',
-                [
-                    $iPageId
-                ])['MAX(Content_Position)'];
-            $this->oDatabase->query('INSERT INTO tblCmsContentBlocks SET Content_page_Id = ?, Content_Position = ?',
-                [
-                    $iPageId,
-                    ($iPosition+1)
-                ]);
-            return $this->oDatabase->getLastInsertId();
-        } catch (\Exception $e){
-            var_dump($e);
+        $iPosition = (int)$this -> oDatabase->fetchRow('SELECT MAX(Content_Position) FROM tblCmsContentBlocks WHERE Content_Page_Id = ?',
+            [
+                $iPageId
+            ])['MAX(Content_Position)'];
+        return $this->oDatabase->createRecord('tblCmsContentBlocks', ['Content_Page_Id' => $iPageId, 'Content_Position'=>($iPosition+1)]);
+    }
+
+    public function DeleteContentBlock($iBlockId){
+        $this->oDatabase -> query('DELETE FROM tblCmsContentBlocks WHERE Content_Id = ?',
+            [
+                (int)$iBlockId
+            ]);
+
+    }
+    public function setContentValues($aData){
+        foreach ($aData as $iContentBlockId => $aBlock){
+            if (isset($aBlock['Settings'])){
+                $this->oDatabase->query('UPDATE tblCmsContentBlocks SET Content_Value = ? WHERE Content_Id = ?',
+                    [
+                        json_encode($aBlock['Settings']),
+                        $iContentBlockId
+                    ]);
+            }
         }
     }
 

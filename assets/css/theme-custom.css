@@ -37,7 +37,11 @@
     top: -20px;
     right: -20px;
 }
-.content-head .content-head-widthcontrol{
+.CMS-Tiny{
+    width: 100%;
+}
+.content-widthcontrol{
+    display: none;
     border-radius: 5px;
     padding: 5px;
     background: black;
@@ -63,5 +67,9 @@
     float: left;
 }
 .content-block.Active-Block{
-    background: navy;
+    background: lime;
+}
+.content-item{
+    border: red 1px solid;
+    margin: 20px;
 }
