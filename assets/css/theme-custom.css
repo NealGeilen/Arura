@@ -29,13 +29,8 @@
 }
 .content-head .content-head-maincontrol{
     position: absolute;
-    top: -15px;
+    top: 0px;
     left: -15px;
-}
-.content-head .content-head-plugincontrol{
-    position: absolute;
-    top: -20px;
-    right: -20px;
 }
 .CMS-Tiny{
     width: 100%;
@@ -46,6 +41,7 @@
     padding: 5px;
     background: black;
     position: absolute;
+    z-index: 1000;
     right: -15px;
     top: 30px;
     color: white;
@@ -54,7 +50,6 @@
     font-size: unset;
 }
 .content-block .content-main{
-    min-height: 100px;
 }
 .content-block .content-main .Content-item{
     display: block;
@@ -70,6 +65,5 @@
     background: lime;
 }
 .content-item{
-    border: red 1px solid;
-    margin: 20px;
+
 }

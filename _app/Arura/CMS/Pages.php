@@ -2,6 +2,7 @@
 namespace Arura\CMS;
 
 use NG\Database;
+use NG\Functions;
 
 class Pages{
 
@@ -12,10 +13,12 @@ class Pages{
     }
 
     public function getContentBlockData($iContentId){
-        return $this->oDatabase->fetchRow('SELECT * FROM tblCmsContentBlocks WHERE Content_Id = ? ',
+        $aData =  $this->oDatabase->fetchRow('SELECT * FROM tblCmsContentBlocks WHERE Content_Id = ? ',
             [
                 $iContentId
             ]);
+        $aData['Content_Value'] = Functions::json_array_decode($aData['Content_Value']);
+        return $aData;
     }
 
     public function CreateContentBlock($iPageId){
@@ -23,7 +26,9 @@ class Pages{
             [
                 $iPageId
             ])['MAX(Content_Position)'];
-        return $this->oDatabase->createRecord('tblCmsContentBlocks', ['Content_Page_Id' => $iPageId, 'Content_Position'=>($iPosition+1)]);
+        $iBlockId = $this->oDatabase->createRecord('tblCmsContentBlocks', ['Content_Page_Id' => $iPageId, 'Content_Position'=>($iPosition+1)]);
+        $this->setPluginToBlock(1,$iBlockId);
+        return $iBlockId;
     }
 
     public function DeleteContentBlock($iBlockId){
@@ -61,6 +66,27 @@ class Pages{
                     (int)$aBlock['Id']
                 ]);
         }
+    }
+
+    public function setPluginToBlock($iPlgId, $iBlockId){
+        $aSettings = $this -> oDatabase -> fetchAll('SELECT * FROM tblCmsPlgSettings WHERE Setting_Plg_Id = ?',
+            [
+                $iPlgId
+            ]);
+        $aList = [];
+        foreach ($aSettings as $aSetting){
+            $aList[$aSetting['Setting_Tag']] = '';
+        }
+        $aValue = [$aList];
+        $this->oDatabase->query('UPDATE tblCmsContentBlocks SET Content_Plg_Id = ?, Content_Value = ? WHERE Content_Id = ?',
+        [
+           $iPlgId,
+           json_encode($aValue),
+           $iBlockId,
+        ]);
+
+
+
     }
 
 

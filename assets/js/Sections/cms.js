@@ -11,9 +11,9 @@ $(document).on('click', function (e) {
 var Builder = {
     Plugins: null,
     ContentBlocks: null,
-    initTiny: function(){
+    initTiny: function(element){
         tinymce.init({
-            selector: '.CMS-Tiny',
+            target: element,
             inline: true,
             theme_advanced_resizing : true,
             theme_advanced_resize_horizontal : false
@@ -167,9 +167,15 @@ var Builder = {
                    });
                }
             });
+        },
+        addItem: function (iContentId) {
+            aBlock = Builder.Save(false)[iContentId];
+            iNewPosition = Object.keys(aBlock.Settings).length;
+            aBlock.Settings[iNewPosition] = {};
+            console.log(aBlock);
         }
     },
-    Save: function(){
+    Save: function(sendData = true){
         aList = {};
         $.each($('.content-blocks-editor').find('.content-block'), function (iBlockPosition, oElement) {
             iBlockId = parseInt($(oElement).attr('content-id'));
@@ -182,6 +188,7 @@ var Builder = {
                 aList[iBlockId]['Settings'][iSettingsPosition] = {};
                 $.each($(oBlock).find('.content-setting'), function (iFieldPosition, oField) {
                     aList[iBlockId]['Settings'][iSettingsPosition][$(oField).attr('content-tag')] = {};
+                    value = null;
                     value = null;
                     switch ($(oField).attr('content-type')) {
                         case 'Tiny':
@@ -196,16 +203,20 @@ var Builder = {
                 });
             });
         });
-        this.Xhr({
-           data : ({
-               type: 'save-content-values',
-               data: aList,
-               Page_Id: _Page_Id
-           }),
-           success: function () {
-               addSuccessMessage('Pagina opgeslagen');
-           }
-        });
+        if (sendData){
+            this.Xhr({
+                data : ({
+                    type: 'save-content-values',
+                    data: aList,
+                    Page_Id: _Page_Id
+                }),
+                success: function () {
+                    addSuccessMessage('Pagina opgeslagen');
+                }
+            });
+        } else {
+            return aList;
+        }
     },
     setEvents: function (oElement= null){
         if (oElement === null){
@@ -218,25 +229,27 @@ var Builder = {
         oElement.find('.delete-block').on('click', function () {
             Builder.Block.delete(parseInt($(this).parents('.content-block').attr('content-id')));
         });
-
+        oElement.find('.add-item').on('click', function () {
+            console.log(false);
+           Builder.Block.addItem(parseInt($(this).parents('.content-block').attr('content-id')));
+        });
+        $.each(oElement.find('.CMS-Tiny'), function (iKey, oTiny) {
+            Builder.initTiny(oTiny);
+        });
         this.initResizable(oElement);
     },
     setStructure: function (iPageId) {
-      $.ajax({
-          type: 'post',
+      this.Xhr({
           data : ({
               type: 'getStructure',
               Page_Id: iPageId
           }),
-          dataType: 'json',
-          url : '/_api/cms/page.php',
           success: function (returned) {
               Builder.Plugins = returned.data.Plugins;
               Builder.ContentBlocks = returned.data.ContentBlocks;
               $.each(Builder.ContentBlocks, function (iKey, aContentBlock){
                   $('.content-blocks-editor').append(Builder.generateBlock(aContentBlock));
               });
-              Builder.initTiny();
               Builder.initSortable();
               Builder.setEvents();
           }
@@ -244,9 +257,6 @@ var Builder = {
     },
     generateBlock: function (aData) {
         oBlock = $(this.BlockTemplate);
-        $.each(this.Plugins, function (iPlgId, aPlg) {
-           oBlock.find('select').append($('<option>').val(aPlg.Plg_Id).text(aPlg.Plg_Name));
-        });
         if (!parseInt(this.Plugins[aData.Content_Plg_Id].Plg_Multiple_value)){
             oBlock.find('.add-item').css('display', 'none');
         }
@@ -258,19 +268,20 @@ var Builder = {
             .attr('content-id', aData.Content_Id)
             .attr('content-position', aData.Content_Position)
             .attr('content-plg-id', aData.Content_Plg_Id)
-            .find('.content-main > .row').append(this.generateSettingFields(aData));
+            .find('.content-main').append(this.generateSettingFields(aData));
         return oBlock;
 
     },
     generateSettingFields(aData){
         aPlg = this.Plugins[aData.Content_Plg_Id];
         aValue = aData.Content_Value;
-        var Field  = $('<div>');
 
         var constructGroup = function (aValue) {
-            oGroup = $('<div>');
+            iWidth = 12 / aValue.length;
+            oGroup = $('<div>').addClass('row').data('data-content-block', aValue);
+
             $.each(aValue, function (iPosition, aGroup) {
-                oGroup.append(constructField(aGroup));
+                oGroup.append(constructField(aGroup).addClass('col-md-' + iWidth));
             });
             return oGroup;
         };
@@ -301,10 +312,7 @@ var Builder = {
             }
             return container;
         };
-
-        iWidth = 12 / aValue.length;
-        Field.append(constructGroup(aValue)).addClass('col-md-' + iWidth);
-        return Field;
+        return constructGroup(aValue);
 
     },
     Fields: {
