@@ -170,9 +170,25 @@ var Builder = {
         },
         addItem: function (iContentId) {
             aBlock = Builder.Save(false)[iContentId];
+            console.log(Builder.Plugins);
             iNewPosition = Object.keys(aBlock.Settings).length;
             aBlock.Settings[iNewPosition] = {};
+            console.log(Builder.Plugins[parseInt(aBlock.Plugin_Id)].Plg_Settings);
+            $.each(Builder.Plugins[parseInt(aBlock.Plugin_Id)].Plg_Settings, function(sTag,aSettings){
+                aBlock.Settings[iNewPosition][sTag] = "";
+            });
             console.log(aBlock);
+
+            Builder.Xhr({
+                data: ({
+                    type: 'save-content-value',
+                    Content_Id : iContentId,
+                    data: aBlock
+                }),
+                success: function (returned) {
+                    $('[content-id='+iContentId+']').find('.content-main').html(null).append(Builder.generateSettingFields(returned.data))
+                }
+            })
         }
     },
     Save: function(sendData = true){
@@ -233,9 +249,6 @@ var Builder = {
             console.log(false);
            Builder.Block.addItem(parseInt($(this).parents('.content-block').attr('content-id')));
         });
-        $.each(oElement.find('.CMS-Tiny'), function (iKey, oTiny) {
-            Builder.initTiny(oTiny);
-        });
         this.initResizable(oElement);
     },
     setStructure: function (iPageId) {
@@ -273,6 +286,7 @@ var Builder = {
 
     },
     generateSettingFields(aData){
+        console.log(aData);
         aPlg = this.Plugins[aData.Content_Plg_Id];
         aValue = aData.Content_Value;
 
@@ -282,6 +296,9 @@ var Builder = {
 
             $.each(aValue, function (iPosition, aGroup) {
                 oGroup.append(constructField(aGroup).addClass('col-md-' + iWidth));
+            });
+            $.each(oGroup.find('.CMS-Tiny'), function (iKey, oTiny) {
+                Builder.initTiny(oTiny);
             });
             return oGroup;
         };

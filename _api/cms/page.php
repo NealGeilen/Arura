@@ -19,6 +19,10 @@ $request->sandbox(function ($aData) use ($response){
         case 'save-content-values':
             $ArPages->setContentValues($aData['data']);
             break;
+        case 'save-content-value':
+            $ArPages->setContentValue($aData['Content_Id'], $aData['data']);
+            $response->exitSuccess($ArPages->getContentBlockData($aData['Content_Id']));
+            break;
         case 'create-content-block':
             $iContentId = $ArPages -> CreateContentBlock((int)$aData['Page_Id']);
             $response->exitSuccess($ArPages->getContentBlockData($iContentId));

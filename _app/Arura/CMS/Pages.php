@@ -41,12 +41,17 @@ class Pages{
     public function setContentValues($aData){
         foreach ($aData as $iContentBlockId => $aBlock){
             if (isset($aBlock['Settings'])){
-                $this->oDatabase->query('UPDATE tblCmsContentBlocks SET Content_Value = ? WHERE Content_Id = ?',
-                    [
-                        json_encode($aBlock['Settings']),
-                        $iContentBlockId
-                    ]);
+                $this -> setContentValue($iContentBlockId, $aBlock);
             }
+        }
+    }
+    public function setContentValue($iContentBlockId,$aData){
+        if (isset($aData['Settings'])){
+            $this->oDatabase->query('UPDATE tblCmsContentBlocks SET Content_Value = ? WHERE Content_Id = ?',
+                [
+                    json_encode($aData['Settings']),
+                    (int)$iContentBlockId
+                ]);
         }
     }
 
