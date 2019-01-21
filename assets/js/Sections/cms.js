@@ -17,8 +17,12 @@ var Builder = {
     ContentBlocks: null,
     initTiny: function(element){
         tinymce.init({
+            language : "nl",
             target: element,
             inline: true,
+            toolbar: "undo redo | justifyleft justifycenter justifyright | bold italic underline",
+            statusbar: false,
+            menubar: false,
             theme_advanced_resizing : true,
             theme_advanced_resize_horizontal : false
         });
