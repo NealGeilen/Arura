@@ -24,16 +24,15 @@
 }
 .content-block .content-head{
     display: none;
-    position: relative;
-    z-index: 1000;
-}
-.content-head .content-head-maincontrol{
     position: absolute;
-    top: 0px;
-    left: -15px;
+    right: 0;
+    z-index: 1000;
 }
 .CMS-Tiny{
     width: 100%;
+}
+.Active-Block .CMS-Tiny{
+    border: 1px dotted black;
 }
 .content-widthcontrol{
     display: none;
@@ -50,20 +49,37 @@
     font-size: unset;
 }
 .content-block .content-main{
+    margin: 10px;
 }
-.content-block .content-main .Content-item{
+.content-block .content-main .content-item{
     display: block;
     margin: 0 auto;
+    padding: 3px;
+}
+.content-block .content-main > .row{
+    margin: unset;
+}
+.Active-Block .content-item{
+    border: 2px dotted grey;
 }
 .content-block-placeholder{
-    background: black;
+    background: gray;
     height: 150px;
     width: 1000px;
     float: left;
 }
 .content-block.Active-Block{
-    background: lime;
+    background: darkgray;
 }
-.content-item{
-
+.content-item .item-settings{
+    display: none;
+    position: absolute;
+    top: -35px;
+    left: -3px;
+}
+.content-item.Active-Item{
+    background: red;
+}
+.content-item.Active-Item .item-settings{
+    display: block;
 }

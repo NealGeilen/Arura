@@ -1,8 +1,12 @@
 $(document).ready(function () {
 Builder.setStructure(_Page_Id);
 $(document).on('click', function (e) {
-    if (!($(e.target).parents('.content-block').length === 1)){
+    console.log(e.target);
+    if (!($(e.target).parents('.content-block').length === 1) && !$(e.target).hasClass('content-block')){
         Builder.Block.disable();
+    }
+    if (!($(e.target).parents('.content-item').length === 1)){
+        Builder.Item.disable();
     }
 })
 });
@@ -128,7 +132,7 @@ var Builder = {
         enable: function (oElement) {
             this.disable();
             $(oElement).addClass('Active-Block').find('.content-head').css('display', 'block');
-            $(oElement).find('.content-widthcontrol').css('display', 'block')
+            $(oElement).find('.content-widthcontrol').css('display', 'block');
         },
         disable: function () {
             oElement = $('.Active-Block');
@@ -170,14 +174,11 @@ var Builder = {
         },
         addItem: function (iContentId) {
             aBlock = Builder.Save(false)[iContentId];
-            console.log(Builder.Plugins);
             iNewPosition = Object.keys(aBlock.Settings).length;
             aBlock.Settings[iNewPosition] = {};
-            console.log(Builder.Plugins[parseInt(aBlock.Plugin_Id)].Plg_Settings);
             $.each(Builder.Plugins[parseInt(aBlock.Plugin_Id)].Plg_Settings, function(sTag,aSettings){
                 aBlock.Settings[iNewPosition][sTag] = "";
             });
-            console.log(aBlock);
 
             Builder.Xhr({
                 data: ({
@@ -188,7 +189,39 @@ var Builder = {
                 success: function (returned) {
                     $('[content-id='+iContentId+']').find('.content-main').html(null).append(Builder.generateSettingFields(returned.data))
                 }
-            })
+            });
+        }
+    },
+    Item: {
+        enable: function (oElement) {
+            this.disable();
+            $(oElement).addClass('Active-Item').css('display', 'block')
+        },
+        disable:function () {
+            $('.Active-Item').removeClass('Active-Item');
+        },
+        remove: function (oElement) {
+            Modals.Warning({
+                Title: 'Item verwijderen',
+                Message: 'Weet je zeker dat je dit item wilt verwijderen?',
+                onConfirm: function () {
+                    iContentId = parseInt($(oElement).parents('.content-block').attr('content-id'));
+                    $(oElement).parents('.content-item').remove();
+                    aBlock = Builder.Save(false)[iContentId];
+                    Builder.Xhr({
+                        data: ({
+                            type: 'save-content-value',
+                            Content_Id : iContentId,
+                            data: aBlock
+                        }),
+                        success: function (returned) {
+                            oBlock = Builder.generateSettingFields(returned.data);
+                            Builder.setEvents(oBlock);
+                            $('[content-id='+iContentId+']').find('.content-main').html(null).append(oBlock)
+                        }
+                    });
+                }
+            });
         }
     },
     Save: function(sendData = true){
@@ -242,12 +275,17 @@ var Builder = {
         oElement.on('click', function () {
             Builder.Block.enable(this);
         });
+        oElement.find('.content-item').on('click', function () {
+            // Builder.Item.enable(this);
+        });
         oElement.find('.delete-block').on('click', function () {
             Builder.Block.delete(parseInt($(this).parents('.content-block').attr('content-id')));
         });
         oElement.find('.add-item').on('click', function () {
-            console.log(false);
            Builder.Block.addItem(parseInt($(this).parents('.content-block').attr('content-id')));
+        });
+        oElement.find('.remove-item').on('click', function () {
+           Builder.Item.remove(this);
         });
         this.initResizable(oElement);
     },
@@ -286,13 +324,12 @@ var Builder = {
 
     },
     generateSettingFields(aData){
-        console.log(aData);
         aPlg = this.Plugins[aData.Content_Plg_Id];
         aValue = aData.Content_Value;
 
         var constructGroup = function (aValue) {
             iWidth = 12 / aValue.length;
-            oGroup = $('<div>').addClass('row').data('data-content-block', aValue);
+            oGroup = $('<div>').addClass('row');
 
             $.each(aValue, function (iPosition, aGroup) {
                 oGroup.append(constructField(aGroup).addClass('col-md-' + iWidth));
@@ -304,6 +341,10 @@ var Builder = {
         };
         var constructField = function (value){
             container = $('<div>').addClass('content-item');
+            console.log(parseInt(aPlg.Plg_Multiple_value));
+            if (parseInt(aPlg.Plg_Multiple_value) === 1){
+                container.append(Builder.ItemSettings);
+            }
             if (value !== null){
                 $.each(aPlg.Plg_Settings, function (sSettingKey, aSetting) {
                     var Field;
@@ -336,5 +377,6 @@ var Builder = {
         input: '<div class="form-group"><label></label><input class="form-control"></div>',
         Quil: '<div class="CMS-Tiny" id=""></div>'
     },
+    ItemSettings: $('.template-item-settings').html(),
     BlockTemplate: $('.template-content-block').html()
 };
