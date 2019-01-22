@@ -50,6 +50,7 @@
 }
 .content-block .content-main{
     margin: 10px;
+    word-wrap: break-word;
 }
 .content-block .content-main .content-item{
     display: block;

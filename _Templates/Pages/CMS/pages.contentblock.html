@@ -1,0 +1,121 @@
+
+<header class="page-header">
+    <a class="btn btn-primary" href="/pages?p={$aBlock.Content_Page_Id}">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    <h2>
+        Content blok
+    </h2>
+</header>
+<form id="ContentBlockSettings">
+    <input class="form-control" type="hidden" name="Content_Id" value="{$aBlock.Content_Id}">
+    <section class="panel">
+        <header class="panel-heading">
+            <div class="panel-actions">
+                <a href="#" class="fa fa-caret-down"></a>
+            </div>
+            <h2 class="panel-title">Plugin</h2>
+        </header>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-4">
+                    <label>Plugin selectie</label>
+                </div>
+                <div class="col-md-8">
+                    <select class="form-control" value="{$aBlock.Content_Plg_Id}" name="Content_Plg_Id">
+                        {foreach from=$aPlugins key=$iKey item=aPlugin}
+                        <option value="{$aPlugin.Plg_Id}">{$aPlugin.Plg_Name}</option>
+                        {/foreach}
+                    </select>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <header class="panel-heading">
+            <div class="panel-actions">
+                <a href="#" class="fa fa-caret-down"></a>
+            </div>
+            <h2 class="panel-title">Stijl</h2>
+        </header>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-md-6 col-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Achtergrond kleur:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+
+                                <input class="form-control" type="color" name="Content_Css_Background_Color">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Achtergrond afbeelding:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="Content_Css_Img">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Class:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="Content_Css_Class" value="{$aBlock.Content_Css_Class}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Id:</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="Content_Css_Id" value="{$aBlock.Content_Css_Id}">
+                            </div>
+                        </div>
+                    </div>
+                    {if $aPlugins[$aBlock.Content_Plg_Id].Plg_Multiple_value === '0'}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label>Grid</label>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-secondary active">
+                                    <input type="radio" name="Content_Item_Width" autocomplete="off" value="2">  2-2-2-2-2-2
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input type="radio" name="Content_Item_Width" autocomplete="off" value="3"> 3-3-3-3
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input type="radio" name="Content_Item_Width" autocomplete="off" value="4"> 4-4-4
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input type="radio" name="Content_Item_Width" autocomplete="off" value="6"> 6-6
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input type="radio" name="Content_Item_Width" autocomplete="off" value="12"> 12
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+<button class="btn btn-primary">
+    save
+</button>

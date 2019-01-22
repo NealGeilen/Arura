@@ -17,10 +17,11 @@ var Builder = {
     ContentBlocks: null,
     initTiny: function(element){
         tinymce.init({
-            language : "nl",
+            // language : "nl",
             target: element,
+            themes: "modern",
             inline: true,
-            toolbar: "undo redo | justifyleft justifycenter justifyright | bold italic underline",
+            toolbar: "undo redo | align | bold italic underline",
             statusbar: false,
             menubar: false,
             theme_advanced_resizing : true,
@@ -315,6 +316,7 @@ var Builder = {
         if (!parseInt(this.Plugins[aData.Content_Plg_Id].Plg_Multiple_value)){
             oBlock.find('.add-item').css('display', 'none');
         }
+        oBlock.find('.edit-content-block').attr('href', '/pages?c=' + aData.Content_Id);
         oBlock.addClass('col-' + aData.Content_Size);
         oBlock.find('select').val(aData.Content_Plg_Id);
         oBlock

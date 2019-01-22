@@ -6,7 +6,6 @@ $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 
 $request->setRequestMethod('POST');
-$db = new \NG\Database();
 $request->sandbox(function ($aData) use ($response){
     $ArPages = new \Arura\CMS\Pages();
     switch ($aData['type']){
@@ -18,6 +17,11 @@ $request->sandbox(function ($aData) use ($response){
             break;
         case 'save-content-values':
             $ArPages->setContentValues($aData['data']);
+            break;
+        case 'save-content-settings':
+            $db = new \NG\Database();
+            foreach ($aData['date'] as $sField => $sValue){
+            }
             break;
         case 'save-content-value':
             $ArPages->setContentValue($aData['Content_Id'], $aData['data']);
