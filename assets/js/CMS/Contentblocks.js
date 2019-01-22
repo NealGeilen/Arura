@@ -4,14 +4,13 @@ Block = {
         return oForm.serializeArray();
     },
     save: function () {
+        aData = this.getSettings();
+        aData.push({name: 'type', value: 'save-content-settings'});
         $.ajax({
             url: '/_api/cms/page.php',
             type: 'post',
             dataType: 'json',
-            data: ({
-                type: 'save-block-settings',
-                data: this.getSettings()
-            }),
+            data: (aData),
             success: addSuccessMessage('Instellingen opgeslagen')
         });
     }
