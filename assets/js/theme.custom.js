@@ -18,6 +18,4 @@ function addErrorMessage(sMessage) {
     };
     $.notify({message:sMessage},oSettings);
 }
-
-;
 $("select option[value="+$('select').attr('value')+"]").attr('selected', 'selected');

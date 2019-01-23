@@ -28,9 +28,9 @@ $request->sandbox(function ($aData) use ($response){
             unset($aList['Content_Id']);
             unset($aList['type']);
             $aList[null]=$aData['Content_Id'];
-//            return $this->oDatabase->updateRecord('tblUsers', $aData, 'User_Id = ?');
             $db -> updateRecord('tblCmsContentBlocks',$aList, 'Content_Id = ?');
             break;
+
         case 'save-content-value':
             $ArPages->setContentValue($aData['Content_Id'], $aData['data']);
             $response->exitSuccess($ArPages->getContentBlockData($aData['Content_Id']));

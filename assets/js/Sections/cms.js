@@ -28,8 +28,8 @@ var Builder = {
             theme_advanced_resize_horizontal : false
         });
     },
-    initIconPicker: function(){
-        $('.CMS-IconPicker').iconpicker();
+    initIconPicker: function(oElement){
+        oElement.find('.icp-dd').iconpicker({});
     },
     initSortable: function(){
         $('.content-blocks-editor').sortable({
@@ -248,6 +248,11 @@ var Builder = {
                         case 'Tiny':
                             value = tinyMCE.get($(oField).attr('id')).getContent();
                             break;
+                        case 'Icon':
+                            value = $(oField).find('.iconpicker-component').find('i').attr('class');
+                            value = (value === 'iconpicker-component') ? null : value ;
+                            console.log();
+                            break;
                         default:
                             value = $(oField).find('.form-control').val();
                             break
@@ -361,7 +366,10 @@ var Builder = {
                             Field.attr('content-type', 'Tiny');
                             break;
                         case 'icon':
-                            Field = $('<button>').attr('type', 'button').addClass('CMS-IconPicker');
+                            Field = $(Builder.IconPickerTemplate);
+                            Field.find('.iconpicker-component > i').addClass(value[aSetting.Setting_Tag]);
+                            Field.attr('content-type', 'Icon');
+                            Builder.initIconPicker(Field);
                             break;
                         default :
                             Field = $(Builder.Fields.input);
@@ -384,5 +392,6 @@ var Builder = {
         Quil: '<div class="CMS-Tiny" id=""></div>'
     },
     ItemSettings: $('.template-item-settings').html(),
-    BlockTemplate: $('.template-content-block').html()
+    BlockTemplate: $('.template-content-block').html(),
+    IconPickerTemplate: $('.template-icon-picker').html()
 };
