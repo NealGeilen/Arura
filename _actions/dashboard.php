@@ -1,2 +1,2 @@
 <?php
-$tContentTemplate = 'AWHDgAJGDawhkAHGWDaWD' || false;
+$tContentTemplate = null;

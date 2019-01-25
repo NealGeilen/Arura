@@ -1,0 +1,28 @@
+.CMS-Block-Header{
+    background: white;
+    border: darkgray 2px solid;
+    padding: 10px;
+}
+.CMS-Block-Header span{
+    border: 1px lightgrey solid;
+    border-radius: 10px;
+    padding: 3px 5px;
+}
+.CMS-Page-Editor .CMS-Group{
+    border: #0d3349 1px solid;
+    margin-top: 10px;
+    position: relative;
+}
+.CMS-Group .CMS-Group-Content{
+    padding: 10px;
+    margin: unset;
+    background: lime;
+    position: absolute;
+    top: 5px;
+    bottom: 5px;
+    left: 45px;
+    right: 8px;
+}
+.CMS-Group .CMS-Group-Control{
+    margin: 5px;
+}
