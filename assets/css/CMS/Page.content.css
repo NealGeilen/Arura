@@ -3,26 +3,39 @@
     border: darkgray 2px solid;
     padding: 10px;
 }
-.CMS-Block-Header span{
-    border: 1px lightgrey solid;
-    border-radius: 10px;
-    padding: 3px 5px;
-}
-.CMS-Page-Editor .CMS-Group{
+.CMS-Group{
     border: #0d3349 1px solid;
     margin-top: 10px;
     position: relative;
 }
 .CMS-Group .CMS-Group-Content{
-    padding: 10px;
     margin: unset;
     background: lime;
-    position: absolute;
-    top: 5px;
-    bottom: 5px;
-    left: 45px;
-    right: 8px;
+    min-height: 10px;
+    height: 100%;
+    width: 100%;
+    /*position: absolute;*/
+    /*top: 5px;*/
+    /*bottom: 5px;*/
+    /*left: 45px;*/
+    /*right: 8px;*/
+}
+.CMS-Group .CMS-Group-Content .Block-Item{
+    float: left;
+
 }
 .CMS-Group .CMS-Group-Control{
-    margin: 5px;
+    position: absolute;
+    left: -40px;
+    top: 0;
+}
+.Block-Item{
+    background: red;
+    /*height: 100%;*/
+    height: 100px;
+    width: 100px;
+    position: relative;
+}
+.Block-Item .Block-Item-Position-Handle{
+
 }
