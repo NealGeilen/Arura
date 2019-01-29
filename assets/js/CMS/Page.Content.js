@@ -111,10 +111,33 @@ var Builder = {
         },
     },
     Item:{
+        Sortable: {
 
+        },
+        Delete: function(){
+
+        },
+        Add: function(){
+
+        },
+        Build: function () {
+            oContainer = $('<div>').addClass('Block-Item');
+
+        }
     },
     Fields: {
+        Types:{
 
+        },
+        build: function (sType, sValue) {
+            var oField;
+            switch (sType) {
+                default:
+                    oField = $($('.template-input-field').html()).val(sValue).attr('type', sType);
+                    break;
+            }
+            return oField;
+        }
     }
 
 
