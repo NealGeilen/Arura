@@ -14,11 +14,6 @@
     min-height: 10px;
     height: 100%;
     width: 100%;
-    /*position: absolute;*/
-    /*top: 5px;*/
-    /*bottom: 5px;*/
-    /*left: 45px;*/
-    /*right: 8px;*/
 }
 .CMS-Group .CMS-Group-Content .Block-Item{
     float: left;
@@ -36,6 +31,9 @@
     width: 100px;
     position: relative;
 }
-.Block-Item .Block-Item-Position-Handle{
-
+.Block-Item .Block-Item-Width-Control{
+    background: black;
+    position: absolute;
+    right: 0;
+    cursor: e-resize;
 }

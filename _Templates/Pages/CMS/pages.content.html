@@ -6,7 +6,7 @@
     <h2>
         PAGE
     </h2>
-    <button class="btn btn-primary" onclick="Builder.Group.add()">
+    <button class="btn btn-primary" onclick="Builder.Group.Add()">
         Groep <i class="fas fa-plus"></i>
     </button>
     <div class="right-wrapper pull-right">
@@ -60,7 +60,7 @@
                     <span class="btn btn-sm btn-primary Group-Position-Handler">
                         <i class="fas fa-arrows-alt"></i>
                     </span>
-                    <button class="btn btn-sm btn-primary">
+                    <button class="btn btn-sm btn-primary" onclick="Builder.Group.Delete($(this).parents('.CMS-Group'))">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
@@ -76,14 +76,14 @@
                     <span class="btn btn-sm btn-primary Block-Item-Position-Handle">
                         <i class="fas fa-arrows-alt"></i>
                     </span>
-                    <button class="btn btn-sm btn-primary">
+                    <button class="btn btn-sm btn-primary" onclick="Builder.Block.Delete($(this).parents('.Block-Item'))">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </div>
             </div>
             <div class="Block-Item-Content">
             </div>
-            <div class="Block-Item-Width-Control">
+            <div class="Block-Item-Width-Control ui-resizable-handle ui-resizable-e">
 
             </div>
 
