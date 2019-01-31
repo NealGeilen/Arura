@@ -1,3 +1,6 @@
+.CMS-Page-Editor{
+    position: relative;
+}
 .CMS-Block-Header{
     background: white;
     border: darkgray 2px solid;
@@ -11,7 +14,7 @@
 .CMS-Group .CMS-Group-Content{
     margin: unset;
     background: lime;
-    min-height: 10px;
+    min-height: 80px;
     height: 100%;
     width: 100%;
 }
@@ -20,9 +23,13 @@
 
 }
 .CMS-Group .CMS-Group-Control{
+    display: none;
     position: absolute;
     left: -40px;
     top: 0;
+}
+.active{
+    display: block;
 }
 .Block-Item{
     background: red;

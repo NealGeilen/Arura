@@ -44,7 +44,7 @@ var Builder = {
     Group: {
         Build : function(){
             oTemplate = $($('.template-page-group').html());
-            this.sortable(oTemplate.find(sSelectors.Group_Content));
+            this.Events(oTemplate);
             return oTemplate;
         },
         Add: function () {
@@ -52,6 +52,22 @@ var Builder = {
         },
         Delete : function (oElement) {
             oElement.remove();
+        },
+        State:{
+            Activate: function (oElement) {
+                this.Deactivate();
+                oElement.find(sSelectors.Group_Control).addClass('active');
+            },
+            Deactivate: function () {
+                $('.CMS-Group-Control.active').removeClass('active');
+            }
+        },
+        Events: function(oElement){
+            Selector = (oElement === null) ? $(sSelectors.Group) : oElement;
+            Selector.on('click', function () {
+                Builder.Group.sortable(Selector.find(sSelectors.Group_Content));
+                Builder.Group.State.Activate($(this));
+            });
         },
         sortable: function (oElement = null) {
             Selector = (oElement === null) ? $(sSelectors.Group_Content) : oElement;
@@ -147,4 +163,9 @@ $(document).ready(function () {
    Builder.Editor.sortable();
    Builder.Group.sortable();
    Builder.ContentTypes.draggable();
+   $(document).on('click', function (e) {
+       if ($(e.target).parents(sSelectors.Group).length < 1){
+           Builder.Group.State.Deactivate();
+       }
+   })
 });
