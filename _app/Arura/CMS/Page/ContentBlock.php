@@ -17,22 +17,29 @@ class ContentBlock extends Plugin{
         return $aData;
     }
 
-    public function setContentWidth($iSize, $iContentId){
-        $this -> oDatabase -> query('UPDATE tblCmsContentBlocks SET Content_Size = ? WHERE Content_Id = ?',
+    public function getContentBlockFromGroup($iGroupId){
+        $aData =  $this->oDatabase->fetchAll('SELECT * FROM tblCmsContentBlocks WHERE Content_Group_Id = ? ORDER BY Content_Position ASC',
             [
-                (int)$iSize,
-                (int)$iContentId
+                $iGroupId
             ]);
+        $aList = [];
+        foreach ($aData as $aBlock){
+            if (Functions::isJson($aBlock['Content_Value'])){
+                $aBlock['Content_Value'] = Functions::json_array_decode($aBlock['Content_Value']);
+            }
+            $aList[] = $aBlock;
+        }
+        return $aList;
     }
 
-    public function setContentPosition($aData){
-        foreach ($aData as $iKey => $aBlock){
-            $this -> oDatabase -> query('UPDATE tblCmsContentBlocks SET Content_Position = ? WHERE Content_Id = ?',
-                [
-                    (int)$aBlock['Position'],
-                    (int)$aBlock['Id']
-                ]);
-        }
+
+    public function setContentBlock($iBlockId,$aBlock){
+        $aBlock[null] = $iBlockId;
+        return $this -> oDatabase -> updateRecord('tblCmsContentBlocks',$aBlock,'Content_Id = ?');
+    }
+
+    public function CreateContentBlock(){
+        return $this->oDatabase->createRecord('tblCmsContentBlocks',[]);
     }
 
 }

@@ -8,6 +8,18 @@ var sSelectors = {
 };
 
 var Builder = {
+    Xhr:function(options){
+        var settings = $.extend({
+            url: '/_api/cms/Page.Content.php',
+            type: 'post',
+            dataType: 'json',
+            error: function () {
+                addErrorMessage('Handeling is niet opgeslagen');
+            }
+        }, options);
+
+        $.ajax(settings);
+    },
     ContentTypes:{
         draggable: function () {
             $(sSelectors.Content_Type_Selector).draggable({
@@ -133,38 +145,7 @@ var Builder = {
                 $('.Block-Item.active').removeClass('active');
             }
         },
-    },
-    Item:{
-        Sortable: {
-
-        },
-        Delete: function(){
-
-        },
-        Add: function(){
-
-        },
-        Build: function () {
-            oContainer = $('<div>').addClass('Block-Item');
-
-        }
-    },
-    Fields: {
-        Types:{
-
-        },
-        build: function (sType, sValue) {
-            var oField;
-            switch (sType) {
-                default:
-                    oField = $($('.template-input-field').html()).val(sValue).attr('type', sType);
-                    break;
-            }
-            return oField;
-        }
     }
-
-
 };
 
 $(document).ready(function () {
