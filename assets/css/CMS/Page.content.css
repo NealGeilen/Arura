@@ -22,14 +22,14 @@
     float: left;
 
 }
+.CMS-Group.active .CMS-Group-Control{
+    display: block!important;
+}
 .CMS-Group .CMS-Group-Control{
     display: none;
     position: absolute;
     left: -40px;
     top: 0;
-}
-.active{
-    display: block;
 }
 .Block-Item{
     background: red;
@@ -37,6 +37,12 @@
     height: 100px;
     width: 100px;
     position: relative;
+}
+.Block-Item.active .Block-Item-Control{
+    display: block!important;
+}
+.Block-Item .Block-Item-Control{
+    display: none;
 }
 .Block-Item .Block-Item-Width-Control{
     background: black;

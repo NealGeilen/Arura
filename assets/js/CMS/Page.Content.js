@@ -13,7 +13,7 @@ var Builder = {
             $(sSelectors.Content_Type_Selector).draggable({
                 helper: function () {
                     oTemplate = $($('.template-page-block').html());
-                    Builder.Block.Resizable.resizable(oTemplate);
+                    Builder.Block.Events(oTemplate);
                     return oTemplate;
                 },
                 connectToSortable: sSelectors.Group_Content,
@@ -56,17 +56,17 @@ var Builder = {
         State:{
             Activate: function (oElement) {
                 this.Deactivate();
-                oElement.find(sSelectors.Group_Control).addClass('active');
+                oElement.addClass('active');
             },
             Deactivate: function () {
-                $('.CMS-Group-Control.active').removeClass('active');
+                $('.CMS-Group.active').removeClass('active');
             }
         },
         Events: function(oElement){
             Selector = (oElement === null) ? $(sSelectors.Group) : oElement;
+            Builder.Group.sortable(Selector.find(sSelectors.Group_Content));
             Selector.on('click', function () {
-                Builder.Group.sortable(Selector.find(sSelectors.Group_Content));
-                Builder.Group.State.Activate($(this));
+                Builder.Group.State.Activate($(this).parents(sSelectors.Group));
             });
         },
         sortable: function (oElement = null) {
@@ -117,12 +117,20 @@ var Builder = {
         Delete: function(oElement){
             oElement.remove();
         },
-        Active: {
-            Set: function(iContentBlockId){
-                
+        Events: function(oElement = null){
+            Selector = (oElement === null) ? $(sSelectors.Block_Item) : oElement;
+            this.Resizable.resizable(Selector);
+            Selector.on('click', function () {
+                Builder.Block.State.Activate($(this));
+            });
+        },
+        State:{
+            Activate: function (oElement) {
+                this.Deactivate();
+                oElement.addClass('active');
             },
-            Remove: function () {
-
+            Deactivate: function () {
+                $('.Block-Item.active').removeClass('active');
             }
         },
     },
@@ -164,8 +172,11 @@ $(document).ready(function () {
    Builder.Group.sortable();
    Builder.ContentTypes.draggable();
    $(document).on('click', function (e) {
-       if ($(e.target).parents(sSelectors.Group).length < 1){
+       if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group')){
            Builder.Group.State.Deactivate();
+       }
+       if ($(e.target).parents(sSelectors.Block_Item).length < 1 && !$(e.target).hasClass('Block-Item')){
+           Builder.Block.State.Deactivate();
        }
    })
 });
