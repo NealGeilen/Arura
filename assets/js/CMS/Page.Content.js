@@ -35,14 +35,44 @@ var Builder = {
     },
     Structure: {
         Page_Id : _Page_Id,
-        get: function () {
-            
+        get: function (callback) {
+            Builder.Xhr({
+               data: ({
+                   type: 'Page-Content-Structure',
+                   Page_Id: this.Page_Id
+               }),
+               success: function (aData) {
+                   callback.call(this,aData);
+               }
+            });
         },
         set: function () {
-            
+            this.get(function (aData) {
+               aStructure =  aData.data;
+               $.each(aStructure, function (iPosition, aGroup) {
+                   $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
+               });
+            });
         },
         save: function () {
-
+            aList={};
+            $.each($('.CMS-Page-Editor .CMS-Group'), function (iGroupPosition, oGroup) {
+                oGroup = $(oGroup);
+                iGroupId = parseInt(oGroup.attr('group-id'));
+                aList[iGroupId] = {
+                    Group_Position : iGroupPosition
+                };
+            });
+            Builder.Xhr({
+               data: ({
+                   type: 'Save-Page-Content',
+                   Data: aList
+               }),
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+            return aList;
         }
     },
     Editor: {
@@ -54,13 +84,22 @@ var Builder = {
       }
     },
     Group: {
-        Build : function(){
+        Build : function(aGroup){
             oTemplate = $($('.template-page-group').html());
+            oTemplate.attr('group-id', aGroup.Group_Id);
             this.Events(oTemplate);
             return oTemplate;
         },
         Add: function () {
-            $(sSelectors.Editor).append(this.Build());
+            Builder.Xhr({
+               data: ({
+                   type: 'Create-Group',
+                   Page_Id: _Page_Id
+               }),
+                success: function (aData) {
+                    $(sSelectors.Editor).append(Builder.Group.Build(aData.data));
+                }
+            });
         },
         Delete : function (oElement) {
             oElement.remove();
@@ -152,6 +191,7 @@ $(document).ready(function () {
    Builder.Editor.sortable();
    Builder.Group.sortable();
    Builder.ContentTypes.draggable();
+   Builder.Structure.set();
    $(document).on('click', function (e) {
        if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group')){
            Builder.Group.State.Deactivate();

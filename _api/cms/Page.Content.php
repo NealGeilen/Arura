@@ -11,12 +11,15 @@ $request->sandbox(function ($aData) use ($response,$Pages){
         case 'Page-Content-Structure':
             $aOutcome = $Pages->getPageStructure((int)$aData['Page_Id']);
             break;
+        case 'Save-Page-Content':
+            $aOutcome = $Pages->SavePageContents($aData['Data']);
+            break;
+        case 'Create-Group':
+            $iGroupId = $Pages->CreateCroup($aData['Page_Id']);
+            $aOutcome = $Pages->getGroup($iGroupId);
+            break;
     }
-
     $response->exitSuccess($aOutcome);
-
-
-
-
-
 });
+
+$response -> exitScript();

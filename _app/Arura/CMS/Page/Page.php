@@ -10,14 +10,12 @@ class Page extends Group{
             ]);
     }
 
-    public function SaveContents($aData){
+    public function SavePageContents($aData){
+        $aGroupList = [];
         //Loop groups
         foreach ($aData as $iGroupId => $aGroup){
             //Loop ContentBlocks
-            foreach ($aGroup as $iBlockId => $aBlock){
-                $this -> setContentBlock($iBlockId,$aBlock);
-                return;
-            }
+            $this->setGroup($iGroupId,$aGroup);
         }
     }
 
