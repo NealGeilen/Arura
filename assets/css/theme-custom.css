@@ -14,80 +14,11 @@
     top: 20px;
     right: 20px;
 }
-.content-blocks-editor{
-    background: white;
-}
-.content-blocks-editor .content-block{
-    background: lightgray;
-    float: left;
-    /*border: 2px solid lightgrey;*/
-}
-.content-block .content-head{
-    display: none;
-    position: absolute;
-    top: 15px;
-    left: -15px;
-    z-index: 1000;
-}
-.CMS-Tiny{
-    width: 100%;
-}
-.Active-Block .CMS-Tiny{
-    border: 1px solid black;
-}
-.content-widthcontrol{
-    display: none;
-    border-radius: 5px;
+.btns-page-actions{
+    position: fixed;
+    bottom: 15px;
+    right: 20px;
     padding: 5px;
-    background: black;
-    position: absolute;
-    z-index: 1000;
-    right: -15px;
-    top: 30px;
-    color: white;
-    width: unset;
-    height: unset;
-    font-size: unset;
-}
-.content-block .content-main{
-    margin: 10px;
-    padding: 15px;
-    word-wrap: break-word;
-}
-.content-block .content-main .content-item{
-    display: block;
-    margin: 0 auto;
-    padding: 15px;
-}
-.content-block .content-main > .row{
-    margin: unset;
-}
-.Active-Block .content-item{
-    /*border: 1px dotted grey;*/
-}
-.content-block-placeholder{
-    background: gray;
-    height: 150px;
-    width: 1000px;
-    float: left;
-}
-.content-block.Active-Block{
-    background: darkgray;
-}
-.content-item .item-settings{
-    display: none;
-    position: absolute;
-    top: -35px;
-    left: -3px;
-}
-.content-setting{
-    /*display: block;*/
-    width: 100%;
-    margin: 0 auto;
-}
-.content-item.Active-Item{
-    background: red;
-}
-.content-item.Active-Item .item-settings{
-    display: block;
+    background: rgba(0,0,0,0.5);
+
 }

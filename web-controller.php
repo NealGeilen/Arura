@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__. "/_app/autoload.php";
+require_once __DIR__ . "/_app/autoload.php";
 $smarty = new Smarty();
 define("__TEMPLATES__", __ROOT__ . '/_Templates/');
 $aResourceFiles = json_decode(file_get_contents(__TEMPLATES__ . 'config.json'), true);

@@ -19,8 +19,10 @@ class Page extends Group{
             }
         }
         //Loop groups
-        foreach ($aData['Groups'] as $iGroupId => $aGroup){
-            $this->setGroup($iGroupId,$aGroup);
+        if (isset($aData['Groups'])){
+            foreach ($aData['Groups'] as $iGroupId => $aGroup){
+                $this->setGroup($iGroupId,$aGroup);
+            }
         }
     }
 
