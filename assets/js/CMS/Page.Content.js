@@ -34,6 +34,10 @@ var Builder = {
         }
     },
     Structure: {
+        DeleteItems:{
+            aGroups: [],
+            aBlocks: []
+        },
         Page_Id : _Page_Id,
         get: function (callback) {
             Builder.Xhr({
@@ -55,24 +59,26 @@ var Builder = {
             });
         },
         save: function () {
-            aList={};
+            aData={};
+            aData.DeleteItems = this.DeleteItems;
+            aData.Groups = {};
             $.each($('.CMS-Page-Editor .CMS-Group'), function (iGroupPosition, oGroup) {
                 oGroup = $(oGroup);
                 iGroupId = parseInt(oGroup.attr('group-id'));
-                aList[iGroupId] = {
+                aData.Groups[iGroupId] = {
                     Group_Position : iGroupPosition
                 };
             });
             Builder.Xhr({
                data: ({
                    type: 'Save-Page-Content',
-                   Data: aList
+                   Data: aData
                }),
                 success: function (data) {
                     console.log(data);
                 }
             });
-            return aList;
+            return aData;
         }
     },
     Editor: {
@@ -102,6 +108,7 @@ var Builder = {
             });
         },
         Delete : function (oElement) {
+            Builder.Structure.DeleteItems.aGroups.push(parseInt(oElement.attr('group-id')));
             oElement.remove();
         },
         State:{

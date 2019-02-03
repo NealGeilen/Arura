@@ -12,9 +12,14 @@ class Page extends Group{
 
     public function SavePageContents($aData){
         $aGroupList = [];
+        //Delete Groups
+        if (isset($aData['DeleteItems']['aGroups'])){
+            foreach ($aData['DeleteItems']['aGroups'] as $iGroupId){
+                $this -> DeleteGroup($iGroupId);
+            }
+        }
         //Loop groups
-        foreach ($aData as $iGroupId => $aGroup){
-            //Loop ContentBlocks
+        foreach ($aData['Groups'] as $iGroupId => $aGroup){
             $this->setGroup($iGroupId,$aGroup);
         }
     }

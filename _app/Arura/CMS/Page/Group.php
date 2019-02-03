@@ -26,4 +26,11 @@ class Group extends ContentBlock {
         return $this -> oDatabase -> createRecord('tblCmsGroups',["Group_Page_Id"=>(int)$iPageId,"Group_Position"=>-1]);
     }
 
+    public function DeleteGroup($iGroupId){
+        $this -> oDatabase -> query('DELETE FROM tblCmsGroups WHERE Group_Id = ?',
+            [
+                (int)$iGroupId
+            ]);
+    }
+
 }
