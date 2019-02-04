@@ -18,6 +18,13 @@ class Page extends Group{
                 $this -> DeleteGroup($iGroupId);
             }
         }
+
+        //Delete Groups
+        if (isset($aData['DeleteItems']['aBlocks'])){
+            foreach ($aData['DeleteItems']['aBlocks'] as $iBlockId){
+            }
+        }
+
         //Loop groups
         if (isset($aData['Groups'])){
             foreach ($aData['Groups'] as $iGroupId => $aGroup){

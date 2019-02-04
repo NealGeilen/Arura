@@ -180,9 +180,9 @@ var Builder = {
             OnResize: function (ui) {
                 Element = $(ui.helper);
                 iWidth = parseInt(Element.attr('block-width'));
-                Element.removeClass('col-md-' + iWidth);
+                Element.removeClass('col-xs-' + iWidth);
                 i = parseInt((Element.width() / ($(sSelectors.Group_Content).innerWidth() / 100 * (100/12))));
-                Element.addClass('col-md-' + i).css('width', (100/12*i).toFixed() + '%').attr('block-width', i);
+                Element.addClass('col-xs-' + i).css('width', (100/12*i).toFixed() + '%').attr('block-width', i);
             },
             ResizePermission(ui){
                 Element = $(ui.item);
@@ -196,15 +196,16 @@ var Builder = {
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
             if (aBlock === null){
-                oBlock.attr('block-width', 2).attr('content-id', 0).addClass('col-md-' + 1);
+                oBlock.attr('block-width', 2).attr('content-id', 0).addClass('col-xs-' + 1);
             }  else {
-                oBlock.attr('block-width', aBlock.Content_Size).attr('content-id', aBlock.Content_Id).addClass('col-md-' + aBlock.Content_Size);
+                oBlock.attr('block-width', aBlock.Content_Size).attr('content-id', aBlock.Content_Id).addClass('col-xs-' + aBlock.Content_Size);
             }
 
             this.Events(oBlock);
             return oBlock;
         },
         Delete: function(oElement){
+            Builder.Structure.DeleteItems.aBlocks.push(parseInt(oElement.attr('content-id')));
             oElement.remove();
         },
         Create:function(oElement){
