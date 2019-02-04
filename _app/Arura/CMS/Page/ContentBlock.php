@@ -39,7 +39,7 @@ class ContentBlock extends Plugin{
     }
 
     public function CreateContentBlock(){
-        return $this->oDatabase->createRecord('tblCmsContentBlocks',[]);
+        return $this->oDatabase->createRecord('tblCmsContentBlocks',['Content_Position'=>-1]);
     }
 
 }

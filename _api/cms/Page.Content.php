@@ -14,6 +14,9 @@ $request->sandbox(function ($aData) use ($response,$Pages){
         case 'Save-Page-Content':
             $aOutcome = $Pages->SavePageContents($aData['Data']);
             break;
+        case 'Create-Block':
+            $aOutcome['Content_Id'] = $Pages -> CreateContentBlock();
+            break;
         case 'Create-Group':
             $iGroupId = $Pages->CreateCroup($aData['Page_Id']);
             $aOutcome = $Pages->getGroup($iGroupId);

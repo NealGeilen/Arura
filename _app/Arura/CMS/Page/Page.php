@@ -21,7 +21,16 @@ class Page extends Group{
         //Loop groups
         if (isset($aData['Groups'])){
             foreach ($aData['Groups'] as $iGroupId => $aGroup){
+                $aBlocks = $aGroup['Blocks'];
+                unset($aGroup['Blocks']);
                 $this->setGroup($iGroupId,$aGroup);
+
+                foreach ($aBlocks as $iBlockId => $aBlock){
+                    $this -> setContentBlock($iBlockId,$aBlock);
+                }
+
+
+
             }
         }
     }

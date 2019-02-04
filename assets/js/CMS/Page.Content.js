@@ -24,12 +24,15 @@ var Builder = {
         draggable: function () {
             $(sSelectors.Content_Type_Selector).draggable({
                 helper: function () {
-                    oTemplate = $($('.template-page-block').html());
-                    Builder.Block.Events(oTemplate);
-                    return oTemplate;
+                    return Builder.Block.Build();
                 },
                 connectToSortable: sSelectors.Group_Content,
-                revert: "invalid"
+                revert: "invalid",
+                stop: function (event,ui) {
+                    if ($(ui.helper).parent().hasClass('CMS-Group-Content')){
+                        Builder.Block.Create($(ui.helper));
+                    }
+                }
             });
         }
     },
@@ -58,7 +61,7 @@ var Builder = {
                });
             });
         },
-        save: function () {
+        save: function (bSendData = true) {
             aData={};
             aData.DeleteItems = this.DeleteItems;
             aData.Groups = {};
@@ -66,18 +69,30 @@ var Builder = {
                 oGroup = $(oGroup);
                 iGroupId = parseInt(oGroup.attr('group-id'));
                 aData.Groups[iGroupId] = {
-                    Group_Position : iGroupPosition
+                    Group_Position : iGroupPosition,
+                    Blocks: {}
                 };
+                $.each(oGroup.find(sSelectors.Block_Item), function (iContentPosition, oBlock) {
+                    oBlock = $(oBlock);
+                    iContentId = parseInt(oBlock.attr('content-id'));
+                    aData.Groups[iGroupId].Blocks[iContentId] = {
+                        Content_Position: iContentPosition,
+                        Content_Group_Id : iGroupId,
+                        Content_Size: parseInt(oBlock.attr('block-width'))
+                    }
+                });
             });
-            Builder.Xhr({
-               data: ({
-                   type: 'Save-Page-Content',
-                   Data: aData
-               }),
-                success: function (data) {
-                    console.log(data);
-                }
-            });
+            if (bSendData){
+                Builder.Xhr({
+                    data: ({
+                        type: 'Save-Page-Content',
+                        Data: aData
+                    }),
+                    success: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
             return aData;
         }
     },
@@ -93,6 +108,12 @@ var Builder = {
         Build : function(aGroup){
             oTemplate = $($('.template-page-group').html());
             oTemplate.attr('group-id', aGroup.Group_Id);
+            if ('Blocks' in aGroup){
+                $.each(aGroup.Blocks,function (ikey,aBlock) {
+                   oTemplate.find(sSelectors.Group_Content).append(Builder.Block.Build(aBlock));
+                });
+                console.log(oTemplate);
+            }
             this.Events(oTemplate);
             return oTemplate;
         },
@@ -159,9 +180,9 @@ var Builder = {
             OnResize: function (ui) {
                 Element = $(ui.helper);
                 iWidth = parseInt(Element.attr('block-width'));
-                Element.removeClass('col-' + iWidth);
+                Element.removeClass('col-md-' + iWidth);
                 i = parseInt((Element.width() / ($(sSelectors.Group_Content).innerWidth() / 100 * (100/12))));
-                Element.addClass('col-' + i).css('width', (100/12*i).toFixed() + '%').attr('block-width', i);
+                Element.addClass('col-md-' + i).css('width', (100/12*i).toFixed() + '%').attr('block-width', i);
             },
             ResizePermission(ui){
                 Element = $(ui.item);
@@ -172,8 +193,31 @@ var Builder = {
                 }
             },
         },
+        Build: function(aBlock = null){
+            oBlock = $($('.template-page-block').html());
+            if (aBlock === null){
+                oBlock.attr('block-width', 2).attr('content-id', 0).addClass('col-md-' + 1);
+            }  else {
+                oBlock.attr('block-width', aBlock.Content_Size).attr('content-id', aBlock.Content_Id).addClass('col-md-' + aBlock.Content_Size);
+            }
+
+            this.Events(oBlock);
+            return oBlock;
+        },
         Delete: function(oElement){
             oElement.remove();
+        },
+        Create:function(oElement){
+            oElement.css('display', 'none');
+            Builder.Xhr({
+               data: ({
+                   type: 'Create-Block'
+               }),
+                success: function (returned) {
+                   oElement.attr('content-id', returned.data.Content_Id);
+                   oElement.css('display', 'block');
+                }
+            });
         },
         Events: function(oElement = null){
             Selector = (oElement === null) ? $(sSelectors.Block_Item) : oElement;
