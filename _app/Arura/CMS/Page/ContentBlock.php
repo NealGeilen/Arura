@@ -42,4 +42,11 @@ class ContentBlock extends Plugin{
         return $this->oDatabase->createRecord('tblCmsContentBlocks',['Content_Position'=>-1]);
     }
 
+    public function DeleteContentBlock($iBlockId){
+        $this->oDatabase->query('DELETE FROM tblCmsContentBlocks WHERE Content_Id = ?',
+            [
+                (int)$iBlockId
+            ]);
+    }
+
 }

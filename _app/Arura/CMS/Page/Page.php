@@ -22,19 +22,20 @@ class Page extends Group{
         //Delete Groups
         if (isset($aData['DeleteItems']['aBlocks'])){
             foreach ($aData['DeleteItems']['aBlocks'] as $iBlockId){
+                $this -> DeleteContentBlock($iBlockId);
             }
         }
 
         //Loop groups
         if (isset($aData['Groups'])){
             foreach ($aData['Groups'] as $iGroupId => $aGroup){
-                $aBlocks = $aGroup['Blocks'];
+                if (isset($aGroup['Blocks'])){
+                    foreach ($aGroup['Blocks'] as $iBlockId => $aBlock){
+                        $this -> setContentBlock($iBlockId,$aBlock);
+                    }
+                }
                 unset($aGroup['Blocks']);
                 $this->setGroup($iGroupId,$aGroup);
-
-                foreach ($aBlocks as $iBlockId => $aBlock){
-                    $this -> setContentBlock($iBlockId,$aBlock);
-                }
 
 
 
