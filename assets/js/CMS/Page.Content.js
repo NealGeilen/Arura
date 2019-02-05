@@ -6,7 +6,7 @@ var sSelectors = {
     Block_Item: '.Block-Item',
     Content_Type_Selector: '.ContentType-Selector',
 };
-
+//TODO SAVE TYPE BLOCK
 var Builder = {
     Xhr:function(options){
         var settings = $.extend({
@@ -24,8 +24,11 @@ var Builder = {
         draggable: function () {
             $(sSelectors.Content_Type_Selector).draggable({
                 helper: function (event) {
-                    console.log($(event.target).attr('content-type'));
-                    return Builder.Block.Build();
+                    aBlock = Builder.ContentTypes.DefaultBlock;
+                    aBlock.Content_Type = $(event.target).attr('content-type');
+                    oElement = Builder.Block.Build(Builder.ContentTypes.DefaultBlock);
+                    oElement.attr('content-type', $(event.target).attr('content-type'));
+                    return oElement;
                 },
                 connectToSortable: sSelectors.Group_Content,
                 revert: "invalid",
@@ -35,6 +38,38 @@ var Builder = {
                     }
                 }
             });
+        },
+        DefaultBlock:{
+            Content_Size: 2,
+            Content_Value: null,
+            Content_Type: null,
+            Content_Id: 0
+        },
+        Types: {
+            Text: {
+                oTemplate: $('<div>').addClass('Tinymce'),
+                init: function (sValue) {
+                    oText  = this.oTemplate.clone();
+                    oText.html(sValue);
+                    TinyMce.SetText(oText);
+                    return oText;
+                },
+                value: function(oElement){
+                    return TinyMce.getValue(oElement);
+                }
+            },
+            Header: {
+                oTemplate: $('<div>').addClass('Tinymce'),
+                init: function (sValue) {
+                    oText  = this.oTemplate.clone();
+                    oText.html(sValue);
+                    TinyMce.SetHeader(oText);
+                    return oText;
+                },
+                value: function(oElement){
+                    return TinyMce.getValue(oElement);
+                }
+            }
         }
     },
     Structure: {
@@ -78,8 +113,10 @@ var Builder = {
                     iContentId = parseInt(oBlock.attr('content-id'));
                     aData.Groups[iGroupId].Blocks[iContentId] = {
                         Content_Position: iContentPosition,
+                        Content_Type: oBlock.attr('content-type'),
                         Content_Group_Id : iGroupId,
-                        Content_Size: parseInt(oBlock.attr('block-width'))
+                        Content_Size: parseInt(oBlock.attr('block-width')),
+                        Content_Value: Builder.Block.getValue(oBlock)
                     }
                 });
             });
@@ -113,7 +150,6 @@ var Builder = {
                 $.each(aGroup.Blocks,function (ikey,aBlock) {
                    oTemplate.find(sSelectors.Group_Content).append(Builder.Block.Build(aBlock));
                 });
-                console.log(oTemplate);
             }
             this.Events(oTemplate);
             return oTemplate;
@@ -196,13 +232,11 @@ var Builder = {
         },
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
-            if (aBlock === null){
-                oBlock.attr('block-width', 2).attr('content-id', 0).addClass('col-xs-' + 1);
-            }  else {
-                oBlock.attr('block-width', aBlock.Content_Size).attr('content-id', aBlock.Content_Id).addClass('col-xs-' + aBlock.Content_Size);
-            }
-
+            oBlock.attr('block-width', aBlock.Content_Size).attr('content-id', aBlock.Content_Id).addClass('col-xs-' + aBlock.Content_Size).attr('content-type', aBlock.Content_Type);
+            value = aBlock.Content_Value;
             this.Events(oBlock);
+            oField = Builder.Item.Build(aBlock);
+            oBlock.find('.Block-Item-Content').append(oField);
             return oBlock;
         },
         Delete: function(oElement){
@@ -237,6 +271,58 @@ var Builder = {
                 $('.Block-Item.active').removeClass('active');
             }
         },
+        getValue:function(oBlock){
+            var value;
+            switch(oBlock.attr('content-type')){
+                default:
+                    value = Builder.ContentTypes.Types[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Content > div'));
+                    break;
+            }
+            return value;
+        }
+    },
+    Item:{
+        Build: function (aBlock) {
+            var oItem;
+            switch(aBlock.Content_Type){
+                default:
+                    oItem = Builder.ContentTypes.Types[aBlock.Content_Type].init(aBlock.Content_Value);
+                    break;
+            }
+            return oItem;
+        }
+    }
+};
+var TinyMce = {
+    Count : 0,
+    SetHeader: function(oElement){
+        oElement.attr('id', 'tinymce_' + this.Count);
+        tinymce.init({
+            // language : "nl",
+            target: oElement[0],
+            themes: "modern",
+            inline: true,
+            toolbar: "undo redo | align | bold italic underline",
+            statusbar: false,
+            menubar: false,
+            theme_advanced_resizing : true,
+            theme_advanced_resize_horizontal : false
+        });
+        ++this.Count;
+    },
+    SetText: function (oElement) {
+        oElement.attr('id', 'tinymce_' + this.Count);
+        tinymce.init({
+            // language : "nl",
+            target: oElement[0],
+            themes: "modern",
+            inline: true
+        });
+        ++this.Count;
+    },
+    getValue: function (oElement) {
+        console.log(oElement);
+        return tinyMCE.get(oElement.attr('id')).getContent();
     }
 };
 
