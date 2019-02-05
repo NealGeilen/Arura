@@ -1,5 +1,7 @@
 .CMS-Page-Editor{
     position: relative;
+    background: #fff;
+    padding: 5px;
 }
 .CMS-Block-Header{
     background: white;
@@ -8,38 +10,37 @@
 }
 .CMS-Group{
     border: #0d3349 1px solid;
-    margin-top: 10px;
+    margin: 5px;
     position: relative;
 }
 .CMS-Group .CMS-Group-Content{
+    min-height: 40px;
     margin: unset;
-    background: lime;
-    min-height: 80px;
+    background: #E6E6E6;
     height: 100%;
     width: 100%;
 }
 .CMS-Group .CMS-Group-Content .Block-Item{
     float: left;
-
-}
-.CMS-Group.active .CMS-Group-Control{
-    display: block!important;
 }
 .CMS-Group .CMS-Group-Control{
     display: none;
     position: absolute;
-    left: -40px;
-    top: 0;
+    left: -15px;
+    top: -15px;
 }
 .Block-Item{
-    background: red;
-    height: 100px;
+    background: lightblue;
     position: relative;
+}
+.Block-Item .Block-Item-Content{
+    padding: 16px 0;
 }
 .Block-Item.active .Block-Item-Control{
     display: block!important;
 }
 .Block-Item .Block-Item-Control{
+    position: absolute;
     display: none;
 }
 .Block-Item .Block-Item-Width-Control{
@@ -47,4 +48,17 @@
     position: absolute;
     right: 0;
     cursor: e-resize;
+}
+.Tinymce{
+    padding: 2px;
+    background: unset;
+}
+/**
+Active group
+ */
+.CMS-Group.active .CMS-Group-Control{
+    display: block!important;
+}
+.Block-Item.active .Tinymce{
+    background: white!important;
 }
