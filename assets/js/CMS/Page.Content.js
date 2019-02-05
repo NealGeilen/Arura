@@ -23,7 +23,8 @@ var Builder = {
     ContentTypes:{
         draggable: function () {
             $(sSelectors.Content_Type_Selector).draggable({
-                helper: function () {
+                helper: function (event) {
+                    console.log($(event.target).attr('content-type'));
                     return Builder.Block.Build();
                 },
                 connectToSortable: sSelectors.Group_Content,
