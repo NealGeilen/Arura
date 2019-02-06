@@ -6,7 +6,6 @@ var sSelectors = {
     Block_Item: '.Block-Item',
     Content_Type_Selector: '.ContentType-Selector',
 };
-//TODO SAVE TYPE BLOCK
 var Builder = {
     Xhr:function(options){
         var settings = $.extend({
@@ -188,6 +187,8 @@ var Builder = {
         sortable: function (oElement = null) {
             Selector = (oElement === null) ? $(sSelectors.Group_Content) : oElement;
             Selector.sortable({
+                placeholder: 'Block-Placeholder',
+                forcePlaceholderSize: true,
                 handle: '.Block-Item-Position-Handle',
                 connectWith: sSelectors.Group_Content
             });
@@ -316,7 +317,21 @@ var TinyMce = {
             // language : "nl",
             target: oElement[0],
             themes: "modern",
-            inline: true
+            inline: true,
+
+            toolbar: 'bold italic | styleselect | table link unlink | bullist numlist | image media | blockquote codesample' ,
+            contextmenu: "code undo redo codesample removeformat",
+            menubar: false,
+            content_css: "demo.css, tinymceBubbleBar.css",
+            content_style: ".mce-widget.mce-tooltip {display: none !important;}",
+            fixed_toolbar_container: "#tinymceWrapperBubbleBar",
+            plugins: [
+                'noneditable codesample',
+                'autoresize advlist autolink lists link image charmap print preview hr anchor',
+                'searchreplace wordcount visualblocks visualchars code fullscreen',
+                'insertdatetime media nonbreaking save table contextmenu directionality',
+                'paste textcolor colorpicker textpattern imagetools media'
+            ]
         });
         ++this.Count;
     },

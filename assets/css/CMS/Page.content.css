@@ -43,14 +43,24 @@
 .Block-Item .Block-Item-Control{
     position: absolute;
     display: none;
-    top: -15px;
+    top: 20px;
+    left: -12px;
     z-index: 500;
 }
+.Block-Item.active .Block-Item-Width-Control{
+    display: block!important;
+}
 .Block-Item .Block-Item-Width-Control{
-    background: black;
+    display: none!important;
     position: absolute;
-    right: 0;
+    top: 20px;
+    right: -12px;
     cursor: e-resize;
+    height: unset;
+    width: unset;
+}
+.Block-Placeholder{
+    background: red;
 }
 .Tinymce{
     padding: 2px;
