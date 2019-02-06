@@ -28,6 +28,7 @@
     position: absolute;
     left: -15px;
     top: -15px;
+    z-index: 500;
 }
 .Block-Item{
     background: lightblue;
@@ -42,6 +43,8 @@
 .Block-Item .Block-Item-Control{
     position: absolute;
     display: none;
+    top: -15px;
+    z-index: 500;
 }
 .Block-Item .Block-Item-Width-Control{
     background: black;
