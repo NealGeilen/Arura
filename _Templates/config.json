@@ -18,7 +18,7 @@
     "/assets/js/Sections/rolles.js"
   ],
   "Css" : [
-    "ttp://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light",
+    "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light",
     "/assets/vendor/bootstrap/css/bootstrap.css",
     "/assets/vendor/font-awesome/css/font-awesome.css",
     "/assets/vendor/fontawesome-iconpicker-3.0.0/dist/css/fontawesome-iconpicker.css",

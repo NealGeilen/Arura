@@ -126,6 +126,7 @@ var Builder = {
                         Data: aData
                     }),
                     success: function (data) {
+                        addSuccessMessage('Content opgeslagen');
                         console.log(data);
                     }
                 });
