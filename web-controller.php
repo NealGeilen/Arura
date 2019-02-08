@@ -67,6 +67,15 @@ $aNavBarPages =
             "Icon" => "fas fa-users",
             "isChild" => true,
             "Children" => null
+        ],
+        /**
+         * Profiel page
+         */
+        '/profiel' => [
+            "hasRight" => \NG\User\User::isLogged(),
+            "Title" => "Profiel",
+            "FileName" => "profile.php",
+            "isChild" => true,
         ]
     ];
 function isUrlValid($sUrl,$aPages){

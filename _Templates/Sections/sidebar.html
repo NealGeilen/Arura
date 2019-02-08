@@ -23,13 +23,15 @@
                             {if $aPage.Children !== NULL}
                                 <ul class="nav nav-children">
                                     {foreach from=$aPage.Children item=ChildHref}
-                                        <li {if $ChildHref === $smarty.server.REDIRECT_URL}class="nav-active"{/if}>
-                                            <a href="{$ChildHref}">
-                                                <i class="{$aNavPages[$ChildHref].Icon}" aria-hidden="true"></i>
-                                                <span>{$aNavPages[$ChildHref].Title}</span>
+                                        {if $aNavPages[$ChildHref].hasRight}
+                                            <li {if $ChildHref === $smarty.server.REDIRECT_URL}class="nav-active"{/if}>
+                                                <a href="{$ChildHref}">
+                                                    <i class="{$aNavPages[$ChildHref].Icon}" aria-hidden="true"></i>
+                                                    <span>{$aNavPages[$ChildHref].Title}</span>
 
-                                            </a>
-                                        </li>
+                                                </a>
+                                            </li>
+                                        {/if}
                                     {/foreach}
                                 </ul>
                             {/if}

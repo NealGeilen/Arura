@@ -1,0 +1,43 @@
+<section class="panel">
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a href="#" class="fa fa-caret-down"></a>
+        </div>
+        <h2 class="panel-title">Profiel instellingen</h2>
+    </header>
+    <div class="panel-body" style="display: block;">
+        <form>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="username-profile">Gebruikersnaam</label>
+                    <input type="text" class="form-control" id="username-profile" value="{$aUser.Username}" placeholder="Gebruikersnaam">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="firstname-profile">Voornaam</label>
+                    <input type="text" class="form-control" id="firstname-profile" value="{$aUser.Firstname}" placeholder="Voornaam">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="lastname-profile">Achternaam</label>
+                    <input type="text" class="form-control" id="lastname-profile" value="{$aUser.Lastname}" placeholder="Achternaam">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="email-profile">E-mail</label>
+                    <input type="email" class="form-control" id="email-profile" value="{$aUser.Email}" placeholder="E-mail">
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="password-two-profile">Wachtwoord</label>
+                    <input type="password" class="form-control" id="password-two-profile">
+                    <!--<small>Leeg laten voor geen verandering</small>-->
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="password-one-profile">Wachtwoord bevestiging</label>
+                    <input type="password" class="form-control" id="password-one-profile">
+                </div>
+                <div class="btn-group col-md-6" role="group" aria-label="Basic example">
+                    <button type="submit" class="btn btn-success">Opslaan</button>
+                    <button type="reset" class="btn btn-danger">Annuleren</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>
