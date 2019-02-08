@@ -24,7 +24,6 @@ $request->sandbox(function ($aData) use ($response){
             ]);
         $_SESSION['logged-in'] = true;
         $data['loggedin'] = true;
-//        \NG\Cookies::set('logged-in',true, (time() + 864000));
         $response->exitSuccess($data);
     } else{
         \NG\Client\ResponseHandler::trowError(403);
