@@ -6,58 +6,75 @@ $aResourceFiles = json_decode(file_get_contents(__TEMPLATES__ . 'config.json'), 
 
 $aNavBarPages =
     [
-        "/dashboard" => [
+
+        /**
+         * Main CMS Pages
+         */
+        "/content" => [
             "hasRight" => true,
-            "Title" => "Dashboard",
-            "FileName" => "dashboard.php",
-            "Icon" => "fa fa-home",
+            "Title" => "Website content",
+            "FileName" => null,
+            "Icon" => "far fa-copy",
+            "isChild" => false,
+            "Children" =>
+                [
+                    '/content/pagina',
+                    '/content/plugins'
+                ]
         ],
-        "/pages" => [
+        "/content/pagina" => [
             "hasRight" => true,
             "Title" => "Pagina's",
-            "FileName" => "pages.php",
+            "FileName" => "cms/pages.php",
             "Icon" => "far fa-copy",
+            "isChild" => true,
+            "Children" => null
         ],
-        "/menu" => [
+        "/content/plugins" => [
             "hasRight" => true,
-            "Title" => "Menu",
-            "FileName" => "menu.php",
-            "Icon" => "fas fa-bars",
+            "Title" => "Plugin's",
+            "FileName" => null,
+            "Icon" => "far fa-copy",
+            "isChild" => true,
+            "Children" => null
         ],
-        "/users" => [
+        /**
+         * Arura settings pages
+         */
+        '/arura' => [
             "hasRight" => true,
-            "Title" => "Gebruikers",
-            "FileName" => "users.php",
-            "Icon" => "fas fa-users",
+            "Title" => "Arura",
+            "FileName" => null,
+            "Icon" => "far fa-copy",
+            "isChild" => false,
+            "Children" => ['/arura/rollen','/arura/gebruikers']
         ],
-        "/roles" => [
+        '/arura/rollen' => [
             "hasRight" => true,
             "Title" => "Rollen",
-            "FileName" => "roles.php",
-            "Icon" => "fas fa-key",
+            "FileName" => "arura/roles.php",
+            "Icon" => "far fa-copy",
+            "isChild" => true,
+            "Children" => null
         ],
-        "/settings" => [
+        '/arura/gebruikers' => [
             "hasRight" => true,
-            "Title" => "Instellingen",
-            "FileName" => "settings.php",
-            "Icon" => "fas fa-wrench",
-        ],
-        "/files" => [
-            "hasRight" => true,
-            "Title" => "Bestanden",
-            "FileName" => "roles.php",
-            "Icon" => "fas fa-archive",
+            "Title" => "Gebruikers",
+            "FileName" => "arura/users.php",
+            "Icon" => "far fa-copy",
+            "isChild" => true,
+            "Children" => null
         ]
-    ];
 
+    ];
 function isUrlValid($sUrl,$aPages){
-    return isset($aPages['/'.$sUrl]);
+    return isset($aPages[$sUrl]);
 }
 $tContentTemplate = "";
 $db = new \NG\Database();
-if(isUrlValid($aUrl[0], $aNavBarPages)){
-
-    include __ROOT__ . '/_actions/' . $aNavBarPages['/'.$aUrl[0]]['FileName'];
+$sUrl = '/'.join('/', $aUrl);
+if(isUrlValid($sUrl, $aNavBarPages)){
+    include __ROOT__ . '/_actions/' . $aNavBarPages[$sUrl]['FileName'];
 } else {
     $smarty->display(__TEMPLATES__ . '404.html');
     exit;

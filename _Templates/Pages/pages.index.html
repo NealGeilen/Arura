@@ -21,7 +21,7 @@
                 <td>{$aPage.Page_Url}</td>
                 <td>
                     <div class="btn-group">
-                        <a href="/pages?p={$aPage.Page_Id}" type="button" class="btn btn-primary btn-link btn-sm" >
+                        <a href="{$smarty.server.REQUEST_URI}?p={$aPage.Page_Id}" type="button" class="btn btn-primary btn-link btn-sm" >
                             <i class="fas fa-pen"></i>
                         </a>
 
