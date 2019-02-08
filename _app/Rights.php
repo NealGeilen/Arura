@@ -1,9 +1,11 @@
 <?php
 class Rights{
-    const USERS = 1;
-    const ROLES = 2;
-    CONST PAGES = 3;
-    CONST MENU = 4;
-    const FILES = 5;
-    const SETTINGS = 6;
+    const ARURA_USERS = 1;
+    const ARURA_ROLLES = 2;
+    const ARURA_SETTINGS = 3;
+
+    const CMS_PAGES = 10;
+    const CMS_MENU = 11;
+    const CMS_ = 12;
+
 }

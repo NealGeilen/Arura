@@ -5,8 +5,7 @@ require_once __DIR__ . '/../../_app/autoload.php';
 $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 
-//$request->setRight(Permissions::PERMISSIONS);
-
+$request->setRight(Rights::ARURA_ROLLES);
 $request->setRequestMethod('POST');
 
 $request->sandbox(function ($aData) use ($response){

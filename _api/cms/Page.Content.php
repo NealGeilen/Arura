@@ -4,6 +4,8 @@ require_once __DIR__ . '/../../_app/autoload.php';
 $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 $Pages = new \Arura\CMS\Page\Page();
+$request->setRight(Rights::CMS_PAGES);
+$request->TriggerEvent();
 $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response,$Pages){
    $aOutcome=[];

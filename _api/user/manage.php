@@ -3,8 +3,8 @@ require_once __DIR__ . '/../../_app/autoload.php';
 
 $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
-
-//$request->setRight();
+;
+$request->setRight(Rights::ARURA_USERS);
 $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
     switch ($aData['type']){

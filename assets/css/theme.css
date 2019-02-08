@@ -2391,10 +2391,10 @@ ul.nav-main li.nav-parent > a {
 }
 
 ul.nav-main li.nav-parent > a:after {
-	font-family: 'Font Awesome 5 Free';
-	content: '\f107';
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
+	content: "\f077";
 	font-size: 16px;
-	font-size: 1.6rem;
 	color: #abb4be;
 	position: absolute;
 	right: 0;
@@ -2403,7 +2403,7 @@ ul.nav-main li.nav-parent > a:after {
 }
 
 ul.nav-main li.nav-parent.nav-expanded > a:after {
-	content: '\f106';
+	content: '\f078';
 }
 
 ul.nav-main li.nav-parent.nav-expanded > ul.nav-children {

@@ -6,12 +6,12 @@ $request = new \NG\Client\RequestHandler();
 
 $request->setRequestMethod('POST');
 
-$request->sandbox(function (){
+$request->sandbox(function ($aData){
     $db = new \NG\Database();
     \NG\Sessions::Start();
     $db -> query('DELETE FROM tblSessions WHERE Session_User_Id = ?',
         [
-            (int)htmlentities($_POST['user_id'])
+            (int)htmlentities($aData['User_Id'])
         ]);
     $_SESSION['logged-in'] = false;
     unset($_SESSION['logged-in']);

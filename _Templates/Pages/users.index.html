@@ -20,19 +20,19 @@
                 </tr>
             </thead>
             <tbody>
-            {foreach from=$aUsers key=$iKey item=aUser}
+            {foreach from=$aUsers key=$iKey item=user}
             <tr>
-                <td>{$aUser.User_Username}</td>
-                <td>{$aUser.User_Firstname}</td>
-                <td>{$aUser.User_Lastname}</td>
-                <td>{$aUser.User_Email}</td>
+                <td>{$user.User_Username}</td>
+                <td>{$user.User_Firstname}</td>
+                <td>{$user.User_Lastname}</td>
+                <td>{$user.User_Email}</td>
                 <td></td>
                 <td class="td-actions text-right">
-                    <button type="button" class="btn btn-primary btn-link btn-sm" onclick="callUser({$aUser.User_Id})">
+                    <button type="button" class="btn btn-primary btn-link btn-sm" onclick="callUser({$user.User_Id})">
                         <i class="fas fa-user-edit"></i>
                     </button>
 
-                    <button type="button" class="btn btn-danger btn-link btn-sm" onclick="deleteUser({$aUser.User_Id})">
+                    <button type="button" class="btn btn-danger btn-link btn-sm" onclick="deleteUser({$user.User_Id})">
                         <i class="fas fa-trash-alt"></i>
                     </button>
                 </td>
@@ -61,18 +61,23 @@
                 </tr>
             </thead>
             <tbody>
+
                 {foreach from=$aSessions item=$aSession}
-                    <tr>
-                        <td>{$aSession.Session_Id}</td>
-                        <td>{$aSession.Session_User_Id}</td>
-                        <td>{$aSession.Session_Last_Active|date_format:"%A, %B %e, %Y  %H:%M:%S"}</td>
-                        <td>
-                            <button type="button" class="btn btn-danger btn-link btn-sm" onclick="callSession('{$aSession.Session_Id}')">
-                                <i class="fas fa-trash-alt"></i>
-                                <div class="ripple-container"></div>
-                            </button>
-                        </td>
-                    </tr>
+
+                        <tr>
+                            <td>{$aSession.Session_Id}</td>
+                            <td>{$aSession.Session_User_Id}</td>
+                            <td>{$aSession.Session_Last_Active|date_format:"%A, %B %e, %Y  %H:%M:%S"}</td>
+                            <td>
+                                {if $aSession.Session_Id !== $aUser.Session_Id}
+                                    <button type="button" class="btn btn-danger btn-link btn-sm" onclick="callSession('{$aSession.Session_Id}')">
+                                        <i class="fas fa-trash-alt"></i>
+                                        <div class="ripple-container"></div>
+                                    </button>
+                                {/if}
+                            </td>
+                        </tr>
+
                 {/foreach}
             </tbody>
         </table>
