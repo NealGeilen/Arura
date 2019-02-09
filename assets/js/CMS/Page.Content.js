@@ -54,7 +54,7 @@ var Builder = {
                     return oText;
                 },
                 value: function(oElement){
-                    return TinyMce.getValue(oElement);
+                    return TinyMce.getValue(oElement.find('.Tinymce'));
                 }
             },
             Header: {
@@ -66,7 +66,19 @@ var Builder = {
                     return oText;
                 },
                 value: function(oElement){
-                    return TinyMce.getValue(oElement);
+                    return TinyMce.getValue(oElement.find('.Tinymce'));
+                }
+            },
+            Picture:{
+                oTemplate: $('<input>').attr('type','text').addClass('from-control'),
+                init: function (sValue) {
+                    oField  = this.oTemplate.clone();
+                    oField.val(sValue);
+                    return oField;
+                },
+                value: function(oElement){
+                    console.log(oElement.find('input'));
+                    return oElement.find('input').val();
                 }
             }
         }
@@ -127,7 +139,6 @@ var Builder = {
                     }),
                     success: function (data) {
                         addSuccessMessage('Content opgeslagen');
-                        console.log(data);
                     }
                 });
             }
@@ -277,7 +288,7 @@ var Builder = {
             var value;
             switch(oBlock.attr('content-type')){
                 default:
-                    value = Builder.ContentTypes.Types[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Content > div'));
+                    value = Builder.ContentTypes.Types[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Content'));
                     break;
             }
             return value;
@@ -337,7 +348,7 @@ var TinyMce = {
         ++this.Count;
     },
     getValue: function (oElement) {
-        console.log(oElement);
+        console.log(oElement.attr('id'));
         return tinyMCE.get(oElement.attr('id')).getContent();
     }
 };
