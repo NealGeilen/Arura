@@ -44,13 +44,14 @@ class Page extends Group{
     }
 
     public function getPageStructure($iPageId){
-        $aOutcome = [];
+        $aOutcome = ['Groups'=>[], 'Addons'=>[]];
         foreach ($this->getGroupsFromPage($iPageId) as $iGroupPosition => $aGroup){
-            $aOutcome[$iGroupPosition] = $aGroup;
+            $aOutcome['Groups'][$iGroupPosition] = $aGroup;
             foreach ($this->getContentBlockFromGroup((int)$aGroup['Group_Id']) as $iBlockPosition => $aBlock){
-                $aOutcome[$iGroupPosition]['Blocks'][$iBlockPosition] = $aBlock;
+                $aOutcome['Groups'][$iGroupPosition]['Blocks'][$iBlockPosition] = $aBlock;
             }
         }
+        $aOutcome['Addons'] = $this -> getAllAddons();
         return $aOutcome;
     }
 

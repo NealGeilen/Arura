@@ -6,6 +6,7 @@ var sSelectors = {
     Block_Item: '.Block-Item',
     Content_Type_Selector: '.ContentType-Selector',
 };
+var Addons = {};
 var Builder = {
     Xhr:function(options){
         var settings = $.extend({
@@ -24,8 +25,9 @@ var Builder = {
             $(sSelectors.Content_Type_Selector).draggable({
                 helper: function (event) {
                     aBlock = Builder.ContentTypes.DefaultBlock;
-                    aBlock.Content_Type = $(event.target).attr('content-type');
-                    oElement = Builder.Block.Build(Builder.ContentTypes.DefaultBlock);
+                    aBlock['Content_Type'] = $(event.target).attr('content-type');
+                    aBlock['Content_Addon_Id'] = parseInt($(event.target).attr('content-addon-id'));
+                    oElement = Builder.Block.Build(aBlock);
                     oElement.attr('content-type', $(event.target).attr('content-type'));
                     return oElement;
                 },
@@ -42,7 +44,8 @@ var Builder = {
             Content_Size: 2,
             Content_Value: null,
             Content_Type: null,
-            Content_Id: 0
+            Content_Id: 0,
+            Content_Addon_Id : 1
         },
         Types: {
             Text: {
@@ -54,7 +57,7 @@ var Builder = {
                     return oText;
                 },
                 value: function(oElement){
-                    return TinyMce.getValue(oElement.find('.Tinymce'));
+                    return TinyMce.getValue(oElement);
                 }
             },
             Header: {
@@ -66,7 +69,7 @@ var Builder = {
                     return oText;
                 },
                 value: function(oElement){
-                    return TinyMce.getValue(oElement.find('.Tinymce'));
+                    return TinyMce.getValue(oElement);
                 }
             },
             Picture:{
@@ -77,9 +80,60 @@ var Builder = {
                     return oField;
                 },
                 value: function(oElement){
-                    console.log(oElement.find('input'));
-                    return oElement.find('input').val();
+                    return oElement.val();
                 }
+            },
+            Icon: {
+                oTemplate: $('<button>').addClass('btn bnt-default'),
+                init: function (sValue) {
+                    sValue = (sValue === null) ? '' : sValue;
+                    oPicker = this.oTemplate.clone();
+                    oPicker.iconpicker({
+                        iconset: 'fontawesome5',
+                        icon: sValue
+                    });
+                    return oPicker;
+                },
+                value: function (oPicker) {
+                    return oPicker.find('i').attr('class');
+                }
+            }
+        },
+        Addons:{
+            widget:{
+                oTemplate: $(''),
+                init: function (aBlock) {
+                    container = $('<div class="row"></div>');
+                    Widget = Addons[parseInt(aBlock.Content_Addon_Id)];
+                    Settings = Widget.AddonSettings;
+                    aValue = (aBlock.Content_Value === null) ? [{}] : aBlock.Content_Value;
+                    $.each(aValue, function (iPosition, aSection) {
+                        section = $('<div class="Block-Item-Section">').addClass('col-xs-' + aBlock.Content_Raster);
+                        $.each(Settings, function (iKey, aSetting) {
+                            value = aSection[aSetting.AddonSetting_Tag];
+                            oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);
+                            oField.attr('field-tag', aSetting.AddonSetting_Tag).attr('field-type', aSetting.AddonSetting_Type).addClass('Block-Item-Field');
+                            section.append(oField);
+                        });
+                        container.append(section);
+                    });
+                    return container;
+                },
+                value: function (oBlock) {
+                    console.log(oBlock);
+                    aValue= {};
+                    $.each(oBlock.find('.Block-Item-Section'), function (iPosition, oGroup) {
+                        aGroup = {};
+                        $.each($(oGroup).find('.Block-Item-Field'), function (iKey, oField) {
+                            aGroup[$(oField).attr('field-tag')] = Builder.ContentTypes.Types[$(oField).attr('field-type')].value($(oField));
+                        });
+                        aValue[iPosition] = aGroup;
+                    });
+                    return aValue;
+                }
+            },
+            plugin:{
+
             }
         }
     },
@@ -102,10 +156,24 @@ var Builder = {
         },
         set: function () {
             this.get(function (aData) {
-               aStructure =  aData.data;
+               aStructure =  aData.data.Groups;
+                aAddons = aData.data.Addons;
+                Addons = aAddons;
                $.each(aStructure, function (iPosition, aGroup) {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
+               $.each(aAddons, function(iKey,aAddon){
+                   oHelper = $('<li><a class="ContentType-Selector"></a></li>')
+                   oHelper.find('a').attr('content-type',aAddon.Addon_Type).attr('content-addon-id', aAddon.Addon_Id).text(aAddon.Addon_Name);
+                   $('[addon-types='+aAddon.Addon_Type+']').append(oHelper);
+               });
+
+
+
+                Builder.Editor.sortable();
+                Builder.Group.sortable();
+                Builder.ContentTypes.draggable();
+
             });
         },
         save: function (bSendData = true) {
@@ -126,6 +194,7 @@ var Builder = {
                         Content_Position: iContentPosition,
                         Content_Type: oBlock.attr('content-type'),
                         Content_Group_Id : iGroupId,
+                        Content_Addon_Id: oBlock.attr('content-addon-id'),
                         Content_Size: parseInt(oBlock.attr('block-width')),
                         Content_Value: Builder.Block.getValue(oBlock)
                     }
@@ -245,7 +314,12 @@ var Builder = {
         },
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
-            oBlock.attr('block-width', aBlock.Content_Size).attr('content-id', aBlock.Content_Id).addClass('col-xs-' + aBlock.Content_Size).attr('content-type', aBlock.Content_Type);
+            oBlock
+                .attr('block-width', aBlock.Content_Size)
+                .attr('content-id', aBlock.Content_Id)
+                .addClass('col-xs-' + aBlock.Content_Size)
+                .attr('content-type', aBlock.Content_Type)
+                .attr('content-addon-id',aBlock.Content_Addon_Id);
             value = aBlock.Content_Value;
             this.Events(oBlock);
             oField = Builder.Item.Build(aBlock);
@@ -287,8 +361,12 @@ var Builder = {
         getValue:function(oBlock){
             var value;
             switch(oBlock.attr('content-type')){
+                case 'widget':
+                case 'plugin':
+                    value = Builder.ContentTypes.Addons[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Content'));
+                    break;
                 default:
-                    value = Builder.ContentTypes.Types[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Content'));
+                    value = Builder.ContentTypes.Types[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Field'));
                     break;
             }
             return value;
@@ -298,8 +376,12 @@ var Builder = {
         Build: function (aBlock) {
             var oItem;
             switch(aBlock.Content_Type){
+                case 'widget':
+                case 'plugin':
+                    oItem = Builder.ContentTypes.Addons[aBlock.Content_Type].init(aBlock);
+                    break;
                 default:
-                    oItem = Builder.ContentTypes.Types[aBlock.Content_Type].init(aBlock.Content_Value);
+                    oItem = Builder.ContentTypes.Types[aBlock.Content_Type].init(aBlock.Content_Value).addClass('Block-Item-Field');
                     break;
             }
             return oItem;
@@ -348,15 +430,11 @@ var TinyMce = {
         ++this.Count;
     },
     getValue: function (oElement) {
-        console.log(oElement.attr('id'));
         return tinyMCE.get(oElement.attr('id')).getContent();
     }
 };
 
 $(document).ready(function () {
-   Builder.Editor.sortable();
-   Builder.Group.sortable();
-   Builder.ContentTypes.draggable();
    Builder.Structure.set();
    $(document).on('click', function (e) {
        if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group')){

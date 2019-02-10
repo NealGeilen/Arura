@@ -3,7 +3,7 @@ namespace Arura\CMS\Page;
 
 use NG\Functions;
 
-class ContentBlock extends Plugin{
+class ContentBlock extends Addon{
 
 
     public function getContentBlock($iContentId){
