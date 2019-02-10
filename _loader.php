@@ -11,7 +11,11 @@ global $aHeaders;
 $aUrl = $aPath;
 $aHeaders = $aRoots;
 if (join('/', $aUrl) === 'login'){
-    $smarty->display('_Templates/Pages/login.index.html');
+    if (\NG\User\User::isLogged()){
+        header('Location: /content');
+    } else {
+        $smarty->display('_Templates/Pages/login.index.html');
+    }
     exit;
 }
 if (!\NG\User\User::isLogged()){
