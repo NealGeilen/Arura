@@ -26,11 +26,11 @@
 .CMS-Group .CMS-Group-Control{
     display: none;
     position: absolute;
-    left: -15px;
-    top: -15px;
+    left: -2px;
+    top: -32px;
 }
 .Block-Item{
-    background: lightblue;
+    background: lightgrey;
     position: relative;
     padding: unset;
 }
@@ -39,14 +39,16 @@
     padding: 16px;
     width: 100%;
 }
+.Block-Item.active .Block-Item-Content{
+    background: gray;
+}
 .Block-Item.active .Block-Item-Control{
     display: block!important;
 }
 .Block-Item .Block-Item-Control{
     position: absolute;
     display: none;
-    top: 20px;
-    left: -12px;
+    left: -24px;
 }
 .Block-Item.active .Block-Item-Width-Control{
     display: block!important;

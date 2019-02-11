@@ -42,12 +42,15 @@
 <div style="display: none">
     <div class="template-page-group">
         <div class="CMS-Group">
-            <div class="CMS-Group-Control">
-                <span class="btn btn-default btn-circle Group-Position-Handler">
+            <div class="CMS-Group-Control btn-group">
+                <span class="btn btn-sm btn-default Group-Position-Handler">
                         <i class="fas fa-arrows-alt-v"></i>
                 </span>
-                <button class="btn btn-default btn-circle" onclick="Builder.Group.Delete($(this).parents('.CMS-Group'))">
+                <button class="btn btn-sm btn-default" onclick="Builder.Group.Delete($(this).parents('.CMS-Group'))">
                     <i class="fas fa-trash-alt"></i>
+                </button>
+                <button class="btn btn-sm btn-default" onclick="">
+                    <i class="fas fa-pen"></i>
                 </button>
             </div>
             <div class="CMS-Group-Content row">
@@ -64,6 +67,12 @@
                     <button class="btn btn-xsm btn-primary" onclick="Builder.Block.Delete($(this).parents('.Block-Item'))">
                         <i class="fas fa-trash-alt"></i>
                     </button>
+                    <button class="btn btn-xsm btn-primary" onclick="">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button class="btn btn-xsm btn-primary" onclick="">
+                        <i class="fas fa-pen"></i>
+                    </button>
                 </div>
             </div>
             <div class="Block-Item-Content">
@@ -74,6 +83,3 @@
         </div>
     </div>
 </div>
-
-
-<button class="btn btn-secondary" role="iconpicker" data-iconset="fontawesome5" data-icon="fas fa-wifi"></button>
