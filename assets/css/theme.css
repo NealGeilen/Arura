@@ -2418,7 +2418,7 @@ ul.nav-main li .nav-children {
 }
 
 ul.nav-main li .nav-children li a {
-	padding: 6px 15px 6px 57px;
+	padding: 6px 15px 6px 40px;
 	overflow: hidden;
 }
 
@@ -3894,7 +3894,8 @@ input.input-rounded {
 .checkbox-custom input[type="checkbox"]:checked + label:after {
 	position: absolute;
 	display: inline-block;
-	font-family: 'Font Awesome 5 Free';
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
 	content: '\F00C';
 	top: 50%;
 	left: 4px;
@@ -4220,7 +4221,8 @@ div.validation-message ul label.error {
 }
 
 div.validation-message ul label.error:before {
-	font-family: 'Font Awesome 5 Free';
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
 	content: '\f00d';
 	position: absolute;
 	top: 0;
@@ -11307,7 +11309,8 @@ ul.simple-todo-list li.completed:before {
 	position: absolute;
 	top: 3px;
 	left: 0;
-	font-family: 'Font Awesome 5 Free';
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;;
 	content: "\f00c";
 	z-index: 1;
 }
@@ -12947,7 +12950,8 @@ html.dark .pricing-table .plan {
 
 .datepicker table thead tr th.prev {
 	content: '\f0d9';
-	font-family: 'Font Awesome 5 Free';
+	font-family: "Font Awesome 5 Free";
+	font-weight: 900;
 }
 
 .datepicker table thead tr th.next {
