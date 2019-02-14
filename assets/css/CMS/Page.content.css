@@ -98,3 +98,10 @@ Active group
 .Block-Item.active .Tinymce{
     background: white!important;
 }
+.content-body{
+    /*padding: unset;*/
+}
+.CMS-overvieuw{
+    position: relative;
+    padding:  5px;
+}

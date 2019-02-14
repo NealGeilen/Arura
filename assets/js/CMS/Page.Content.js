@@ -194,7 +194,7 @@ var Builder = {
                         Content_Position: iContentPosition,
                         Content_Type: oBlock.attr('content-type'),
                         Content_Group_Id : iGroupId,
-                        Content_Addon_Id: oBlock.attr('content-addon-id'),
+                        Content_Addon_Id: parseInt(oBlock.attr('content-addon-id')),
                         Content_Size: parseInt(oBlock.attr('block-width')),
                         Content_Value: Builder.Block.getValue(oBlock)
                     }

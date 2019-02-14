@@ -11,26 +11,57 @@
     </button>
 </header>
 
-<div class="CMS-Block-Header">
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Standaard <span class="caret"></span> </button>
-        <ul class="dropdown-menu">
-            <li><a class="ContentType-Selector" content-type="Header"><i class="fas fa-arrows-alt"></i> Header</a></li>
-            <li><a class="ContentType-Selector" content-type="Text"><i class="fas fa-arrows-alt"></i> Tekst</a></li>
-            <li><a class="ContentType-Selector" content-type="Picture"><i class="fas fa-arrows-alt"></i> Afbeelding</a></li>
-            <li><a class="ContentType-Selector" content-type="Icon"><i class="fas fa-arrows-alt"></i>Pictogram</a></li>
-        </ul>
-    </div>
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Widget <span class="caret"></span> </button>
-        <ul class="dropdown-menu" addon-types="widget">
-            <li><a class="ContentType-Selector"><i class="fas fa-arrows-alt"></i>Gallarij</a></li>
-        </ul>
-    </div>
-</div>
 
-<div class="CMS-Page-Editor">
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-9 CMS-overvieuw">
+            <section class="panel">
+                <header class="panel-heading">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Standaard <span class="caret"></span> </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="ContentType-Selector" content-type="Header"><i class="fas fa-arrows-alt"></i> Header</a></li>
+                            <li><a class="ContentType-Selector" content-type="Text"><i class="fas fa-arrows-alt"></i> Tekst</a></li>
+                            <li><a class="ContentType-Selector" content-type="Picture"><i class="fas fa-arrows-alt"></i> Afbeelding</a></li>
+                            <li><a class="ContentType-Selector" content-type="Icon"><i class="fas fa-arrows-alt"></i>Pictogram</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Widget <span class="caret"></span> </button>
+                        <ul class="dropdown-menu" addon-types="widget">
+                            <li><a class="ContentType-Selector"><i class="fas fa-arrows-alt"></i>Gallarij</a></li>
+                        </ul>
+                    </div>
+                </header>
+                <div class="panel-body">
+                    <div class="CMS-Page-Editor">
+
+                    </div>
+                </div>
+            </section>
+        </div>
+        <div class="col-xs-3 CMS-overvieuw">
+            <div class="arura-sidebar">
+                <div class="tabs">
+                    <ul class="nav nav-tabs nav-justified">
+                        <li class="">
+                            <a href="#popular10" data-toggle="tab" class="text-center" aria-expanded="false"><i class="far fa-object-group"></i> Groep</a>
+                        </li>
+                        <li class="active">
+                            <a href="#recent10" data-toggle="tab" class="text-center" aria-expanded="true"><i class="fas fa-square"></i> Block</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div id="popular10" class="tab-pane">
+                           </div>
+                        <div id="recent10" class="tab-pane active">
+                           </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="btn-group btns-page-actions">
     <button class="btn btn-primary" onclick="Builder.Structure.save()">
@@ -49,9 +80,6 @@
                 <button class="btn btn-sm btn-default" onclick="Builder.Group.Delete($(this).parents('.CMS-Group'))">
                     <i class="fas fa-trash-alt"></i>
                 </button>
-                <button class="btn btn-sm btn-default" onclick="">
-                    <i class="fas fa-pen"></i>
-                </button>
             </div>
             <div class="CMS-Group-Content row">
             </div>
@@ -66,12 +94,6 @@
                     </span>
                     <button class="btn btn-xsm btn-primary" onclick="Builder.Block.Delete($(this).parents('.Block-Item'))">
                         <i class="fas fa-trash-alt"></i>
-                    </button>
-                    <button class="btn btn-xsm btn-primary" onclick="">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button class="btn btn-xsm btn-primary" onclick="">
-                        <i class="fas fa-pen"></i>
                     </button>
                 </div>
             </div>
