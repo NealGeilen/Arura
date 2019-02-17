@@ -48,7 +48,7 @@ var Builder = {
             Content_Addon_Id : 1
         },
         Types: {
-            Text: {
+            TextArea: {
                 oTemplate: $('<div>').addClass('Tinymce'),
                 init: function (sValue) {
                     oText  = this.oTemplate.clone();
@@ -96,6 +96,18 @@ var Builder = {
                 },
                 value: function (oPicker) {
                     return oPicker.find('i').attr('class');
+                }
+            },
+            Number: {
+                oTemplate: $('<input>').addClass('form-control'),
+                init: function (sValue) {
+                    sValue = (sValue === null) ? '' : sValue;
+                    oInput = this.oTemplate.clone();
+                    oInput.attr('type', 'number').val(sValue);
+                    return oInput;
+                },
+                value: function (oInput) {
+                    return oInput.val();
                 }
             }
         },
