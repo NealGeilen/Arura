@@ -264,9 +264,11 @@ var Builder = {
         State:{
             Activate: function (oElement) {
                 this.Deactivate();
+                Sidebar.Group.Active_Id = parseInt(oElement.attr('group-id'));
                 oElement.addClass('active');
             },
             Deactivate: function () {
+                Sidebar.Group.Active_Id = 0;
                 $('.CMS-Group.active').removeClass('active');
             }
         },
@@ -364,9 +366,11 @@ var Builder = {
         State:{
             Activate: function (oElement) {
                 this.Deactivate();
+                Sidebar.Block.Active_Id = parseInt(oElement.attr('content-id'));
                 oElement.addClass('active');
             },
             Deactivate: function () {
+                Sidebar.Block.Active_Id = 0;
                 $('.Block-Item.active').removeClass('active');
             }
         },
@@ -397,6 +401,20 @@ var Builder = {
                     break;
             }
             return oItem;
+        }
+    }
+};
+var Sidebar = {
+    Group: {
+        Active_Id: 0,
+        getGroupSetting : function () {
+
+        }
+    },
+    Block: {
+        Active_Id: 0,
+        getBlockSetting : function () {
+
         }
     }
 };
