@@ -28,7 +28,6 @@ var Builder = {
                     aBlock['Content_Type'] = $(event.target).attr('content-type');
                     aBlock['Content_Addon_Id'] = parseInt($(event.target).attr('content-addon-id'));
                     oElement = Builder.Block.Build(aBlock);
-                    oElement.attr('content-type', $(event.target).attr('content-type'));
                     return oElement;
                 },
                 connectToSortable: sSelectors.Group_Content,
@@ -175,7 +174,7 @@ var Builder = {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
                $.each(aAddons, function(iKey,aAddon){
-                   oHelper = $('<li><a class="ContentType-Selector"></a></li>')
+                   oHelper = $('<li><a class="ContentType-Selector"></a></li>');
                    oHelper.find('a').attr('content-type',aAddon.Addon_Type).attr('content-addon-id', aAddon.Addon_Id).text(aAddon.Addon_Name);
                    $('[addon-types='+aAddon.Addon_Type+']').append(oHelper);
                });
@@ -194,22 +193,24 @@ var Builder = {
             aData.Groups = {};
             $.each($('.CMS-Page-Editor .CMS-Group'), function (iGroupPosition, oGroup) {
                 oGroup = $(oGroup);
-                iGroupId = parseInt(oGroup.attr('group-id'));
+                iGroupId = parseInt(Builder.Group.getData(oGroup).Group_Id);
                 aData.Groups[iGroupId] = {
                     Group_Position : iGroupPosition,
                     Blocks: {}
                 };
                 $.each(oGroup.find(sSelectors.Block_Item), function (iContentPosition, oBlock) {
                     oBlock = $(oBlock);
-                    iContentId = parseInt(oBlock.attr('content-id'));
-                    aData.Groups[iGroupId].Blocks[iContentId] = {
-                        Content_Position: iContentPosition,
-                        Content_Type: oBlock.attr('content-type'),
-                        Content_Group_Id : iGroupId,
-                        Content_Addon_Id: parseInt(oBlock.attr('content-addon-id')),
-                        Content_Size: parseInt(oBlock.attr('block-width')),
-                        Content_Value: Builder.Block.getValue(oBlock)
-                    }
+                    var aBlock = Builder.Block.getData(oBlock);
+                    iContentId = parseInt(aBlock.Content_Id);
+                    value = Builder.Block.getValue(oBlock);
+                    Builder.Block.setData(oBlock, 'Content_Value', value);
+                    Builder.Block.setData(oBlock, 'Content_Position', iContentPosition);
+                    Builder.Block.setData(oBlock, 'Content_Group_Id', iGroupId);
+                    aBlock.Content_Position = iContentPosition;
+                    aBlock.Content_Value = value;
+                    aBlock.Content_Group_Id = iGroupId;
+                    aBlock.Content_Raster = 12;
+                    aData.Groups[iGroupId].Blocks[iContentId] = aBlock;
                 });
             });
             if (bSendData){
@@ -235,6 +236,15 @@ var Builder = {
       }
     },
     Group: {
+        setData: function(oGroup, aArray){
+            if ('Blocks' in aArray){
+                delete aArray.Blocks;
+            }
+            oGroup.data('group-data', aArray);
+        },
+        getData: function(oGroup){
+            return oGroup.data('group-data');
+        },
         Build : function(aGroup){
             oTemplate = $($('.template-page-group').html());
             oTemplate.attr('group-id', aGroup.Group_Id);
@@ -243,6 +253,7 @@ var Builder = {
                    oTemplate.find(sSelectors.Group_Content).append(Builder.Block.Build(aBlock));
                 });
             }
+            this.setData(oTemplate, aGroup);
             this.Events(oTemplate);
             return oTemplate;
         },
@@ -258,7 +269,7 @@ var Builder = {
             });
         },
         Delete : function (oElement) {
-            Builder.Structure.DeleteItems.aGroups.push(parseInt(oElement.attr('group-id')));
+            Builder.Structure.DeleteItems.aGroups.push(parseInt(this.getData(oElement).Group_Id));
             oElement.remove();
         },
         State:{
@@ -304,7 +315,7 @@ var Builder = {
                         B.ResizePermission(ui);
                     },
                     resize: function (event,ui) {
-                        B.ResizePermission(ui);
+                        // B.ResizePermission(ui);
                         B.OnResize(ui);
                     },
                     stop: function (event,ui) {
@@ -314,36 +325,48 @@ var Builder = {
             },
             OnResize: function (ui) {
                 Element = $(ui.helper);
-                iWidth = parseInt(Element.attr('block-width'));
-                Element.removeClass('col-xs-' + iWidth);
+                aData = Builder.Block.getData(Element);
+
+                Element.removeClass('col-xs-' + aData.Content_Size);
                 i = parseInt((Element.width() / ($(sSelectors.Group_Content).innerWidth() / 100 * (100/12))));
-                Element.addClass('col-xs-' + i).css('width', (100/12*i).toFixed() + '%').attr('block-width', i);
+                Element.addClass('col-xs-' + i).css('width', (100/12*i).toFixed() + '%');
+                Builder.Block.setData(Element, 'Content_Size', i);
+
             },
             ResizePermission(ui){
-                Element = $(ui.item);
-                if (parseInt(Element.attr('block-width')) > 12) {
+                Element = $(ui.helper);
+                aData = Builder.Block.getData(Element);
+                if (parseInt(aData.Content_Size) > 12) {
                     Element.resizable("option", "maxWidth", Element.width());
                 } else {
                     Element.resizable("option", "maxWidth", null);
                 }
             },
         },
+        setArray: function(oBlock, aArray){
+            oBlock.data('block-data', aArray);
+        },
+        setData: function(oBlock, sField,sValue){
+            a = this.getData(oBlock);
+            a[sField] =sValue;
+            this.setArray(oBlock,a);
+        },
+        getData: function(oBlock){
+            return oBlock.data('block-data');
+        },
         Build: function(aBlock = null){
+            console.log(aBlock);
             oBlock = $($('.template-page-block').html());
+            this.setArray(oBlock, aBlock);
             oBlock
-                .attr('block-width', aBlock.Content_Size)
-                .attr('content-id', aBlock.Content_Id)
-                .addClass('col-xs-' + aBlock.Content_Size)
-                .attr('content-type', aBlock.Content_Type)
-                .attr('content-addon-id',aBlock.Content_Addon_Id);
-            value = aBlock.Content_Value;
+                .addClass('col-xs-' + aBlock.Content_Size);
             this.Events(oBlock);
             oField = Builder.Item.Build(aBlock);
             oBlock.find('.Block-Item-Content').append(oField);
             return oBlock;
         },
         Delete: function(oElement){
-            Builder.Structure.DeleteItems.aBlocks.push(parseInt(oElement.attr('content-id')));
+            Builder.Structure.DeleteItems.aBlocks.push(parseInt(this.getData(oElement).Content_Id));
             oElement.remove();
         },
         Create:function(oElement){
@@ -353,7 +376,7 @@ var Builder = {
                    type: 'Create-Block'
                }),
                 success: function (returned) {
-                   oElement.attr('content-id', returned.data.Content_Id);
+                   Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
                    oElement.css('display', 'block');
                 }
             });
@@ -368,7 +391,7 @@ var Builder = {
         State:{
             Activate: function (oElement) {
                 this.Deactivate();
-                Sidebar.Block.Active_Id = parseInt(oElement.attr('content-id'));
+                Sidebar.Block.Active_Id = parseInt(Builder.Block.getData(oElement).Content_Id);
                 Sidebar.Block.State.Activate();
                 oElement.addClass('active');
             },
@@ -380,13 +403,14 @@ var Builder = {
         },
         getValue:function(oBlock){
             var value;
-            switch(oBlock.attr('content-type')){
+            aBlock = this.getData(oBlock);
+            switch(aBlock.Content_Type){
                 case 'widget':
                 case 'plugin':
-                    value = Builder.ContentTypes.Addons[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Content'));
+                    value = Builder.ContentTypes.Addons[aBlock.Content_Type].value(oBlock.find('.Block-Item-Content'));
                     break;
                 default:
-                    value = Builder.ContentTypes.Types[oBlock.attr('content-type')].value(oBlock.find('.Block-Item-Field'));
+                    value = Builder.ContentTypes.Types[aBlock.Content_Type].value(oBlock.find('.Block-Item-Field'));
                     break;
             }
             return value;
