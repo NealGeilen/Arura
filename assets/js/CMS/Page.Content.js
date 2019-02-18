@@ -265,10 +265,12 @@ var Builder = {
             Activate: function (oElement) {
                 this.Deactivate();
                 Sidebar.Group.Active_Id = parseInt(oElement.attr('group-id'));
+                Sidebar.Group.State.Activate();
                 oElement.addClass('active');
             },
             Deactivate: function () {
                 Sidebar.Group.Active_Id = 0;
+                Sidebar.Group.State.Deactivate();
                 $('.CMS-Group.active').removeClass('active');
             }
         },
@@ -367,10 +369,12 @@ var Builder = {
             Activate: function (oElement) {
                 this.Deactivate();
                 Sidebar.Block.Active_Id = parseInt(oElement.attr('content-id'));
+                Sidebar.Block.State.Activate();
                 oElement.addClass('active');
             },
             Deactivate: function () {
                 Sidebar.Block.Active_Id = 0;
+                Sidebar.Block.State.Deactivate();
                 $('.Block-Item.active').removeClass('active');
             }
         },
@@ -409,12 +413,32 @@ var Sidebar = {
         Active_Id: 0,
         getGroupSetting : function () {
 
+        },
+        State: {
+            Activate: function () {
+                $('.group-message').css('display', 'none');
+                $('.group-settings').css('display', 'block');
+            },
+            Deactivate : function () {
+                $('.group-message').css('display', 'block');
+                $('.group-settings').css('display', 'none')
+            }
         }
     },
     Block: {
         Active_Id: 0,
         getBlockSetting : function () {
 
+        },
+        State: {
+            Activate: function () {
+                $('.block-message').css('display', 'none');
+                $('.block-settings').css('display', 'block');
+            },
+            Deactivate : function () {
+                $('.block-message').css('display', 'block');
+                $('.block-settings').css('display', 'none')
+            }
         }
     }
 };
@@ -467,10 +491,14 @@ var TinyMce = {
 $(document).ready(function () {
    Builder.Structure.set();
    $(document).on('click', function (e) {
-       if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group')){
+       if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group') && $(e.target).parents('.arura-sidebar').length < 1){
            Builder.Group.State.Deactivate();
        }
-       if ($(e.target).parents(sSelectors.Block_Item).length < 1 && !$(e.target).hasClass('Block-Item')){
+       if (
+           $(e.target).parents(sSelectors.Block_Item).length < 1
+           && !$(e.target).hasClass('Block-Item')
+           && $(e.target).parents('.arura-sidebar').length < 1
+       ){
            Builder.Block.State.Deactivate();
        }
    })
