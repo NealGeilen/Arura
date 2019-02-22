@@ -94,7 +94,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <button class="btn btn-default">
+                                <button class="btn btn-default" onclick="Sidebar.Block.Edit.Start()">
                                     Item's aanpassen
                                 </button>
                             </div>
@@ -114,6 +114,11 @@
     <button class="btn btn-primary" onclick="Builder.Structure.save()">
         SAVE
     </button>
+</div>
+<div class="block-editor-background">
+    <div class="close btn btn-primary" onclick="Sidebar.Block.Edit.End()">
+        <i class="fas fa-times"></i>
+    </div>
 </div>
 
 

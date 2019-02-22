@@ -492,6 +492,16 @@ var Sidebar = {
                 $('.block-message').css('display', 'block');
                 $('.block-settings').css('display', 'none')
             }
+        },
+        Edit: {
+            Start : function (){
+                Sidebar.Block.getBlockElement().find('.Block-Item-Content').addClass('active');
+                $('.block-editor-background').addClass('active');
+            },
+            End: function () {
+                Sidebar.Block.getBlockElement().find('.Block-Item-Content').removeClass('active');
+                $('.block-editor-background').removeClass('active');
+            }
         }
     }
 };

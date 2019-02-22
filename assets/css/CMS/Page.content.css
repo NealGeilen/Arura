@@ -42,6 +42,9 @@
 .Block-Item.active .Block-Item-Content{
     background: gray;
 }
+.Block-Item.active .Block-Item-Content.active{
+    z-index: 120;
+}
 .Block-Item.active .Block-Item-Control{
     display: block!important;
 }
@@ -104,4 +107,26 @@ Active group
 .CMS-overvieuw{
     position: relative;
     padding:  5px;
+}
+.block-editor-background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    display: none;
+}
+.block-editor-background.active{
+    display: block;
+}
+.block-editor-background .close{
+    position: absolute;
+    right: 0;
+    top: 100px;
+    font-size: 24px;
+    margin: 15px;
+    z-index: 101;
+    opacity: unset;
 }
