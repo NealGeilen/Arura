@@ -131,7 +131,6 @@ var Builder = {
                     return container;
                 },
                 value: function (oBlock) {
-                    console.log(oBlock);
                     aValue= {};
                     $.each(oBlock.find('.Block-Item-Section'), function (iPosition, oGroup) {
                         aGroup = {};
@@ -355,11 +354,11 @@ var Builder = {
             return oBlock.data('block-data');
         },
         Build: function(aBlock = null){
-            console.log(aBlock);
             oBlock = $($('.template-page-block').html());
             this.setArray(oBlock, aBlock);
             oBlock
-                .addClass('col-xs-' + aBlock.Content_Size);
+                .addClass('col-xs-' + aBlock.Content_Size)
+                .attr('block-id', aBlock.Content_Id);
             this.Events(oBlock);
             oField = Builder.Item.Build(aBlock);
             oBlock.find('.Block-Item-Content').append(oField);
@@ -393,6 +392,7 @@ var Builder = {
                 this.Deactivate();
                 Sidebar.Block.Active_Id = parseInt(Builder.Block.getData(oElement).Content_Id);
                 Sidebar.Block.State.Activate();
+                Sidebar.Block.setBlockSettingValues();
                 oElement.addClass('active');
             },
             Deactivate: function () {
@@ -434,6 +434,7 @@ var Builder = {
 };
 var Sidebar = {
     Group: {
+
         Active_Id: 0,
         getGroupSetting : function () {
 
@@ -451,7 +452,25 @@ var Sidebar = {
     },
     Block: {
         Active_Id: 0,
-        getBlockSetting : function () {
+        getBlockElement: function(){
+            return $('[block-id='+this.Active_Id+']');
+        },
+        getBlockData:function(){
+           return Builder.Block.getData(this.getBlockElement());
+        },
+        setBlockSettingValues: function(){
+            aData = this.getBlockData();
+            var rest = function (){
+                $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
+            };
+            var set = function (){
+                $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
+            };
+
+            rest();
+            set();
+        },
+        Events : function () {
 
         },
         State: {
