@@ -183,6 +183,7 @@ var Builder = {
                 Builder.Editor.sortable();
                 Builder.Group.sortable();
                 Builder.ContentTypes.draggable();
+                Sidebar.Block.Events();
 
             });
         },
@@ -208,7 +209,6 @@ var Builder = {
                     aBlock.Content_Position = iContentPosition;
                     aBlock.Content_Value = value;
                     aBlock.Content_Group_Id = iGroupId;
-                    aBlock.Content_Raster = 12;
                     aData.Groups[iGroupId].Blocks[iContentId] = aBlock;
                 });
             });
@@ -458,6 +458,9 @@ var Sidebar = {
         getBlockData:function(){
            return Builder.Block.getData(this.getBlockElement());
         },
+        setBlockData: function(sField, value){
+          Builder.Block.setData(this.getBlockElement(),sField,value);
+        },
         setBlockSettingValues: function(){
             aData = this.getBlockData();
             var rest = function (){
@@ -471,7 +474,14 @@ var Sidebar = {
             set();
         },
         Events : function () {
+            S = this;
+            $('[content-raster]').parent().on('click', function () {
+                Raster = parseInt($(this).find('input').attr('content-raster'));
+                aData = Sidebar.Block.getBlockData();
+                Sidebar.Block.getBlockElement().find('.Block-Item-Section').removeClass('col-xs-' + aData.Content_Raster).addClass('col-xs-'+Raster);
 
+                Sidebar.Block.setBlockData('Content_Raster', Raster);
+            });
         },
         State: {
             Activate: function () {
