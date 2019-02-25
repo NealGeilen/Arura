@@ -494,12 +494,39 @@ var Sidebar = {
             }
         },
         Edit: {
+            SortableObj: null,
+            Sortable : function(){
+                this.SortableObj = Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row');
+                this.SortableObj.sortable({
+                    handle : ".Block-Editor-Handle",
+                });
+            },
+            Remove: function(oButton){
+                oButton.parents('.Block-Item-Section').remove();
+            },
+            Add: function(){
+                aBlock = Sidebar.Block.getBlockData();
+                Settings = Addons[parseInt(Sidebar.Block.getBlockData().Content_Addon_Id)].AddonSettings;
+                // console.log(, Addons);
+                section = $('<div class="Block-Item-Section">').addClass('col-xs-' + aBlock.Content_Raster).append($('.template-edit-item').html());
+                $.each(Settings, function (iKey, aSetting) {
+                    value = null;
+                    oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);
+                    oField.attr('field-tag', aSetting.AddonSetting_Tag).attr('field-type', aSetting.AddonSetting_Type).addClass('Block-Item-Field');
+                    section.append(oField);
+                });
+                Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row').append(section);
+            },
             Start : function (){
+                this.Sortable();
                 Sidebar.Block.getBlockElement().find('.Block-Item-Content').addClass('active');
+                Sidebar.Block.getBlockElement().find('.Block-Item-Section').append($('.template-edit-item').html());
                 $('.block-editor-background').addClass('active');
             },
             End: function () {
+                this.SortableObj.sortable('destroy');
                 Sidebar.Block.getBlockElement().find('.Block-Item-Content').removeClass('active');
+                Sidebar.Block.getBlockElement().find('.Block-Editor').remove();
                 $('.block-editor-background').removeClass('active');
             }
         }
@@ -561,6 +588,9 @@ $(document).ready(function () {
            $(e.target).parents(sSelectors.Block_Item).length < 1
            && !$(e.target).hasClass('Block-Item')
            && $(e.target).parents('.arura-sidebar').length < 1
+           && !$(e.target).hasClass('btn')
+           && $(e.target).parent('.btn').length < 1
+           && $(e.target).hasClass('.block-editor-background')
        ){
            Builder.Block.State.Deactivate();
        }

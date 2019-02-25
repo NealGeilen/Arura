@@ -121,7 +121,7 @@ Active group
 .block-editor-background.active{
     display: block;
 }
-.block-editor-background .close{
+.block-editor-background .btn-group-vertical{
     position: absolute;
     right: 0;
     top: 100px;
@@ -129,4 +129,20 @@ Active group
     margin: 15px;
     z-index: 101;
     opacity: unset;
+}
+.Block-Editor{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+}
+.Block-Editor .btn-group{
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    /*right: 40%;*/
 }

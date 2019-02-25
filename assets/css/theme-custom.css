@@ -39,3 +39,6 @@
 .arura-sidebar .tabs, .arura-sidebar .tab-content{
     height: 100%;
 }
+.page-header > .btn , .page-header > .btn-group{
+    margin: 8px 7px;
+}
