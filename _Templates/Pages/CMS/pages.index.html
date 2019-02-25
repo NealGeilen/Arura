@@ -21,11 +21,13 @@
                 <td>{$aPage.Page_Url}</td>
                 <td>
                     <div class="btn-group">
-                        <a href="{$smarty.server.REQUEST_URI}?p={$aPage.Page_Id}" type="button" class="btn btn-primary btn-link btn-sm" >
+                        <a class="btn btn-default" href="{$smarty.server.REDIRECT_URL}?p={$aPage.Page_Id}" type="button">
+                            <i class="fas fa-cog"></i>
+                        </a>
+                        <a href="{$smarty.server.REDIRECT_URL}?c={$aPage.Page_Id}" type="button" class="btn btn-primary btn-link" >
                             <i class="fas fa-pen"></i>
                         </a>
-
-                        <button type="button" class="btn btn-danger btn-link btn-sm" >
+                        <button type="button" class="btn btn-danger btn-link" >
                             <i class="far fa-trash-alt"></i>
                         </button>
                     </div>

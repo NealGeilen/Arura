@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Gegenereerd op: 10 feb 2019 om 20:25
+-- Gegenereerd op: 25 feb 2019 om 16:33
 -- Serverversie: 5.7.23
 -- PHP-versie: 7.2.10
 
@@ -68,10 +68,10 @@ CREATE TABLE IF NOT EXISTS `tblcmsaddonsettings` (
 --
 
 INSERT INTO `tblcmsaddonsettings` (`AddonSetting_Id`, `AddonSetting_Addon_Id`, `AddonSetting_Type`, `AddonSetting_Position`, `AddonSetting_Tag`) VALUES
-(1, 5, 'Text', 1, 'text'),
+(1, 5, 'TextArea', 1, 'text'),
 (2, 5, 'Picture', 0, 'img'),
 (3, 6, 'Icon', 0, 'Icon'),
-(4, 6, 'Text', 1, 'Text');
+(4, 6, 'TextArea', 1, 'Text');
 
 -- --------------------------------------------------------
 
@@ -82,30 +82,25 @@ INSERT INTO `tblcmsaddonsettings` (`AddonSetting_Id`, `AddonSetting_Addon_Id`, `
 DROP TABLE IF EXISTS `tblcmscontentblocks`;
 CREATE TABLE IF NOT EXISTS `tblcmscontentblocks` (
   `Content_Id` int(11) NOT NULL AUTO_INCREMENT,
-  `Content_Group_Id` int(11) NOT NULL,
-  `Content_Addon_Id` int(11) NOT NULL,
-  `Content_Type` varchar(255) COLLATE utf8_bin NOT NULL,
-  `Content_Value` longtext COLLATE utf8_bin NOT NULL,
-  `Content_Position` int(11) NOT NULL,
-  `Content_Size` int(11) NOT NULL,
-  `Content_Raster` int(11) NOT NULL,
+  `Content_Group_Id` int(11) DEFAULT NULL,
+  `Content_Addon_Id` int(11) DEFAULT NULL,
+  `Content_Type` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `Content_Value` longtext COLLATE utf8_bin,
+  `Content_Position` int(11) DEFAULT NULL,
+  `Content_Size` int(11) DEFAULT NULL,
+  `Content_Raster` int(11) DEFAULT NULL,
   PRIMARY KEY (`Content_Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `tblcmscontentblocks`
 --
 
 INSERT INTO `tblcmscontentblocks` (`Content_Id`, `Content_Group_Id`, `Content_Addon_Id`, `Content_Type`, `Content_Value`, `Content_Position`, `Content_Size`, `Content_Raster`) VALUES
-(26, 24, 0, 'Header', '<p style=\"text-align: center;\">TEst</p>', 0, 12, 0),
-(10, 23, 0, 'Header', '', 0, 12, 0),
-(11, 23, 0, 'Text', '', 1, 12, 0),
-(25, 24, 5, 'widget', '[{\"img\":\"test\",\"text\":\"<p>testkshwadwjahdkljwahwakjldhawlkjhwadkjlwahdkjlawdhwakjdhawldjkhawdkhwadlkjawhlkjdhwad<\\/p>\"},{\"img\":\"test\",\"text\":\"<p>test<\\/p>\"}]', 1, 12, 6),
-(12, 25, 0, 'Text', '', 0, 12, 0),
-(27, 0, 0, '', '', -1, 0, 0),
-(28, 0, 0, '', '', -1, 0, 0),
-(29, 0, 0, '', '', -1, 0, 0),
-(31, 24, 6, 'widget', '[{\"Icon\":\"fab fa-accusoft\",\"Text\":\"<p>jkwadhljkawhdjkwladwakjdhawkdlhawdkjlawhdkjwadhwa<\\/p>\"}]', 2, 12, 0);
+(19, 33, 0, 'TextArea', '', 0, 2, NULL),
+(17, NULL, NULL, NULL, NULL, -1, NULL, NULL),
+(18, 30, 5, 'widget', '[{\"img\":\"\",\"text\":\"<p>k;ldajalwkdjwakldjwalkdjawlkdwajdlkwajdlkwadjwalkd;jwaldk;jwaldkjw;djadlajwdljdwa;ldjwaldk;jwalkdwa;djwldkwd<\\/p>\"}]', 0, 12, 12),
+(16, 31, 5, 'widget', '[{\"img\":\"\",\"text\":\"\"},{\"img\":\"\",\"text\":\"\"},{\"img\":\"\",\"text\":\"\"}]', 0, 12, 4);
 
 -- --------------------------------------------------------
 
@@ -119,15 +114,18 @@ CREATE TABLE IF NOT EXISTS `tblcmsgroups` (
   `Group_Page_Id` int(11) NOT NULL,
   `Group_Position` int(11) NOT NULL,
   PRIMARY KEY (`Group_Id`)
-) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=MyISAM AUTO_INCREMENT=35 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
 -- Gegevens worden geëxporteerd voor tabel `tblcmsgroups`
 --
 
 INSERT INTO `tblcmsgroups` (`Group_Id`, `Group_Page_Id`, `Group_Position`) VALUES
-(23, 1, 0),
-(24, 1, 1);
+(34, 1, 4),
+(31, 1, 0),
+(33, 1, 3),
+(30, 1, 1),
+(32, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -164,6 +162,8 @@ CREATE TABLE IF NOT EXISTS `tblcmspages` (
   `Page_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Page_Title` varchar(255) COLLATE utf8_bin NOT NULL,
   `Page_Url` text COLLATE utf8_bin,
+  `Page_Visible` tinyint(1) DEFAULT '0',
+  `Page_Description` text COLLATE utf8_bin,
   PRIMARY KEY (`Page_Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -171,8 +171,8 @@ CREATE TABLE IF NOT EXISTS `tblcmspages` (
 -- Gegevens worden geëxporteerd voor tabel `tblcmspages`
 --
 
-INSERT INTO `tblcmspages` (`Page_Id`, `Page_Title`, `Page_Url`) VALUES
-(1, 'index', '/');
+INSERT INTO `tblcmspages` (`Page_Id`, `Page_Title`, `Page_Url`, `Page_Visible`, `Page_Description`) VALUES
+(1, 'index', '/', 1, 'awdwakduwakldhawjkldhwakljdhawdkjwhadkjwahdkjawhdkjwahdkawjdhawkjdhawkjldhawkjhkdhawdklwad');
 
 -- --------------------------------------------------------
 
@@ -262,7 +262,7 @@ CREATE TABLE IF NOT EXISTS `tblsessions` (
 --
 
 INSERT INTO `tblsessions` (`Session_Id`, `Session_User_Id`, `Session_Last_Active`) VALUES
-('8i189r4fje6rf0p913t8thl4i9', 1, 1549828099);
+('crgg8ekibcn3t6unl5lm0htpm7', 1, 1551111987);
 
 -- --------------------------------------------------------
 
