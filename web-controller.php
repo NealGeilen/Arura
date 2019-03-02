@@ -101,12 +101,15 @@ if(isUrlValid($sUrl, $aNavBarPages)){
     } else {
         $tContentTemplate = true;
     }
+    $smarty->assign('aResourceFiles', $aResourceFiles);
+    $smarty->assign('aNavPages', $aNavBarPages);
 } else {
+    $smarty->assign('aResourceFiles', $aResourceFiles);
+    $smarty->assign('aNavPages', $aNavBarPages);
     $smarty->display(__TEMPLATES__ . '404.html');
     exit;
 }
-$smarty->assign('aResourceFiles', $aResourceFiles);
-$smarty->assign('aNavPages', $aNavBarPages);
+
 
 $smarty->assign('body_head', $smarty->fetch(__TEMPLATES__ . 'Sections/body_head.html'));
 

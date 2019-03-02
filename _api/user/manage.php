@@ -35,6 +35,7 @@ $request->sandbox(function ($aData) use ($response){
             $aUserData = $aData['InputData'];
             $usr_email = htmlentities($aUserData['user_email']);
             $user = new \NG\User\User((string)$usr_email);
+            $user -> load(true);
             $user -> setEmail(htmlentities($aUserData['User_Email']));
             $user -> setUsername(htmlentities($aUserData['User_Username']));
             $user -> setFirstname(htmlentities($aUserData['User_Firstname']));
