@@ -1,0 +1,6 @@
+/vendor/*
+/arura/*
+/templates_c/*
+/.idea/*
+/composer.lock
+composer.phar
