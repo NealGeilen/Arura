@@ -13,7 +13,7 @@
     "psr-4": {"Arura\\": "_app/Arura"}
   },
   "require" : {
-    "NG/Framework": "dev-master",
+    "NG/Framework": "dev-dev",
     "smarty/smarty": "~3.1"
   },
   "repositories": [
