@@ -17,6 +17,7 @@ $aNavBarPages =
             "Children" =>
                 [
                     '/content/pagina',
+                    '/content/menu',
                     '/content/plugins'
                 ]
         ],
@@ -28,10 +29,18 @@ $aNavBarPages =
             "isChild" => true,
             "Children" => null
         ],
+        "/content/menu" => [
+            "hasRight" => \NG\Permissions\Restrict::Validation(Rights::CMS_MENU),
+            "Title" => "Menu",
+            "FileName" => "cms/menu.php",
+            "Icon" => "fas fa-bars",
+            "isChild" => true,
+            "Children" => null
+        ],
         "/content/plugins" => [
             "hasRight" => true,
             "Title" => "Plugin's",
-            "FileName" => null,
+            "FileName" => "cms/pages.php",
             "Icon" => "fas fa-puzzle-piece",
             "isChild" => true,
             "Children" => null
