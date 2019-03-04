@@ -1,13 +1,50 @@
+<style>
+    .dd-handle{
+        height: unset;
+        width: unset!important;
+    }
+    .Nav-Item .btn{
+        padding: 2px 5px;
+    }
+    .Nav-Item{
+        position: relative;
+        min-height: 24px;
+    }
+    .Nav-Item .Nav-Item-Controls{
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+</style>
+
 <header class="page-header">
     <h2>
         Menu
     </h2>
     <div class="btn-group pull-right">
-        <button class="btn btn-primary">
+        <button class="btn btn-primary" onclick="save()">
             <i class="fas fa-save"></i>
         </button>
     </div>
 </header>
+<div class="template-item" style="display: none">
+    <div class="Nav-Item-Container">
+        <div class="Nav-Item">
+            <span class="Nav-Item-Name"></span>
+            <span class="Nav-Item-Url"></span>
+            <div class="Nav-Item-Controls">
+                <div class="btn-group">
+                    <button class="btn btn-primary btn-sm btn-link">
+                        <i class="fas fa-pen"></i>
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteItem($(this))">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <div class="dd" id="nestable-json"></div>

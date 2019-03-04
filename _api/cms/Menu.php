@@ -14,6 +14,8 @@ $request->sandbox(function ($aData) use ($response,$Pages){
             $aOutcome = json_decode(file_get_contents(__SITE__ . '/Templates/menu.json'),true);
             break;
         case 'set':
+            $aNavData =$aData['NavData'];
+            file_put_contents(__SITE__ . '/Templates/menu.json', json_encode($aNavData));
             break;
     }
     $response->exitSuccess($aOutcome);
