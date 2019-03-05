@@ -39,3 +39,14 @@ function LogOutUser(iUserID){
         }
     });
 }
+
+function serializeArray(oForm) {
+    aList = {};
+    $.each(oForm.find('.form-control[name]'), function (iKey, oField) {
+        aList[$(oField).attr('name')] = $(oField).val();
+    });
+    return aList;
+}
+$("select[value]").each(function() {
+    $(this).val(this.getAttribute("value"));
+});

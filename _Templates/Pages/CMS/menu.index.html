@@ -1,26 +1,71 @@
 <style>
     .dd-handle{
+        position: absolute;
+        padding: 2px 5px;
+        margin: 8px;
+        left: 0;
+        top: 0;
+        cursor: pointer;
         height: unset;
-        width: unset!important;
+        /*width: 30px;*/
+        /*text-indent: 30px;*/
+        /*white-space: nowrap;*/
+        /*overflow: hidden;*/
+        /*border: 1px solid #aaa;*/
+        /*background: #ddd;*/
+        /*background: -webkit-linear-gradient(top, #ddd 0%, #bbb 100%);*/
+        /*background: -moz-linear-gradient(top, #ddd 0%, #bbb 100%);*/
+        /*background: linear-gradient(top, #ddd 0%, #bbb 100%);*/
+        /*border-top-right-radius: 0;*/
+        /*border-bottom-right-radius: 0;*/
+        z-index: 20;
+    }
+    .dd-empty{
+        display: none;
     }
     .Nav-Item .btn{
         padding: 2px 5px;
     }
+    .Nav-Item-Container{
+        min-height: 30px;
+    }
     .Nav-Item{
+        z-index: 10;
         position: relative;
-        min-height: 24px;
+        display: block;
+        height: 40px;
+        margin: 5px 0;
+        padding: 5px 10px 5px 40px;
+        color: #333;
+        text-decoration: none;
+        font-weight: bold;
+        border: 1px solid #ccc;
+        background: #fafafa;
+        background: -webkit-linear-gradient(top, #fafafa 0%, #eee 100%);
+        background: -moz-linear-gradient(top, #fafafa 0%, #eee 100%);
+        background: linear-gradient(top, #fafafa 0%, #eee 100%);
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
     }
     .Nav-Item .Nav-Item-Controls{
+        margin: 8px;
+        display: block;
         position: absolute;
         top: 0;
         right: 0;
     }
+
 </style>
 
 <header class="page-header">
     <h2>
         Menu
     </h2>
+    <button class="btn btn-primary" onclick="creatNavBarItemModal()">
+        <i class="fas fa-plus"></i>
+    </button>
     <div class="btn-group pull-right">
         <button class="btn btn-primary" onclick="save()">
             <i class="fas fa-save"></i>
@@ -30,11 +75,11 @@
 <div class="template-item" style="display: none">
     <div class="Nav-Item-Container">
         <div class="Nav-Item">
-            <span class="Nav-Item-Name"></span>
-            <span class="Nav-Item-Url"></span>
+            <span class="Nav-Item-name"></span>
+            <span class="Nav-Item-url"></span>
             <div class="Nav-Item-Controls">
                 <div class="btn-group">
-                    <button class="btn btn-primary btn-sm btn-link">
+                    <button class="btn btn-primary btn-sm btn-link" onclick="editNavBarItemModal($(this))">
                         <i class="fas fa-pen"></i>
                     </button>
                     <button class="btn btn-danger btn-sm" onclick="deleteItem($(this))">
@@ -44,6 +89,20 @@
             </div>
         </div>
     </div>
+</div>
+<div class="template-input" style="display: none">
+    <form class="form-item">
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <label>Naam</label>
+                <input type="text" name="name" class="form-control" required>
+            </div>
+            <div class="col-md-6 form-group">
+                <label>Url</label>
+                <input type="text" name="url" class="form-control" required>
+            </div>
+        </div>
+    </form>
 </div>
 
 

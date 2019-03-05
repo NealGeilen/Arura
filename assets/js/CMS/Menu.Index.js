@@ -10,7 +10,7 @@ $.ajax({
         var options = {
             'json': response.data,
             maxDepth: 3,
-            includeContent: true,
+            includeContent: false,
             contentCallback: function (item) {
                 return createNavTabBar(item);
             },
@@ -66,15 +66,59 @@ function deleteItem(oBtn) {
         }
     });
 }
-
-
-
 function createNavTabBar(aNavBar){
-    console.log(aNavBar);
     oTemplate = $($('.template-item').html());
-    oTemplate.find('.Nav-Item-Name').text(aNavBar.name);
-    oTemplate.find('.Nav-Item-Url').text(aNavBar.url);
+    oTemplate.find('.Nav-Item-name').text(aNavBar.name);
+    oTemplate.find('.Nav-Item-url').text(aNavBar.url);
     return oTemplate[0].outerHTML;
 
 }
+
+function creatNavBarItemModal() {
+    Modals.Custom({
+        // Size: 'large',
+        Title: 'Menu item toevoegen',
+        Message: $('.template-input').html(),
+        onConfirm: function (oModal) {
+            aData = $.extend({
+                    "id": getNewId()
+                }, serializeArray(oModal.find('form')));
+            Nestable.nestable('add',aData);
+        }
+    });
+}
+
+
+function editNavBarItemModal(oRow) {
+    oRow = oRow.parents('.dd-item');
+    oTemplate = $($('.template-input').html());
+    oTemplate.find('[name=name]').val(oRow.attr('data-name'));
+    oTemplate.find('[name=url]').val(oRow.attr('data-url'));
+    Modals.Custom({
+        // Size: 'large',
+        Title: 'Menu item aanpassen',
+        Message: oTemplate,
+        onConfirm: function (oModal) {
+            
+            $.each(serializeArray(oModal.find('form')), function (sKey,sValue) {
+                oRow.attr('data-' + sKey, sValue);
+                oRow.find('.Nav-Item-' + sKey).text(sValue);
+            });
+        }
+    });
+}
+
+
+function getNewId(){
+    iH = 1;
+    $.each($('.dd-item'), function (i, oElement) {
+        if (parseInt($(oElement).attr('data-id')) > iH){
+            iH = parseInt($(oElement).attr('data-id'));
+        }
+    });
+    return ++iH
+}
+
+
+
 

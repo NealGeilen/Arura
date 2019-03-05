@@ -15,6 +15,9 @@ $request->sandbox(function ($aData) use ($response,$Pages){
             break;
         case 'set':
             $aNavData =$aData['NavData'];
+            if (empty($aNavData)){
+                $aNavData = [];
+            }
             file_put_contents(__SITE__ . '/Templates/menu.json', json_encode($aNavData));
             break;
     }
