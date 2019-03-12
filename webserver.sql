@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Gegenereerd op: 11 mrt 2019 om 20:55
+-- Gegenereerd op: 12 mrt 2019 om 10:30
 -- Serverversie: 5.7.23
 -- PHP-versie: 7.2.10
 
@@ -89,6 +89,8 @@ CREATE TABLE IF NOT EXISTS `tblcmscontentblocks` (
   `Content_Position` int(11) DEFAULT NULL,
   `Content_Size` int(11) DEFAULT NULL,
   `Content_Raster` int(11) DEFAULT '2',
+  `Content_Css_Background_Color` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `Content_Css_Background_Img` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`Content_Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
@@ -96,20 +98,20 @@ CREATE TABLE IF NOT EXISTS `tblcmscontentblocks` (
 -- Gegevens worden geëxporteerd voor tabel `tblcmscontentblocks`
 --
 
-INSERT INTO `tblcmscontentblocks` (`Content_Id`, `Content_Group_Id`, `Content_Addon_Id`, `Content_Type`, `Content_Value`, `Content_Position`, `Content_Size`, `Content_Raster`) VALUES
-(23, 37, 0, 'TextArea', '<h2 style=\"text-align: center;\">Over Ons</h2>\n<p style=\"text-align: center;\">Dakwerken John Geilen &ndash; derde generatie dakdekkers inmiddels &ndash; een bedrijf dat o.a. gespecialiseerd is in platte en gebitumineerde daken. Het aanleggen van lood &ndash; en zinkwerken is bij ons bedrijf in uitstekende handen. Tevens verzorgen wij reparaties aan pannendaken en voeren schoorsteenrenovaties uit.</p>', 0, 12, 2),
-(16, 31, 5, 'widget', '[{\"img\":\"\\/assets\\/img\\/home-head-top-kwaliteit-1.jpg\",\"text\":\"<h4 class=\\\"text-primary\\\" style=\\\"text-align: center;\\\">TOP KWALITEIT<\\/h4>\\n<p style=\\\"text-align: center;\\\">Wij werken alleen met de allerbeste materialen die voorzien zijn van uitgebreide garanties. Dat verhoogt aanzienlijk de levensduur van uw dak. Bij ons kunt u terecht voor het onderhoud van daken en goten. Net als een tuin, een huis of een auto heeft uw dak of dakgoot een jaarlijkse onderhoudsbeurt nodig. Onderhoud verlengt de levensduur van daken en goten. U voorkomt er erg grote en dure reparaties mee en investeert in de kwaliteit van uw huis of bedrijfspand.<\\/p>\"},{\"img\":\"\\/assets\\/img\\/home-head-zink-lood-werk.jpg\",\"text\":\"<h4 class=\\\"text-primary\\\" style=\\\"text-align: center;\\\">LOOD- EN ZINKWERK<\\/h4>\\n<p style=\\\"text-align: center;\\\">Goten en hemelwaterafvoeren van zink en koper zijn reeds jaren algemeen bekend. Maar ook complete daken en gevels worden uitgevoerd met lood, zink of koper. De bewezen levensduur van deze materialen in combinatie met een goede montage is indrukwekkend. Er zijn bijvoorbeeld dak- of gevelbekledingen die ouder zijn dan 500 jaar. Dit is een reden te meer om eens serieus over dergelijk systeem te gaan nadenken. Wij denken graag met U mee.<\\/p>\"},{\"img\":\"\\/assets\\/img\\/home-head-bitumineuze-dakbedekking.jpg\",\"text\":\"<h4 class=\\\"text-primary\\\" style=\\\"text-align: center;\\\">BITUMINEUZE DAKBEDEKKING<\\/h4>\\n<p style=\\\"text-align: center;\\\">Wij werken alleen met IKO producten, (voorheen Nebiprofa) dat sinds 1942 toonaangevend fabrikant van duurzame dakconcepten is. Dankzij onze jarenlange ervaring en brede assortiment dakbedekkingsmaterialen (IKO), isolatie en dakaccessoires bieden wij totaaloplossingen voor elk dak. Hierbij hebben wij oog voor duurzaamheid, gebruiksvriendelijkheid en kwaliteit van onze producten in het eindgebruik van onze dakconcepten.<\\/p>\"}]', 0, 12, 4),
-(22, 36, 0, 'TextArea', '<h1 style=\"text-align: center;\">Dakwerken John Geilen</h1>', 0, 12, 2),
-(24, 37, 0, 'Picture', '/assets/img/john_geiler.jpg', 2, 4, 2),
-(26, 37, 0, 'Picture', '/assets/img/john_geilen_history.jpg', 1, 4, 2),
-(27, 37, 0, 'Picture', '/assets/img/john_geilen_history_logo.jpg', 3, 4, 2),
-(28, 38, 0, 'TextArea', '<h1 style=\"text-align: center;\">Onze partners</h1>', 0, 12, 2),
-(29, 38, 0, 'Picture', '/assets/img/vmzinc-logo.png', 3, 4, 2),
-(34, 38, 0, 'Picture', '/assets/img/Iko-logo.jpg', 4, 4, 2),
-(35, 38, 0, 'Picture', '/assets/img/Sievert-logo.jpg', 5, 4, 2),
-(37, 38, 0, 'Picture', '/assets/img/Velux-logo.jpg', 1, 4, 2),
-(38, 38, 0, 'Picture', '/assets/img/Hilti-logo.jpg', 2, 4, 2),
-(39, 38, 0, 'Picture', '/assets/img/Rheinzink-logo.jpg', 6, 4, 2);
+INSERT INTO `tblcmscontentblocks` (`Content_Id`, `Content_Group_Id`, `Content_Addon_Id`, `Content_Type`, `Content_Value`, `Content_Position`, `Content_Size`, `Content_Raster`, `Content_Css_Background_Color`, `Content_Css_Background_Img`) VALUES
+(23, 37, 0, 'TextArea', '<h2 style=\"text-align: center;\">Over Ons</h2>\n<p style=\"text-align: center;\">Dakwerken John Geilen &ndash; derde generatie dakdekkers inmiddels &ndash; een bedrijf dat o.a. gespecialiseerd is in platte en gebitumineerde daken. Het aanleggen van lood &ndash; en zinkwerken is bij ons bedrijf in uitstekende handen. Tevens verzorgen wij reparaties aan pannendaken en voeren schoorsteenrenovaties uit.</p>', 0, 12, 2, '', ''),
+(16, 31, 5, 'widget', '[{\"img\":\"\\/assets\\/img\\/home-head-top-kwaliteit-1.jpg\",\"text\":\"<h4 class=\\\"text-primary\\\" style=\\\"text-align: center;\\\">TOP KWALITEIT<\\/h4>\\n<p style=\\\"text-align: center;\\\">Wij werken alleen met de allerbeste materialen die voorzien zijn van uitgebreide garanties. Dat verhoogt aanzienlijk de levensduur van uw dak. Bij ons kunt u terecht voor het onderhoud van daken en goten. Net als een tuin, een huis of een auto heeft uw dak of dakgoot een jaarlijkse onderhoudsbeurt nodig. Onderhoud verlengt de levensduur van daken en goten. U voorkomt er erg grote en dure reparaties mee en investeert in de kwaliteit van uw huis of bedrijfspand.<\\/p>\"},{\"img\":\"\\/assets\\/img\\/home-head-zink-lood-werk.jpg\",\"text\":\"<h4 class=\\\"text-primary\\\" style=\\\"text-align: center;\\\">LOOD- EN ZINKWERK<\\/h4>\\n<p style=\\\"text-align: center;\\\">Goten en hemelwaterafvoeren van zink en koper zijn reeds jaren algemeen bekend. Maar ook complete daken en gevels worden uitgevoerd met lood, zink of koper. De bewezen levensduur van deze materialen in combinatie met een goede montage is indrukwekkend. Er zijn bijvoorbeeld dak- of gevelbekledingen die ouder zijn dan 500 jaar. Dit is een reden te meer om eens serieus over dergelijk systeem te gaan nadenken. Wij denken graag met U mee.<\\/p>\"},{\"img\":\"\\/assets\\/img\\/home-head-bitumineuze-dakbedekking.jpg\",\"text\":\"<h4 class=\\\"text-primary\\\" style=\\\"text-align: center;\\\">BITUMINEUZE DAKBEDEKKING<\\/h4>\\n<p style=\\\"text-align: center;\\\">Wij werken alleen met IKO producten, (voorheen Nebiprofa) dat sinds 1942 toonaangevend fabrikant van duurzame dakconcepten is. Dankzij onze jarenlange ervaring en brede assortiment dakbedekkingsmaterialen (IKO), isolatie en dakaccessoires bieden wij totaaloplossingen voor elk dak. Hierbij hebben wij oog voor duurzaamheid, gebruiksvriendelijkheid en kwaliteit van onze producten in het eindgebruik van onze dakconcepten.<\\/p>\"}]', 0, 12, 4, '', ''),
+(22, 36, 0, 'TextArea', '<h1 style=\"text-align: center;\">Dakwerken John Geilen</h1>', 0, 12, 4, '', ''),
+(24, 37, 0, 'Picture', '/assets/img/john_geiler.jpg', 2, 4, 2, '', ''),
+(26, 37, 0, 'Picture', '/assets/img/john_geilen_history.jpg', 1, 4, 2, '', ''),
+(27, 37, 0, 'Picture', '/assets/img/john_geilen_history_logo.jpg', 3, 4, 2, '', ''),
+(28, 38, 0, 'TextArea', '<h1 style=\"text-align: center;\">Onze partners</h1>', 0, 12, 2, '', ''),
+(29, 38, 0, 'Picture', '/assets/img/vmzinc-logo.png', 3, 4, 2, '', ''),
+(34, 38, 0, 'Picture', '/assets/img/Iko-logo.jpg', 4, 4, 2, '', ''),
+(35, 38, 0, 'Picture', '/assets/img/Sievert-logo.jpg', 5, 4, 2, '', ''),
+(37, 38, 0, 'Picture', '/assets/img/Velux-logo.jpg', 1, 4, 2, '', ''),
+(38, 38, 0, 'Picture', '/assets/img/Hilti-logo.jpg', 2, 4, 2, '', ''),
+(39, 38, 0, 'Picture', '/assets/img/Rheinzink-logo.jpg', 6, 4, 2, '', '');
 
 -- --------------------------------------------------------
 
@@ -277,7 +279,9 @@ INSERT INTO `tblsessions` (`Session_Id`, `Session_User_Id`, `Session_Last_Active
 ('crgg8ekibcn3t6unl5lm0htpm7', 1, 1551111987),
 ('v554mvktb8cemera96pd6b3oqe', 1, 1551720019),
 ('cncivejdjtmjrhd8fepjdjsab7', 1, 1551536355),
-('8n2ho56n6i1t5rmfhv23heumj1', 1, 1552334614);
+('8n2ho56n6i1t5rmfhv23heumj1', 1, 1552334614),
+('qh8s7ub8ht360dhhqhu85c6ued', 1, 1552343126),
+('ee42gfu0ptr31uu9mf25cl0i1e', 1, 1552383896);
 
 -- --------------------------------------------------------
 
