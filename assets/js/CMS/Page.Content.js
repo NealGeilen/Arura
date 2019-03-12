@@ -434,13 +434,36 @@ var Builder = {
 };
 var Sidebar = {
     Group: {
-
         Active_Id: 0,
-        getGroupSetting : function () {
+        getGroupElement: function(){
+            return $('[group-id='+this.Active_Id+']');
+        },
+        getGroupData:function(){
+            return Builder.Group.getData(this.getGroupElement());
+        },
+        setGroupData: function(sField, value){
+            Builder.Group.setData(this.getGroupElement(),sField,value);
+        },
+        setGroupSettingValues: function(){
+            aData = this.getGroupData();
+            var rest = function (){
+                $('.group-settings-field').val(null)
+            };
+            var set = function (){
+                $.each(aData, function (sKey,sValue) {
+                    $('[field='+sKey+']').val(sValue);
+                });
+            };
 
+            rest();
+            set();
+        },
+        Events : function () {
+            S = this;
         },
         State: {
             Activate: function () {
+                Sidebar.Group.setGroupSettingValues();
                 $('.group-message').css('display', 'none');
                 $('.group-settings').css('display', 'block');
             },
@@ -465,9 +488,13 @@ var Sidebar = {
             aData = this.getBlockData();
             var rest = function (){
                 $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
+                $('#content-background-color').val(null);
+                $('#content-background-img').val(null)
             };
             var set = function (){
                 $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
+                $('#content-background-color').val(aData.Content_Css_Background_Color);
+                $('#content-background-img').val(aData.Content_Css_Background_Img)
             };
 
             rest();
@@ -481,6 +508,9 @@ var Sidebar = {
                 Sidebar.Block.getBlockElement().find('.Block-Item-Section').removeClass('col-xs-' + aData.Content_Raster).addClass('col-xs-'+Raster);
 
                 Sidebar.Block.setBlockData('Content_Raster', Raster);
+            });
+            $('.block-settings-field').on('input', function () {
+                Sidebar.Block.setBlockData($(this).attr('field'), $(this).val());
             });
         },
         State: {
