@@ -7,25 +7,27 @@
     "/assets/vendor/nanoscroller/nanoscroller.js",
     "/assets/vendor/tinymce/tinymce/tinymce.min.js",
     "/assets/vendor/jquery-ui/jquery-ui.js",
-    "/assets/js/theme.js",
-    "/assets/js/theme.custom.js",
-    "/assets/js/theme.init.js",
-    "/assets/js/Modals.js",
     "/assets/vendor/bootstrap-notify/bootstrap-notify.js",
-    "/assets/js/Sections/Users.js",
-    "/assets/js/Sections/settings.js",
-    "/assets/js/Sections/rolles.js"
+    "/assets/js/line-chart.js",
+    "/assets/js/pie-chart.js",
+    "/assets/js/plugins.js",
+    "/assets/js/scripts.js"
   ],
   "Css" : [
     "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light",
     "/assets/vendor/bootstrap/css/bootstrap.css",
     "/assets/vendor/font-awesome/css/font-awesome.css",
-    "/assets/vendor/magnific-popup/magnific-popup.css",
-    "/assets/vendor/bootstrap-datepicker/css/datepicker3.css",
     "/assets/vendor/jquery-ui/jquery-ui.css",
-    "/assets/css/theme.css",
-    "/assets/css/skins/default.css",
+    "/assets/css/owl.carousel.min.css",
+    "/assets/css/metisMenu.css",
+    "https://www.amcharts.com/lib/3/plugins/export/export.css",
+    "/assets/css/typography.css",
+    "/assets/css/slicknav.min.css",
+    "/assets/css/typography.css",
     "/assets/css/theme-custom.css",
+    "/assets/css/default-css.css",
+    "/assets/css/styles.css",
+    "/assets/css/responsive.css",
     "https://fonts.googleapis.com/icon?family=Material+Icons"
   ]
 }
