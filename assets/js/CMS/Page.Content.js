@@ -184,7 +184,6 @@ var Builder = {
                 Builder.Group.sortable();
                 Builder.ContentTypes.draggable();
                 Sidebar.Block.Events();
-
             });
         },
         save: function (bSendData = true) {
@@ -194,10 +193,11 @@ var Builder = {
             $.each($('.CMS-Page-Editor .CMS-Group'), function (iGroupPosition, oGroup) {
                 oGroup = $(oGroup);
                 iGroupId = parseInt(Builder.Group.getData(oGroup).Group_Id);
-                aData.Groups[iGroupId] = {
+                a = {
                     Group_Position : iGroupPosition,
                     Blocks: {}
                 };
+                aData.Groups[iGroupId] = $.extend(a, Builder.Group.getData(oGroup));
                 $.each(oGroup.find(sSelectors.Block_Item), function (iContentPosition, oBlock) {
                     oBlock = $(oBlock);
                     var aBlock = Builder.Block.getData(oBlock);
@@ -235,11 +235,10 @@ var Builder = {
       }
     },
     Group: {
-        setData: function(oGroup, aArray){
-            if ('Blocks' in aArray){
-                delete aArray.Blocks;
-            }
-            oGroup.data('group-data', aArray);
+        setData: function(oGroup, sField, sValue){
+            a = this.getData(oGroup);
+            a[sField] =sValue;
+            oGroup.data('group-data', a);
         },
         getData: function(oGroup){
             return oGroup.data('group-data');
@@ -252,7 +251,10 @@ var Builder = {
                    oTemplate.find(sSelectors.Group_Content).append(Builder.Block.Build(aBlock));
                 });
             }
-            this.setData(oTemplate, aGroup);
+            if ("Blocks" in aGroup){
+                delete aGroup.Blocks;
+            }
+            oTemplate.data('group-data', aGroup);
             this.Events(oTemplate);
             return oTemplate;
         },
@@ -460,9 +462,16 @@ var Sidebar = {
         },
         Events : function () {
             S = this;
+            $.each(this.getGroupData(), function (sField, sValue) {
+                $('[field='+sField+']').unbind().on('input', function () {
+                    console.log(this);
+                    S.setGroupData(sField,this.value);
+                });
+            });
         },
         State: {
             Activate: function () {
+                Sidebar.Group.Events();
                 Sidebar.Group.setGroupSettingValues();
                 $('.group-message').css('display', 'none');
                 $('.group-settings').css('display', 'block');
@@ -620,7 +629,6 @@ $(document).ready(function () {
            && $(e.target).parents('.arura-sidebar').length < 1
            && !$(e.target).hasClass('btn')
            && $(e.target).parent('.btn').length < 1
-           && $(e.target).hasClass('.block-editor-background')
        ){
            Builder.Block.State.Deactivate();
        }
