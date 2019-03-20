@@ -1,41 +1,48 @@
-<div class="sidebar-menu">
+<aside id="sidebar-left" class="sidebar-left">
+
     <div class="sidebar-header">
-        <div class="logo">
-            <a href="#"><img src="assets/images/icon/logo.png" alt="logo"></a>
+        <div class="sidebar-title">
+            Navigation
+        </div>
+        <div class="sidebar-toggle hidden-xs" data-toggle-class="sidebar-left-collapsed" data-target="html" data-fire-event="sidebar-left-toggle">
+            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
         </div>
     </div>
-    <div class="main-menu">
-        <div class="menu-inner">
-            <nav>
-                <ul class="metismenu" id="menu">
-                    <li class="active">
-                        <a href="javascript:void(0)" aria-expanded="true"><i class="ti-dashboard"></i><span>Dashboard</span></a>
-                        <ul class="collapse">
-                            <li class="active"><a href="#">Active Menu Item</a></li>
-                            <li><a href="#">Menuitem 2</a></li>
-                            <li><a href="#">Menuitem 3</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="#"><i class="ti-map-alt"></i><span>Not expanding</span></a></li>
-                    <li>
-                        <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-align-left"></i>
-                            <span>Multi
-                                        level menu</span></a>
-                        <ul class="collapse">
-                            <li><a href="#">Item level (1)</a></li>
-                            <li><a href="#">Item level (1)</a></li>
-                            <li><a href="#" aria-expanded="true">Item level (1)</a>
-                                <ul class="collapse">
-                                    <li><a href="#">Item level (2)</a></li>
-                                    <li><a href="#">Item level (2)</a></li>
-                                    <li><a href="#">Item level (2)</a></li>
+
+    <div class="nano">
+        <div class="nano-content">
+            <nav id="menu" class="nav-main" role="navigation">
+                <ul class="nav nav-main">
+                    {foreach from=$aNavPages key=Href item=aPage}
+                    {if $aPage.hasRight && !$aPage.isChild}
+                        <li class="{if $Href === $smarty.server.REDIRECT_URL}nav-active{/if} {if $aPage.Children !== NULL}nav-parent {if in_array($smarty.server.REDIRECT_URL,$aPage.Children)}nav-expanded{/if}{/if}">
+                        <a {if $aPage.Children === NULL}href="{$Href}"{/if}>
+                            <i class="{$aPage.Icon}" aria-hidden="true"></i>
+                            <span>{$aPage.Title}</span>
+                        </a>
+                            {if $aPage.Children !== NULL}
+                                <ul class="nav nav-children">
+                                    {foreach from=$aPage.Children item=ChildHref}
+                                        {if $aNavPages[$ChildHref].hasRight}
+                                            <li {if $ChildHref === $smarty.server.REDIRECT_URL}class="nav-active"{/if}>
+                                                <a href="{$ChildHref}">
+                                                    <i class="{$aNavPages[$ChildHref].Icon}" aria-hidden="true"></i>
+                                                    <span>{$aNavPages[$ChildHref].Title}</span>
+
+                                                </a>
+                                            </li>
+                                        {/if}
+                                    {/foreach}
                                 </ul>
-                            </li>
-                            <li><a href="#">Item level (1)</a></li>
-                        </ul>
-                    </li>
+                            {/if}
+                        </li>
+                    {/if}
+                    {/foreach}
                 </ul>
             </nav>
+
         </div>
+
     </div>
-</div>
+
+</aside>

@@ -1,77 +1,42 @@
-<div class="header-area">
-    <div class="row align-items-center">
-        <!-- nav and search button -->
-        <div class="col-md-6 col-sm-8 clearfix">
-            <div class="nav-btn pull-left">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-            <div class="search-box pull-left">
-                <form action="#">
-                    <input type="text" name="search" placeholder="Search..." required>
-                    <i class="ti-search"></i>
-                </form>
-            </div>
-        </div>
-        <!-- profile info & task notification -->
-        <div class="col-md-6 col-sm-4 clearfix">
-            <ul class="notification-area pull-right">
-                <li id="full-view"><i class="ti-fullscreen"></i></li>
-                <li id="full-view-exit"><i class="ti-zoom-out"></i></li>
-                <li class="dropdown">
-                    <i class="ti-bell dropdown-toggle" data-toggle="dropdown">
-                        <span>2</span>
-                    </i>
-                    <div class="dropdown-menu bell-notify-box notify-box">
-                        <span class="notify-title">You have 3 new notifications <a href="#">view all</a></span>
-                        <div class="nofity-list">
-                            <a href="#" class="notify-item">
-                                <div class="notify-thumb"><i class="ti-key btn-danger"></i></div>
-                                <div class="notify-text">
-                                    <p>You have Changed Your Password</p>
-                                    <span>Just Now</span>
-                                </div>
-                            </a>
-                            <a href="#" class="notify-item">
-                                <div class="notify-thumb"><i class="ti-comments-smiley btn-info"></i></div>
-                                <div class="notify-text">
-                                    <p>New Commetns On Post</p>
-                                    <span>30 Seconds ago</span>
-                                </div>
-                            </a>
-                            <a href="#" class="notify-item">
-                                <div class="notify-thumb"><i class="ti-key btn-primary"></i></div>
-                                <div class="notify-text">
-                                    <p>Some special like you</p>
-                                    <span>Just Now</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </li>
-                <li class="dropdown">
-                    <i class="fa fa-envelope-o dropdown-toggle" data-toggle="dropdown"><span>3</span></i>
-                    <div class="dropdown-menu notify-box nt-enveloper-box">
-                        <span class="notify-title">You have 3 new notifications <a href="#">view all</a></span>
-                        <div class="nofity-list">
-                            <a href="#" class="notify-item">
-                                <div class="notify-thumb">
-                                    <img src="assets/images/author/author-img1.jpg" alt="image">
-                                </div>
-                                <div class="notify-text">
-                                    <p>Aglae Mayer</p>
-                                    <span class="msg">Hey I am waiting for you...</span>
-                                    <span>3:15 PM</span>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </li>
-                <li class="settings-btn">
-                    <i class="ti-settings"></i>
-                </li>
-            </ul>
+<!-- start: header -->
+<header class="header">
+    <div class="logo-container">
+        <a href="../" class="logo">
+            <!--<img src="/assets/img/logo.png" height="35" alt="Porto Admin" />-->
+        </a>
+        <div class="visible-xs toggle-sidebar-left" data-toggle-class="sidebar-left-opened" data-target="html" data-fire-event="sidebar-left-opened">
+            <i class="fa fa-bars" aria-label="Toggle sidebar"></i>
         </div>
     </div>
-</div>
+
+    <!-- start: search & user box -->
+    <div class="header-right">
+
+        <span class="separator"></span>
+
+        <div id="userbox" class="userbox">
+            <a href="#" data-toggle="dropdown">
+                <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@okler.com">
+                    <span class="name">{$aUser.Firstname} {$aUser.Lastname}</span>
+                    <span class="role">{$aUser.Email}</span>
+                </div>
+
+                <i class="fa custom-caret"></i>
+            </a>
+
+            <div class="dropdown-menu">
+                <ul class="list-unstyled">
+                    <li class="divider"></li>
+                    <li>
+                        <a role="menuitem" tabindex="-1" href="/profiel"><i class="fa fa-user"></i>Mijn profiel</a>
+                    </li>
+                    <li>
+                        <a role="menuitem" tabindex="-1" href="javascript:LogOutUser({$aUser.Id})"><i class="fa fa-power-off"></i> Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- end: search & user box -->
+</header>
+<!-- end: header -->
