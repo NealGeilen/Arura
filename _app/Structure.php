@@ -8,3 +8,4 @@ define('__RESOURCES__',  __APP__  . 'Resources/');
 define('__SITE__', realpath(__ROOT__ . '/../'));
 define('__APP_ROOT__',   realpath(__ROOT__ . '/../../'));
 define('__SETTINGS__',   __APP_ROOT__ . '/settings/');
+define('__FILES__', __ROOT__ . '/files/');
