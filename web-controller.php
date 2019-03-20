@@ -45,6 +45,17 @@ $aNavBarPages =
             "isChild" => true,
             "Children" => null
         ],
+
+
+        "/bestanden" => [
+            "hasRight" => true,
+            "Title" => "Bestanden",
+            "FileName" => "filemanger.php",
+            "Icon" => "fas fa-file",
+            "isChild" => false,
+            "Children" => null
+        ],
+
         /**
          * Arura settings pages
          */
