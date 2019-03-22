@@ -21,16 +21,32 @@ class FileManger{
 
             if (strlen($Item) > 3){
                 if (is_file($sPath)){
-                    $aOutcome[] = ['text' => $Item, 'dir' => $sMangerPath, 'type' => self::getFileType($sPath)];
+                    $aOutcome[] = ['text' => $Item, 'dir' => $sMangerPath, 'icon' => self::getIcon(self::getFileType($sPath))];
                 } else if (is_dir($sPath)){
-                    $isDirEmpty = !(new \FilesystemIterator($sPath))->valid();
-                    $aOutcome[] = ['text' => $Item, 'children' => $isDirEmpty, 'dir' => $sMangerPath];
+                    $isDirEmpty = (new \FilesystemIterator($sPath))->valid();
+                    $aOutcome[] = ['text' => $Item, 'children' => $isDirEmpty, 'dir' => $sMangerPath . '/', 'icon' => self::getIcon()];
                 }
             }
 
         }
 
         return $aOutcome;
+    }
+
+    public static function getIcon($sFileType = ''){
+        $sType = '';
+        switch ($sFileType){
+            case 'file':
+                $sType = 'fas fa-file';
+                break;
+            case 'img':
+                $sType = 'fas fa-file-image';
+                break;
+            default:
+                $sType = 'fas fa-folder';
+                break;
+        }
+        return $sType;
     }
 
     public static function getFileType($sFilePath){

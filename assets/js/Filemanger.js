@@ -4,17 +4,18 @@ $('.test').jstree({
     },
     'core' : {
         'data' : {
+            "type": "POST",
 
-            "url" : "/_api/filemanger.php?type=load",
+            "url" : "/_api/filemanger.php",
             "data" : function (node) {
                 // console.log(node);
-                // return { "id" : node.id };
+                if (typeof node.original === "undefined"){
+                    node.original = {dir: null};
+                }
+                console.log(node);
+                return { "type": "load", "dir": node.original.dir};
             },
             "dataType" : "json",
-            success: function (response) {
-                console.log(response.data);
-                return response.data;
-            }
-        }
+        },
     }
 });

@@ -7,12 +7,13 @@ $request = new \NG\Client\RequestHandler();
 
 
 
-$request->setRequestMethod('GET');
+$request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
     $Manger = new \Arura\FileManger\FileManger();
     switch ($aData['type']){
         case 'load':
             $sDir = (isset($aData['dir']) ? $aData['dir'] : null);
+            $response->setParentContainer(null);
             $response->exitSuccess($Manger->loadDir($sDir));
             break;
     }
