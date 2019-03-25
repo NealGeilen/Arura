@@ -132,12 +132,12 @@ if(isUrlValid($sUrl, $aNavBarPages)){
 
 
 $smarty->assign('body_head', $smarty->fetch(__TEMPLATES__ . 'Sections/body_head.html'));
-
 $smarty->assign('navbar', $smarty->fetch(__TEMPLATES__ . 'Sections/nav.html'));
 $smarty->assign('sContent', $tContentTemplate);
 $smarty->assign('sidebar', $smarty->fetch(__TEMPLATES__ . 'Sections/sidebar.html'));
 
 $smarty->assign('footer', $smarty->fetch(__TEMPLATES__ . 'Sections/footer.html'));
+$smarty->assign('body_modals', $smarty->fetch(__TEMPLATES__ . 'Sections/body_modals.html'));
 
 $smarty->assign('body_end', $smarty->fetch(__TEMPLATES__ . 'Sections/body_end.html'));
 
