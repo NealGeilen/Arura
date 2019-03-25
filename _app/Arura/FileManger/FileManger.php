@@ -4,11 +4,11 @@ namespace Arura\FileManger;
 class FileManger{
 
 
-    public function uploadFiles(){
+    public function uploadFiles($sDir){
         foreach ($_FILES as $file){
-            var_dump($file);
-            if (!is_file(__FILES__ . $file['name']) && !is_dir(__FILES__ . $file['name'])){
-                move_uploaded_file($file['tmp_name'], __FILES__ . $file['name']);
+            $sPath = __FILES__ . $sDir . $file['name'];
+            if (!is_file($sPath) && !is_dir($sPath)){
+                move_uploaded_file($file['tmp_name'], $sPath);
             } else {
                 unlink($file['tmp_name']);
                 throw new \Exception('file or directorie already exits',500);
@@ -41,12 +41,22 @@ class FileManger{
                         [
                             'text' => $Item,
                             'children' => $isDirEmpty,
-                            'dir' => $sMangerPath . '/', 'icon' => self::getIcon(),
-                            'type' => self::getFileType($sPath)
+                            'dir' => $sMangerPath . '/',
+                            'icon' => self::getIcon(),
+                            'type' => 'dir'
                         ];
                 }
             }
 
+        }
+        if (is_null($sDir)){
+            return                         [
+                'text' => 'Main',
+                'children' => $aOutcome,
+                'dir' => '',
+                'icon' => self::getIcon(),
+                'type' => 'dir'
+            ];
         }
 
         return $aOutcome;
@@ -86,11 +96,28 @@ class FileManger{
         return false;
     }
 
+
+    public function createDir($sDir,$sName){
+        $sNewDir = __FILES__ . $sDir . $sName;
+        if (!is_dir($sNewDir) && !is_file($sNewDir) && is_dir(__FILES__ . $sDir)){
+            if (!mkdir($sNewDir)){
+                throw new \Exception('Dir creation has failed', 500);
+            }
+        } else {
+            throw new \Exception('Dir already exits', 500);
+        }
+        return true;
+    }
+
     public function deleteItem($sPath){
-        $sPath = __FILES__ . $sPath;
         if (is_file($sPath)){
             unlink($sPath);
         } else if (is_dir($sPath)){
+            foreach (scandir($sPath) as $item){
+                if (strlen($item) > 3){
+                    $this -> deleteItem($sPath .'/'. $item);
+                }
+            }
             rmdir($sPath);
         } else {
             throw new \Exception('item does not exists', 500);

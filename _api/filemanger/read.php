@@ -12,7 +12,7 @@ $request->sandbox(function ($aData) use ($response){
     $Manger = new \Arura\FileManger\FileManger();
     switch ($aData['type']){
         case 'get':
-            $sDir = (isset($aData['dir']) ? $aData['dir'] : null);
+            $sDir = (isset($aData['dir']) && !empty($aData['dir'])) ? $aData['dir'] : null;
             $response->setParentContainer(null);
             $response->exitSuccess($Manger->loadDir($sDir));
             break;

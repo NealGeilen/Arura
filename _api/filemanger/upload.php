@@ -6,7 +6,7 @@ $request = new \NG\Client\RequestHandler();
 $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
     $Manger = new \Arura\FileManger\FileManger();
-    $Manger->uploadFiles();
+    $Manger->uploadFiles($aData['dir']);
 });
 
 $response->exitScript();

@@ -1,10 +1,8 @@
 var FileManger = {
     oFileThree : $('.test'),
     loadDirThree: function () {
+        this.oFileThree.jstree("destroy");
         this.oFileThree.jstree({
-            ajax:function (dw) {
-                console.log(dw);
-            },
             'core' : {
                 'data' : {
                     "type": "POST",
@@ -32,21 +30,43 @@ var FileManger = {
             console.log(nodes);
         });
     },
-
     selectItem: function () {
 
     },
-
     uploadItem(){
-        var eModalContent = $($('.modal-template-fileupload').html());
-        // var oDropzone = new Dropzone('#filemager-file-upload', { url: "/file/post"});
-        console.log(eModalContent);
-        eModalContent.find('form').dropzone({ url: "/_api/filemanger/upload.php" });
-        Modals.Custom({
-           Title: "Test",
-           Message: eModalContent,
-           Size: "large"
-        });
+        var nodes = FileManger.oFileThree.jstree('get_selected',true);
+
+        if (nodes.length > 1){
+            Modals.Inform({
+                Title: 'Teveel mappen geslecteerd',
+                Message :'Er zijn te veel mappgen geslecteerd. Selecteer een map'
+            });
+        } else if (nodes.length < 1) {
+            Modals.Inform({
+                Title: 'Geen map geslecteerd',
+                Message: 'Selecteer eerst een map om een niewe map toetevoegen'
+            });
+        } else if (nodes[0].original.type !== "dir") {
+            Modals.Inform({
+                Title: 'Geen map geslecteerd',
+                Message: 'Selecteer eerst een map om een niewe map toetevoegen'
+            });
+        }  else {
+            var eModalContent = $($('.modal-template-fileupload').html());
+            // var oDropzone = new Dropzone('#filemager-file-upload', { url: "/file/post"});
+            console.log(eModalContent);
+            eModalContent.find('form').dropzone({
+                url: "/_api/filemanger/upload.php",
+                params: {
+                    dir : nodes[0].original.dir
+                }
+            });
+            Modals.Custom({
+                Title: "Test",
+                Message: eModalContent,
+                Size: "large"
+            });
+        }
     },
 
 
@@ -58,7 +78,7 @@ var FileManger = {
                 onConfirm: function () {
                     var nodes = FileManger.oFileThree.jstree('get_selected',true);
                     $.ajax({
-                        url: '',
+                        url: '/_api/filemanger/edit.php',
                         type: 'post',
                         dataType: 'json',
                         data: ({
@@ -67,13 +87,65 @@ var FileManger = {
                         }),
                         success: function () {
                             addSuccessMessage('Items verwijdert');
+                            FileManger.loadDirThree();
                         },
                         error: function () {
                             addErrorMessage('Het verwijderen van enkele items is mislukt');
+                            FileManger.loadDirThree();
                         }
                     });
                 }
             })
+        },
+        CreateDir: function(){
+            var nodes = FileManger.oFileThree.jstree('get_selected',true);
+
+            if (nodes.length > 1){
+                Modals.Inform({
+                    Title: 'Teveel mappen geslecteerd',
+                    Message :'Er zijn te veel mappgen geslecteerd. Selecteer een map'
+                });
+            } else if (nodes.length < 1) {
+                Modals.Inform({
+                    Title: 'Geen map geslecteerd',
+                    Message: 'Selecteer eerst een map om een niewe map toetevoegen'
+                });
+            } else if (nodes[0].original.type !== "dir") {
+                Modals.Inform({
+                    Title: 'Geen map geslecteerd',
+                    Message: 'Selecteer eerst een map om een niewe map toetevoegen'
+                });
+            }  else {
+                Modals.Custom({
+                    Title: "Map aanmaken",
+                    Message: $('.modal-template-dircreation').html(),
+                    onConfirm: function (oModal) {
+                        sDirname = oModal.find('input[type=text]').val();
+
+                        $.ajax({
+                            url: '/_api/filemanger/edit.php',
+                            type: 'post',
+                            dataType: 'json',
+                            data: ({
+                                type : 'create-dir',
+                                dir : nodes[0].original.dir,
+                                name : sDirname,
+                            }),
+                            success: function () {
+                                addSuccessMessage('Map toegevoegd');
+                                FileManger.loadDirThree();
+                            },
+                            error: function () {
+                                addErrorMessage('Het toeveogen van de map is mislukt');
+                                FileManger.loadDirThree();
+                            }
+                        });
+
+
+
+                    }
+                });
+            }
         }
 
     }

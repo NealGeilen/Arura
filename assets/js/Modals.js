@@ -193,7 +193,7 @@ var Modals = (function() {
         var settings = $.extend({
             Buttons:
                 [
-                    $(Buttons.allow).css('background-color', Colors.info),
+                    $(Buttons.allow).css('background-color', Colors.info).text('Oké'),
                 ],
         }, options);
         template(Elements.Icons.info, Colors.info, settings);
