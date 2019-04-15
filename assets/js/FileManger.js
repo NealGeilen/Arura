@@ -3,6 +3,7 @@ var FileManger = {
     loadDirThree: function () {
         this.oFileThree.jstree("destroy");
         this.oFileThree.jstree({
+            "plugins": ["dnd"],
             'core' : {
                 'data' : {
                     "type": "POST",
@@ -17,6 +18,8 @@ var FileManger = {
                     "dataType" : "json",
                 },
             }
+        }).bind("move_node.jstree", function (e, data) {
+            console.log(e,data);
         });
         this.oFileThree.click(function (e) {
             var nodes = FileManger.oFileThree.jstree('get_selected',true);
