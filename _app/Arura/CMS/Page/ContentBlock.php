@@ -1,7 +1,6 @@
 <?php
 namespace Arura\CMS\Page;
 
-use NG\Functions;
 
 class ContentBlock extends Addon{
 
@@ -11,8 +10,8 @@ class ContentBlock extends Addon{
             [
                 $iContentId
             ]);
-        if (Functions::isJson($aData['Content_Value'])){
-            $aData['Content_Value'] = Functions::json_array_decode($aData['Content_Value']);
+        if (isJson($aData['Content_Value'])){
+            $aData['Content_Value'] = json_array_decode($aData['Content_Value']);
         }
         return $aData;
     }
@@ -24,8 +23,8 @@ class ContentBlock extends Addon{
             ]);
         $aList = [];
         foreach ($aData as $aBlock){
-            if (Functions::isJson($aBlock['Content_Value'])){
-                $aBlock['Content_Value'] = Functions::json_array_decode($aBlock['Content_Value']);
+            if (isJson($aBlock['Content_Value'])){
+                $aBlock['Content_Value'] = json_array_decode($aBlock['Content_Value']);
             }
             $aList[] = $aBlock;
         }

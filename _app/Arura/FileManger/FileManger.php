@@ -120,9 +120,33 @@ class FileManger{
             }
             rmdir($sPath);
         } else {
-            throw new \Exception('item does not exists', 500);
+            throw new \Exception('item does not exists', 404);
         }
         return true;
+    }
+
+    public function renameItem($sPath,$sNewName){
+        $sRootPath = __FILES__ . $sPath;
+        $sNewRootPath = dirname($sRootPath) .'/'. $sNewName;
+        if (is_dir($sRootPath) || is_file($sRootPath)){
+            if (is_file($sRootPath)){
+                $sNewRootPath .= '.' . pathinfo($sRootPath, PATHINFO_EXTENSION);
+            }
+            if (rename($sRootPath,$sNewRootPath)){
+                if (is_dir($sNewRootPath)){
+                    return $this ->loadDir($sNewRootPath);
+                } else {
+                    return [
+                        'text' => basename($sNewRootPath),
+//                        'dir' => $sNewName,
+                        'icon' => self::getIcon(self::getFileType($sNewRootPath)),
+                        'type' => self::getFileType($sNewRootPath)
+                    ];
+                }
+
+            }
+        }
+        throw new \Exception('item does not exists', 404);
     }
 
 }

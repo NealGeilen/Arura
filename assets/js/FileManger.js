@@ -9,11 +9,9 @@ var FileManger = {
 
                     "url" : "/_api/filemanger/read.php",
                     "data" : function (node) {
-                        // console.log(node);
                         if (typeof node.original === "undefined"){
                             node.original = {dir: null};
                         }
-                        console.log(node);
                         return { "type": "get", "dir": node.original.dir};
                     },
                     "dataType" : "json",
@@ -27,7 +25,6 @@ var FileManger = {
             } else {
                 $('.node-options button').prop('disabled', true);
             }
-            console.log(nodes);
         });
     },
     selectItem: function () {
@@ -53,8 +50,6 @@ var FileManger = {
             });
         }  else {
             var eModalContent = $($('.modal-template-fileupload').html());
-            // var oDropzone = new Dropzone('#filemager-file-upload', { url: "/file/post"});
-            console.log(eModalContent);
             eModalContent.find('form').dropzone({
                 url: "/_api/filemanger/upload.php",
                 params: {
@@ -140,14 +135,51 @@ var FileManger = {
                                 FileManger.loadDirThree();
                             }
                         });
-
-
-
                     }
                 });
             }
+        },
+        RenameItem: function () {
+            var nodes = FileManger.oFileThree.jstree('get_selected',true);
+            if (nodes.length === 1){
+                Modals.Custom({
+                    Title: "Map aanmaken",
+                    Message: $('.modal-template-rename').html(),
+                    onConfirm: function (oModal) {
+                        sNewName = oModal.find('input[type=text]').val();
+                        node = nodes[0];
+                        $.ajax({
+                            url: '/_api/filemanger/edit.php',
+                            type: 'post',
+                            dataType: 'json',
+                            data: ({
+                                type : 'rename-item',
+                                dir : node.original.dir,
+                                name : sNewName,
+                            }),
+                            success: function () {
+                                addSuccessMessage('Map toegevoegd');
+                                FileManger.loadDirThree();
+                            },
+                            error: function () {
+                                addErrorMessage('Het toevoegen van de map is mislukt');
+                                FileManger.loadDirThree();
+                            }
+                        });
+                    }
+                });
+            } else if (nodes.length > 1) {
+                Modals.Inform({
+                    Title: 'Teveel items geslecteerd',
+                    Message :'Er zijn te veel items geslecteerd. Selecteer één item'
+                });
+            } else {
+                Modals.Inform({
+                    Title: 'geen items geslecteerd',
+                    Message :'Er zijn geen items geslecteerd. Selecteer één item'
+                });
+            }
         }
-
     }
 
 };

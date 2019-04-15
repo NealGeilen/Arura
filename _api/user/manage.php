@@ -17,7 +17,7 @@ $request->sandbox(function ($aData) use ($response){
             if ($aUserData['password1'] === $aUserData['password2'] && $aUserData['password2'] !== '' && $aUserData['password1'] !== ''){
                 $password = \NG\User\Password::Create(htmlentities($aUserData['password2']));
             } else {
-                $password = \NG\User\Password::Create(\NG\Functions::str_random(128));
+                $password = \NG\User\Password::Create(str_random(128));
             }
             \NG\User\User::createUser($username,$firstname,$lastname,$email,$password);
             break;

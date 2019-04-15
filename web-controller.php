@@ -102,19 +102,10 @@ function isUrlValid($sUrl,$aPages){
     return isset($aPages[$sUrl]);
 }
 $oUser = \NG\User\User::activeUser();
-$aUser =
-    [
-        'Username' => $oUser->getUserName(),
-        'Firstname' => $oUser->getFirstName(),
-        'Lastname' => $oUser->getLastName(),
-        'Id' => $oUser->getId(),
-        'Email' => $oUser->getEmail(),
-        'Session_Id' => \NG\Sessions::getSessionId()
-    ];
 $tContentTemplate = "";
 $db = new \NG\Database();
 $sUrl = '/'.join('/', $aUrl);
-$smarty->assign('aUser', $aUser);
+$smarty->assign('aUser', $oUser->__toArray());
 if(isUrlValid($sUrl, $aNavBarPages)){
     if ($aNavBarPages[$sUrl]['hasRight']){
         include __ROOT__ . '/_actions/' . $aNavBarPages[$sUrl]['FileName'];

@@ -6,8 +6,9 @@ $request = new \NG\Client\RequestHandler();
 
 
 //$request->setRight(Rights::FILES_READ);
-
+$response->isDebug(true);
 $request->setRequestMethod('POST');
+$request->requiredFields('type');
 $request->sandbox(function ($aData) use ($response){
     $Manger = new \Arura\FileManger\FileManger();
     switch ($aData['type']){

@@ -2,7 +2,6 @@
 namespace Arura\CMS;
 
 use NG\Database;
-use NG\Functions;
 
 class Pages{
 
@@ -17,7 +16,7 @@ class Pages{
             [
                 $iContentId
             ]);
-        $aData['Content_Value'] = Functions::json_array_decode($aData['Content_Value']);
+        $aData['Content_Value'] = json_array_decode($aData['Content_Value']);
         return $aData;
     }
 

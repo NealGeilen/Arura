@@ -15,19 +15,11 @@ $request->sandbox(function ($aData) use ($response){
             $email
         ]);
     if(\NG\User\Password::Verify($pw, $aUser['User_Password'])){
-        \NG\Sessions::Start();
-        $db -> createRecord('tblSessions',
-            [
-                'Session_Id' => \NG\Sessions::getSessionId(),
-                'Session_User_Id' => $aUser['User_Id'],
-                'Session_Last_Active' => time()
-            ]);
-        $_SESSION['logged-in'] = true;
-        $data['loggedin'] = true;
+        $oUser= new \NG\User\User($aUser['User_Id']);
+        $oUser->logInUser();
         $response->exitSuccess($data);
     } else{
-        \NG\Client\ResponseHandler::trowError(403);
-        $response->exitError(($data['loggedin'] = false));
+        throw new \NG\Exceptions\Forbidden();
     }
 });
 
