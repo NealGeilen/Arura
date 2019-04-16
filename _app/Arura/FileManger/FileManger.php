@@ -1,6 +1,8 @@
 <?php
 namespace Arura\FileManger;
 
+use NG\Exceptions\NotAcceptable;
+
 class FileManger{
 
 
@@ -149,4 +151,22 @@ class FileManger{
         throw new \Exception('item does not exists', 404);
     }
 
+    public function moveItem($sPathItem, $sNewDesignation){
+    $sRootPathItem = __FILES__ . $sPathItem;
+    $sNewRootPath = __FILES__ . $sNewDesignation;
+    if (is_dir($sNewRootPath)){
+        if (is_file($sRootPathItem)){
+            $sNewRootPath .= pathinfo($sRootPathItem, PATHINFO_BASENAME);
+        }
+        if (rename($sRootPathItem,$sNewRootPath)){
+            if (is_file($sNewRootPath)){
+                return $sNewDesignation . pathinfo($sNewRootPath, PATHINFO_BASENAME);
+            } else {
+                return $sNewDesignation;
+            }
+
+        }
+    }
+    throw new NotAcceptable();
+    }
 }

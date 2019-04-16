@@ -20,6 +20,7 @@ $request->sandbox(function ($aData) use ($response){
             }
             break;
         case 'move-item':
+            $response->exitSuccess($Manger->moveItem($aData['item'],$aData['dir']));
             break;
         case 'rename-item':
             $response->exitSuccess($Manger->renameItem($aData['dir'],$aData['name']));

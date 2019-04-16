@@ -5,6 +5,9 @@ var FileManger = {
         this.oFileThree.jstree({
             "plugins": ["dnd"],
             'core' : {
+                'check_callback': function (operation, node, parent, position, more) {
+                    return (parent.icon === "fas fa-folder");
+                },
                 'data' : {
                     "type": "POST",
 
@@ -19,7 +22,24 @@ var FileManger = {
                 },
             }
         }).bind("move_node.jstree", function (e, data) {
-            console.log(e,data);
+            nodeDir = data.node.original.dir;
+            parentDir = FileManger.oFileThree.jstree(true).get_node(data.parent).original.dir;
+            $.ajax({
+                url: '/_api/filemanger/edit.php',
+                type: 'post',
+                dataType: 'json',
+                data: ({
+                    type : 'move-item',
+                    item: nodeDir,
+                    dir: parentDir,
+                }),
+                success: function (response) {
+                    FileManger.oFileThree.jstree(true).get_node(data.node.id).original.dir = response.data;
+                },
+                error: function () {
+                    FileManger.loadDirThree();
+                }
+            })
         });
         this.oFileThree.click(function (e) {
             var nodes = FileManger.oFileThree.jstree('get_selected',true);
