@@ -14,8 +14,8 @@ $request->sandbox(function ($aData) use ($response){
             break;
         case 'delete-item':
             foreach ($aData['nodes'] as $node){
-                if (!empty($node['original']['dir'])){
-                    $Manger->deleteItem(__FILES__ . $node['original']['dir']);
+                if (!empty($node['dir'])){
+                    $Manger->deleteItem(__FILES__ . $node['dir']);
                 }
             }
             break;

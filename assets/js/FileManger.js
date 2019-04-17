@@ -43,11 +43,7 @@ var FileManger = {
         });
         this.oFileThree.click(function (e) {
             var nodes = FileManger.oFileThree.jstree('get_selected',true);
-            if (nodes.length >= 1){
-                $('.node-options button').prop('disabled', false);
-            } else {
-                $('.node-options button').prop('disabled', true);
-            }
+            $('.node-options button').prop('disabled', !(nodes.length >= 1));
         });
     },
     selectItem: function () {
@@ -82,7 +78,10 @@ var FileManger = {
             Modals.Custom({
                 Title: "Test",
                 Message: eModalContent,
-                Size: "large"
+                Size: "large",
+                onConfirm: function () {
+                   FileManger.loadDirThree();
+                }
             });
         }
     },
@@ -95,17 +94,24 @@ var FileManger = {
                 Message: "Weet je zeker dat je deze items wilt verwijderen?",
                 onConfirm: function () {
                     var nodes = FileManger.oFileThree.jstree('get_selected',true);
+                    console.log(nodes);
+                    aData = [];
+                    $.each(nodes, function (i,Node) {
+                        aData[i] = Node.original;
+                    });
                     $.ajax({
                         url: '/_api/filemanger/edit.php',
                         type: 'post',
                         dataType: 'json',
                         data: ({
                             type : 'delete-item',
-                            nodes : nodes
+                            nodes : aData
                         }),
                         success: function () {
+                            $.each(nodes, function (i, node) {
+                                FileManger.oFileThree.jstree("delete_node", node);
+                            });
                             addSuccessMessage('Items verwijdert');
-                            FileManger.loadDirThree();
                         },
                         error: function () {
                             addErrorMessage('Het verwijderen van enkele items is mislukt');
