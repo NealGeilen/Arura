@@ -14,17 +14,13 @@ $request->sandbox(function ($aData) use ($response,$Pages){
     unset($aData['type']);
     switch ($sType){
         case 'save-settings':
-            if (!$Pages->savePageSettings($aData)){
-                throw new \NG\Exceptions\NotAcceptable();
-            }
+            $Pages->savePageSettings($aData);
             break;
         case 'get-all-pages':
             $aOutcome = \Arura\CMS\Page\Page::getAllPages();
             break;
         case 'delete-page':
-            if (!\Arura\CMS\Page\Page::deletePage($aData['Page_Id'])){
-
-            }
+            \Arura\CMS\Page\Page::deletePage($aData['Page_Id']);
             break;
         case 'create-page':
             $aOutcome = \Arura\CMS\Page\Page::createPage($aData['Page_Title'], $aData['Page_Url']);

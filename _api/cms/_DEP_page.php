@@ -25,11 +25,8 @@ $request->sandbox(function ($aData) use ($response){
             if ((int)$aBlock['Content_PLg_Id'] !== (int)$aData['Content_Plg_Id']){
                 $ArPages->setContentValue($aData['Content_Id'], [[]]);
             }
-            $aList = $aData;
-            unset($aList['Content_Id']);
-            unset($aList['type']);
-            $aList[null]=$aData['Content_Id'];
-            $db -> updateRecord('tblCmsContentBlocks',$aList, 'Content_Id = ?');
+            unset($aData['type']);
+            $db -> updateRecord('tblCmsContentBlocks',$aData, 'Content_Id');
             break;
 
         case 'save-content-value':

@@ -32,7 +32,7 @@ class Page extends Group{
     }
 
     public function savePageSettings($aPageData){
-        $this->oDatabase->query('UPDATE tblCmsPages SET Page_Title = :Page_Title, Page_Url =:Page_Url, Page_Description = :Page_Description  WHERE Page_Id = :Page_Id',$aPageData);
+        $this->oDatabase->updateRecord('tblCmsPages', $aPageData, 'Page_Id');
         return $this -> oDatabase -> isQuerySuccessful();
     }
 

@@ -18,8 +18,8 @@ class Group extends ContentBlock {
     }
 
     public function setGroup($iGroupId,$aGroup){
-        $aGroup[null] = $iGroupId;
-        return $this->oDatabase->updateRecord('tblCmsGroups',$aGroup,'Group_Id = ?');
+        $aGroup['Group_Id'] = $iGroupId;
+        return $this->oDatabase->updateRecord('tblCmsGroups',$aGroup,'Group_Id');
     }
 
     public function CreateCroup($iPageId){

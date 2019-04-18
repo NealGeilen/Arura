@@ -33,11 +33,11 @@ class ContentBlock extends Addon{
 
 
     public function setContentBlock($iBlockId,$aBlock){
-        $aBlock[null] = $iBlockId;
+        $aBlock['Content_Id'] = $iBlockId;
         if (is_array($aBlock['Content_Value'])){
             $aBlock['Content_Value'] = json_encode($aBlock['Content_Value']);
         }
-        return $this -> oDatabase -> updateRecord('tblCmsContentBlocks',$aBlock,'Content_Id = ?');
+        return $this -> oDatabase -> updateRecord('tblCmsContentBlocks',$aBlock,'Content_Id');
     }
 
     public function CreateContentBlock(){
