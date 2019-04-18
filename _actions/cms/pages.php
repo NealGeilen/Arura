@@ -26,7 +26,6 @@ if (isset($_GET['p'])){
 }
 
 if (!isset($_GET['p']) && !isset($_GET['c'])){
-    $aPages = $db ->fetchAll('SELECT * FROM tblCmsPages');
-    $smarty -> assign('aPages', $aPages);
+    $aResourceFiles['Js'][] = '/assets/js/CMS/Page.Settings.js';
     $tContentTemplate = $smarty -> fetch(__TEMPLATES__ . 'Pages/CMS/pages.index.html');
 }

@@ -50,3 +50,19 @@ function serializeArray(oForm) {
 $("select[value]").each(function() {
     $(this).val(this.getAttribute("value"));
 });
+
+$('form.form-sender').submit(function (e) {
+    e.preventDefault();
+    $.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        dataType: 'json',
+        data: ($(this).serializeArray()),
+        success: function () {
+            addSuccessMessage('Opgelsagen');
+        },
+        error: function () {
+            addErrorMessage('opslaan mislukt');
+        }
+    });
+});

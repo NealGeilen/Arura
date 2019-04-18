@@ -6,7 +6,7 @@
         <h2 class="panel-title">Pagina's</h2>
     </header>
     <div class="panel-body table-responsive" style="display: block;">
-        <table class="table">
+        <table class="table pages-overvieuw">
             <thead>
             <tr>
                 <th>Titel</th>
@@ -15,26 +15,24 @@
             </tr>
             </thead>
             <tbody>
-            {foreach from=$aPages key=$iKey item=aPage}
-            <tr>
-                <td>{$aPage.Page_Title}</td>
-                <td>{$aPage.Page_Url}</td>
-                <td>
-                    <div class="btn-group">
-                        <a class="btn btn-default" href="{$smarty.server.REDIRECT_URL}?p={$aPage.Page_Id}" type="button">
-                            <i class="fas fa-cog"></i>
-                        </a>
-                        <a href="{$smarty.server.REDIRECT_URL}?c={$aPage.Page_Id}" type="button" class="btn btn-primary btn-link" >
-                            <i class="fas fa-pen"></i>
-                        </a>
-                        <button type="button" class="btn btn-danger btn-link" >
-                            <i class="far fa-trash-alt"></i>
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            {/foreach}
             </tbody>
         </table>
     </div>
 </section>
+
+
+<div style="display: none">
+    <div class="template-pages-btns">
+        <div class="btn-group">
+            <a class="btn btn-default" href="" type="button" page="p">
+                <i class="fas fa-cog"></i>
+            </a>
+            <a href="" type="button" class="btn btn-primary" page="c">
+                <i class="fas fa-pen"></i>
+            </a>
+            <button type="button" class="btn btn-danger" >
+                <i class="far fa-trash-alt"></i>
+            </button>
+        </div>
+    </div>
+</div>

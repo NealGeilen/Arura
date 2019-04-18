@@ -1,6 +1,8 @@
 <?php
 namespace Arura\CMS\Page;
 
+use NG\Database;
+
 class Page extends Group{
 
     public function  getPage($iPageId){
@@ -10,8 +12,27 @@ class Page extends Group{
             ]);
     }
 
+    public static function getAllPages(){
+        $db = new Database();
+        return $db->fetchAll('SELECT * FROM tblCmsPages');
+    }
+
+    public static function deletePage($iPageId){
+        $db = new Database();
+        $db->query('DELETE FROM tblCmsGroups FROM tblCmsContentBlocks JOIN ON 	Content_Group_Id = Group_Id WHERE Group_Page_Id = :Page_Id',['Page_Id' => $iPageId]);
+//        $db->query('DELETE FROM tblCmsPages WHERE Page_Id = :Page_Id',['Page_Id' => $iPageId]);
+        return $db ->isQuerySuccessful();
+    }
+
+    public static function createPage($sPageName,$sPageUrl){
+        $db = new Database();
+        $i = $db ->createRecord('tblCmsPages',['Page_Title'=>$sPageName,'Page_Url'=>$sPageUrl]);
+        $page = new self();
+        return $page->getPage($i);
+    }
+
     public function savePageSettings($aPageData){
-        $this->oDatabase->query('UPDATE tblCmsPages SET Page_Title = :Page_Title, Page_Url =:Page_Url, Page_Visible = :Page_Visible, Page_Description = :Page_Description  WHERE Page_Id = ?',$aPageData);
+        $this->oDatabase->query('UPDATE tblCmsPages SET Page_Title = :Page_Title, Page_Url =:Page_Url, Page_Description = :Page_Description  WHERE Page_Id = :Page_Id',$aPageData);
         return $this -> oDatabase -> isQuerySuccessful();
     }
 
