@@ -3450,7 +3450,7 @@
 		settings._iDisplayStart = start;
 	
 		if ( changed ) {
-			_fnCallbackFire( settings, null, 'page', [settings] );
+			_fnCallbackFire( settings, null, '_DEP_page.php', [settings] );
 	
 			if ( redraw ) {
 				_fnDraw( settings );
@@ -5769,7 +5769,7 @@
 		 */
 		this.fnPageChange = function ( mAction, bRedraw )
 		{
-			var api = this.api( true ).page( mAction );
+			var api = this.api( true )._DEP_page( mAction );
 		
 			if ( bRedraw === undefined || bRedraw ) {
 				api.draw(false);
@@ -7163,7 +7163,7 @@
 	 */
 	_api_register( 'page()', function ( action ) {
 		if ( action === undefined ) {
-			return this.page.info().page; // not an expensive call
+			return this._DEP_page.info()._DEP_page; // not an expensive call
 		}
 	
 		// else, have an action to take on all tables
@@ -7191,7 +7191,7 @@
 	 *  * `recordsDisplay` - Data set length once the current filtering criterion
 	 *    are applied.
 	 */
-	_api_register( 'page.info()', function ( action ) {
+	_api_register( '_DEP_page.php.info()', function (action ) {
 		if ( this.context.length === 0 ) {
 			return undefined;
 		}
@@ -7226,7 +7226,7 @@
 	 * @param {integer} Page length to set. Use `-1` to show all records.
 	 * @returns {DataTables.Api} this
 	 */
-	_api_register( 'page.len()', function ( len ) {
+	_api_register( '_DEP_page.php.len()', function (len ) {
 		// Note that we can't call this function 'length()' because `length`
 		// is a Javascript property of functions which defines how many arguments
 		// the function expects.
@@ -7434,7 +7434,7 @@
 		return {
 			search: opts.search || 'none',
 			order:  opts.order  || 'current',
-			page:   opts.page   || 'all'
+			page:   opts._DEP_page   || 'all'
 		};
 	};
 	
@@ -7470,7 +7470,7 @@
 		var
 			search = opts.search,  // none, applied, removed
 			order  = opts.order,   // applied, current, index (original - compatibility with 1.9)
-			page   = opts.page;    // all, current
+			page   = opts._DEP_page;    // all, current
 	
 		if ( _fnDataSource( settings ) == 'ssp' ) {
 			// In server-side processing mode, most options are irrelevant since
@@ -14475,7 +14475,7 @@
 
 	/**
 	 * Page change event, fired when the paging of the table is altered.
-	 *  @name DataTable#page.dt
+	 *  @name DataTable#_DEP_page.php.dt
 	 *  @event
 	 *  @param {event} e jQuery event object
 	 *  @param {object} o DataTables settings object {@link DataTable.models.oSettings}

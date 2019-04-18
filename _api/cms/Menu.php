@@ -7,11 +7,11 @@ $Pages = new \Arura\CMS\Page\Page();
 $request->setRight(Rights::CMS_MENU);
 $request->TriggerEvent();
 $request->setRequestMethod('POST');
-$request->sandbox(function ($aData) use ($response,$Pages){
+$request->sandbox(function ($aData) use ($response){
     $aOutcome=[];
     switch ($aData['type']){
         case 'get':
-            $aOutcome = json_decode(file_get_contents(__SITE__ . '/Templates/menu.json'),true);
+            $aOutcome = json_array_decode(file_get_contents(__SITE__ . '/Templates/menu.json'));
             break;
         case 'set':
             $aNavData =$aData['NavData'];

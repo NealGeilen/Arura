@@ -1503,7 +1503,7 @@
         // will move the cursor to where it should be in the end.
         var curStart = cm.getCursor();
         var repeat = motionArgs.repeat;
-        cm.moveV((motionArgs.forward ? repeat : -repeat), 'page');
+        cm.moveV((motionArgs.forward ? repeat : -repeat), '_DEP_page.php');
         var curEnd = cm.getCursor();
         cm.setCursor(curStart);
         return curEnd;

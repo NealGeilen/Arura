@@ -1667,7 +1667,7 @@
     var yOff = heightAtLine(lineObj);
     if (context == "local") yOff += paddingTop(cm.display);
     else yOff -= cm.display.viewOffset;
-    if (context == "page" || context == "window") {
+    if (context == "_DEP_page.php" || context == "window") {
       var lOff = cm.display.lineSpace.getBoundingClientRect();
       yOff += lOff.top + (context == "window" ? 0 : pageScrollY());
       var xOff = lOff.left + (context == "window" ? 0 : pageScrollX());
@@ -1683,7 +1683,7 @@
     if (context == "div") return coords;
     var left = coords.left, top = coords.top;
     // First move into "page" coordinate system
-    if (context == "page") {
+    if (context == "_DEP_page.php") {
       left -= pageScrollX();
       top -= pageScrollY();
     } else if (context == "local" || !context) {
@@ -3703,7 +3703,7 @@
   // property if it reached the end of the document.
   function findPosV(cm, pos, dir, unit) {
     var doc = cm.doc, x = pos.left, y;
-    if (unit == "page") {
+    if (unit == "_DEP_page.php") {
       var pageSize = Math.min(cm.display.wrapper.clientHeight, window.innerHeight || document.documentElement.clientHeight);
       y = pos.top + dir * (pageSize - (dir < 0 ? 1.5 : .5) * textHeight(cm.display));
     } else if (unit == "line") {
@@ -3893,20 +3893,20 @@
       if (start == null) pos = range.head;
       else if (typeof start == "object") pos = clipPos(this.doc, start);
       else pos = start ? range.from() : range.to();
-      return cursorCoords(this, pos, mode || "page");
+      return cursorCoords(this, pos, mode || "_DEP_page.php");
     },
 
     charCoords: function(pos, mode) {
-      return charCoords(this, clipPos(this.doc, pos), mode || "page");
+      return charCoords(this, clipPos(this.doc, pos), mode || "_DEP_page.php");
     },
 
     coordsChar: function(coords, mode) {
-      coords = fromCoordSystem(this, coords, mode || "page");
+      coords = fromCoordSystem(this, coords, mode || "_DEP_page.php");
       return coordsChar(this, coords.left, coords.top);
     },
 
     lineAtHeight: function(height, mode) {
-      height = fromCoordSystem(this, {top: height, left: 0}, mode || "page").top;
+      height = fromCoordSystem(this, {top: height, left: 0}, mode || "_DEP_page.php").top;
       return lineAtHeight(this.doc, height + this.display.viewOffset);
     },
     heightAtLine: function(line, mode) {
@@ -3914,7 +3914,7 @@
       if (line < this.doc.first) line = this.doc.first;
       else if (line > last) { line = last; end = true; }
       var lineObj = getLine(this.doc, line);
-      return intoCoordSystem(this, lineObj, {top: 0, left: 0}, mode || "page").top +
+      return intoCoordSystem(this, lineObj, {top: 0, left: 0}, mode || "_DEP_page.php").top +
         (end ? this.doc.height - heightAtLine(lineObj) : 0);
     },
 
@@ -4087,7 +4087,7 @@
         if (range.goalColumn != null) headPos.left = range.goalColumn;
         goals.push(headPos.left);
         var pos = findPosV(cm, headPos, dir, unit);
-        if (unit == "page" && range == doc.sel.primary())
+        if (unit == "_DEP_page.php" && range == doc.sel.primary())
           addToScrollPos(cm, null, charCoords(cm, pos, "div").top - headPos.top);
         return pos;
       }, sel_move);
@@ -4490,8 +4490,8 @@
     },
     goLineUp: function(cm) {cm.moveV(-1, "line");},
     goLineDown: function(cm) {cm.moveV(1, "line");},
-    goPageUp: function(cm) {cm.moveV(-1, "page");},
-    goPageDown: function(cm) {cm.moveV(1, "page");},
+    goPageUp: function(cm) {cm.moveV(-1, "_DEP_page.php");},
+    goPageDown: function(cm) {cm.moveV(1, "_DEP_page.php");},
     goCharLeft: function(cm) {cm.moveH(-1, "char");},
     goCharRight: function(cm) {cm.moveH(1, "char");},
     goColumnLeft: function(cm) {cm.moveH(-1, "column");},

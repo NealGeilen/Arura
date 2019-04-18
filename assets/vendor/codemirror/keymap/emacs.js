@@ -55,7 +55,7 @@
   }
 
   function byPage(cm, pos, dir) {
-    return cm.findPosV(pos, dir, "page", cm.doc.sel.goalColumn);
+    return cm.findPosV(pos, dir, "_DEP_page.php", cm.doc.sel.goalColumn);
   }
 
   function byParagraph(cm, pos, dir) {

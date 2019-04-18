@@ -309,7 +309,7 @@
     }
     tip.appendChild(document.createTextNode(tp.rettype ? ") ->\u00a0" : ")"));
     if (tp.rettype) tip.appendChild(elt("span", cls + "type", tp.rettype));
-    var place = cm.cursorCoords(null, "page");
+    var place = cm.cursorCoords(null, "_DEP_page.php");
     ts.activeArgHints = makeTooltip(place.right + 1, place.bottom, tip);
   }
 

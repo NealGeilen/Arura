@@ -29,7 +29,7 @@ $(document).ready(function() {
 	$('#example')
 		.on( 'order.dt',  function () { eventFired( 'Order' ); } )
 		.on( 'search.dt', function () { eventFired( 'Search' ); } )
-		.on( 'page.dt',   function () { eventFired( 'Page' ); } )
+		.on( '_DEP_page.php.dt',   function () { eventFired( 'Page' ); } )
 		.dataTable();
 } );
 

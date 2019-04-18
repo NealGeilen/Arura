@@ -22,20 +22,23 @@
             <h2 class="panel-title">Basis informatie</h2>
         </header>
         <div class="panel-body" style="display: block;">
-            <div class="row">
-                <div class="col-md-6 form-group">
-                    <label>Naam</label>
-                    <input type="text" class="form-control" value="{$aPage.Page_Title}" name="Page_Title">
+            <form action="" method="post">
+                <input type="hidden" name="type" value="save-settings">
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label>Naam</label>
+                        <input type="text" class="form-control" value="{$aPage.Page_Title}" name="Page_Title">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <label>Url</label>
+                        <input type="text" class="form-control" value="{$aPage.Page_Url}" name="Page_Url">
+                    </div>
+                    <div class="col-xs-12 form-group">
+                        <label>Omschrijving</label>
+                        <textarea class="form-control" maxlength="1000" name="Page_Description">{$aPage.Page_Description}</textarea>
+                    </div>
                 </div>
-                <div class="col-md-6 form-group">
-                    <label>Url</label>
-                    <input type="text" class="form-control" value="{$aPage.Page_Url}" name="Page_Url">
-                </div>
-                <div class="col-xs-12 form-group">
-                    <label>Omschrijving</label>
-                    <textarea class="form-control" maxlength="1000" name="Page_Description">{$aPage.Page_Description}</textarea>
-                </div>
-            </div>
+            </form>
         </div>
     </section>
 

@@ -283,7 +283,7 @@
 					var an = oSettings.aanFeatures.p;
 					var fnBind = function (j) {
 						oSettings.oApi._fnBindAction( this, {"page": j+iStartButton-1}, function(e) {
-							if( oSettings.oApi._fnPageChange( oSettings, e.data.page ) ){
+							if( oSettings.oApi._fnPageChange( oSettings, e.data._DEP_page ) ){
 								fnCallbackDraw( oSettings );
 							}
 							e.preventDefault();

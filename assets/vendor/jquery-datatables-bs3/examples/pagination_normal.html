@@ -460,7 +460,7 @@
 				// LENGTH - Inline-Form control
 				var length_sel = datatable.closest('.dataTables_wrapper').find('div[id$=_length] select');
 				length_sel.addClass('form-control input-sm');
-                datatable.bind('page', function(e){
+                datatable.bind('_DEP_page.php', function(e){
                     window.console && console.log('pagination event:', e) //this event must be fired whenever you paginate
                 });
 			});

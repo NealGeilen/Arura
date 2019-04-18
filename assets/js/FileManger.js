@@ -1,6 +1,6 @@
 var FileManger = {
     oFileThree : $('.test'),
-    loadDirThree: function () {
+    loadDirThree: function (sType = null) {
         this.oFileThree.jstree("destroy");
         this.oFileThree.jstree({
             "plugins": ["dnd"],
@@ -16,7 +16,7 @@ var FileManger = {
                         if (typeof node.original === "undefined"){
                             node.original = {dir: null};
                         }
-                        return { "type": "get", "dir": node.original.dir};
+                        return { "type": "get", "dir": node.original.dir, "itemType": sType};
                     },
                     "dataType" : "json",
                 },
@@ -45,9 +45,6 @@ var FileManger = {
             var nodes = FileManger.oFileThree.jstree('get_selected',true);
             $('.node-options button').prop('disabled', !(nodes.length >= 1));
         });
-    },
-    selectItem: function () {
-
     },
     uploadItem(){
         var nodes = FileManger.oFileThree.jstree('get_selected',true);
@@ -85,8 +82,6 @@ var FileManger = {
             });
         }
     },
-
-
     DirThreeFunctions: {
         DeleteItems: function () {
             Modals.Warning({
@@ -209,7 +204,19 @@ var FileManger = {
                 });
             }
         }
+    },
+    Selector: function (sType = 'img', callback = function () {}) {
+        oThree = this.oFileThree;
+        this.loadDirThree(sType);
+        Modals.Custom({
+           Title: 'Test',
+           Message: oThree,
+           onConfirm: function () {
+               var nodes = oThree.jstree('get_selected',true);
+               console.log(nodes);
+               callback.call(this,nodes);
+           }
+        });
     }
-
 };
 FileManger.loadDirThree();

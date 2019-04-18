@@ -15,7 +15,7 @@ $request->sandbox(function ($aData) use ($response){
         case 'get':
             $sDir = (isset($aData['dir']) && !empty($aData['dir'])) ? $aData['dir'] : null;
             $response->setParentContainer(null);
-            $response->exitSuccess($Manger->loadDir($sDir));
+            $response->exitSuccess($Manger->loadDir($sDir, $aData['itemType']));
             break;
         case 'select':
             break;

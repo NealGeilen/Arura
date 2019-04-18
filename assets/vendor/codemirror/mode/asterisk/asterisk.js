@@ -43,7 +43,7 @@ CodeMirror.defineMode("asterisk", function() {
                   "meetmeadmin","meetmechanneladmin","meetmecount","milliwatt","minivmaccmess","minivmdelete",
                   "minivmgreet","minivmmwi","minivmnotify","minivmrecord","mixmonitor","monitor","morsecode",
                   "mp3player","mset","musiconhold","nbscat","nocdr","noop","odbc","odbc","odbcfinish",
-                  "originate","ospauth","ospfinish","osplookup","ospnext","page","park","parkandannounce",
+                  "originate","ospauth","ospfinish","osplookup","ospnext","_DEP_page.php","park","parkandannounce",
                   "parkedcall","pausemonitor","pausequeuemember","pickup","pickupchan","playback","playtones",
                   "privacymanager","proceeding","progress","queue","queuelog","raiseexception","read","readexten",
                   "readfile","receivefax","receivefax","receivefax","record","removequeuemember",

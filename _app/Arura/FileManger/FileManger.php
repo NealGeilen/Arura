@@ -19,7 +19,7 @@ class FileManger{
     }
 
 
-    public function loadDir($sDir = null){
+    public function loadDir($sDir = null, $sType =null){
         $sDirLockUp = (is_null($sDir) ? __FILES__ : __FILES__ . $sDir);
 
         $aOutcome = [];
@@ -30,13 +30,15 @@ class FileManger{
 
             if (strlen($Item) > 3){
                 if (is_file($sPath)){
-                    $aOutcome[] =
-                        [
-                            'text' => $Item,
-                            'dir' => $sMangerPath,
-                            'icon' => self::getIcon(self::getFileType($sPath)),
-                            'type' => self::getFileType($sPath)
-                        ];
+                    if (empty($sType) || self::getFileType($sPath) === $sType){
+                        $aOutcome[] =
+                            [
+                                'text' => $Item,
+                                'dir' => $sMangerPath,
+                                'icon' => self::getIcon(self::getFileType($sPath)),
+                                'type' => self::getFileType($sPath)
+                            ];
+                    }
                 } else if (is_dir($sPath)){
                     $isDirEmpty = (new \FilesystemIterator($sPath))->valid();
                     $aOutcome[] =

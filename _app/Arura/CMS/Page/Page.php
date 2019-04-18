@@ -10,6 +10,11 @@ class Page extends Group{
             ]);
     }
 
+    public function savePageSettings($aPageData){
+        $this->oDatabase->query('UPDATE tblCmsPages SET Page_Title = :Page_Title, Page_Url =:Page_Url, Page_Visible = :Page_Visible, Page_Description = :Page_Description  WHERE Page_Id = ?',$aPageData);
+        return $this -> oDatabase -> isQuerySuccessful();
+    }
+
     public function SavePageContents($aData){
         $aGroupList = [];
         //Delete Groups
