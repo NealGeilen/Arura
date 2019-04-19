@@ -168,20 +168,26 @@ var Users = {
             }
         },
         Delete: function (oElement) {
-            var tr = oElement.closest('tr');
-            var row = this.oTable.row( tr );
-            aData = row.data();
-            $.ajax({
-                type: 'post',
-                dataType: 'json',
-                url : '/_api/user/manage.php',
-                data: ({
-                    type: 'delete-user',
-                    User_Id:  aData.User_Id
-                }),
-                success: function () {
-                    row.remove().draw();
-                    addSuccessMessage('Gebruiker verwijdert')
+            Modals.Warning({
+                Title: 'Pagina verwijderen',
+                Message: 'Weet je zeker dat je deze pagina wilt verwijderen?',
+                onConfirm: function () {
+                    var tr = oElement.closest('tr');
+                    var row = this.oTable.row( tr );
+                    aData = row.data();
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        url : '/_api/user/manage.php',
+                        data: ({
+                            type: 'delete-user',
+                            User_Id:  aData.User_Id
+                        }),
+                        success: function () {
+                            row.remove().draw();
+                            addSuccessMessage('Gebruiker verwijdert')
+                        }
+                    })
                 }
             })
         },

@@ -19,8 +19,8 @@ class Page extends Group{
 
     public static function deletePage($iPageId){
         $db = new Database();
-        $db->query('DELETE FROM tblCmsGroups FROM tblCmsContentBlocks JOIN ON 	Content_Group_Id = Group_Id WHERE Group_Page_Id = :Page_Id',['Page_Id' => $iPageId]);
-//        $db->query('DELETE FROM tblCmsPages WHERE Page_Id = :Page_Id',['Page_Id' => $iPageId]);
+//        $db->query('DELETE FROM tblCmsGroups FROM tblCmsContentBlocks JOIN ON Content_Group_Id = Group_Id WHERE Group_Page_Id = :Page_Id',['Page_Id' => $iPageId]);
+        $db->query('DELETE FROM tblCmsPages WHERE Page_Id = :Page_Id',['Page_Id' => $iPageId]);
         return $db ->isQuerySuccessful();
     }
 

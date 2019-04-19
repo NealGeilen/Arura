@@ -28,6 +28,7 @@ var Builder = {
                     aBlock['Content_Type'] = $(event.target).attr('content-type');
                     aBlock['Content_Addon_Id'] = parseInt($(event.target).attr('content-addon-id'));
                     oElement = Builder.Block.Build(aBlock);
+                    console.log(oElement);
                     return oElement;
                 },
                 connectToSortable: sSelectors.Group_Content,
@@ -208,11 +209,10 @@ var Builder = {
             $.each($('.CMS-Page-Editor .CMS-Group'), function (iGroupPosition, oGroup) {
                 oGroup = $(oGroup);
                 iGroupId = parseInt(Builder.Group.getData(oGroup).Group_Id);
-                a = {
-                    Group_Position : iGroupPosition,
-                    Blocks: {}
-                };
-                aData.Groups[iGroupId] = $.extend(a, Builder.Group.getData(oGroup));
+                aGroup = Builder.Group.getData(oGroup);
+                aGroup.Group_Position = iGroupPosition;
+                aGroup.Blocks = {};
+                aData.Groups[iGroupId] = aGroup;
                 $.each(oGroup.find(sSelectors.Block_Item), function (iContentPosition, oBlock) {
                     oBlock = $(oBlock);
                     var aBlock = Builder.Block.getData(oBlock);
@@ -373,6 +373,7 @@ var Builder = {
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
             this.setArray(oBlock, aBlock);
+            console.log(aBlock);
             oBlock
                 .addClass('col-xs-' + aBlock.Content_Size)
                 .attr('block-id', aBlock.Content_Id);
@@ -394,6 +395,7 @@ var Builder = {
                 success: function (returned) {
                    Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
                    oElement.css('display', 'block');
+                   console.log(oElement,returned);
                 }
             });
         },
@@ -510,19 +512,21 @@ var Sidebar = {
         },
         setBlockSettingValues: function(){
             aData = this.getBlockData();
+            console.log(aData);
             var rest = function (){
                 $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
                 $('#content-background-color').val(null);
                 $('#content-background-img').val(null)
             };
-            var set = function (){
+            var set = function (aData){
+
                 $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
                 $('#content-background-color').val(aData.Content_Css_Background_Color);
                 $('#content-background-img').val(aData.Content_Css_Background_Img)
             };
 
             rest();
-            set();
+            set(aData);
         },
         Events : function () {
             S = this;
