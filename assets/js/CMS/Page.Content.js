@@ -519,7 +519,7 @@ var Sidebar = {
                 $('#content-background-img').val(null)
             };
             var set = function (aData){
-
+                console.log(aData);
                 $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
                 $('#content-background-color').val(aData.Content_Css_Background_Color);
                 $('#content-background-img').val(aData.Content_Css_Background_Img)
