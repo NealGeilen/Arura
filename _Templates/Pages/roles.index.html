@@ -1,44 +1,28 @@
 <section class="panel">
     <header class="panel-heading">
         <div class="panel-actions">
-            <a href="javascript:createRole()" class="far fa-plus-square"></a>
+            <a href="javascript:Roles.Roles.Create()" class="far fa-plus-square"></a>
             <a href="#" class="fa fa-caret-down"></a>
         </div>
         <h2 class="panel-title">Rollen</h2>
     </header>
-    <div class="panel-body table-responsive" style="display: block;">
-        <table class="table">
+    <div class="panel-body" style="display: block;">
+        <table id="rolles-overview" class="table">
             <thead>
             <tr>
-                <th>Naam</th>
-                <th>Rechten</th>
+                <th>
+                    ID
+                </th>
+                <th>
+                    Naam
+                </th>
+                <th>
+                    Rechten
+                </th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
-            {foreach from=$aRoles key=$iKey item=aRole}
-                <tr>
-                    <td>{$aRole.Role_Name}</td>
-                    <td>
-                        <ul>
-                            {foreach from=$aRole.Role_Rights key=$iKey item=aRight}
-                                <li>{$aRight.Right_Name}</li>
-                            {/foreach}
-                        </ul>
-                    </td>
-                    <td>
-                        <div class="btn-group">
-                            <button type="button" class="btn btn-primary btn-link btn-sm" onclick="editRole({$aRole['Role_Id']})">
-                                <i class="fas fa-pen"></i>
-                            </button>
-
-                            <button type="button" class="btn btn-danger btn-link btn-sm" onclick="deleteRole({$aRole['Role_Id']})">
-                                <i class="far fa-trash-alt"></i>
-                            </button>
-                        </div>
-                    </td>
-                </tr>
-            {/foreach}
             </tbody>
         </table>
     </div>
@@ -71,54 +55,88 @@
     </div>
 </section>
 
-
-
-<div style="display: none;">
-    <div class="user-edit">
-        <div class="row">
-            <table class="col-12 table">
-                <thead>
-                <tr>
-                    <th>Rol</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
-
+<div style="display: none">
+    <div class="template-role-edit">
+        <form class="form-row table-panel" method="post" action="/api/roles.php">
+            <input type="hidden" value="save-role" name="type">
+            <input type="hidden" name="Role_Id">
+            <div class="form-group col-12">
+                <label class="control-label">Naam</label>
+                <input type="text" name="Role_Name" class="form-control" required>
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="col-6">
+                <input type="submit" class="btn btn-success" value="Opslaan">
+            </div>
+        </form>
     </div>
-    <div class="role-edit">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label>Naam</label>
-                    <input field="Role_Name" type="text" class="form-control" required>
+    <div class="template-roles-rights">
+        <div class="table-panel">
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary btn-sm btn-right-add">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="col-12 rights">
+
                 </div>
             </div>
-            <div class="col-md-12">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Rechten</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
         </div>
     </div>
-    <div class="right-selector">
+
+    <div class="template-role-rights-details">
         <div class="row">
-            <div class="col-12">
-                <label>Kies een recht</label>
-                <select class="form-control" required>
-                    <option value=>- Selecteer - </option>
-                </select>
+            <div class="col-8">
+                <span class="title"></span>
+            </div>
+            <div class="col-4">
+                <button class='btn btn-danger btn-sm btn-right-delete'>
+                    <i class='fas fa-trash-alt'></i>
+                </button>
             </div>
         </div>
     </div>
+
+
+
+    <div class="template-roles-edit-btns">
+        <div>
+            <div class="btn-group btn-group-sm btn-role-menu">
+                <button class='btn btn-primary' onclick="Roles.Roles.AltRole($(this))">
+                    <i class="fas fa-pen"></i>
+                </button>
+                <button class='btn btn-primary' onclick="Roles.Roles.AltRights($(this))">
+                    <i class="fas fa-user-tag"></i>
+                </button>
+            </div>
+
+            <div class="btn-group btn-group-sm btn-role-menu-close" style="display: none" onclick="Roles.Roles.CloseMenu($(this))">
+                <button class="btn btn-secondary">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <button class='btn btn-danger btn-sm' onclick="Roles.Roles.Delete($(this))">
+                <i class='fas fa-trash-alt'></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="template-role-create">
+        <form class="form-row" method="post" action="/api/roles.php">
+            <input type="hidden" value="create-role" name="type">
+            <div class="form-group col-12">
+                <label class="control-label">Naam</label>
+                <input type="text" name="Role_Name" class="form-control" required">
+                <div class="help-block with-errors"></div>
+            </div>
+            <div class="col-6">
+                <input type="submit" class="btn btn-success modal-confirm" value="Aanmnaken">
+            </div>
+        </form>
+    </div>
+
+
+
 </div>

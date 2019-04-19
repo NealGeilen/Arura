@@ -1,174 +1,250 @@
-function callUser(UserId){
-    oTemplate = $($('.user-interface').html());
-    $.ajax({
-        type: 'post',
-        data : ({
-            type : 'user-data',
-            id : UserId
-        }),
-        dataType: 'json',
-        url : '/_api/user/manage.php',
-        success : function (returned) {
-            $.each(returned.data, function (sKey, sValue) {
-                oTemplate.find('[name='+sKey+']').val(sValue);
-            });
-            $.each(returned.data.Roles, function (iKey, aRole) {
-                console.log(aRole);
-                oTemplate.find('.roles > tbody').append($('<tr>').append($('<td>').text(aRole.Role_Name)).append('<td class="td-actions text-right"><button type="button" class="btn btn-danger btn-link btn-sm" onclick="removeRoleFromUser('+UserId+','+aRole.Role_Id+')"><i class="material-icons">close</i><div class="ripple-container"></div></button></td>'));
-            });
-            oTemplate.find('[name=user_email]').val(returned.data.User_Email);
-            Modals.Custom({
-                Title: 'Gebruikers instellingen',
-                Message: oTemplate,
-                Size: 'large',
-                Buttons : [
-                    $('<button>').text('Rol toevoegen').addClass('btn btn-secondary').attr('onclick', 'addRoleToUser('+UserId+')'),
-                    $(Modals.Buttons.allow).text('Opslaan').addClass('btn-success')
+$(document).ready(function() {
+    Users.Users.setTable();
+    Users.Sessions.setTable();
+} );
+
+
+
+var Users = {
+    Users: {
+        oTable: null,
+        setTable: function (oElement = $('#users-overview')) {
+            this.oTable =  oElement.DataTable({
+                dataSource: '/_api/user/manage.php',
+                dataSrc: 'data',
+                "columns":[
+                    { "data": "User_Id" },
+                    { "data": "User_Username" },
+                    { "data": "User_Firstname" },
+                    { "data" : "User_Lastname"},
+                    { "data" : "User_Email"},
+                    { "data": null, "defaultContent": null},
+                    { "data": null, "defaultContent": $('.template-user-edit-btns')[0].outerHTML}
                 ],
-                onConfirm : function (oModal) {
+                "columnDefs": [
+                    {
+                        "render": function ( data, type, row ) {
+                            s = '<ul>';
+                            $.each(data.Roles, function (i, Role) {
+                                if (typeof Role !== "undefined"){
+                                    s += '<li>' + Role.Role_Name  + '</li>';
+                                }
+                            });
+                            s += '</ul>';
+                            return s;
+                        },
+                        "targets": 5
+                    },
+                ],
+                rowId: "User_Id",
+                ajax:{
+                    url: '/_api/user/manage.php',
+                    type: "post",
+                    data: {
+                        type: 'get-users'
+                    }
+                }
+            });
+        },
+        AltRoles: function (oElement) {
+            var tr = oElement.closest('tr');
+            var row = this.oTable.row( tr );
+
+            if (!row.child.isShown() ) {
+                oTemplate = $($('.template-user-rolles').html());
+                aData = row.data();
+                tr.find('.btn-user-menu').hide();
+                tr.find('.btn-user-menu-close').show();
+                $.each(aData.Roles , function (i, aRole) {
+                    t = $($('.template-user-role-details').html());
+                    t.find('.title').text(aRole.Role_Name);
+                    t.find('.btn').data('role', aRole);
+                    oTemplate.find('.roles').append(t);
+                });
+
+                oTemplate.find('.btn-role-delete').on('click', function () {
+                    oBtn = this;
                     $.ajax({
                         type: 'post',
-                        data : ({
-                            type : 'update',
-                            InputData: oModal.find('form').serializeArray()
-                        }),
                         dataType: 'json',
                         url : '/_api/user/manage.php',
+                        data: ({
+                            type: 'remove-role',
+                            Role_Id : $(this).data('role').Role_Id,
+                            User_Id:  aData.User_Id
+                        }),
                         success: function () {
-                            location.reload();
-                            addSuccessMessage('Gebruiker opgeslagen');
+                            delete aData.Roles[parseInt($(oBtn).data('role').Role_Id)];
+                            row.data(aData).draw();
+                            row.child.hide();
+                            tr.removeClass('shown');
+                            addSuccessMessage('Rol verwijdert');
+                        },
+                    });
+                });
+
+                oTemplate.find('.btn-role-add').on('click', function () {
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        url : '/_api/user/manage.php',
+                        data: ({
+                            type: 'get-avalibel-roles',
+                            User_Id:  aData.User_Id
+                        }),
+                        success: function (response) {
+                            t = $('<select>').addClass('form-control');
+
+                            $.each(response.data, function (i, Role) {
+                                t.append($('<option>').val(Role.Role_Id).text(Role.Role_Name));
+                            });
+
+                            Modals.Custom({
+                                Title: 'Rol toevoegen',
+                                Message: t,
+                                onConfirm: function (oModal) {
+                                    iRoleId = parseInt(oModal.find('select').val());
+                                    $.ajax({
+                                        type: 'post',
+                                        dataType: 'json',
+                                        url : '/_api/user/manage.php',
+                                        data: ({
+                                            type: 'assign-role',
+                                            Role_Id: iRoleId,
+                                            User_Id:  aData.User_Id
+                                        }),
+                                        success: function () {
+                                            aData.Roles[iRoleId] = response.data[iRoleId];
+                                            row.data(aData).draw();
+                                            row.child.hide();
+                                            tr.removeClass('shown');
+                                            addSuccessMessage('Rol toegevoegd')
+                                        }
+                                    })
+                                }
+                            });
                         }
                     });
-                }
-            });
-        }
-    });
-}
-function deleteUser(UserId) {
-    Modals.Warning({
-        Title : 'Gebruiker verwijderen',
-        Message : 'Weet je zeker dat je deze gebruiker wilt verwijderen?',
-        onConfirm : function () {
+                });
+
+                row.child( oTemplate ).show();
+                tr.addClass('shown');
+            }
+        },
+        AltUser: function (oElement) {
+            var tr = oElement.closest('tr');
+            var row = this.oTable.row( tr );
+            if (!row.child.isShown() ) {
+                oTemplate = $($('.template-user-edit').html());
+                tr.find('.btn-user-menu').hide();
+                tr.find('.btn-user-menu-close').show();
+                aData = row.data();
+                oTemplate.validator();
+                oTemplate.FormAjax({
+                    success: function (response) {
+                        data = $.extend(aData, response.data);
+                        row.data(data).draw();
+                        row.child.hide();
+                        tr.removeClass('shown');
+                        addSuccessMessage('Gebruiker opgeslagen');
+                    }
+                });
+                $.each(aData , function (sField, sValue) {
+                    oTemplate.find('[name='+sField+']').val(sValue)
+                });
+                row.child( oTemplate ).show();
+                tr.addClass('shown');
+            }
+        },
+        CloseMenu:function(oElement){
+            var tr = oElement.closest('tr');
+            var row = Users.Users.oTable.row( tr );
+
+            if (row.child.isShown()){
+                row.child.hide();
+                tr.removeClass('shown');
+                tr.find('.btn-user-menu').show();
+                tr.find('.btn-user-menu-close').hide();
+            }
+        },
+        Delete: function (oElement) {
+            var tr = oElement.closest('tr');
+            var row = this.oTable.row( tr );
+            aData = row.data();
             $.ajax({
                 type: 'post',
-                data : ({
+                dataType: 'json',
+                url : '/_api/user/manage.php',
+                data: ({
                     type: 'delete-user',
-                    User_Id : UserId
+                    User_Id:  aData.User_Id
                 }),
-                dataType: 'json',
-                url : '/_api/user/manage.php',
                 success: function () {
-                    addSuccessMessage('Gebruiker verwijdert');
-                    location.reload();
+                    row.remove().draw();
+                    addSuccessMessage('Gebruiker verwijdert')
+                }
+            })
+        },
+        Create: function () {
+            oMessage = $($('.template-user-create').html());
+            oMessage.validator();
+            Table = this.oTable;
+            oMessage.FormAjax({
+                success: function (response) {
+                    aUser = response.data.User;
+                    aRoles = response.data.Roles;
+                    Table.row.add(aUser).draw();
+                    addSuccessMessage('Gebruiker aangemaakt');
                 }
             });
+            Modals.Custom({
+                Title: 'Gebruiker aanmaken',
+                Message: oMessage,
+                Size : 'large',
+                Buttons: []
+            });
         }
-    });
-}
-function callSession(SessionId) {
-    Modals.Warning({
-        Title: 'Sessie verwijderen',
-        Message: 'Weet je zeker dat je deze sessie wilt verwijderen',
-        onConfirm : function () {
+    },
+    Sessions: {
+        oTable: null,
+        setTable: function (oElement = $('#sessions-overview')) {
+            this.oTable  = oElement.DataTable({
+                dataSource: '/_api/user/manage.php',
+                dataSrc: 'data',
+                "columns":[
+                    { "data": "Session_Id" },
+                    { "data": "User_Username" },
+                    { "data": "Session_Last_Active" },
+                    { "data": null, "defaultContent": "<div class='btn-group btn-group-sm'><button class='btn btn-danger' onclick='Users.Sessions.Delete($(this))'><i class='fas fa-trash-alt'></i></button></div>"
+                    }
+                ],
+                rowId: "Session_Id",
+                ajax:{
+                    url: '/_api/user/manage.php',
+                    type: "post",
+                    data: {
+                        type: 'get-sessions'
+                    }
+                }
+            });
+        },
+        Delete: function (oElement) {
+            var tr = oElement.closest('tr');
+            var row = this.oTable.row( tr );
+            aData = row.data();
             $.ajax({
                 type: 'post',
-                data : ({
+                dataType: 'json',
+                url : '/_api/user/manage.php',
+                data: ({
                     type: 'delete-session',
-                    id : SessionId
+                    Session_Id:  aData.Session_Id
                 }),
-                dataType: 'json',
-                url : '/_api/user/manage.php',
                 success: function () {
-                    location.reload();
-                }
-            });
-        }
-    });
-}
-function createUser() {
-    oTemplate = $($('.user-interface').html());
-    oTemplate.find('input').prop('required', true);
-    Modals.Custom({
-        Title: 'Gebruikers instellingen',
-        Message: oTemplate,
-        Size: 'large',
-        Buttons : [
-            $(Modals.Buttons.allow).text('Toevoegen')
-        ],
-        onConfirm : function (oModal) {
-            aData = oModal.find('form').serializeArray();
-            aData[7] = {name : 'type', value: 'create'};
-            console.log(aData);
-            $.ajax({
-                type: 'post',
-                data : (aData),
-                dataType: 'json',
-                url : '/_api/user/manage.php',
-                success: function () {
-                    location.reload();
-                    addSuccessMessage('Gebruiker toegevoegd');
-                }
-            });
-        }
-    });
-
-}
-function removeRoleFromUser(iUserId, iRoleId) {
-    Modals.Warning({
-        Title: 'Verwijder rol',
-        Message: 'Weet je zeker date je deze rol wilt verwijderen van deze gebruiker',
-        onConfirm: function () {
-            $.ajax({
-                type: 'post',
-                data : ({
-                    type: 'remove-role-from-user',
-                    RoleId: iRoleId,
-                    UserId: iUserId
-                }),
-                dataType: 'json',
-                url : '/_api/user/manage.php',
-                success: function () {
-                    location.reload();
-                }
-            });
-        }
-    });
-
-}
-function addRoleToUser(iUserId) {
-    oTemplate = $($('.right-selector').html());
-    $.ajax({
-        type: 'post',
-        data : ({
-            type: 'get-available-roles',
-            UserId : iUserId
-        }),
-        dataType: 'json',
-        url : '/_api/user/manage.php',
-        success: function (returned) {
-            console.log(returned);
-            $.each(returned.data, function (iKey,aData) {
-                oTemplate.find('select').append($('<option>').val(aData.Role_Id).text(aData.Role_Name));
-            });
-            Modals.Edit({
-                Title : 'Role toevoegen aan gebruiker',
-                Message: oTemplate,
-                onConfirm: function (oModal) {
-                    $.ajax({
-                        type: 'post',
-                        data : ({
-                            type: 'add-role-to-user',
-                            UserId : iUserId,
-                            RoleId : oModal.find('select').val()
-                        }),
-                        dataType: 'json',
-                        url : '/_api/user/manage.php',
-                        success: function () {
-                            location.reload();
-                        }
-                    })
+                    row.remove().draw();
+                    addSuccessMessage('sessie verwijdert')
                 }
             })
         }
-    });
-}
+    }
+};

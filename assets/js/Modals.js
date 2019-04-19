@@ -85,6 +85,8 @@ var Modals = (function() {
                 settings.onConfirm.call(this , modal);
                 $('.modal-confirm').unbind();
                 modal.modal('hide');
+                $('.modal-backdrop').remove();
+                $('.Modals-Modal').remove();
             }
         });
 
@@ -92,6 +94,8 @@ var Modals = (function() {
             settings.onDeny.call(this, modal);
             $('.modal-denied').unbind();
             modal.modal('hide');
+            $('.modal-backdrop').remove();
+            $('.Modals-Modal').remove();
         });
 
 

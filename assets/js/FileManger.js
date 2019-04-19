@@ -1,5 +1,5 @@
 var FileManger = {
-    oFileThree : $('.test'),
+    oFileThree : $('.FileManger-Three'),
     loadDirThree: function (sType = null) {
         this.oFileThree.jstree("destroy");
         this.oFileThree.jstree({
@@ -209,8 +209,8 @@ var FileManger = {
         oThree = this.oFileThree;
         this.loadDirThree(sType);
         Modals.Custom({
-           Title: 'Test',
-           Message: oThree,
+           Title: 'Selecteer bestanden',
+           Message: this.oFileThree,
            onConfirm: function () {
                var nodes = oThree.jstree('get_selected',true);
                console.log(nodes);
@@ -219,4 +219,3 @@ var FileManger = {
         });
     }
 };
-FileManger.loadDirThree();

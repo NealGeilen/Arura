@@ -72,14 +72,29 @@ var Builder = {
                 }
             },
             Picture:{
-                oTemplate: $('<input>').attr('type','text').addClass('from-control'),
+                oTemplate: $('<img>'),
                 init: function (sValue) {
                     oField  = this.oTemplate.clone();
-                    oField.val(sValue);
+                    if (sValue === null || sValue === ''){
+                        oField.attr('src', '').attr('imgPath', '');
+                    } else {
+                        oField.attr('src', 'http://dwjg/' + 'files/' + sValue).attr('imgPath', sValue);
+                    }
+                    oField.on('click', function () {
+                        oField = $(this);
+                       FileManger.Selector('img', function (nodes) {
+                           if (nodes.length >= 1){
+                               sDir = nodes[0].original.dir;
+                               console.log(sDir,oField);
+                               oField.attr('src', 'http://dwjg/' + 'files/' + sDir).attr('imgPath', sDir);
+                           }
+                       });
+                    });
+
                     return oField;
                 },
                 value: function(oElement){
-                    return oElement.val();
+                    return oElement.attr('imgPath');
                 }
             },
             Icon: {

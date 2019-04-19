@@ -7,72 +7,73 @@ $request = new \NG\Client\RequestHandler();
 $request->setRight(Rights::ARURA_USERS);
 $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
-    switch ($aData['type']){
-        case 'create':
-            $aUserData = $aData;
-            $username =         htmlentities($aUserData['User_Email']);
-            $firstname =        htmlentities($aUserData['User_Firstname']);
-            $lastname =         htmlentities($aUserData['User_Lastname']);
-            $email =            htmlentities($aUserData['User_Email']);
-            if ($aUserData['password1'] === $aUserData['password2'] && $aUserData['password2'] !== '' && $aUserData['password1'] !== ''){
-                $password = \NG\User\Password::Create(htmlentities($aUserData['password2']));
-            } else {
-                $password = \NG\User\Password::Create(str_random(128));
+    switch ((string)$aData['type']){
+        case 'get-users':
+            $Table = new \NG\Client\DataTables();
+            foreach (\NG\User\User::getAllUsers() as $User){
+                $Table->addRow($User->__ToArray());
             }
-            \NG\User\User::createUser($username,$firstname,$lastname,$email,$password);
+            $response->exitSuccess($Table->getTable());
             break;
-        case 'user-data':
-            $id = htmlentities($aData['id']);
+        case 'get-sessions':
+            $Table = new \NG\Client\DataTables();
             $db = new \NG\Database();
-            $user_details = $db -> fetchRow('SELECT User_Email, User_Firstname,User_Lastname,User_Username FROM tblUsers WHERE User_Id = ?',[$id]);
-            $user_details['Roles'] = $db -> fetchAll('SELECT t2.Role_Id, t2.Role_Name FROM tblUserRoles as t1 JOIN tblRoles as t2 ON t1.Role_Id = t2.Role_Id WHERE t1.User_Id = ? ',
-                [
-                    $id
-                ]);
-            $response->exitSuccess($user_details);
+            $Table->addRows($db ->fetchAll('SELECT S.Session_Id, U.User_Username, FROM_UNIXTIME(S.Session_Last_Active) AS Session_Last_Active FROM tblSessions AS S JOIN tblUsers AS U ON S.Session_User_Id = U.User_Id'));
+            $response->exitSuccess($Table->getTable());
             break;
-        case 'update':
-            $aUserData = $aData['InputData'];
-            $usr_email = htmlentities($aUserData['user_email']);
-            $user = new \NG\User\User((string)$usr_email);
-            $user -> load(true);
-            $user -> setEmail(htmlentities($aUserData['User_Email']));
-            $user -> setUsername(htmlentities($aUserData['User_Username']));
-            $user -> setFirstname(htmlentities($aUserData['User_Firstname']));
-            $user -> setLastname(htmlentities($aUserData['User_Lastname']));
+        case 'get-avalibel-roles':
+            $oUser = new \NG\User\User((int)$aData['User_Id']);
+            $response->exitSuccess($oUser->getAvailableRoles());
+            break;
+        case 'save-user':
+            $oUser = new \NG\User\User((int)$aData['User_Id']);
+            $oUser->load(true);
+            $oUser->setEmail($aData['User_Email']);
+            $oUser->setFirstname($aData['User_Firstname']);
+            $oUser->setLastname($aData['User_Lastname']);
+            $oUser->setUsername($aData['User_Username']);
 
-            if ($aUserData['password1'] === $aUserData['password2'] && $aUserData['password2'] !== '' && $aUserData['password1'] !== ''){
-                $user -> setPassword(\NG\User\Password::Create(htmlentities($aUserData['password1'])));
+            if ($aData['User_Password_1'] === $aData['User_Password_2'] && !empty($aData['User_Password_1'])){
+                $oUser->setPassword(\NG\User\Password::Create($aData['User_Password_1']));
             }
+            $oUser->save();
 
-            $user->save();
+            $response->exitSuccess($aData);
             break;
-        case 'remove-role-from-user':
-            $iRoleId = (int)htmlentities($aData['RoleId']);
-            $iUserId = (int)htmlentities($aData['UserId']);
-            \NG\Permissions\Management::removeRoleFromUser($iUserId,$iRoleId);
-            $response->exitSuccess(true);
+
+        case 'assign-role':
+            $oUser = new \NG\User\User((int)$aData['User_Id']);
+            $oUser->assignToRole((int)$aData['Role_Id']);
             break;
-        case 'add-role-to-user':
-            $iRoleId = (int)htmlentities($_POST['RoleId']);
-            $iUserId = (int)htmlentities($_POST['UserId']);
-            \NG\Permissions\Management::assignRoleToUser($iUserId,$iRoleId);
-            $response->exitSuccess(true);
+
+        case 'remove-role':
+            $oUser = new \NG\User\User((int)$aData['User_Id']);
+            $oUser->removeFromRole((int)$aData['Role_Id']);
             break;
         case 'delete-user':
-            $id = htmlentities($aData['User_Id']);
-            \NG\User\User::removeUser((int)$id);
+            $oUser = new \NG\User\User((int)$aData['User_Id']);
+            $oUser->removeUser();
+
             break;
         case 'delete-session':
-            $id = htmlentities($aData['id']);
             $db = new \NG\Database();
-            $db -> query('DELETE FROM tblSessions WHERE Session_Id = ?',[$id]);
+            $db -> query('DELETE FROM tblSessions WHERE Session_Id = :Session_Id',
+                [
+                    'Session_Id' => $aData['Session_Id']
+                ]);
             break;
-        case 'get-available-roles':
-            $iUserId = (int)htmlentities($_POST['UserId']);
-            $db = new \NG\Database();
-            $aData = $db->fetchAll('SELECT * FROM tblRoles');
-            $response->exitSuccess($aData);
+
+
+        case 'create-user':
+
+            $pw1= $aData['User_Password_1'];
+            $pw2 = $aData['User_Password_2'];
+            if ($pw2 !== $pw1){
+                throw new \NG\Exceptions\NotAcceptable();
+            }
+            $pw = \NG\User\Password::Create($pw1);
+            $oUser = \NG\User\User::createUser($aData['User_Username'], $aData['User_Firstname'], $aData['User_Lastname'],$aData['User_Email'],$pw);
+            $response->exitSuccess(['User' => $oUser->__toArray(),'Roles'=>$oUser->getAvailableRoles()]);
             break;
     }
 });

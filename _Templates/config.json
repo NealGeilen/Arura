@@ -6,6 +6,7 @@
     "/assets/vendor/bootstrap/js/bootstrap.js",
     "/assets/vendor/nanoscroller/nanoscroller.js",
     "/assets/vendor/tinymce/tinymce/tinymce.min.js",
+    "https://cdnjs.cloudflare.com/ajax/libs/1000hz-bootstrap-validator/0.11.9/validator.js",
     "/assets/vendor/jquery-ui/jquery-ui.js",
     "/assets/vendor/jstree/jstree.js",
     "https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.js",

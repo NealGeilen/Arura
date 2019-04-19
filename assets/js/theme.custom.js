@@ -66,3 +66,29 @@ $('form.form-sender').submit(function (e) {
         }
     });
 });
+
+$.fn.FormAjax = function( options = {} ) {
+
+
+    return this.each(function() {
+        $(this).submit(function (e) {
+            e.preventDefault();
+
+            var settings = $.extend({
+                type: $(this).attr('method'),
+                dataType: 'json',
+                data: $(this).serializeArray(),
+                url : $(this).attr('action'),
+                success: function(){
+                    addSuccessMessage('Opgeslagen');
+                },
+                error: function () {
+                    addErrorMessage('Het opslaan is niet juist gegaan');
+                }
+            }, options);
+
+            $.ajax(settings);
+        });
+    });
+
+};
