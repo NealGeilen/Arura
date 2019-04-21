@@ -52,20 +52,26 @@ Pages = {
     Delete: function (oElement) {
         var tr = oElement.closest('tr');
         var row = this.oTable.row( tr );
-        aData = row.data();
-        $.ajax({
-            type: 'post',
-            dataType: 'json',
-            url : '/_api/cms/Page.Settings.php',
-            data: ({
-                type: 'delete-page',
-                Page_Id:  aData.Page_Id
-            }),
-            success: function () {
-                row.remove().draw();
-                addSuccessMessage('Pagina verwijdert')
-            }
-        })
+        Modals.Custom({
+           Title: 'Pagina verwijderen',
+           Message: 'Weet je zeker dat je deze pagina wilt verwijderen?',
+           onConfirm: function () {
+               aData = row.data();
+               $.ajax({
+                   type: 'post',
+                   dataType: 'json',
+                   url : '/_api/cms/Page.Settings.php',
+                   data: ({
+                       type: 'delete-page',
+                       Page_Id:  aData.Page_Id
+                   }),
+                   success: function () {
+                       row.remove().draw();
+                       addSuccessMessage('Pagina verwijdert')
+                   }
+               })
+           }
+        });
     },
 };
 Pages.setTable();
