@@ -151,10 +151,10 @@ img.Block-Item-Field:after{
     display: block;
     content: '\f03e';
     color: #abb4be;
-    position: absolute;
-    right: 45%;
-    left: 45%;
-    top: 30%;
+    /*position: absolute;*/
+    /*right: 45%;*/
+    /*left: 45%;*/
+    /*top: 30%;*/
     width: 10%;
     min-height: 40px;
     margin: 0 auto;
