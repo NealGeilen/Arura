@@ -28,7 +28,6 @@ var Builder = {
                     aBlock['Content_Type'] = $(event.target).attr('content-type');
                     aBlock['Content_Addon_Id'] = parseInt($(event.target).attr('content-addon-id'));
                     oElement = Builder.Block.Build(aBlock);
-                    console.log(oElement);
                     return oElement;
                 },
                 connectToSortable: sSelectors.Group_Content,
@@ -86,7 +85,6 @@ var Builder = {
                        FileManger.Selector('img', function (nodes) {
                            if (nodes.length >= 1){
                                sDir = nodes[0].original.dir;
-                               console.log(sDir,oField);
                                oField.attr('src', 'http://dwjg/' + 'files/' + sDir).attr('imgPath', sDir);
                            }
                        });
@@ -373,7 +371,7 @@ var Builder = {
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
             this.setArray(oBlock, aBlock);
-            console.log(aBlock);
+
             oBlock
                 .addClass('col-xs-' + aBlock.Content_Size)
                 .attr('block-id', aBlock.Content_Id);
@@ -394,8 +392,8 @@ var Builder = {
                }),
                 success: function (returned) {
                    Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
+                   oElement.attr('block-id', returned.data.Content_Id);
                    oElement.css('display', 'block');
-                   console.log(oElement,returned);
                 }
             });
         },
@@ -481,7 +479,6 @@ var Sidebar = {
             S = this;
             $.each(this.getGroupData(), function (sField, sValue) {
                 $('[field='+sField+']').unbind().on('input', function () {
-                    console.log(this);
                     S.setGroupData(sField,this.value);
                 });
             });
@@ -512,14 +509,12 @@ var Sidebar = {
         },
         setBlockSettingValues: function(){
             aData = this.getBlockData();
-            console.log(aData);
             var rest = function (){
                 $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
                 $('#content-background-color').val(null);
                 $('#content-background-img').val(null)
             };
             var set = function (aData){
-                console.log(aData);
                 $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
                 $('#content-background-color').val(aData.Content_Css_Background_Color);
                 $('#content-background-img').val(aData.Content_Css_Background_Img)
@@ -565,7 +560,6 @@ var Sidebar = {
             Add: function(){
                 aBlock = Sidebar.Block.getBlockData();
                 Settings = Addons[parseInt(Sidebar.Block.getBlockData().Content_Addon_Id)].AddonSettings;
-                // console.log(, Addons);
                 section = $('<div class="Block-Item-Section">').addClass('col-xs-' + aBlock.Content_Raster).append($('.template-edit-item').html());
                 $.each(Settings, function (iKey, aSetting) {
                     value = null;
@@ -599,7 +593,7 @@ var TinyMce = {
             target: oElement[0],
             themes: "modern",
             inline: true,
-            toolbar: "undo redo | align | bold italic underline",
+            // toolbar: "undo redo | align | bold italic underline",
             statusbar: false,
             menubar: false,
             theme_advanced_resizing : true,
@@ -615,19 +609,19 @@ var TinyMce = {
             themes: "modern",
             inline: true,
 
-            toolbar: 'bold italic | styleselect | table link unlink | bullist numlist | image media | blockquote codesample' ,
-            contextmenu: "code undo redo codesample removeformat",
-            menubar: false,
-            content_css: "demo.css, tinymceBubbleBar.css",
-            content_style: ".mce-widget.mce-tooltip {display: none !important;}",
-            fixed_toolbar_container: "#tinymceWrapperBubbleBar",
-            plugins: [
-                'noneditable codesample',
-                'autoresize advlist autolink lists link image charmap print preview hr anchor',
-                'searchreplace wordcount visualblocks visualchars code fullscreen',
-                'insertdatetime media nonbreaking save table contextmenu directionality',
-                'paste textcolor colorpicker textpattern imagetools media'
-            ]
+            // toolbar: 'bold italic | styleselect | table link unlink | bullist numlist | image media | blockquote codesample' ,
+            // contextmenu: "code undo redo codesample removeformat",
+            // menubar: false,
+            // content_css: "demo.css, tinymceBubbleBar.css",
+            // content_style: ".mce-widget.mce-tooltip {display: none !important;}",
+            // fixed_toolbar_container: "#tinymceWrapperBubbleBar",
+            // plugins: [
+            //     'noneditable codesample',
+            //     'autoresize advlist autolink lists link image charmap print preview hr anchor',
+            //     'searchreplace wordcount visualblocks visualchars code fullscreen',
+            //     'insertdatetime media nonbreaking save table contextmenu directionality',
+            //     'paste textcolor colorpicker textpattern imagetools media'
+            // ]
         });
         ++this.Count;
     },
