@@ -156,6 +156,19 @@ var Builder = {
                     return aValue;
                 }
             },
+            custom :{
+                oTemplate: $('<span>').addClass('text-center'),
+                init: function (aBlock) {
+                    container = this.oTemplate;
+                    console.log(aBlock);
+                    aAddon = Addons[parseInt(aBlock.Content_Addon_Id)];
+                    container.text(aAddon.Addon_Name);
+                    return container;
+                },
+                value: function (oBlock) {
+                    return 1;
+                }
+            },
             plugin:{
 
             }
@@ -183,6 +196,7 @@ var Builder = {
                aStructure =  aData.data.Groups;
                 aAddons = aData.data.Addons;
                 Addons = aAddons;
+                console.log(Addons);
                $.each(aStructure, function (iPosition, aGroup) {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
@@ -424,6 +438,7 @@ var Builder = {
             switch(aBlock.Content_Type){
                 case 'widget':
                 case 'plugin':
+                case 'custom':
                     value = Builder.ContentTypes.Addons[aBlock.Content_Type].value(oBlock.find('.Block-Item-Content'));
                     break;
                 default:
@@ -439,6 +454,7 @@ var Builder = {
             switch(aBlock.Content_Type){
                 case 'widget':
                 case 'plugin':
+                case 'custom':
                     oItem = Builder.ContentTypes.Addons[aBlock.Content_Type].init(aBlock);
                     break;
                 default:
