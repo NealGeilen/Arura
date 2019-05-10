@@ -122,6 +122,7 @@ if(isUrlValid($sUrl, $aNavBarPages)){
 }
 
 
+
 $smarty->assign('body_head', $smarty->fetch(__TEMPLATES__ . 'Sections/body_head.html'));
 $smarty->assign('navbar', $smarty->fetch(__TEMPLATES__ . 'Sections/nav.html'));
 $smarty->assign('sContent', $tContentTemplate);

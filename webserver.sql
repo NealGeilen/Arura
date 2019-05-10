@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Gegenereerd op: 22 apr 2019 om 20:16
+-- Gegenereerd op: 10 mei 2019 om 07:46
 -- Serverversie: 5.7.23
 -- PHP-versie: 7.2.10
 
@@ -21,17 +21,15 @@ SET time_zone = "+00:00";
 --
 -- Database: `webserver`
 --
-CREATE DATABASE IF NOT EXISTS `webserver` DEFAULT CHARACTER SET utf8 COLLATE utf8_bin;
-USE `webserver`;
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblcmsaddons`
+-- Tabelstructuur voor tabel `tblCmsAddons`
 --
 
-DROP TABLE IF EXISTS `tblcmsaddons`;
-CREATE TABLE IF NOT EXISTS `tblcmsaddons` (
+DROP TABLE IF EXISTS `tblCmsAddons`;
+CREATE TABLE IF NOT EXISTS `tblCmsAddons` (
   `Addon_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Addon_Name` varchar(255) COLLATE utf8_bin NOT NULL,
   `Addon_FileName` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -42,21 +40,21 @@ CREATE TABLE IF NOT EXISTS `tblcmsaddons` (
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblcmsaddons`
+-- Gegevens worden geëxporteerd voor tabel `tblCmsAddons`
 --
 
-INSERT INTO `tblcmsaddons` (`Addon_Id`, `Addon_Name`, `Addon_FileName`, `Addon_Type`, `Addon_Active`, `Addon_Multipel_Values`) VALUES
+INSERT INTO `tblCmsAddons` (`Addon_Id`, `Addon_Name`, `Addon_FileName`, `Addon_Type`, `Addon_Active`, `Addon_Multipel_Values`) VALUES
 (5, 'Cards', 'plg.cards.php', 'widget', 1, 1),
 (6, 'Milestones', 'awdawdawdawd', 'widget', 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblcmsaddonsettings`
+-- Tabelstructuur voor tabel `tblCmsAddonSettings`
 --
 
-DROP TABLE IF EXISTS `tblcmsaddonsettings`;
-CREATE TABLE IF NOT EXISTS `tblcmsaddonsettings` (
+DROP TABLE IF EXISTS `tblCmsAddonSettings`;
+CREATE TABLE IF NOT EXISTS `tblCmsAddonSettings` (
   `AddonSetting_Id` int(11) NOT NULL AUTO_INCREMENT,
   `AddonSetting_Addon_Id` int(11) NOT NULL,
   `AddonSetting_Type` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -66,10 +64,10 @@ CREATE TABLE IF NOT EXISTS `tblcmsaddonsettings` (
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblcmsaddonsettings`
+-- Gegevens worden geëxporteerd voor tabel `tblCmsAddonSettings`
 --
 
-INSERT INTO `tblcmsaddonsettings` (`AddonSetting_Id`, `AddonSetting_Addon_Id`, `AddonSetting_Type`, `AddonSetting_Position`, `AddonSetting_Tag`) VALUES
+INSERT INTO `tblCmsAddonSettings` (`AddonSetting_Id`, `AddonSetting_Addon_Id`, `AddonSetting_Type`, `AddonSetting_Position`, `AddonSetting_Tag`) VALUES
 (1, 5, 'TextArea', 1, 'text'),
 (2, 5, 'Picture', 0, 'img'),
 (3, 6, 'Icon', 0, 'Icon'),
@@ -78,11 +76,11 @@ INSERT INTO `tblcmsaddonsettings` (`AddonSetting_Id`, `AddonSetting_Addon_Id`, `
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblcmscontentblocks`
+-- Tabelstructuur voor tabel `tblCmsContentBlocks`
 --
 
-DROP TABLE IF EXISTS `tblcmscontentblocks`;
-CREATE TABLE IF NOT EXISTS `tblcmscontentblocks` (
+DROP TABLE IF EXISTS `tblCmsContentBlocks`;
+CREATE TABLE IF NOT EXISTS `tblCmsContentBlocks` (
   `Content_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Content_Group_Id` int(11) DEFAULT NULL,
   `Content_Addon_Id` int(11) DEFAULT NULL,
@@ -97,10 +95,10 @@ CREATE TABLE IF NOT EXISTS `tblcmscontentblocks` (
 ) ENGINE=MyISAM AUTO_INCREMENT=93 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblcmscontentblocks`
+-- Gegevens worden geëxporteerd voor tabel `tblCmsContentBlocks`
 --
 
-INSERT INTO `tblcmscontentblocks` (`Content_Id`, `Content_Group_Id`, `Content_Addon_Id`, `Content_Type`, `Content_Value`, `Content_Position`, `Content_Size`, `Content_Raster`, `Content_Css_Background_Color`, `Content_Css_Background_Img`) VALUES
+INSERT INTO `tblCmsContentBlocks` (`Content_Id`, `Content_Group_Id`, `Content_Addon_Id`, `Content_Type`, `Content_Value`, `Content_Position`, `Content_Size`, `Content_Raster`, `Content_Css_Background_Color`, `Content_Css_Background_Img`) VALUES
 (76, 47, 0, 'Picture', 'vmzinc.png', 2, 4, 2, '', ''),
 (77, 47, 0, 'Picture', 'velux.png', 3, 4, 2, '', ''),
 (78, 47, 0, 'TextArea', '<h1 class=\"text-center text-primary\" style=\"margin-top: 0px; margin-bottom: 0.5rem; font-family: Montserrat; font-weight: bold; line-height: 1.2; font-size: 2.5rem; letter-spacing: normal; color: navy !important;\">Onze partners</h1>', 0, 12, 2, '', ''),
@@ -121,11 +119,11 @@ INSERT INTO `tblcmscontentblocks` (`Content_Id`, `Content_Group_Id`, `Content_Ad
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblcmsgroups`
+-- Tabelstructuur voor tabel `tblCmsGroups`
 --
 
-DROP TABLE IF EXISTS `tblcmsgroups`;
-CREATE TABLE IF NOT EXISTS `tblcmsgroups` (
+DROP TABLE IF EXISTS `tblCmsGroups`;
+CREATE TABLE IF NOT EXISTS `tblCmsGroups` (
   `Group_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Group_Page_Id` int(11) NOT NULL,
   `Group_Position` int(11) NOT NULL,
@@ -135,10 +133,10 @@ CREATE TABLE IF NOT EXISTS `tblcmsgroups` (
 ) ENGINE=MyISAM AUTO_INCREMENT=54 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblcmsgroups`
+-- Gegevens worden geëxporteerd voor tabel `tblCmsGroups`
 --
 
-INSERT INTO `tblcmsgroups` (`Group_Id`, `Group_Page_Id`, `Group_Position`, `Group_Css_Class`, `Group_Css_Id`) VALUES
+INSERT INTO `tblCmsGroups` (`Group_Id`, `Group_Page_Id`, `Group_Position`, `Group_Css_Class`, `Group_Css_Id`) VALUES
 (42, 10, -1, '', ''),
 (43, 10, -1, '', ''),
 (44, 10, -1, NULL, NULL),
@@ -153,11 +151,11 @@ INSERT INTO `tblcmsgroups` (`Group_Id`, `Group_Page_Id`, `Group_Position`, `Grou
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblcmspages`
+-- Tabelstructuur voor tabel `tblCmsPages`
 --
 
-DROP TABLE IF EXISTS `tblcmspages`;
-CREATE TABLE IF NOT EXISTS `tblcmspages` (
+DROP TABLE IF EXISTS `tblCmsPages`;
+CREATE TABLE IF NOT EXISTS `tblCmsPages` (
   `Page_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Page_Title` varchar(255) COLLATE utf8_bin DEFAULT NULL,
   `Page_Url` text COLLATE utf8_bin,
@@ -167,30 +165,30 @@ CREATE TABLE IF NOT EXISTS `tblcmspages` (
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblcmspages`
+-- Gegevens worden geëxporteerd voor tabel `tblCmsPages`
 --
 
-INSERT INTO `tblcmspages` (`Page_Id`, `Page_Title`, `Page_Url`, `Page_Visible`, `Page_Description`) VALUES
+INSERT INTO `tblCmsPages` (`Page_Id`, `Page_Title`, `Page_Url`, `Page_Visible`, `Page_Description`) VALUES
 (11, 'test', '/', 0, NULL);
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblrights`
+-- Tabelstructuur voor tabel `tblRights`
 --
 
-DROP TABLE IF EXISTS `tblrights`;
-CREATE TABLE IF NOT EXISTS `tblrights` (
+DROP TABLE IF EXISTS `tblRights`;
+CREATE TABLE IF NOT EXISTS `tblRights` (
   `Right_Id` int(11) NOT NULL,
   `Right_Name` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`Right_Id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblrights`
+-- Gegevens worden geëxporteerd voor tabel `tblRights`
 --
 
-INSERT INTO `tblrights` (`Right_Id`, `Right_Name`) VALUES
+INSERT INTO `tblRights` (`Right_Id`, `Right_Name`) VALUES
 (1, 'ARURA_USERS'),
 (2, 'ARURA_ROLLES'),
 (3, 'ARURA_SETTINGS'),
@@ -200,20 +198,20 @@ INSERT INTO `tblrights` (`Right_Id`, `Right_Name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblrolerights`
+-- Tabelstructuur voor tabel `tblRoleRights`
 --
 
-DROP TABLE IF EXISTS `tblrolerights`;
-CREATE TABLE IF NOT EXISTS `tblrolerights` (
+DROP TABLE IF EXISTS `tblRoleRights`;
+CREATE TABLE IF NOT EXISTS `tblRoleRights` (
   `RoleRight_Role_Id` int(11) NOT NULL,
   `RoleRight_Right_Id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblrolerights`
+-- Gegevens worden geëxporteerd voor tabel `tblRoleRights`
 --
 
-INSERT INTO `tblrolerights` (`RoleRight_Role_Id`, `RoleRight_Right_Id`) VALUES
+INSERT INTO `tblRoleRights` (`RoleRight_Role_Id`, `RoleRight_Right_Id`) VALUES
 (1, 1),
 (1, 2),
 (1, 3),
@@ -225,52 +223,52 @@ INSERT INTO `tblrolerights` (`RoleRight_Role_Id`, `RoleRight_Right_Id`) VALUES
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblroles`
+-- Tabelstructuur voor tabel `tblRoles`
 --
 
-DROP TABLE IF EXISTS `tblroles`;
-CREATE TABLE IF NOT EXISTS `tblroles` (
+DROP TABLE IF EXISTS `tblRoles`;
+CREATE TABLE IF NOT EXISTS `tblRoles` (
   `Role_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Role_Name` varchar(255) COLLATE utf8_bin NOT NULL,
   PRIMARY KEY (`Role_Id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblroles`
+-- Gegevens worden geëxporteerd voor tabel `tblRoles`
 --
 
-INSERT INTO `tblroles` (`Role_Id`, `Role_Name`) VALUES
+INSERT INTO `tblRoles` (`Role_Id`, `Role_Name`) VALUES
 (1, 'Root'),
 (2, 'Content Editor');
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblsessions`
+-- Tabelstructuur voor tabel `tblSessions`
 --
 
-DROP TABLE IF EXISTS `tblsessions`;
-CREATE TABLE IF NOT EXISTS `tblsessions` (
+DROP TABLE IF EXISTS `tblSessions`;
+CREATE TABLE IF NOT EXISTS `tblSessions` (
   `Session_Id` varchar(255) COLLATE utf8_bin NOT NULL,
   `Session_User_Id` int(11) NOT NULL,
   `Session_Last_Active` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblsessions`
+-- Gegevens worden geëxporteerd voor tabel `tblSessions`
 --
 
-INSERT INTO `tblsessions` (`Session_Id`, `Session_User_Id`, `Session_Last_Active`) VALUES
+INSERT INTO `tblSessions` (`Session_Id`, `Session_User_Id`, `Session_Last_Active`) VALUES
 ('jbhm1565s6fm9l5q15mrbohfmt', 1, 1555964195);
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblsettings`
+-- Tabelstructuur voor tabel `tblSettings`
 --
 
-DROP TABLE IF EXISTS `tblsettings`;
-CREATE TABLE IF NOT EXISTS `tblsettings` (
+DROP TABLE IF EXISTS `tblSettings`;
+CREATE TABLE IF NOT EXISTS `tblSettings` (
   `Setting_Id` int(11) NOT NULL AUTO_INCREMENT,
   `Setting_Name` varchar(255) COLLATE utf8_bin NOT NULL,
   `Setting_Value` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -281,10 +279,10 @@ CREATE TABLE IF NOT EXISTS `tblsettings` (
 ) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblsettings`
+-- Gegevens worden geëxporteerd voor tabel `tblSettings`
 --
 
-INSERT INTO `tblsettings` (`Setting_Id`, `Setting_Name`, `Setting_Value`, `Setting_Required`, `Setting_Type`, `Setting_Plg`) VALUES
+INSERT INTO `tblSettings` (`Setting_Id`, `Setting_Name`, `Setting_Value`, `Setting_Required`, `Setting_Type`, `Setting_Plg`) VALUES
 (1, 'reciever', 'nealgeilen@gmail.com', 0, 'email', 'plg.contact'),
 (3, 'username', 'noreply.ng.server@gmail.com', 1, 'text', 'smtp'),
 (4, 'server', 'smtp.gmail.com', 1, 'text', 'smtp'),
@@ -296,31 +294,31 @@ INSERT INTO `tblsettings` (`Setting_Id`, `Setting_Name`, `Setting_Value`, `Setti
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tbluserroles`
+-- Tabelstructuur voor tabel `tblUserRoles`
 --
 
-DROP TABLE IF EXISTS `tbluserroles`;
-CREATE TABLE IF NOT EXISTS `tbluserroles` (
+DROP TABLE IF EXISTS `tblUserRoles`;
+CREATE TABLE IF NOT EXISTS `tblUserRoles` (
   `UserRole_User_Id` int(11) NOT NULL,
   `UserRole_Role_Id` int(11) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tbluserroles`
+-- Gegevens worden geëxporteerd voor tabel `tblUserRoles`
 --
 
-INSERT INTO `tbluserroles` (`UserRole_User_Id`, `UserRole_Role_Id`) VALUES
+INSERT INTO `tblUserRoles` (`UserRole_User_Id`, `UserRole_Role_Id`) VALUES
 (1, 1),
 (1, 2);
 
 -- --------------------------------------------------------
 
 --
--- Tabelstructuur voor tabel `tblusers`
+-- Tabelstructuur voor tabel `tblUsers`
 --
 
-DROP TABLE IF EXISTS `tblusers`;
-CREATE TABLE IF NOT EXISTS `tblusers` (
+DROP TABLE IF EXISTS `tblUsers`;
+CREATE TABLE IF NOT EXISTS `tblUsers` (
   `User_Id` int(11) NOT NULL AUTO_INCREMENT,
   `User_Username` varchar(255) COLLATE utf8_bin NOT NULL,
   `User_Firstname` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -331,10 +329,10 @@ CREATE TABLE IF NOT EXISTS `tblusers` (
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 --
--- Gegevens worden geëxporteerd voor tabel `tblusers`
+-- Gegevens worden geëxporteerd voor tabel `tblUsers`
 --
 
-INSERT INTO `tblusers` (`User_Id`, `User_Username`, `User_Firstname`, `User_Lastname`, `User_Email`, `User_Password`) VALUES
+INSERT INTO `tblUsers` (`User_Id`, `User_Username`, `User_Firstname`, `User_Lastname`, `User_Email`, `User_Password`) VALUES
 (1, 'nealgeilen@gmail.com', 'Neal', 'Geilen', 'nealgeilen@gmail.com', '$2y$10$kOV1Bi1bJeQMp.CzKi0yFOrbunNIRZVkQxCzRfm0BpQ49PZg329Du');
 COMMIT;
 
