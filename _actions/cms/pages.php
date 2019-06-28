@@ -2,8 +2,8 @@
 if (isset($_GET['c'])){
     $aResourceFiles['Css'][] = '/assets/vendor/bootstrap-iconpicker/bootstrap-iconpicker.min.css';
     $aResourceFiles['Js'][] = '/assets/vendor/bootstrap-iconpicker/bootstrap-iconpicker.min.js';
-    $aResourceFiles['Js'][] = '/assets/js/CMS/Page.Content.js';
-    $aResourceFiles['Css'][] = '/assets/Css/CMS/Page.Content.css';
+    $aResourceFiles['Js'][] = '/assets/js/CMS/Page.content.js';
+    $aResourceFiles['Css'][] = '/assets/css/CMS/Page.content.css';
 
 
     $aPage = $db -> fetchRow('SELECT * FROM tblCmsPages WHERE Page_Id = ? ',

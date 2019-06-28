@@ -1,4 +1,4 @@
-var FileManger = {
+var Filemanger = {
     oFileThree : $('.FileManger-Three'),
     loadDirThree: function (sType = null) {
         this.oFileThree.jstree("destroy");
@@ -23,7 +23,7 @@ var FileManger = {
             }
         }).bind("move_node.jstree", function (e, data) {
             nodeDir = data.node.original.dir;
-            parentDir = FileManger.oFileThree.jstree(true).get_node(data.parent).original.dir;
+            parentDir = Filemanger.oFileThree.jstree(true).get_node(data.parent).original.dir;
             $.ajax({
                 url: '/_api/filemanger/edit.php',
                 type: 'post',
@@ -34,20 +34,20 @@ var FileManger = {
                     dir: parentDir,
                 }),
                 success: function (response) {
-                    FileManger.oFileThree.jstree(true).get_node(data.node.id).original.dir = response.data;
+                    Filemanger.oFileThree.jstree(true).get_node(data.node.id).original.dir = response.data;
                 },
                 error: function () {
-                    FileManger.loadDirThree();
+                    Filemanger.loadDirThree();
                 }
             })
         });
         this.oFileThree.click(function (e) {
-            var nodes = FileManger.oFileThree.jstree('get_selected',true);
+            var nodes = Filemanger.oFileThree.jstree('get_selected',true);
             $('.node-options button').prop('disabled', !(nodes.length >= 1));
         });
     },
     uploadItem(){
-        var nodes = FileManger.oFileThree.jstree('get_selected',true);
+        var nodes = Filemanger.oFileThree.jstree('get_selected',true);
 
         if (nodes.length > 1){
             Modals.Inform({
@@ -77,7 +77,7 @@ var FileManger = {
                 Message: eModalContent,
                 Size: "large",
                 onConfirm: function () {
-                   FileManger.loadDirThree();
+                   Filemanger.loadDirThree();
                 }
             });
         }
@@ -88,7 +88,7 @@ var FileManger = {
                 Title: "Items verwijderen",
                 Message: "Weet je zeker dat je deze items wilt verwijderen?",
                 onConfirm: function () {
-                    var nodes = FileManger.oFileThree.jstree('get_selected',true);
+                    var nodes = Filemanger.oFileThree.jstree('get_selected',true);
                     console.log(nodes);
                     aData = [];
                     $.each(nodes, function (i,Node) {
@@ -104,20 +104,20 @@ var FileManger = {
                         }),
                         success: function () {
                             $.each(nodes, function (i, node) {
-                                FileManger.oFileThree.jstree("delete_node", node);
+                                Filemanger.oFileThree.jstree("delete_node", node);
                             });
                             addSuccessMessage('Items verwijdert');
                         },
                         error: function () {
                             addErrorMessage('Het verwijderen van enkele items is mislukt');
-                            FileManger.loadDirThree();
+                            Filemanger.loadDirThree();
                         }
                     });
                 }
             })
         },
         CreateDir: function(){
-            var nodes = FileManger.oFileThree.jstree('get_selected',true);
+            var nodes = Filemanger.oFileThree.jstree('get_selected',true);
 
             if (nodes.length > 1){
                 Modals.Inform({
@@ -152,11 +152,11 @@ var FileManger = {
                             }),
                             success: function () {
                                 addSuccessMessage('Map toegevoegd');
-                                FileManger.loadDirThree();
+                                Filemanger.loadDirThree();
                             },
                             error: function () {
                                 addErrorMessage('Het toeveogen van de map is mislukt');
-                                FileManger.loadDirThree();
+                                Filemanger.loadDirThree();
                             }
                         });
                     }
@@ -164,7 +164,7 @@ var FileManger = {
             }
         },
         RenameItem: function () {
-            var nodes = FileManger.oFileThree.jstree('get_selected',true);
+            var nodes = Filemanger.oFileThree.jstree('get_selected',true);
             if (nodes.length === 1){
                 Modals.Custom({
                     Title: "Map aanmaken",
@@ -183,11 +183,11 @@ var FileManger = {
                             }),
                             success: function () {
                                 addSuccessMessage('Map toegevoegd');
-                                FileManger.loadDirThree();
+                                Filemanger.loadDirThree();
                             },
                             error: function () {
                                 addErrorMessage('Het toevoegen van de map is mislukt');
-                                FileManger.loadDirThree();
+                                Filemanger.loadDirThree();
                             }
                         });
                     }

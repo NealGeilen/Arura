@@ -82,7 +82,7 @@ var Builder = {
                     }
                     oField.on('click', function () {
                         oField = $(this);
-                       FileManger.Selector('img', function (nodes) {
+                       Filemanger.Selector('img', function (nodes) {
                            if (nodes.length >= 1){
                                sDir = nodes[0].original.dir;
                                oField.attr('src', 'http://dwjg/' + 'files/' + sDir).attr('imgPath', sDir);
