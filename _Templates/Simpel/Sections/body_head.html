@@ -1,0 +1,9 @@
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<title>Arura</title>
+{foreach from=$aResourceFiles.Css item=File}
+<link href="{$File}" rel="stylesheet">
+{/foreach}
+<style>
+    {$aResourceFiles.CssPage}
+</style>

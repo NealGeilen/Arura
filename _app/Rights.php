@@ -12,4 +12,9 @@ class Rights{
     const FILES_WRITE = 21;
     const FILES_UPLOAD = 22;
 
+    static function getConstants() {
+        $oClass = new ReflectionClass(__CLASS__);
+        return $oClass->getConstants();
+    }
+
 }

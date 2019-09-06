@@ -1,0 +1,1 @@
+Filemanger.loadDirThree();
