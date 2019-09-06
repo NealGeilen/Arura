@@ -9,17 +9,15 @@ $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
     switch ((string)$aData['type']){
         case 'get-users':
-            $Table = new \NG\Client\DataTables();
+            $UserData = [];
             foreach (\NG\User\User::getAllUsers() as $User){
-                $Table->addRow($User->__ToArray());
+                $UserData[] = $User->__ToArray();
             }
-            $response->exitSuccess($Table->getTable());
+            $response->exitSuccess($UserData);
             break;
         case 'get-sessions':
-            $Table = new \NG\Client\DataTables();
             $db = new \NG\Database();
-            $Table->addRows($db ->fetchAll('SELECT S.Session_Id, U.User_Username, FROM_UNIXTIME(S.Session_Last_Active) AS Session_Last_Active FROM tblSessions AS S JOIN tblUsers AS U ON S.Session_User_Id = U.User_Id'));
-            $response->exitSuccess($Table->getTable());
+            $response->exitSuccess($db ->fetchAll('SELECT S.Session_Id, U.User_Username, FROM_UNIXTIME(S.Session_Last_Active) AS Session_Last_Active FROM tblSessions AS S JOIN tblUsers AS U ON S.Session_User_Id = U.User_Id'));
             break;
         case 'get-avalibel-roles':
             $oUser = new \NG\User\User((int)$aData['User_Id']);
