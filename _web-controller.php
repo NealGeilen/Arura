@@ -97,7 +97,7 @@ $aNavBarPages =
             "Icon" => "fas fa-cube",
             "isChild" => false,
             "MasterPage" => "Aqua",
-            "Children" => ['/arura/rollen','/arura/gebruikers']
+            "Children" => ['/arura/rollen','/arura/gebruikers','/arura/instellingen']
         ],
         '/arura/rollen' => [
             "hasRight" => \NG\Permissions\Restrict::Validation(Rights::ARURA_ROLLES),
@@ -112,6 +112,15 @@ $aNavBarPages =
             "hasRight" => \NG\Permissions\Restrict::Validation(Rights::ARURA_USERS),
             "Title" => "Gebruikers",
             "FileName" => "Arura.Users",
+            "Icon" => "fas fa-users",
+            "isChild" => true,
+            "MasterPage" => "Aqua",
+            "Children" => null
+        ],
+        '/arura/instellingen' => [
+            "hasRight" => \NG\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS),
+            "Title" => "Instellingen",
+            "FileName" => "Arura.Settings",
             "Icon" => "fas fa-users",
             "isChild" => true,
             "MasterPage" => "Aqua",

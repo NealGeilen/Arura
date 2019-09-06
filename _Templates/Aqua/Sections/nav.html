@@ -16,7 +16,7 @@
 
         <div id="userbox" class="userbox">
             <a href="#" data-toggle="dropdown">
-                <div class="profile-info" data-lock-name="John Doe" data-lock-email="johndoe@okler.com">
+                <div class="profile-info">
                     <span class="name">{$aUser.User_Firstname} {$aUser.User_Lastname}</span>
                     <span class="role">{$aUser.User_Email}</span>
                 </div>
@@ -28,7 +28,7 @@
                 <ul class="list-unstyled">
                     <li class="divider"></li>
                     <li>
-                        <a role="menuitem" tabindex="-1" href="../../../_web-controller.php"><i class="fa fa-user"></i>Mijn profiel</a>
+                        <a role="menuitem" tabindex="-1" href="/profiel"><i class="fa fa-user"></i>Mijn profiel</a>
                     </li>
                     <li>
                         <a role="menuitem" tabindex="-1" href="javascript:LogOutUser({$aUser.User_Id})"><i class="fa fa-power-off"></i> Logout</a>

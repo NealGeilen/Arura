@@ -4,7 +4,7 @@ $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 
 $request->setRequestMethod('POST');
-//$request->setRight(Permissions::SETTINGS);
+$request->setRight(Rights::ARURA_SETTINGS);
 $request->sandbox(function ($aData) use ($response){
 
     $db = new \NG\Database();
