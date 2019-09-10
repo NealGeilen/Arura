@@ -8,9 +8,7 @@ class Rights{
     const CMS_MENU = 11;
     const CMS_ = 12;
 
-    const FILES_READ = 20;
-    const FILES_WRITE = 21;
-    const FILES_UPLOAD = 22;
+    const EVENTS_MANGE= 20;
 
     static function getConstants() {
         $oClass = new ReflectionClass(__CLASS__);

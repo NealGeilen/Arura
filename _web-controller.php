@@ -1,4 +1,7 @@
 <?php
+
+use NG\Permissions\Restrict;
+
 require_once __DIR__ . "/_app/autoload.php";
 define("__TEMPLATES__", __ROOT__ . '/_Templates/');
 
@@ -67,6 +70,16 @@ $aNavBarPages =
             "FileName" => "Cms.Page",
             "Icon" => "fas fa-puzzle-piece",
             "isChild" => true,
+            "MasterPage" => "Aqua",
+            "Children" => null
+        ],
+
+        "/events" => [
+            "hasRight" => Restrict::Validation(Rights::EVENTS_MANGE),
+            "Title" => "Evenementen",
+            "FileName" => "Events.Mange",
+            "Icon" => "fas fa-calendar",
+            "isChild" => false,
             "MasterPage" => "Aqua",
             "Children" => null
         ],
