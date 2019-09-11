@@ -16,7 +16,8 @@
     "https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js",
     "/assets/js/Modals.js",
     "/assets/vendor/bootstrap-notify/bootstrap-notify.js",
-    "/assets/js/Filemanger.js"
+    "/assets/js/Filemanger.js",
+    "/assets/js/DataTables.js"
   ],
   "Css" : [
     "http://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800|Shadows+Into+Light",

@@ -9,6 +9,7 @@ class Rights{
     const CMS_ = 12;
 
     const EVENTS_MANGE= 20;
+    const EVENTS_REGISTRATION = 21;
 
     static function getConstants() {
         $oClass = new ReflectionClass(__CLASS__);

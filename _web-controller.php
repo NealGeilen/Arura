@@ -73,13 +73,30 @@ $aNavBarPages =
             "MasterPage" => "Aqua",
             "Children" => null
         ],
-
         "/events" => [
-            "hasRight" => Restrict::Validation(Rights::EVENTS_MANGE),
+            "hasRight" => Restrict::Validation(Rights::EVENTS_MANGE) || Restrict::Validation(Rights::EVENTS_REGISTRATION),
             "Title" => "Evenementen",
-            "FileName" => "Events.Mange",
+            "FileName" => "",
             "Icon" => "fas fa-calendar",
             "isChild" => false,
+            "MasterPage" => "Aqua",
+            "Children" => ["/events/mange","/events/registratie"]
+        ],
+        "/events/mange" => [
+            "hasRight" => Restrict::Validation(Rights::EVENTS_MANGE),
+            "Title" => "Beheer",
+            "FileName" => "Events.Mange",
+            "Icon" => "fas fa-calendar",
+            "isChild" => true,
+            "MasterPage" => "Aqua",
+            "Children" => null
+        ],
+        "/events/registratie" => [
+            "hasRight" => Restrict::Validation(Rights::EVENTS_REGISTRATION),
+            "Title" => "Registratie",
+            "FileName" => "Events.Registration",
+            "Icon" => "fas fa-ticket-alt",
+            "isChild" => true,
             "MasterPage" => "Aqua",
             "Children" => null
         ],

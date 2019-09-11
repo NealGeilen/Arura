@@ -1,0 +1,12 @@
+{
+  "columns": [
+    {
+      "data": "EventCategory_Id"
+    },
+    {
+      "data": "EventCategory_Name"
+    }
+  ],
+  "primaryKey" : "EventCategory_Id",
+  "table": "tblEventCategories"
+}
