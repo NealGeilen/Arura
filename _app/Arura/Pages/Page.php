@@ -1,6 +1,8 @@
 <?php
 namespace Arura\Pages;
 
+use function Composer\Autoload\includeFile;
+
 class Page{
 
     protected $sUrl;
@@ -80,7 +82,12 @@ class Page{
     }
 
     public static function getHtml($sLocation){
-        return self::getSmarty()->fetch($sLocation . '/' . basename($sLocation) . '.html');
+        if (is_file($sLocation)){
+            return self::getSmarty()->fetch($sLocation);
+        } else {
+            return self::getSmarty()->fetch($sLocation . '/' . basename($sLocation) . '.html');
+        }
+
     }
 
 
