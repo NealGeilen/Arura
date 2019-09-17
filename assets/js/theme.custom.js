@@ -43,7 +43,11 @@ function LogOutUser(iUserID){
 function serializeArray(oForm) {
     aList = {};
     $.each(oForm.find('.form-control[name]'), function (iKey, oField) {
-        aList[$(oField).attr('name')] = $(oField).val();
+        value = $(oField).val();
+        aList[$(oField).attr('name')] =  value;
+    });
+    $.each(oForm.find('input[type=checkbox]'), function (iKey, oField) {
+        aList[$(oField).attr('name')]  = $(oField).is(':checked') ? 1 : 0;
     });
     return aList;
 }

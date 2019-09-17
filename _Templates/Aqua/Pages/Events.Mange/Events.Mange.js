@@ -51,4 +51,10 @@ $('.Img-Select').on('click', function () {
 $('.create-event').ready(function () {
    oForm = $(this);
    oForm.validator();
+   oForm.submit(function (e) {
+       e.preventDefault();
+       console.log($(this).serializeArray());
+       console.log(serializeArray(oForm));
+   });
+
 });

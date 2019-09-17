@@ -9,23 +9,28 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Naam</label>
-                    <input name="Event_Name" type="text" class="form-control">
+                    <input name="Event_Name" type="text" class="form-control" required>
+                    <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Start</label>
-                    <input type='text' class="TimePikers form-control"/>
+                    <input type='text' class="TimePikers form-control" required name="Event_Start_Timestamp"/>
+                    <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Eind</label>
-                    <input type='text' class="TimePikers form-control"/>
+                    <input type='text' class="TimePikers form-control" required name="Event_End_Timestamp"/>
+                    <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-12">
                     <label>Lokatie</label>
-                    <input name="Event_Name" type="text" class="form-control">
+                    <input name="Event_Location" type="text" class="form-control" required>
+                    <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-12">
                     <label>Omschrijving</label>
-                    <textarea class="form-control" name="Event_Description"></textarea>
+                    <textarea class="form-control" name="Event_Description" required></textarea>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
         </div>
@@ -38,7 +43,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>Soort</label>
-                    <select name="Event_Type" class="form-control">
+                    <select name="Event_Type_Id" class="form-control">
                         <option value="">-Geen-</option>
                         {foreach item=a from=$aEventTypes}
                         <option value="{$a.EventType_Id}">{$a.EventType_Name}</option>
@@ -47,7 +52,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Categorie</label>
-                    <select name="Event_Category" class="form-control">
+                    <select name="Event_Category_Id" class="form-control">
                         <option value="">-Geen-</option>
                         {foreach item=a from=$aEventCategories}
                         <option value="{$a.EventCategory_Id}">{$a.EventCategory_Name}</option>
@@ -56,16 +61,16 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label>Afbeelding</label>
-                    <input name="Event_Name" type="text" class="form-control Img-Select">
+                    <input name="Event_Banner" type="text" class="form-control Img-Select">
                 </div>
 
                 <div class="form-group col-md-4">
                     <label>Prijs per deelnemer</label>
-                    <input name="Event_Name" type="text" class="form-control">
+                    <input name="Event_Price" type="text" class="form-control">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Organizator</label>
-                    <select name="Event_Category" class="form-control">
+                    <select name="Event_Organizer_User_Id" class="form-control">
                         <option value="">-Geen-</option>
                         {foreach item=a from=$aUsers}
                         <option value="{$a.User_Id}">{$a.User_Username}</option>
@@ -83,7 +88,7 @@
             <div class="form-row">
                 <div class="col-md-4">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="EventActive">
+                        <input class="form-check-input" type="checkbox" value="" id="EventActive" name="Event_IsActive">
                         <label class="form-check-label" for="EventActive">
                             Actief
                         </label>
@@ -91,7 +96,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="EventVisable">
+                        <input class="form-check-input" type="checkbox" value="" id="EventVisable" name="Event_isVisible">
                         <label class="form-check-label" for="EventVisable">
                             Zichtbaar
                         </label>
@@ -99,9 +104,11 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label>Event capaciteit</label>
-                    <input name="Event_Capacity" type="number" class="form-control">
+                    <input name="Event_Capacity" type="number" class="form-control" min="0" value="0">
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
         </div>
     </section>
+    <button class="btn btn-success" type="submit">Aanmaken</button>
 </form>
