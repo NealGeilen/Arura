@@ -20,6 +20,7 @@ class Event{
     private $iCapacity;
     private $oCategory;
     private $oType;
+    private $fPrice;
 
     //Class Objects
     private $isLoaded = false;
@@ -51,8 +52,41 @@ class Event{
             $EndDate->setTimestamp($aEvent["Event_End_Timestamp"]);
             $this->setStart($EndDate);
             $this->setDescription($aEvent["Event_Description"]);
-
+            $this->setCapacity((int)$aEvent["Event_Capacity"]);
+            $this->setIsActive((boolean)$aEvent["Event_IsActive"]);
+            $this->setIsVisible((boolean)$aEvent["Event_IsVisible"]);
         }
+    }
+
+    public function save(){
+        if ($this->isLoaded){
+            $this-> db ->updateRecord("tblEvents",$this->__ToArray(),"Event_Id");
+            return $this -> db -> isQuerySuccessful();
+        } else {
+            return false;
+        }
+    }
+
+    public function __ToArray(){
+        return [
+            "Event_Name" => $this->getName(),
+            "Event_Description" => $this->getDescription(),
+            "Event_Start_Timestamp" => $this->getStart()->getTimestamp(),
+            "Event_End_Timestamp" => $this->getEnd()->getTimestamp(),
+            "Event_Location" => $this->getLocation(),
+            "Event_Price" => (float)$this->getPrice(),
+            "Event_Banner" => $this->getBanner(),
+            "Event_Organizer_User_Id" => $this->getOrganizer()->getId(),
+            "Event_IsActive" => $this->getIsActive(),
+            "Event_IsVisible" => $this->getIsVisible(),
+            "Event_Capacity" => $this->getCapacity()
+        ];
+    }
+
+    public static function Create($aData){
+        $db = new Database();
+        $i = $db -> createRecord("tblEvents",$aData);
+        return new self($i);
     }
 
 
@@ -262,6 +296,22 @@ class Event{
     public function setType($oType)
     {
         $this->oType = $oType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPrice()
+    {
+        return $this->fPrice;
+    }
+
+    /**
+     * @param mixed $fPrice
+     */
+    public function setPrice($fPrice)
+    {
+        $this->fPrice = $fPrice;
     }
 
 
