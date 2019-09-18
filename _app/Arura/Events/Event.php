@@ -32,6 +32,12 @@ class Event{
         $this->db = new Database();
     }
 
+    public static function getAllEvents() : array
+    {
+        $db = new Database();
+        return $db -> fetchAll("SELECT * FROM tblEvents");
+    }
+
     /**
      * Set values on properties
      * @param bool $force
@@ -55,10 +61,12 @@ class Event{
             $this->setCapacity((int)$aEvent["Event_Capacity"]);
             $this->setIsActive((boolean)$aEvent["Event_IsActive"]);
             $this->setIsVisible((boolean)$aEvent["Event_IsVisible"]);
+            $this->setType(new EventType($aEvent["Event_Type_Id"]));
         }
     }
 
-    public function save(){
+    public function save() : bool
+    {
         if ($this->isLoaded){
             $this-> db ->updateRecord("tblEvents",$this->__ToArray(),"Event_Id");
             return $this -> db -> isQuerySuccessful();
@@ -67,8 +75,10 @@ class Event{
         }
     }
 
-    public function __ToArray(){
+    public function __ToArray() : array
+    {
         return [
+            "Event_Id" => $this->getId(),
             "Event_Name" => $this->getName(),
             "Event_Description" => $this->getDescription(),
             "Event_Start_Timestamp" => $this->getStart()->getTimestamp(),
@@ -77,9 +87,10 @@ class Event{
             "Event_Price" => (float)$this->getPrice(),
             "Event_Banner" => $this->getBanner(),
             "Event_Organizer_User_Id" => $this->getOrganizer()->getId(),
-            "Event_IsActive" => $this->getIsActive(),
-            "Event_IsVisible" => $this->getIsVisible(),
-            "Event_Capacity" => $this->getCapacity()
+            "Event_IsActive" => (int)$this->getIsActive(),
+            "Event_IsVisible" => (int)$this->getIsVisible(),
+            "Event_Capacity" => $this->getCapacity(),
+            "Event_Type_Id" => $this->getType()->getId()
         ];
     }
 
@@ -111,6 +122,7 @@ class Event{
      */
     public function getDescription()
     {
+        $this->load();
         return $this->sDescription;
     }
 
@@ -127,6 +139,7 @@ class Event{
      */
     public function getStart()
     {
+        $this->load();
         return $this->dStart;
     }
 
@@ -143,6 +156,7 @@ class Event{
      */
     public function getEnd()
     {
+        $this->load();
         return $this->dEnd;
     }
 
@@ -159,6 +173,7 @@ class Event{
      */
     public function getName()
     {
+        $this->load();
         return $this->sName;
     }
 
@@ -175,6 +190,7 @@ class Event{
      */
     public function getLocation()
     {
+        $this->load();
         return $this->sLocation;
     }
 
@@ -191,6 +207,7 @@ class Event{
      */
     public function getBanner()
     {
+        $this->load();
         return $this->sBanner;
     }
 
@@ -205,8 +222,9 @@ class Event{
     /**
      * @return mixed
      */
-    public function getOrganizer()
+    public function getOrganizer() : User
     {
+        $this->load();
         return $this->oOrganizer;
     }
 
@@ -221,9 +239,10 @@ class Event{
     /**
      * @return mixed
      */
-    public function getIsActive()
+    public function getIsActive() : bool
     {
-        return $this->bIsActive;
+        $this->load();
+        return (bool)$this->bIsActive;
     }
 
     /**
@@ -237,9 +256,10 @@ class Event{
     /**
      * @return mixed
      */
-    public function getIsVisible()
+    public function getIsVisible() : bool
     {
-        return $this->bIsVisible;
+        $this->load();
+        return (bool)$this->bIsVisible;
     }
 
     /**
@@ -255,6 +275,7 @@ class Event{
      */
     public function getCapacity()
     {
+        $this->load();
         return $this->iCapacity;
     }
 
@@ -269,8 +290,9 @@ class Event{
     /**
      * @return mixed
      */
-    public function getCategory()
+    public function getCategory() : int
     {
+        $this->load();
         return $this->oCategory;
     }
 
@@ -285,15 +307,16 @@ class Event{
     /**
      * @return mixed
      */
-    public function getType()
+    public function getType() : EventType
     {
+        $this->load();
         return $this->oType;
     }
 
     /**
      * @param mixed $oType
      */
-    public function setType($oType)
+    public function setType(EventType $oType)
     {
         $this->oType = $oType;
     }
@@ -301,9 +324,10 @@ class Event{
     /**
      * @return mixed
      */
-    public function getPrice()
+    public function getPrice() : float
     {
-        return $this->fPrice;
+        $this->load();
+        return (float)$this->fPrice;
     }
 
     /**
