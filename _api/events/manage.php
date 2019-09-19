@@ -1,5 +1,6 @@
 <?php
 
+use NG\Database;
 use NG\User\User;
 
 require_once __DIR__ . "/../../_app/autoload.php";
@@ -17,6 +18,9 @@ $request->sandbox(function ($aData) use ($response) {
                 $aEvent = $aData;
                 $oEvent = \Arura\Events\Event::Create($aEvent);
                 $response->exitSuccess($aEvent);
+                break;
+            case "get":
+                $response->exitSuccess(\Arura\Events\Event::getAllEvents());
                 break;
         }
     }
