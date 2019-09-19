@@ -53,8 +53,22 @@ $('.create-event').ready(function () {
    oForm.validator();
    oForm.submit(function (e) {
        e.preventDefault();
-       console.log($(this).serializeArray());
-       console.log(serializeArray(oForm));
+       aData = serializeArray(oForm);
+       aData.Event_End_Timestamp = toTimestamp(aData.Event_End_Timestamp);
+       aData.Event_Start_Timestamp = toTimestamp(aData.Event_Start_Timestamp);
+       $.ajax({
+           url: "/_api/events/manage.php?a=create",
+           type: "post",
+           dataType: 'json',
+           data: (aData),
+           success: function () {
+               addSuccessMessage('Opgeslagen');
+               document.location.href = "/events/mange"
+           },
+           error: function () {
+               addErrorMessage('opslaan mislukt');
+           }
+       });
    });
 
 });

@@ -44,7 +44,9 @@ function serializeArray(oForm) {
     aList = {};
     $.each(oForm.find('.form-control[name]'), function (iKey, oField) {
         value = $(oField).val();
-        aList[$(oField).attr('name')] =  value;
+        if (value !== ""){
+            aList[$(oField).attr('name')] =  value;
+        }
     });
     $.each(oForm.find('input[type=checkbox]'), function (iKey, oField) {
         aList[$(oField).attr('name')]  = $(oField).is(':checked') ? 1 : 0;

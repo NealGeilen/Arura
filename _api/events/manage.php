@@ -1,26 +1,25 @@
 <?php
 
+use NG\User\User;
+
 require_once __DIR__ . "/../../_app/autoload.php";
 
-//$oEvent = \Arura\Events\Event::Create([
-//    "Event_Name" => "Test",
-//    "Event_Description" => "ajwkdlhagwkdhawgdjaw",
-//    "Event_Start_Timestamp" => 83274982,
-//    "Event_End_Timestamp" => 23487,
-//    "Event_Location" => "Sittard",
-//    "Event_Price" => 10.11,
-//    "Event_Banner" => "/awdhawd/awdkhgajw/awd.jpg",
-//    "Event_Organizer_User_Id" => 1,
-//    "Event_IsActive" => 0,
-//    "Event_IsVisible" => 0,
-//    "Event_Capacity" => 0
-//]);
-$oEvent = new \Arura\Events\Event(3);
-$oEvent->load(true);
-$oEvent->setEnd(new DateTime());
+$response = new \NG\Client\ResponseHandler();
+$request = new \NG\Client\RequestHandler();
 
-$oEvent->getCapacity();
-$oEvent->getOrganizer()->getLastname();
-var_dump($oEvent->getIsActive());
-$oEvent->save();
-var_dump($oEvent->__ToArray());
+
+$request->setRequestMethod("POST");
+$response->isDebug(true);
+$request->sandbox(function ($aData) use ($response) {
+    if (isset($_GET["a"])){
+        switch ($_GET["a"]){
+            case "create":
+                $aEvent = $aData;
+                $oEvent = \Arura\Events\Event::Create($aEvent);
+                $response->exitSuccess($aEvent);
+                break;
+        }
+    }
+});
+
+$response->exitScript();

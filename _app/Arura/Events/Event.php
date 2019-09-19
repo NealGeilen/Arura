@@ -7,7 +7,7 @@ use NG\User\User;
 class Event{
 
     //Properties
-    private $iId;
+    private $sHash;
     private $sName;
     private $sDescription;
     private $dStart;
@@ -26,9 +26,9 @@ class Event{
     private $isLoaded = false;
     private $db;
 
-    public function __construct($iId)
+    public function __construct($sHash)
     {
-        $this->setId($iId);
+        $this->setHash($sHash);
         $this->db = new Database();
     }
 
@@ -45,7 +45,7 @@ class Event{
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             //load user properties from database
-            $aEvent = $this -> db -> fetchRow("SELECT * FROM tblEvents WHERE Event_Id = ? ", [$this -> getId()]);
+            $aEvent = $this -> db -> fetchRow("SELECT * FROM tblEvents WHERE Event_Hash = ? ", [$this -> getHash()]);
             $this -> isLoaded = true;
             $this->setName($aEvent["Event_Name"]);
             $this->setLocation($aEvent["Event_Location"]);
@@ -62,6 +62,7 @@ class Event{
             $this->setIsActive((boolean)$aEvent["Event_IsActive"]);
             $this->setIsVisible((boolean)$aEvent["Event_IsVisible"]);
             $this->setType(new EventType($aEvent["Event_Type_Id"]));
+            $this->setCategory(new EventCategory($aEvent["Event_Category_Id"]));
         }
     }
 
@@ -78,7 +79,7 @@ class Event{
     public function __ToArray() : array
     {
         return [
-            "Event_Id" => $this->getId(),
+            "Event_Hash" => $this->getHash(),
             "Event_Name" => $this->getName(),
             "Event_Description" => $this->getDescription(),
             "Event_Start_Timestamp" => $this->getStart()->getTimestamp(),
@@ -90,31 +91,16 @@ class Event{
             "Event_IsActive" => (int)$this->getIsActive(),
             "Event_IsVisible" => (int)$this->getIsVisible(),
             "Event_Capacity" => $this->getCapacity(),
-            "Event_Type_Id" => $this->getType()->getId()
+            "Event_Type_Id" => $this->getType()->getId(),
+            "Event_Category_Id" => $this->getCategory()->getId()
         ];
     }
 
     public static function Create($aData){
         $db = new Database();
-        $i = $db -> createRecord("tblEvents",$aData);
-        return new self($i);
-    }
-
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->iId;
-    }
-
-    /**
-     * @param mixed $iId
-     */
-    public function setId($iId)
-    {
-        $this->iId = $iId;
+        $aData["Event_Hash"] = getHash("tblEvents", "Event_Hash");
+        $db -> createRecord("tblEvents",$aData);
+        return new self($aData["Event_Hash"]);
     }
 
     /**
@@ -290,7 +276,7 @@ class Event{
     /**
      * @return mixed
      */
-    public function getCategory() : int
+    public function getCategory() : EventCategory
     {
         $this->load();
         return $this->oCategory;
@@ -299,7 +285,7 @@ class Event{
     /**
      * @param mixed $oCategory
      */
-    public function setCategory($oCategory)
+    public function setCategory(EventCategory $oCategory)
     {
         $this->oCategory = $oCategory;
     }
@@ -336,6 +322,22 @@ class Event{
     public function setPrice($fPrice)
     {
         $this->fPrice = $fPrice;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHash()
+    {
+        return $this->sHash;
+    }
+
+    /**
+     * @param mixed $sHash
+     */
+    public function setHash($sHash)
+    {
+        $this->sHash = $sHash;
     }
 
 
