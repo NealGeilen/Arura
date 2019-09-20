@@ -19,6 +19,18 @@ $T->addTab('create', __DIR__ . DIRECTORY_SEPARATOR . "Events.Create.html", funct
     $Smarty -> assign('aEventTypes', $DB -> fetchAll('SELECT * FROM tblEventTypes'));
     $Smarty -> assign('aUsers', $DB -> fetchAll('SELECT User_Id, User_Username FROM tblUsers'));
 });
+if (isset($_GET["hash"])){
+    $T->addTab('edit', __DIR__ . DIRECTORY_SEPARATOR . "Events.Edit.html", function (){
+        $DB = new Database();
+        $Smarty = Page::getSmarty();
+        Page::addResourceFile("Css","/assets/vendor/timepicker/timepicker.min.css");
+        Page::addResourceFile("Js","/assets/vendor/timepicker/timepicker.min.js");
+        $Smarty -> assign('aEvent', $DB -> fetchRow('SELECT * FROM tblEvents WHERE Event_Hash = :Event_Hash', ["Event_Hash" => $_GET["hash"]]));
+        $Smarty -> assign('aEventCategories', $DB -> fetchAll('SELECT * FROM tblEventCategories'));
+        $Smarty -> assign('aEventTypes', $DB -> fetchAll('SELECT * FROM tblEventTypes'));
+        $Smarty -> assign('aUsers', $DB -> fetchAll('SELECT User_Id, User_Username FROM tblUsers'));
+    });
+}
 $T->addTab(null, __DIR__ . DIRECTORY_SEPARATOR . "Events.Mange.html");
 $T->setHeader(__DIR__ . DIRECTORY_SEPARATOR . "Events.Header.html");
 return $T->getPage($_GET["p"]);

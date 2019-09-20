@@ -1,6 +1,7 @@
 
-<h1>Event aanmaken</h1>
-<form class="create-event" action="/_api/events/manage.php?a=create" method="post">
+<h1>Event aanpassen</h1>
+<form class="edit-event">
+    <input type="hidden" name="Event_Hash" value="{$aEvent.Event_Hash}" class="form-control">
     <section class="panel">
         <header class="panel-heading">
             <h2 class="panel-title">Omschrijving</h2>
@@ -9,27 +10,27 @@
             <div class="form-row">
                 <div class="form-group col-md-12">
                     <label>Naam</label>
-                    <input name="Event_Name" type="text" class="form-control" required>
+                    <input name="Event_Name" type="text" class="form-control" required value="{$aEvent.Event_Name}">
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Start</label>
-                    <input type='text' class="TimePikers form-control" required name="Event_Start_Timestamp"/>
+                    <input type='text' class="TimePikers form-control" required name="Event_Start_Timestamp" value="{$aEvent.Event_Start_Timestamp}"/>
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-6">
                     <label>Eind</label>
-                    <input type='text' class="TimePikers form-control" required name="Event_End_Timestamp"/>
+                    <input type='text' class="TimePikers form-control" required name="Event_End_Timestamp" value="{$aEvent.Event_End_Timestamp}"/>
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-12">
                     <label>Lokatie</label>
-                    <input name="Event_Location" type="text" class="form-control" required>
+                    <input name="Event_Location" type="text" class="form-control" required value="{$aEvent.Event_Name}">
                     <div class="help-block with-errors"></div>
                 </div>
                 <div class="form-group col-md-12">
                     <label>Omschrijving</label>
-                    <textarea class="form-control" name="Event_Description" required></textarea>
+                    <textarea class="form-control" name="Event_Description" required>{$aEvent.Event_Description}</textarea>
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
@@ -43,7 +44,7 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label>Soort</label>
-                    <select name="Event_Type_Id" class="form-control">
+                    <select name="Event_Type_Id" class="form-control" value="{$aEvent.Event_Type_Id}">
                         <option value="0">-Geen-</option>
                         {foreach item=a from=$aEventTypes}
                         <option value="{$a.EventType_Id}">{$a.EventType_Name}</option>
@@ -52,7 +53,7 @@
                 </div>
                 <div class="form-group col-md-6">
                     <label>Categorie</label>
-                    <select name="Event_Category_Id" class="form-control">
+                    <select name="Event_Category_Id" class="form-control" value="{$aEvent.Event_Category_Id}">
                         <option value="0">-Geen-</option>
                         {foreach item=a from=$aEventCategories}
                         <option value="{$a.EventCategory_Id}">{$a.EventCategory_Name}</option>
@@ -61,16 +62,16 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label>Afbeelding</label>
-                    <input name="Event_Banner" type="text" class="form-control Img-Select">
+                    <input name="Event_Banner" type="text" class="form-control Img-Select" value="{$aEvent.Event_Banner}">
                 </div>
 
                 <div class="form-group col-md-4">
                     <label>Prijs per deelnemer</label>
-                    <input name="Event_Price" type="text" class="form-control">
+                    <input name="Event_Price" type="text" class="form-control" value="{$aEvent.Event_Price}">
                 </div>
                 <div class="form-group col-md-4">
                     <label>Organizator</label>
-                    <select name="Event_Organizer_User_Id" class="form-control">
+                    <select name="Event_Organizer_User_Id" class="form-control" value="{$aEvent.Event_Organizer_User_Id}">
                         <option value="0">-Geen-</option>
                         {foreach item=a from=$aUsers}
                         <option value="{$a.User_Id}">{$a.User_Username}</option>
@@ -88,7 +89,7 @@
             <div class="form-row">
                 <div class="col-md-4">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="EventActive" name="Event_IsActive">
+                        <input class="form-check-input" type="checkbox" value="" id="EventActive" name="Event_IsActive" {if $aEvent.Event_IsActive === "1"} checked {/if}>
                         <label class="form-check-label" for="EventActive">
                             Actief
                         </label>
@@ -96,7 +97,7 @@
                 </div>
                 <div class="col-md-4">
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="" id="EventVisable" name="Event_isVisible">
+                        <input class="form-check-input" type="checkbox" value="" id="EventVisable" name="Event_IsVisible" {if $aEvent.Event_IsVisible === "1"} checked {/if}>
                         <label class="form-check-label" for="EventVisable">
                             Zichtbaar
                         </label>
@@ -104,11 +105,12 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label>Event capaciteit</label>
-                    <input name="Event_Capacity" type="number" class="form-control" min="0" value="0">
+                    <input name="Event_Capacity" type="number" class="form-control" min="0" value="{$aEvent.Event_Capacity}" >
                     <div class="help-block with-errors"></div>
                 </div>
             </div>
         </div>
     </section>
-    <button class="btn btn-success" type="submit">Aanmaken</button>
+    <input class="btn btn-success" type="submit" value="opslaan">
+    <button class="btn btn-danger btn-delete" type="button">Verwijderen</button>
 </form>

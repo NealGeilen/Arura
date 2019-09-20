@@ -1,5 +1,7 @@
 <?php
 
+use Arura\Events\EventCategory;
+use Arura\Events\EventType;
 use NG\Database;
 use NG\User\User;
 
@@ -21,6 +23,14 @@ $request->sandbox(function ($aData) use ($response) {
                 break;
             case "get":
                 $response->exitSuccess(\Arura\Events\Event::getAllEvents());
+                break;
+            case "edit":
+                $db = new Database();
+                $db -> updateRecord("tblEvents", $aData, "Event_Hash");
+                break;
+            case "delete":
+                $oEvent = new \Arura\Events\Event($aData["Event_Hash"]);
+                $oEvent->Remove();
                 break;
         }
     }

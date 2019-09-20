@@ -42,6 +42,7 @@ function LogOutUser(iUserID){
 
 function serializeArray(oForm) {
     aList = {};
+    console.log(oForm);
     $.each(oForm.find('.form-control[name]'), function (iKey, oField) {
         value = $(oField).val();
         if (value !== ""){

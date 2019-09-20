@@ -103,6 +103,10 @@ class Event{
         return new self($aData["Event_Hash"]);
     }
 
+    public function Remove(){
+        $this->db->query("DELETE FROM tblEvents WHERE Event_Hash = :Event_Hash", ["Event_Hash" => $this->getHash()]);
+    }
+
     /**
      * @return mixed
      */
@@ -132,7 +136,7 @@ class Event{
     /**
      * @param mixed $dStart
      */
-    public function setStart($dStart)
+    public function setStart(\DateTime $dStart)
     {
         $this->dStart = $dStart;
     }
@@ -149,7 +153,7 @@ class Event{
     /**
      * @param mixed $dEnd
      */
-    public function setEnd($dEnd)
+    public function setEnd(\DateTime $dEnd)
     {
         $this->dEnd = $dEnd;
     }

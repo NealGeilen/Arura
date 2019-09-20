@@ -50,8 +50,10 @@ $.fn.NgTables = function( options = {} ) {
                 settings.columns.push({
                     data: null
                 });
+                console.log(oTable);
                 settings.columnDefs.push({
                     "render": function ( data, type, row ) {
+                        console.log(oTable);
                         //Close edit record menu
                         oTable.find('.btn-menu-close').on('click', function () {
                             var tr = $(this).closest('tr');
@@ -89,7 +91,7 @@ $.fn.NgTables = function( options = {} ) {
                             oForm.append('<input type="hidden" name="type" value="edit">');
                             oForm.append('<input type="submit" class="btn btn-success" value="Opslaan">');
                             oForm.attr('method', 'post').attr('action', settings.source);
-                            
+
                             $.each(aData, function (sField, sValue) {
                                 oForm.find('[name='+sField+']').val(sValue)
                             });
@@ -97,7 +99,7 @@ $.fn.NgTables = function( options = {} ) {
                             row.child(oForm).show();
 
                             oForm.submit(function (e) {
-                               e.preventDefault();
+                                e.preventDefault();
                                 $.ajax({
                                     type: 'post',
                                     dataType: 'json',

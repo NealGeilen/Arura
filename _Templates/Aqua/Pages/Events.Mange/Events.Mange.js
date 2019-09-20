@@ -32,10 +32,18 @@ $('.event-categories').NgTables({
     source: '/_api/events/categories.php'
 });
 
-$('.TimePikers').datepicker({
-    minDate: new Date(),
-    timepicker: true
+$.each($('.TimePikers'), function (i,oElement) {
+    oElement = $(oElement);
+    date = new Date();
+    date.setMilliseconds(oElement.val());
+    oElement.val(toDateTime(oElement.val()));
+    console.log(date);
+    oElement.datepicker({
+        timepicker: true,
+        startDate: date
+    });
 });
+
 
 function toTimestamp(strDate){
     var datum = Date.parse(strDate);
@@ -48,7 +56,7 @@ function toDateTime(Timestamp){
     return d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + d.getHours() + ":"+ d.getMinutes();
 }
 function YesNo(sValue){
-    return (sValue === 1 || sValue === "1") ? "Ja" : "Nee";
+    return (sValue === 1 || sValue === "1") ? "<i class=\"fas fa-check text-success\"></i>" : "<i class=\"fas fa-times text-danger\"></i>";
 }
 $('.Img-Select').on('click', function () {
     oInput = $(this);
@@ -56,9 +64,52 @@ $('.Img-Select').on('click', function () {
         oInput.val(aNode[0].original.dir)
    });
 });
-
+$('.edit-event').ready(function () {
+    oEditForm = $('.edit-event');
+    oEditForm.validator();
+    $('.btn-delete').on('click', function () {
+       Modals.Warning({
+           Title: "Verwijderen",
+           Message: "Weet je zeker dat je dit event wilt verwijderen",
+           onConfirm: function () {
+               $.ajax({
+                   url: "/_api/events/manage.php?a=delete",
+                   type: "post",
+                   dataType: 'json',
+                   data: ({Event_Hash: $('input[name=Event_Hash]').val()}),
+                   success: function () {
+                       addSuccessMessage('Verwijdert');
+                               document.location.href = "/events/mange"
+                   },
+                   error: function () {
+                       addErrorMessage('Verwijderen mislukt');
+                   }
+               });
+           }
+       })
+    });
+    oEditForm.submit(function (e) {
+        e.preventDefault();
+        aData = serializeArray(oEditForm);
+        aData.Event_End_Timestamp = toTimestamp(aData.Event_End_Timestamp);
+        aData.Event_Start_Timestamp = toTimestamp(aData.Event_Start_Timestamp);
+        $.ajax({
+            url: "/_api/events/manage.php?a=edit",
+            type: "post",
+            dataType: 'json',
+            data: (aData),
+            success: function () {
+                addSuccessMessage('Opgeslagen');
+                document.location.href = "/events/mange"
+            },
+            error: function () {
+                addErrorMessage('opslaan mislukt');
+            }
+        });
+    });
+});
 $('.create-event').ready(function () {
-   oForm = $(this);
+   oForm = $('.create-event');
    oForm.validator();
    oForm.submit(function (e) {
        e.preventDefault();
@@ -79,10 +130,8 @@ $('.create-event').ready(function () {
            }
        });
    });
-
 });
-
-oTable = $('#events-table').DataTable({
+$('#events-table').DataTable({
     dom: '<"toolbar">frtip',
     dataSource: '/_api/events/manage.php?a=get',
     dataSrc: 'data',
@@ -125,7 +174,10 @@ oTable = $('#events-table').DataTable({
         {
             "data": "Event_Hash",
             "render": function ( data, type, row ) {
-                return data;
+                btns = $($(".template-btns").html());
+                btns.attr("href", "/events/mange?p=edit&hash="+data);
+                console.log(btns);
+                return btns[0].outerHTML;
             },
         },
     ],
