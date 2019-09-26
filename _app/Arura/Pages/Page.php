@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Pages;
 
+use NG\Settings\Application;
 use function Composer\Autoload\includeFile;
 
 class Page{
@@ -25,6 +26,10 @@ class Page{
                 throw new \Exception('No Access', 403);
             }
         }
+        self::getSmarty()->assign("aWebiste" ,[
+                "name" => Application::get('webiste', 'name'),
+                "url" => Application::get("webiste", 'url')
+            ]);
         if (empty($this->getMasterPath())){
             return $this -> getFileLocation();
         } else {

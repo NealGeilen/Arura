@@ -1,6 +1,9 @@
 <?php
 
 
+use NG\Settings\Application;
+use NG\Settings\System;
+
 require_once __DIR__ . '/_app/autoload.php';
 
 if (!isset($_GET['sat']) && $_GET['sat'] !== '324792834792374'){
@@ -23,8 +26,8 @@ foreach($commands as $command){
 }
 \NG\Mailer\Notify::Notify([
     'message' => $output,
-    'recipients' => [\NG\Settings\System::get('email', 'webmaster')],
-    'subject' => 'Arura DWJG.nl pull notification'
+    'recipients' => [System::get('email', 'webmaster')],
+    'subject' => 'Arura ' . Application::get('webiste', 'name').' pull notification'
 ]);
 exit;
 ?>
