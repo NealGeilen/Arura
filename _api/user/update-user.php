@@ -7,20 +7,24 @@ $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 
 $request->setRequestMethod('POST');
-$request->sandbox(function (){
+$request->sandbox(function ($aData) use ($response){
     \NG\Sessions::Start();
     $user = \NG\User\User::activeUser();
+    $user->load(true);
 
-    $user -> setEmail(htmlentities($_POST['User_Email']));
-    $user -> setUsername(htmlentities($_POST['User_Username']));
-    $user -> setFirstname(htmlentities($_POST['User_Firstname']));
-    $user -> setLastname(htmlentities($_POST['User_Lastname']));
+    $user -> setEmail(htmlentities($aData['User_Email']));
+    $user -> setUsername(htmlentities($aData['User_Username']));
+    $user -> setFirstname(htmlentities($aData['User_Firstname']));
+    $user -> setLastname(htmlentities($aData['User_Lastname']));
 
-    if ($_POST['Password1'] === $_POST['Password2'] && $_POST['Password1'] !== '' && $_POST['Password2'] !== ''){
-        $user -> setPassword(\NG\User\Password::Create(htmlentities($_POST['Password1'])));
+    if ($aData['Password1'] === $aData['Password2'] && $aData['Password1'] !== '' && $aData['Password2'] !== ''){
+        $user -> setPassword(\NG\User\Password::Create(htmlentities($aData['Password1'])));
     }
 
-    $user->save();
+    if (!$user->save()){
+        throw new \NG\Exceptions\Error();
+    }
+    $response->exitSuccess($aData);
 });
 
 $response->exitScript();
