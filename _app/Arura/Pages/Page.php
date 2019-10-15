@@ -27,8 +27,8 @@ class Page{
             }
         }
         self::getSmarty()->assign("aWebiste" ,[
-                "name" => Application::get('webiste', 'name'),
-                "url" => Application::get("webiste", 'url')
+                "name" => Application::get('website', 'name'),
+                "url" => Application::get("website", 'url')
             ]);
         if (empty($this->getMasterPath())){
             return $this -> getFileLocation();
