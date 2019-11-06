@@ -39,11 +39,13 @@
   </script>
   {$footer}
 
+  {if $sPageSideBar != NULL}
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
-    <!-- Control sidebar content goes here -->
+    {$sPageSideBar}
   </aside>
   <!-- /.control-sidebar -->
+  {/if}
 </div>
 <!-- ./wrapper -->
 

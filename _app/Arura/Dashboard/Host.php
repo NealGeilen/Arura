@@ -12,6 +12,7 @@ class Host{
 
     public function __construct(){
         $this -> setRequestedUrl(("/".$_GET['_url_']));
+        $_SERVER["REDIRECT_URL"] = "/" . __ARURA__DIR_NAME__ . "/" . $_GET['_url_'];
     }
 
     public function addPage(Page $oPage){

@@ -15,6 +15,9 @@ define('__SETTINGS__',          __APP_ROOT__    . DIRECTORY_SEPARATOR. 'settings
 define('__FILES__',             __WEB__ROOT__   . DIRECTORY_SEPARATOR. 'files'      . DIRECTORY_SEPARATOR);
 
 
+define('__RESOURCES__',         __APP__         . DIRECTORY_SEPARATOR. 'resources'  . DIRECTORY_SEPARATOR);
+define('__DATAFILES__',         __RESOURCES__   . DIRECTORY_SEPARATOR. 'DataFiles'  . DIRECTORY_SEPARATOR);
+
 
 require_once __VENDOR__ . "autoload.php";
 require_once __APP__    . "Rights.php";

@@ -6,22 +6,22 @@ var Roles = {
     Roles: {
         oTable: null,
         setTable: function (oElement = $('#rolles-overview')) {
-            this.oTable =  oElement.DataTable({
+            this.oTable = oElement.DataTable({
                 dataSource: ARURA_API_DIR + 'user/roles.php',
                 dataSrc: 'data',
-                "columns":[
-                    { "data": "Role_Id" },
-                    { "data": "Role_Name" },
-                    { "data": "Rights" },
-                    { "data": null, "defaultContent": $('.template-roles-edit-btns')[0].outerHTML },
+                "columns": [
+                    {"data": "Role_Id"},
+                    {"data": "Role_Name"},
+                    {"data": "Rights"},
+                    {"data": null, "defaultContent": $('.template-roles-edit-btns')[0].outerHTML},
                 ],
                 "columnDefs": [
                     {
-                        "render": function ( data, type, row ) {
+                        "render": function (data, type, row) {
                             s = '<ul>';
                             $.each(data, function (i, Role) {
-                                if (typeof Role !== "undefined"){
-                                    s += '<li>' + Role.Right_Name  + '</li>';
+                                if (typeof Role !== "undefined") {
+                                    s += '<li>' + Role.Right_Name + '</li>';
                                 }
                             });
                             s += '</ul>';
@@ -31,7 +31,7 @@ var Roles = {
                     },
                 ],
                 rowId: "Role_Id",
-                ajax:{
+                ajax: {
                     url: ARURA_API_DIR + 'user/roles.php',
                     type: "post",
                     data: {
@@ -42,14 +42,14 @@ var Roles = {
         },
         AltRights: function (oElement) {
             var tr = oElement.closest('tr');
-            var row = this.oTable.row( tr );
+            var row = this.oTable.row(tr);
 
-            if (!row.child.isShown() ) {
+            if (!row.child.isShown()) {
                 oTemplate = $($('.template-roles-rights').html());
                 aData = row.data();
                 tr.find('.btn-role-menu').hide();
                 tr.find('.btn-role-menu-close').show();
-                $.each(aData.Rights , function (i, aRight) {
+                $.each(aData.Rights, function (i, aRight) {
                     t = $($('.template-role-rights-details').html());
                     t.find('.title').text(aRight.Right_Name);
                     t.find('.btn').data('right', aRight);
@@ -61,11 +61,11 @@ var Roles = {
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
-                        url : ARURA_API_DIR + 'user/roles.php',
+                        url: ARURA_API_DIR + 'user/roles.php',
                         data: ({
                             type: 'remove-right',
-                            Right_Id : $(this).data('right').Right_Id,
-                            Role_Id:  aData.Role_Id
+                            Right_Id: $(this).data('right').Right_Id,
+                            Role_Id: aData.Role_Id
                         }),
                         success: function () {
                             delete aData.Rights[parseInt($(oBtn).data('right').Right_Id)];
@@ -81,10 +81,10 @@ var Roles = {
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
-                        url : ARURA_API_DIR + 'user/roles.php',
+                        url: ARURA_API_DIR + 'user/roles.php',
                         data: ({
                             type: 'get-avalibel-rights',
-                            Role_Id:  aData.Role_Id
+                            Role_Id: aData.Role_Id
                         }),
                         success: function (response) {
                             t = $('<select>').addClass('form-control');
@@ -101,11 +101,11 @@ var Roles = {
                                     $.ajax({
                                         type: 'post',
                                         dataType: 'json',
-                                        url : ARURA_API_DIR + 'user/roles.php',
+                                        url: ARURA_API_DIR + 'user/roles.php',
                                         data: ({
                                             type: 'assign-right',
                                             Right_Id: iRightId,
-                                            Role_Id:  aData.Role_Id
+                                            Role_Id: aData.Role_Id
                                         }),
                                         success: function () {
                                             aData.Rights[iRightId] = response.data[iRightId];
@@ -121,14 +121,14 @@ var Roles = {
                     });
                 });
 
-                row.child( oTemplate ).show();
+                row.child(oTemplate).show();
                 tr.addClass('shown');
             }
         },
         AltRole: function (oElement) {
             var tr = oElement.closest('tr');
-            var row = this.oTable.row( tr );
-            if (!row.child.isShown() ) {
+            var row = this.oTable.row(tr);
+            if (!row.child.isShown()) {
                 oTemplate = $($('.template-role-edit').html());
                 tr.find('.btn-role-menu').hide();
                 tr.find('.btn-role-menu-close').show();
@@ -150,11 +150,11 @@ var Roles = {
                 tr.addClass('shown');
             }
         },
-        CloseMenu:function(oElement){
+        CloseMenu: function (oElement) {
             var tr = oElement.closest('tr');
-            var row = this.oTable.row( tr );
+            var row = this.oTable.row(tr);
 
-            if (row.child.isShown()){
+            if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');
                 tr.find('.btn-role-menu').show();
@@ -163,15 +163,15 @@ var Roles = {
         },
         Delete: function (oElement) {
             var tr = oElement.closest('tr');
-            var row = this.oTable.row( tr );
+            var row = this.oTable.row(tr);
             aData = row.data();
             $.ajax({
                 type: 'post',
                 dataType: 'json',
-                url : '/_api/user/roles.php',
+                url: '/_api/user/roles.php',
                 data: ({
                     type: 'delete-role',
-                    Role_Id:  aData.Role_Id
+                    Role_Id: aData.Role_Id
                 }),
                 success: function () {
                     row.remove().draw();

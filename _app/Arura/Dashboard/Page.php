@@ -20,13 +20,15 @@ class Page{
 
     protected static $aResourceFiles = [];
 
+    protected static $sSideBar = null;
+
     public function showPage(){
         if (!is_null($this->getRight())){
             if (!$this->getRight()){
                 throw new \Exception('No Access', 403);
             }
         }
-        self::getSmarty()->assign("aWebiste" ,[
+        self::getSmarty()->assign("aWebsite" ,[
                 "name" => Application::get('website', 'name'),
                 "url" => Application::get("website", 'url'),
             ]);
@@ -41,7 +43,6 @@ class Page{
         if (empty($this->getMasterPath())){
             return $this -> getFileLocation();
         } else {
-
             self::setResourceFiles(json_decode(file_get_contents($this->getMasterPath(). 'config.json'),true));
             self::getSmarty()->assign('sContent', include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php'));
 
@@ -61,6 +62,7 @@ class Page{
             }
             self::$aResourceFiles["JsPage"] = $sJsData;
             self::$aResourceFiles["CssPage"] = $sCssData;
+            self::getSmarty()->assign("sPageSideBar", self::getSideBar());
 
 
             self::getSmarty()->assign('aResourceFiles', self::getResourceFiles());
@@ -72,6 +74,7 @@ class Page{
                     self::getSmarty()->assign($sName, self::getSmarty()->fetch($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item));
                 }
             }
+
 
 //          Show Master Page
             self::getSmarty()->display(($this->getMasterPath() . 'index.html'));
@@ -206,5 +209,24 @@ class Page{
 
     public static function addResourceFile($sCategory, $sFileLocation){
         self::$aResourceFiles[$sCategory][] = $sFileLocation;
+    }
+
+    /**
+     * @return string
+     */
+    private static function getSideBar()
+    {
+        if (!is_null(self::$sSideBar)){
+            return self::getSmarty()->fetch(self::$sSideBar);
+        }
+        return null;
+    }
+
+    /**
+     * @param string $sSideBar
+     */
+    public static function setSideBar($sHtmlFile = null)
+    {
+        self::$sSideBar = $sHtmlFile;
     }
 }

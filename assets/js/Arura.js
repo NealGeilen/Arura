@@ -75,8 +75,6 @@ $('form.form-sender').submit(function (e) {
 });
 
 $.fn.FormAjax = function( options = {} ) {
-
-
     return this.each(function() {
         $(this).submit(function (e) {
             e.preventDefault();

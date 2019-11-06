@@ -1,0 +1,18 @@
+{
+  "primarykey": "Page_Id",
+  "table": "tblCmsPages",
+  "columns": {
+      "Page_Id": {
+        "name": "Titel",
+        "type": "number"
+      },
+      "Page_Title": {
+          "name": "Titel",
+          "type": "text"
+      },
+      "Page_Url": {
+        "name": "Url",
+        "type": "text"
+      }
+  }
+}

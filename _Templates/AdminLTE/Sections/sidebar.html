@@ -11,8 +11,8 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 {foreach from=$aNavPages key=Href item=aPage}
                 {if $aPage.Right && !$aPage.isChild}
-                <li class="nav-item {if $aPage.Children !== NULL}has-treeview{if in_array($smarty.server.REDIRECT_URL,$aPage.Children)} menu-open{/if}{/if}">
-                    <a href="/{$aArura.dir}{$Href}" class="nav-link {if $Href === $smarty.server.REDIRECT_URL}active{/if}">
+                <li class="nav-item {if $aPage.Children !== NULL}has-treeview{if in_array($sRequestUrl,$aPage.Children)} menu-open{/if}{/if}">
+                    <a href="/{$aArura.dir}{$Href}" class="nav-link {if $Href === $sRequestUrl}active{/if}">
                         <i class="nav-icon {$aPage.Icon}"></i>
                         <p>
                             {$aPage.Title}
@@ -26,7 +26,7 @@
                         {foreach from=$aPage.Children item=ChildHref}
                             {if $aNavPages[$ChildHref].Right}
                                 <li class="nav-item">
-                                    <a href="/{$aArura.dir}{$ChildHref}" class="nav-link{if $ChildHref === $smarty.server.REDIRECT_URL} active{/if}">
+                                    <a href="/{$aArura.dir}{$ChildHref}" class="nav-link{if $ChildHref === $sRequestUrl} active{/if}">
                                         <i class="{$aNavPages[$ChildHref].Icon} nav-icon"></i>
                                         <p>{$aNavPages[$ChildHref].Title}</p>
                                     </a>

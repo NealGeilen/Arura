@@ -1,0 +1,167 @@
+.CMS-Page-Editor{
+    position: relative;
+    background: #fff;
+    padding: 5px;
+}
+.CMS-Block-Header{
+    background: white;
+    border: darkgray 2px solid;
+    padding: 10px;
+}
+.CMS-Group{
+    border: #0d3349 1px solid;
+    margin: 5px;
+    position: relative;
+}
+.CMS-Group .CMS-Group-Content{
+    min-height: 40px;
+    margin: unset;
+    background: #E6E6E6;
+    height: 100%;
+    width: 100%;
+}
+.CMS-Group .CMS-Group-Content .Block-Item{
+    float: left;
+}
+.CMS-Group .CMS-Group-Control{
+    display: none;
+    position: absolute;
+    left: -2px;
+    top: -32px;
+}
+.Block-Item{
+    background: lightgrey;
+    position: relative;
+    padding: unset;
+}
+.Block-Item .Block-Item-Content{
+    position: relative;
+    padding: 16px;
+    width: 100%;
+}
+.Block-Item.active .Block-Item-Content{
+    background: gray;
+}
+.Block-Item.active .Block-Item-Content.active{
+    z-index: 120;
+}
+.Block-Item.active .Block-Item-Control{
+    display: block!important;
+}
+.Block-Item .Block-Item-Control{
+    position: absolute;
+    display: none;
+    left: -24px;
+}
+.Block-Item.active .Block-Item-Width-Control{
+    display: block!important;
+}
+.Block-Item .Block-Item-Width-Control{
+    display: none!important;
+    position: absolute;
+    top: 20px;
+    right: -12px;
+    cursor: e-resize;
+    height: unset;
+    width: unset;
+    z-index: 100;
+}
+.Block-Placeholder{
+    background: red;
+}
+.Tinymce{
+    padding: 2px;
+    background: unset;
+}
+.tox-tinymce-inline{
+}
+.Block-Item-Field{
+    width: 100%;
+    /*margin-top: 5px;*/
+    /*margin-bottom: 3px;*/
+}
+Input.Block-Item-Field{
+    padding: 5px;
+    border-radius: 5px;
+    border: unset;
+    text-align: center;
+}
+Button.Block-Item-Field{
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+/**
+Active group
+ */
+.CMS-Group.active .CMS-Group-Control{
+    display: block!important;
+}
+.Block-Item.active .Tinymce{
+    background: white!important;
+}
+.content-body{
+    /*padding: unset;*/
+}
+.CMS-overvieuw{
+    position: relative;
+    padding:  5px;
+}
+.block-editor-background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 100;
+    display: none;
+}
+.block-editor-background.active{
+    display: block;
+}
+.block-editor-background .btn-group-vertical{
+    position: absolute;
+    right: 0;
+    top: 100px;
+    font-size: 24px;
+    margin: 15px;
+    z-index: 101;
+    opacity: unset;
+}
+.Block-Editor{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+}
+img.Block-Item-Field{
+    /*min-height: 40px;*/
+}
+img.Block-Item-Field:after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 24px;
+    text-align: center;
+    display: block;
+    content: '\f03e';
+    color: #abb4be;
+    /*position: absolute;*/
+    /*right: 45%;*/
+    /*left: 45%;*/
+    /*top: 30%;*/
+    width: 10%;
+    min-height: 40px;
+    margin: 0 auto;
+}
+.Block-Editor .btn-group{
+    position: absolute;
+    top: 30%;
+    left: 40%;
+    /*right: 40%;*/
+}

@@ -1,11 +1,8 @@
 <?php
 
 require_once __DIR__ . "/_app/autoload.php";
-if (!\NG\User\User::isLogged() && "/".$_GET['_url_'] !== "/login"){
+if (!\NG\User\User::isLogged() && $_GET['_url_'] !== "login"){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
-    exit;
-} else if("/".$_GET['_url_'] == "/login"){
-    header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."home");
     exit;
 }
 
@@ -23,6 +20,58 @@ $aNavBarPages =
             "Icon" => "fas fa-tachometer-alt",
             "isChild" => false,
             "Children" => Null
+        ],
+        /**
+         * CMS Beheer
+         */
+        "/content" => [
+            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_MENU) || \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+            "Title" => "Website content",
+            "FileName" => null,
+            "Icon" => "fas fa-globe-europe",
+            "isChild" => false,
+            "MasterPage" => null,
+            "Children" =>
+                [
+                    '/content/pagina',
+                    '/content/menu'
+                ]
+        ],
+        "/content/pagina" => [
+            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+            "Title" => "Pagina's",
+            "FileName" => "Cms.Pages",
+            "Icon" => "fas fa-file",
+            "isChild" => true,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        "/content/menu" => [
+            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_MENU),
+            "Title" => "Menu",
+            "FileName" => "Cms.Menu",
+            "Icon" => "fas fa-bars",
+            "isChild" => true,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        "/content/pagina/content" => [
+            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+            "FileName" => "Cms.Page.Content",
+            "Title" => "Gebruikers",
+            "Icon" => "fas fa-file",
+            "MasterPage" => "AdminLTE",
+            "isChild" => true,
+            "Children" => null
+        ],
+        "/content/pagina/instellingen" => [
+            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+            "Title" => "Pagina's",
+            "FileName" => "Cms.Page.Settings",
+            "Icon" => "fas fa-file",
+            "isChild" => true,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
         ],
         /**
          * Arura Beheer
@@ -99,19 +148,21 @@ if (\NG\User\User::isLogged()){
 
 \Arura\Dashboard\Page::setSmarty($smarty);
 foreach ($aNavBarPages as $sUrl => $aProperties){
-    if (isset($aProperties["MasterPage"]))
+    if (isset($aProperties["MasterPage"])){
         $P = new \Arura\Dashboard\Page();
         $P->setUrl($sUrl);
         $P->setTitle($aProperties['Title']);
         $P->setRight($aProperties["Right"]);
-        $P->setMasterPath(__ARURA__TEMPLATES__   . DIRECTORY_SEPARATOR . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR);
+        $P->setMasterPath(__ARURA__TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR);
         $P->setFileLocation(__ARURA__TEMPLATES__  .DIRECTORY_SEPARATOR . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
         $Host->addPage($P);
+    }
 }
 try{
     $oCurrentPage = $Host->getRequestPage();
 
     $smarty->assign('aNavPages', $aNavBarPages);
+    $smarty->assign('sRequestUrl', substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__) ));
     $oCurrentPage->showPage();
 
 } catch (Exception $e){

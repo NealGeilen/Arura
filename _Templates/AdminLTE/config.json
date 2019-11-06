@@ -16,6 +16,7 @@
     "/dashboard/assets/vendor/overlayScrollbars/js/jquery.overlayScrollbars.min.js",
     "https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.js",
     "/dashboard/assets/vendor/bootstrap-notify/bootstrap-notify.js",
+    "http://malsup.github.io/jquery.form.js",
     "/dashboard/assets/js/Modals.js",
     "/dashboard/assets/js/adminlte.js",
     "/dashboard/assets/js/Arura.js"
@@ -31,6 +32,7 @@
     "/dashboard/assets/vendor/daterangepicker/daterangepicker.css",
     "/dashboard/assets/vendor/summernote/summernote-bs4.css",
     "https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.css",
-    "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700"
+    "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700",
+    "/dashboard/assets/css/Arura.css"
   ]
 }

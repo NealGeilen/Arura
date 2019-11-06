@@ -192,9 +192,13 @@ var Users = {
             })
         },
         Create: function () {
-            oMessage = $($('.template-user-create').html());
+            oMessage = $($('.template-user-create').clone());
             oMessage.validator();
             Table = this.oTable;
+            // oMessage.ajaxForm(function () {
+            //     addSuccessMessage('Gebruiker aangemaakt');
+            // });
+
             oMessage.FormAjax({
                 success: function (response) {
                     aUser = response.data.User;
@@ -207,7 +211,7 @@ var Users = {
                 Title: 'Gebruiker aanmaken',
                 Message: oMessage,
                 Size : 'large',
-                Buttons: []
+                Buttons: [],
             });
         }
     },

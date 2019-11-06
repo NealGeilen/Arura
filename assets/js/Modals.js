@@ -73,6 +73,7 @@ var Modals = (function() {
         settings.onInit.call(this , modal, settings);
 
         //Show elements
+        $(document.body).append(modal);
         modal.modal('show');
 
         //Binding events
