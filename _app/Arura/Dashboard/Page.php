@@ -28,8 +28,16 @@ class Page{
         }
         self::getSmarty()->assign("aWebiste" ,[
                 "name" => Application::get('website', 'name'),
-                "url" => Application::get("website", 'url')
+                "url" => Application::get("website", 'url'),
             ]);
+        self::getSmarty()->assign("aArura" ,[
+            "dir" => __ARURA__DIR_NAME__,
+            "api" => "api"
+        ]);
+        self::getSmarty()->assign("aPage" ,[
+            "title" => $this->getTitle(),
+            "url" => $this->getUrl()
+        ]);
         if (empty($this->getMasterPath())){
             return $this -> getFileLocation();
         } else {
