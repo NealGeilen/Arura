@@ -5,8 +5,8 @@ $request = new \NG\Client\RequestHandler();
 
 
 
-//$request->setRight(Rights::FILES_READ);
-$response->isDebug(true);
+$request->setRight(Rights::FILES_READ);
+$request->TriggerEvent();
 $request->setRequestMethod('POST');
 $request->requiredFields('type');
 $request->sandbox(function ($aData) use ($response){

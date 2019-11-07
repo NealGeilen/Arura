@@ -11,7 +11,7 @@ var Filemanger = {
                 'data' : {
                     "type": "POST",
 
-                    "url" : "/_api/filemanger/read.php",
+                    "url" : ARURA_API_DIR +"filemanger/read.php",
                     "data" : function (node) {
                         if (typeof node.original === "undefined"){
                             node.original = {dir: null};
@@ -25,7 +25,7 @@ var Filemanger = {
             nodeDir = data.node.original.dir;
             parentDir = Filemanger.oFileThree.jstree(true).get_node(data.parent).original.dir;
             $.ajax({
-                url: '/_api/filemanger/edit.php',
+                url: ARURA_API_DIR + '/filemanger/edit.php',
                 type: 'post',
                 dataType: 'json',
                 data: ({
@@ -67,13 +67,13 @@ var Filemanger = {
         }  else {
             var eModalContent = $($('.modal-template-fileupload').html());
             eModalContent.find('form').dropzone({
-                url: "/_api/filemanger/upload.php",
+                url: ARURA_API_DIR + "filemanger/upload.php",
                 params: {
                     dir : nodes[0].original.dir
                 }
             });
             Modals.Custom({
-                Title: "Test",
+                Title: "Betand Uploaden",
                 Message: eModalContent,
                 Size: "large",
                 onConfirm: function () {
@@ -95,7 +95,7 @@ var Filemanger = {
                         aData[i] = Node.original;
                     });
                     $.ajax({
-                        url: '/_api/filemanger/edit.php',
+                        url: ARURA_API_DIR +'filemanger/edit.php',
                         type: 'post',
                         dataType: 'json',
                         data: ({
@@ -142,7 +142,7 @@ var Filemanger = {
                         sDirname = oModal.find('input[type=text]').val();
 
                         $.ajax({
-                            url: '/_api/filemanger/edit.php',
+                            url: ARURA_API_DIR +'filemanger/edit.php',
                             type: 'post',
                             dataType: 'json',
                             data: ({
@@ -173,7 +173,7 @@ var Filemanger = {
                         sNewName = oModal.find('input[type=text]').val();
                         node = nodes[0];
                         $.ajax({
-                            url: '/_api/filemanger/edit.php',
+                            url: ARURA_API_DIR +'filemanger/edit.php',
                             type: 'post',
                             dataType: 'json',
                             data: ({

@@ -6,6 +6,7 @@ if (!\NG\User\User::isLogged()){
 $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 
+$response->isDebug(true);
 $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
     \NG\Sessions::Start();

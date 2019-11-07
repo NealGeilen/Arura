@@ -1,7 +1,8 @@
 <?php
 
 require_once __DIR__ . "/_app/autoload.php";
-if (!\NG\User\User::isLogged() && $_GET['_url_'] !== "login"){
+$aExceptionPages = ["/login", "/login/password"];
+if (!\NG\User\User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages)){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
 }
@@ -66,11 +67,24 @@ $aNavBarPages =
         ],
         "/content/pagina/instellingen" => [
             "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
-            "Title" => "Pagina's",
+            "Title" => "Pagina instellingen",
             "FileName" => "Cms.Page.Settings",
             "Icon" => "fas fa-file",
             "isChild" => true,
             "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        "/files" => [
+            "Title" => "Bestanden",
+            "FileName" => "FileManger",
+            "MasterPage" => "AdminLTE",
+            "isChild" => false,
+            "Right" => (
+            \NG\Permissions\Restrict::Validation(Rights::FILES_UPLOAD) &&
+            \NG\Permissions\Restrict::Validation(Rights::FILES_READ) &&
+            \NG\Permissions\Restrict::Validation(Rights::FILES_EDIT)
+            ),
+            "Icon" => "fas fa-file",
             "Children" => null
         ],
         /**
@@ -131,9 +145,27 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "Children" => null
         ],
+        /*
+         * Singel Pages
+         */
+        "/profile" => [
+            "Title" => "Profiel",
+            "FileName" => "User.Profile",
+            "MasterPage" => "AdminLTE",
+            "isChild" => true,
+            "Right" => \NG\User\User::isLogged(),
+            "Icon" => ""
+        ],
         "/login" => [
             "Title" => "Home",
             "FileName" => "User.Login",
+            "MasterPage" => "Clean",
+            "Right" => !\NG\User\User::isLogged(),
+            "Icon" => ""
+        ],
+        "/login/password" => [
+            "Title" => "Nieuw wachtwoord",
+            "FileName" => "User.Login.Password",
             "MasterPage" => "Clean",
             "Right" => !\NG\User\User::isLogged(),
             "Icon" => ""

@@ -24,7 +24,7 @@
 <div style="display: none">
     <div class="template-pages-btns">
         <div class="btn-group">
-            <a class="btn btn-default" href="" type="button" page="p">
+            <a class="btn btn-secondary" href="" type="button" page="p">
                 <i class="fas fa-cog"></i>
             </a>
             <a href="" type="button" class="btn btn-primary" page="c">
@@ -35,7 +35,7 @@
             </button>
         </div>
     </div>
-    <form class="template-create-page" action="/_api/cms/Page.Settings.php" method="post">
+    <form class="template-create-page" action="/{$aArura.dir}/{$aArura.api}/cms/Page.Settings.php" method="post">
         <input type="hidden" value="create-page" name="type">
         <div class="form-group col-6">
             <label>Naam</label>

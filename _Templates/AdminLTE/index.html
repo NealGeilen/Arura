@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 {$body_head}
-<body class="hold-transition layout-fixed control-sidebar-push-slide control-sidebar-open">
+<body class="{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -39,6 +39,7 @@
     WEB_URL = "{$aWebsite.url}"
   </script>
   {$footer}
+  {$body_modals}
 
   {if $sPageSideBar != NULL}
   <!-- Control Sidebar -->

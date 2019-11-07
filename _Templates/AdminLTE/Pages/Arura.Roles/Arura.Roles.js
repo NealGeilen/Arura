@@ -168,7 +168,7 @@ var Roles = {
             $.ajax({
                 type: 'post',
                 dataType: 'json',
-                url: '/_api/user/roles.php',
+                url: ARURA_API_DIR + 'user/roles.php',
                 data: ({
                     type: 'delete-role',
                     Role_Id: aData.Role_Id

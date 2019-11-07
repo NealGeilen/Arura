@@ -2,9 +2,9 @@
 require_once __DIR__ . '/../../_app/autoload.php';
 $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
-//$request->setRight(Rights::FILES_EDIT);
-$response->isDebug(true);
+$request->setRight(Rights::FILES_EDIT);
 $request->setRequestMethod('POST');
+$request->TriggerEvent();
 $request->requiredFields('type');
 $request->sandbox(function ($aData) use ($response){
     $Manger = new \Arura\FileManger\FileManger();

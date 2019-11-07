@@ -3,6 +3,7 @@ require_once __DIR__ . '/../_app/autoload.php';
 $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 
+$request->TriggerEvent();
 $request->setRequestMethod('POST');
 $request->setRight(Rights::ARURA_SETTINGS);
 $request->sandbox(function ($aData) use ($response){

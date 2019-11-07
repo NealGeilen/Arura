@@ -142,7 +142,6 @@ class FileManger{
                 } else {
                     return [
                         'text' => basename($sNewRootPath),
-//                        'dir' => $sNewName,
                         'icon' => self::getIcon(self::getFileType($sNewRootPath)),
                         'type' => self::getFileType($sNewRootPath)
                     ];

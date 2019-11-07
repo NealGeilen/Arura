@@ -20,18 +20,17 @@ function addErrorMessage(sMessage) {
 }
 $("select option[value="+$('select').attr('value')+"]").attr('selected', 'selected');
 
-function LogOutUser(iUserID){
+function LogOutUser(){
     $.ajax({
-        url: '/_api/user/log-out.php',
+        url: ARURA_API_DIR + 'user/log-out.php',
         type: 'post',
         dataType: 'json',
         data: ({
-            User_Id : iUserID
         }),
         success: function () {
             addSuccessMessage('U bent Uitgelogd');
             setTimeout(function () {
-                location.replace("/login");
+                location.replace("/"+ARURA_DIR + "/login");
             },500);
         },
         error: function () {
@@ -97,3 +96,13 @@ $.fn.FormAjax = function( options = {} ) {
     });
 
 };
+function validateUser(){
+    $.ajax({
+        type: 'post',
+        dataType: 'json',
+        url : ARURA_API_DIR + 'user/validate.php',
+        error: function () {
+            location.replace("/"+ARURA_DIR + '/login');
+        }
+    });
+}
