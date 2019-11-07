@@ -168,12 +168,14 @@ var Users = {
             }
         },
         Delete: function (oElement) {
+            Table = this.oTable;
             Modals.Warning({
                 Title: 'Pagina verwijderen',
                 Message: 'Weet je zeker dat je deze pagina wilt verwijderen?',
                 onConfirm: function () {
                     var tr = oElement.closest('tr');
-                    var row = this.oTable.row( tr );
+                    var row = Table.row( tr );
+                    console.log(row);
                     aData = row.data();
                     $.ajax({
                         type: 'post',
@@ -192,26 +194,20 @@ var Users = {
             })
         },
         Create: function () {
-            oMessage = $($('.template-user-create').clone());
-            oMessage.validator();
+            oModal = $('.modal-user-create');
+            oForm = oModal.find('form');
+            oModal.modal("show");
+            oForm.validator();
             Table = this.oTable;
-            // oMessage.ajaxForm(function () {
-            //     addSuccessMessage('Gebruiker aangemaakt');
-            // });
 
-            oMessage.FormAjax({
+            oForm.FormAjax({
                 success: function (response) {
                     aUser = response.data.User;
                     aRoles = response.data.Roles;
                     Table.row.add(aUser).draw();
+                    oModal.Modal("hide");
                     addSuccessMessage('Gebruiker aangemaakt');
                 }
-            });
-            Modals.Custom({
-                Title: 'Gebruiker aanmaken',
-                Message: oMessage,
-                Size : 'large',
-                Buttons: [],
             });
         }
     },

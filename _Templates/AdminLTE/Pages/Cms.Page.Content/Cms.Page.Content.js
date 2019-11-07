@@ -10,7 +10,7 @@ var Addons = {};
 var Builder = {
     Xhr:function(options){
         var settings = $.extend({
-            url: '/_api/cms/Page.Content.php',
+            url: ARURA_API_DIR + '/cms/Page.Content.php',
             type: 'post',
             dataType: 'json',
             error: function () {
@@ -78,14 +78,14 @@ var Builder = {
                     if (sValue === null || sValue === ''){
                         oField.attr('src', '').attr('imgPath', '');
                     } else {
-                        oField.attr('src', 'http://dwjg/' + 'files/' + sValue).attr('imgPath', sValue);
+                        oField.attr('src', WEB_URL + '/files/' + sValue).attr('imgPath', sValue);
                     }
                     oField.on('click', function () {
                         oField = $(this);
                        Filemanger.Selector('img', function (nodes) {
                            if (nodes.length >= 1){
                                sDir = nodes[0].original.dir;
-                               oField.attr('src', 'http://dwjg/' + 'files/' + sDir).attr('imgPath', sDir);
+                               oField.attr('src', WEB_URL + '/files/' + sDir).attr('imgPath', sDir);
                            }
                        });
                     });
@@ -122,6 +122,18 @@ var Builder = {
                 value: function (oInput) {
                     return oInput.val();
                 }
+            },
+            Text: {
+                oTemplate: $('<input>').addClass('form-control'),
+                init: function (sValue) {
+                    sValue = (sValue === null) ? '' : sValue;
+                    oInput = this.oTemplate.clone();
+                    oInput.attr('type', 'text').val(sValue);
+                    return oInput;
+                },
+                value: function (oInput) {
+                    return oInput.val();
+                }
             }
         },
         Addons:{
@@ -133,7 +145,7 @@ var Builder = {
                     Settings = Widget.AddonSettings;
                     aValue = (aBlock.Content_Value === null) ? [{}] : aBlock.Content_Value;
                     $.each(aValue, function (iPosition, aSection) {
-                        section = $('<div class="Block-Item-Section">').addClass('col-xs-' + aBlock.Content_Raster);
+                        section = $('<div class="Block-Item-Section">').addClass('col-' + aBlock.Content_Raster);
                         $.each(Settings, function (iKey, aSetting) {
                             value = aSection[aSetting.AddonSetting_Tag];
                             oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);
@@ -160,7 +172,6 @@ var Builder = {
                 oTemplate: $('<span>').addClass('text-center'),
                 init: function (aBlock) {
                     container = this.oTemplate;
-                    console.log(aBlock);
                     aAddon = Addons[parseInt(aBlock.Content_Addon_Id)];
                     container.text(aAddon.Addon_Name);
                     return container;
@@ -196,7 +207,6 @@ var Builder = {
                aStructure =  aData.data.Groups;
                 aAddons = aData.data.Addons;
                 Addons = aAddons;
-                console.log(Addons);
                $.each(aStructure, function (iPosition, aGroup) {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
@@ -355,9 +365,10 @@ var Builder = {
                 Element = $(ui.helper);
                 aData = Builder.Block.getData(Element);
 
-                Element.removeClass('col-xs-' + aData.Content_Size);
-                i = parseInt((Element.width() / ($(sSelectors.Group_Content).innerWidth() / 100 * (100/12))));
-                Element.addClass('col-xs-' + i).css('width', (100/12*i).toFixed() + '%');
+                Element.removeClass('col-' + aData.Content_Size);
+                i = parseInt((Element.width() / ($(sSelectors.Group_Content).innerWidth() / 100 * (100/12)))) + 1;
+                console.log(i);
+                Element.addClass('col-' + i).css('width', 'unset');
                 Builder.Block.setData(Element, 'Content_Size', i);
 
             },
@@ -387,7 +398,7 @@ var Builder = {
             this.setArray(oBlock, aBlock);
 
             oBlock
-                .addClass('col-xs-' + aBlock.Content_Size)
+                .addClass('col-' + aBlock.Content_Size)
                 .attr('block-id', aBlock.Content_Id);
             this.Events(oBlock);
             oField = Builder.Item.Build(aBlock);
@@ -544,7 +555,7 @@ var Sidebar = {
             $('[content-raster]').parent().on('click', function () {
                 Raster = parseInt($(this).find('input').attr('content-raster'));
                 aData = Sidebar.Block.getBlockData();
-                Sidebar.Block.getBlockElement().find('.Block-Item-Section').removeClass('col-xs-' + aData.Content_Raster).addClass('col-xs-'+Raster);
+                Sidebar.Block.getBlockElement().find('.Block-Item-Section').removeClass('col-' + aData.Content_Raster).addClass('col-'+Raster);
 
                 Sidebar.Block.setBlockData('Content_Raster', Raster);
             });
@@ -576,7 +587,7 @@ var Sidebar = {
             Add: function(){
                 aBlock = Sidebar.Block.getBlockData();
                 Settings = Addons[parseInt(Sidebar.Block.getBlockData().Content_Addon_Id)].AddonSettings;
-                section = $('<div class="Block-Item-Section">').addClass('col-xs-' + aBlock.Content_Raster).append($('.template-edit-item').html());
+                section = $('<div class="Block-Item-Section">').addClass('col-' + aBlock.Content_Raster).append($('.template-edit-item').html());
                 $.each(Settings, function (iKey, aSetting) {
                     value = null;
                     oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);

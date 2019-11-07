@@ -53,6 +53,31 @@
         </table>
     </div>
 </section>
+<div class="modal modal-role-create" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rol toevoegen</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="form-row" method="post" action="/{$aArura.dir}/{$aArura.api}/user/roles.php">
+                    <input type="hidden" value="create-role" name="type">
+                    <div class="form-group col-12">
+                        <label class="control-label">Naam</label>
+                        <input type="text" name="Role_Name" class="form-control" required">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-success modal-confirm" value="Aanmaken">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div style="display: none">
     <div class="template-role-edit">
@@ -123,17 +148,7 @@
     </div>
 
     <div class="template-role-create">
-        <form class="form-row" method="post" action="/{$aArura.dir}/{$aArura.api}/roles.php">
-            <input type="hidden" value="create-role" name="type">
-            <div class="form-group col-12">
-                <label class="control-label">Naam</label>
-                <input type="text" name="Role_Name" class="form-control" required">
-                <div class="help-block with-errors"></div>
-            </div>
-            <div class="col-6">
-                <input type="submit" class="btn btn-success modal-confirm" value="Aanmnaken">
-            </div>
-        </form>
+
     </div>
 
 

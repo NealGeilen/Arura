@@ -180,19 +180,17 @@ var Roles = {
             })
         },
         Create: function () {
-            oMessage = $($('.template-role-create').html());
-            oMessage.validator();
+            oModal = $('.modal-role-create');
+            oForm = oModal.find('form');
+            oModal.modal("show");
+            oForm.validator();
             Table = this.oTable;
-            oMessage.FormAjax({
+            oForm.FormAjax({
                 success: function (response) {
                     Table.row.add(response.data).draw();
+                    oModal.modal("hide");
                     addSuccessMessage('Rol aangemaakt');
                 }
-            });
-            Modals.Custom({
-                Title: 'Rol aanmaken',
-                Message: oMessage,
-                Buttons: []
             });
         }
     },

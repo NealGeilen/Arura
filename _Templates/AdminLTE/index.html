@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 {$body_head}
-<body class="hold-transition sidebar-mini layout-fixed">
+<body class="hold-transition layout-fixed control-sidebar-push-slide control-sidebar-open">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -36,12 +36,13 @@
   <script>
     ARURA_DIR = "{$aArura.dir}";
     ARURA_API_DIR = "/{$aArura.dir}/{$aArura.api}/";
+    WEB_URL = "{$aWebsite.url}"
   </script>
   {$footer}
 
   {if $sPageSideBar != NULL}
   <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
+  <aside class="control-sidebar control-sidebar-dark" style="bottom: 57px; top: 57px; height: 823px;">
     {$sPageSideBar}
   </aside>
   <!-- /.control-sidebar -->

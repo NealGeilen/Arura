@@ -3,57 +3,51 @@
 </script>
 
 <header class="page-header">
-    <h2>
-        {$aCmsPage.Page_Title}
-    </h2>
-    <button class="btn btn-primary" onclick="Builder.Group.Add()">
-        Groep <i class="fas fa-plus"></i>
-    </button>
-    <div class="btn-group pull-right">
-        <a class="btn btn-default" href="/content/pagina/instellingen?p={$aCmsPage.Page_Id}">
-            <i class="fas fa-cog"></i>
-        </a>
-        <button class="btn btn-primary" onclick="Builder.Structure.save()">
-            <i class="fas fa-save"></i>
-        </button>
-    </div>
-
+    <h3>{$aCmsPage.Page_Title}</h3>
+    <h5>
+        <a href="{$aWebsite.url}{$aCmsPage.Page_Url}" target="_blank">{$aWebsite.url}{$aCmsPage.Page_Url}</a>
+    </h5>
 </header>
 
+<div class="CMS-overvieuw">
+    <section class="card">
+        <header class="card-header">
+            <button class="btn btn-primary" onclick="Builder.Group.Add()">
+                Groep <i class="fas fa-plus"></i>
+            </button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Standaard <i class="fas fa-i-cursor"></i> </button>
+                <ul class="dropdown-menu">
+                    <li><a class="ContentType-Selector" content-type="Header" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Header</a></li>
+                    <li><a class="ContentType-Selector" content-type="TextArea" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Tekst</a></li>
+                    <li><a class="ContentType-Selector" content-type="Picture" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Afbeelding</a></li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Widget <i class="fas fa-th"></i></button>
+                <ul class="dropdown-menu" addon-types="widget">
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Custom <i class="fas fa-square-full"></i> </button>
+                <ul class="dropdown-menu" addon-types="custom">
+                </ul>
+            </div>
+            <div class="btn-group pull-right">
+                <a class="btn btn-default" href="/content/pagina/instellingen?p={$aCmsPage.Page_Id}">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <button class="btn btn-primary" onclick="Builder.Structure.save()">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </header>
+        <div class="card-body">
+            <div class="CMS-Page-Editor">
 
-
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-xs-9 CMS-overvieuw">
-            <section class="panel">
-                <header class="panel-heading">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Standaard <span class="caret"></span> </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="ContentType-Selector" content-type="Header" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Header</a></li>
-                            <li><a class="ContentType-Selector" content-type="TextArea" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Tekst</a></li>
-                            <li><a class="ContentType-Selector" content-type="Picture" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Afbeelding</a></li>
-                        </ul>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Widget <span class="caret"></span> </button>
-                        <ul class="dropdown-menu" addon-types="widget">
-                        </ul>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Custom <span class="caret"></span> </button>
-                        <ul class="dropdown-menu" addon-types="custom">
-                        </ul>
-                    </div>
-                </header>
-                <div class="panel-body">
-                    <div class="CMS-Page-Editor">
-
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
-    </div>
+    </section>
 </div>
 <div class="block-editor-background">
     <div class="btn-group-vertical">
