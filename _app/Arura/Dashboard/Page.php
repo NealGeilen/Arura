@@ -31,6 +31,7 @@ class Page{
         self::getSmarty()->assign("aWebsite" ,[
                 "name" => Application::get('website', 'name'),
                 "url" => Application::get("website", 'url'),
+                "banner" => Application::get("website", "banner")
             ]);
         self::getSmarty()->assign("aArura" ,[
             "dir" => __ARURA__DIR_NAME__,

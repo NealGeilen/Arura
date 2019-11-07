@@ -125,10 +125,10 @@ var Modals = (function() {
      * @type {{confirm: string, allow: string, deny: string, cancel: string}}
      */
     var Buttons = {
-        confirm: '<button class="btn modal-confirm" type="submit">Ok</button>',
-        allow : '<button class="btn modal-confirm" type="submit">Yes</button>',
-        deny: '<button class="btn modal-denied" type="reset">No</button>',
-        cancel: '<button class="btn modal-denied" type="reset">Cancel</button>',
+        confirm: '<button class="btn modal-confirm" type="submit">Oke</button>',
+        allow : '<button class="btn modal-confirm" type="submit">Ja</button>',
+        deny: '<button class="btn modal-denied" type="reset">Nee</button>',
+        cancel: '<button class="btn modal-denied" type="reset">Annuleren</button>',
     };
     /**
      * Dom Elements needed for Modal build up.

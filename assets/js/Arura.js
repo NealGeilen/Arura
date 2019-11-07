@@ -102,7 +102,12 @@ function validateUser(){
         dataType: 'json',
         url : ARURA_API_DIR + 'user/validate.php',
         error: function () {
-            location.replace("/"+ARURA_DIR + '/login');
+            Modals.Error({
+                Title:"Sessie verlopen",
+                Message:"Je sessie is verlopen, je wordt nu uitgelogd",
+                button: []
+            });
+            setTimeout(location.replace("/"+ARURA_DIR + '/login'), 5000);
         }
     });
 }

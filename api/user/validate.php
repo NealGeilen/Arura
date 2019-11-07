@@ -20,7 +20,7 @@ $request->sandbox(function (){
         }
     } else {
         \NG\User\User::activeUser()->logOutUser();
-        throw new Exception('expelled',403);
+        \NG\Sessions::End();
     }
 });
 
