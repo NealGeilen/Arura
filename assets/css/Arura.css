@@ -87,7 +87,6 @@ Templates
     border-radius: 5px;
 }
 .login-page .login-box{
-    background: red;
     padding: 15px;
-    background: rgba(255,255,255,0.7);
+    background: rgba(255,255,255,0.7) ;
 }

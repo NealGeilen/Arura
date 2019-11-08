@@ -9,14 +9,13 @@
     padding: 10px;
 }
 .CMS-Group{
-    border: #0d3349 1px solid;
     margin: 5px;
     position: relative;
 }
 .CMS-Group .CMS-Group-Content{
-    min-height: 40px;
+    min-height: 80px;
     margin: unset;
-    background: #E6E6E6;
+    background: #f2f2f2;
     height: 100%;
     width: 100%;
 }
@@ -26,8 +25,9 @@
 .CMS-Group .CMS-Group-Control{
     display: none;
     position: absolute;
-    left: -2px;
-    top: -32px;
+    left: 5px;
+    top: -25px;
+    z-index: 1000;
 }
 .Block-Item{
     background: lightgrey;
@@ -35,6 +35,7 @@
     padding: unset;
 }
 .Block-Item .Block-Item-Content{
+    min-height: 80px;
     position: relative;
     padding: 16px;
     width: 100%;
@@ -49,9 +50,11 @@
     display: block!important;
 }
 .Block-Item .Block-Item-Control{
+    z-index: 1000;
     position: absolute;
     display: none;
-    left: -24px;
+    top: 10px;
+    left: -25px;
 }
 .Block-Item.active .Block-Item-Width-Control{
     display: block!important;
@@ -67,7 +70,7 @@
     z-index: 100;
 }
 .Block-Placeholder{
-    background: red;
+    background: var(--secondary);
 }
 .Tinymce{
     padding: 2px;
@@ -96,7 +99,7 @@ Button.Block-Item-Field{
 Active group
  */
 .CMS-Group.active .CMS-Group-Control{
-    display: block!important;
+    display: inline-flex!important;
 }
 .Block-Item.active .Tinymce{
     background: white!important;
@@ -156,7 +159,7 @@ img.Block-Item-Field:after{
     /*left: 45%;*/
     /*top: 30%;*/
     width: 10%;
-    min-height: 40px;
+    min-height: 80px;
     margin: 0 auto;
 }
 .Block-Editor .btn-group{

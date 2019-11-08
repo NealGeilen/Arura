@@ -539,10 +539,17 @@ var Sidebar = {
             var rest = function (){
                 $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
                 $('#content-background-color').val(null);
-                $('#content-background-img').val(null)
+                $('#content-background-img').val(null);
+                $('.block-settings-items-control').show();
             };
             var set = function (aData){
-                $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
+                console.log(Addons[aData.Content_Addon_Id]);
+
+                if (parseInt(Addons[aData.Content_Addon_Id].Addon_Custom) === 1 || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0){
+                    $('.block-settings-items-control').hide();
+                } else {
+                    $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
+                }
                 $('#content-background-color').val(aData.Content_Css_Background_Color);
                 $('#content-background-img').val(aData.Content_Css_Background_Img)
             };
@@ -660,13 +667,13 @@ var TinyMce = {
 $(document).ready(function () {
    Builder.Structure.set();
    $(document).on('click', function (e) {
-       if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group') && $(e.target).parents('.arura-sidebar').length < 1){
+       if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group') && $(e.target).parents('.control-sidebar').length < 1){
            Builder.Group.State.Deactivate();
        }
        if (
            $(e.target).parents(sSelectors.Block_Item).length < 1
            && !$(e.target).hasClass('Block-Item')
-           && $(e.target).parents('.arura-sidebar').length < 1
+           && $(e.target).parents('.control-sidebar').length < 1
            && !$(e.target).hasClass('btn')
            && $(e.target).parent('.btn').length < 1
        ){
