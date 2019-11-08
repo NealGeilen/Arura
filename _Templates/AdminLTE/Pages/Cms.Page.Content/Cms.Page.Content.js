@@ -211,8 +211,8 @@ var Builder = {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
                $.each(aAddons, function(iKey,aAddon){
-                   oHelper = $('<li><a class="ContentType-Selector"></a></li>');
-                   oHelper.find('a').attr('content-type',aAddon.Addon_Type).attr('content-addon-id', aAddon.Addon_Id).text(aAddon.Addon_Name);
+                   oHelper = $('<li><a class="ContentType-Selector dropdown-item"></a></li>');
+                   oHelper.find('a').attr('content-type',aAddon.Addon_Type).attr('content-addon-id', aAddon.Addon_Id).html("<i class=\"fas fa-arrows-alt\"></i> "+aAddon.Addon_Name);
                    $('[addon-types='+aAddon.Addon_Type+']').append(oHelper);
                });
 
@@ -543,9 +543,7 @@ var Sidebar = {
                 $('.block-settings-items-control').show();
             };
             var set = function (aData){
-                console.log(Addons[aData.Content_Addon_Id]);
-
-                if (parseInt(Addons[aData.Content_Addon_Id].Addon_Custom) === 1 || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0){
+                if (parseInt(aData.Content_Addon_Id) === 0 || (parseInt(Addons[aData.Content_Addon_Id].Addon_Custom) === 1 || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0)){
                     $('.block-settings-items-control').hide();
                 } else {
                     $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');

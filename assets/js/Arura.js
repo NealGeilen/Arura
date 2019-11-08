@@ -1,4 +1,3 @@
-ControlSidebar.show();
 function addSuccessMessage(sMessage) {
     var oSettings = {
         placement: {
@@ -108,7 +107,7 @@ function validateUser(){
                 Message:"Je sessie is verlopen, je wordt nu uitgelogd",
                 button: []
             });
-            setTimeout(location.replace("/"+ARURA_DIR + '/login'), 5000);
+            setTimeout(location.replace("/"+ARURA_DIR + '/login'), 90000);
         }
     });
 }

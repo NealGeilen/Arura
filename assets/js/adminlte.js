@@ -251,7 +251,7 @@
      * ====================================================
      */
 
-
+    // ControlSidebar._jQueryInterface.call($(this), 'show');
     $(document).on('click', Selector.DATA_TOGGLE, function (event) {
       event.preventDefault();
 
