@@ -1,3 +1,4 @@
+ControlSidebar.show();
 function addSuccessMessage(sMessage) {
     var oSettings = {
         placement: {
