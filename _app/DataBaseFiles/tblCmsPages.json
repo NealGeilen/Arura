@@ -1,0 +1,11 @@
+{
+  "columns": {
+    "Page_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "Page_Title" : "VARCHAR(255) NOT NULL",
+    "Page_Url" : "TEXT NOT NULL",
+    "Page_Visible" : "TINYINT(1) NULL DEFAULT '0'",
+    "Page_Description" : "TEXT NULL"
+  },
+  "data": [
+  ]
+}

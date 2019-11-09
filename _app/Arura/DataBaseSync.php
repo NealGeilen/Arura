@@ -30,17 +30,48 @@ class DataBaseSync{
     }
 
     public function Reload(){
-
         foreach ($this->aTables as $sTable => $aData){
-            var_dump("SHOW TABLES LIKE " .$sTable);
-            if (count($this -> db -> fetchall("SHOW TABLES LIKE " .$sTable))> 0){
-                var_dump($sTable);
+            if ($this -> db -> fetchRow("SHOW TABLES LIKE '" .$sTable."'")){
+                $this->fillData($sTable);
+            } else {
+                $this->createTable($sTable);
             }
-
-
         }
 
 
+    }
+
+    private function fillData($sTableName){
+        foreach ($this->aTables[$sTableName]["data"] as $aData){
+            if (!$this->doesRecordExits($sTableName, $aData)){
+                $this->db->createRecord($sTableName, $aData);
+            }
+        }
+    }
+
+    private function createTable($sTableName){
+        $aTable = $this->aTables[$sTableName];
+        $sQuery = "CREATE TABLE " . $sTableName . " (";
+        foreach ($aTable["columns"] as $sColumnName => $sColumnsData){
+            $sQuery .= $this->formatColumn($sColumnName,$sColumnsData) . ", ";
+        }
+        $sQuery = trim($sQuery,", ");
+        $sQuery .= ")";
+        $this->db->query($sQuery);
+        $this->fillData($sTableName);
+    }
+
+    private function formatColumn($sColumnName,$sColumnsData){
+        return $sColumnName ." ". $sColumnsData;
+    }
+
+    private function doesRecordExits($sTableName, $aRecord){
+        $sQuery = "SELECT * FROM " .$sTableName . " WHERE ";
+        foreach ($aRecord as $key => $value){
+            $sQuery.= $key . " = '" . $value . "' AND ";
+        }
+        $sQuery = trim($sQuery,"AND ");
+        return (count($this->db->fetchAll($sQuery)) !== 0 );
     }
 
 

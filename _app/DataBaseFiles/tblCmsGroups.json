@@ -1,0 +1,11 @@
+{
+  "columns": {
+    "Group_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "Group_Page_Id" : "INT(11) NOT NULL",
+    "Group_Position" : "INT(11) NOT NULL",
+    "Group_Css_Class" : "VARCHAR(255) NULL",
+    "Group_Css_Id" : "VARCHAR(255) NULL"
+  },
+  "data": [
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "columns": {
+    "RoleRight_Role_Id" : "INT(11) NOT NULL",
+    "RoleRight_Right_Id" : "INT(11) NOT NULL"
+  },
+  "data": [
+  ]
+}

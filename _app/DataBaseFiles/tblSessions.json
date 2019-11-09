@@ -1,0 +1,9 @@
+{
+  "columns": {
+    "Session_Id" : "VARCHAR(255) PRIMARY KEY NOT NULL",
+    "Session_User_Id" : "INT(11) NOT NULL",
+    "Session_Last_Active" : "INT(11) NOT NULL"
+  },
+  "data": [
+  ]
+}

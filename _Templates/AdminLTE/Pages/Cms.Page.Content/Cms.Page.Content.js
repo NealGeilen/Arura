@@ -636,24 +636,24 @@ var TinyMce = {
     SetText: function (oElement) {
         oElement.attr('id', 'tinymce_' + this.Count);
         tinymce.init({
-            // language : "nl",
+            language : "nl",
             target: oElement[0],
             themes: "modern",
             inline: true,
 
-            // toolbar: 'bold italic | styleselect | table link unlink | bullist numlist | image media | blockquote codesample' ,
-            // contextmenu: "code undo redo codesample removeformat",
-            // menubar: false,
-            // content_css: "demo.css, tinymceBubbleBar.css",
-            // content_style: ".mce-widget.mce-tooltip {display: none !important;}",
-            // fixed_toolbar_container: "#tinymceWrapperBubbleBar",
-            // plugins: [
-            //     'noneditable codesample',
-            //     'autoresize advlist autolink lists link image charmap print preview hr anchor',
-            //     'searchreplace wordcount visualblocks visualchars code fullscreen',
-            //     'insertdatetime media nonbreaking save table contextmenu directionality',
-            //     'paste textcolor colorpicker textpattern imagetools media'
-            // ]
+            toolbar: 'bold italic | forecolor backcolor |styleselect | table link unlink | bullist numlist | blockquote codesample' ,
+            contextmenu: "code undo redo codesample removeformat",
+            menubar: false,
+            content_css: "demo.css, tinymceBubbleBar.css",
+            content_style: ".mce-widget.mce-tooltip {display: none !important;}",
+            fixed_toolbar_container: "#tinymceWrapperBubbleBar",
+            plugins: [
+                'noneditable codesample',
+                'autoresize advlist autolink lists link image charmap print preview hr anchor',
+                'searchreplace wordcount visualblocks visualchars code fullscreen',
+                'insertdatetime media nonbreaking save table contextmenu directionality',
+                'paste textcolor colorpicker textpattern'
+            ]
         });
         ++this.Count;
     },

@@ -1,0 +1,8 @@
+{
+  "columns": {
+    "Role_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "Role_Name" : "VARCHAR(255) NOT NULL"
+  },
+  "data": [
+  ]
+}

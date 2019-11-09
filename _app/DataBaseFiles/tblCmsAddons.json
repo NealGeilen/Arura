@@ -1,0 +1,13 @@
+{
+  "columns": {
+    "Addon_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "Addon_Name" : "VARCHAR(255) NOT NULL",
+    "Addon_FileName" : "VARCHAR(255) NOT NULL",
+    "Addon_Type" : "VARCHAR(255) NOT NULL",
+    "Addon_Active" : "TINYINT(255) NOT NULL",
+    "Addon_Multipel_Values" : "TINYINT(255) NOT NULL",
+    "Addon_Custom" : "TINYINT(255) NOT NULL"
+  },
+  "data": [
+  ]
+}

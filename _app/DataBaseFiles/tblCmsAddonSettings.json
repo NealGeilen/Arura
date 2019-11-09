@@ -1,0 +1,11 @@
+{
+  "columns": {
+    "AddonSetting_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "AddonSetting_Addon_Id" : "INT(11) NOT NULL",
+    "AddonSetting_Type" : "VARCHAR(255) NOT NULL",
+    "AddonSetting_Position" : "INT(11) NOT NULL",
+    "AddonSetting_Tag" : "VARCHAR(255) NOT NULL"
+  },
+  "data": [
+  ]
+}

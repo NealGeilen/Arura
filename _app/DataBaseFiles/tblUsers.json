@@ -1,0 +1,19 @@
+{
+  "columns": {
+    "User_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "User_Username" : "VARCHAR(255) NOT NULL",
+    "User_Firstname" : "VARCHAR(255) NOT NULL",
+    "User_Lastname" : "VARCHAR(255) NOT NULL",
+    "User_Email" : "VARCHAR(255) NOT NULL",
+    "User_Password" : "VARCHAR(255) NOT NULL"
+  },
+  "data": [
+    {
+      "User_Username" : "Neal",
+      "User_Firstname" : "Neal",
+      "User_Lastname" : "Geilen",
+      "User_Email" : "nealgeilen@gmail.com",
+      "User_Password" : "$2y$10$Xd06wpoKrAyIbcOwhTAj9OJiv8YJnDLSFtN76yf0APPG9StTAPrf6"
+    }
+  ]
+}

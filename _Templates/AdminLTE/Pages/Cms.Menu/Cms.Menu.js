@@ -42,16 +42,17 @@ $.ajax({
 
 
 function save(){
+    aNavData = Nestable.nestable('serialize');
     $.ajax({
         url: ARURA_API_DIR+'cms/Menu.php',
         type: 'post',
         data: ({
-            NavData: Nestable.nestable('serialize'),
+            NavData: aNavData,
             type: "set"
         }),
         dataType: 'json',
         success: function (response) {
-            console.log(response.data);
+            console.log(aNavData);
         }
     });
 

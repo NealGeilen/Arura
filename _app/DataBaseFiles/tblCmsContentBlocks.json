@@ -1,0 +1,16 @@
+{
+  "columns": {
+    "Content_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "Content_Group_Id" : "INT(11) NULL",
+    "Content_Addon_Id" : "INT(11) NULL",
+    "Content_Type" : "VARCHAR(255) NULL",
+    "Content_Value" : "LONGTEXT NULL",
+    "Content_Position" : "INT(11) NULL",
+    "Content_Size" : "INT(11) NULL",
+    "Content_Raster" : "INT(11) NULL",
+    "Content_Css_Background_Color" : "VARCHAR(11) NOT NULL",
+    "Content_Css_Background_Img" : "VARCHAR(255) NOT NULL"
+  },
+  "data": [
+  ]
+}
