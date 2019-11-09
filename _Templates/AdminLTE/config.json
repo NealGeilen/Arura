@@ -31,7 +31,7 @@
     "/dashboard/assets/vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
     "/dashboard/assets/vendor/icheck-bootstrap/icheck-bootstrap.min.css",
     "/dashboard/assets/vendor/jqvmap/jqvmap.min.css",
-    "/dashboard/assets/css/adminlte.min.css",
+    "/dashboard/assets/css/adminlte.css",
     "/dashboard/assets/vendor/overlayScrollbars/css/OverlayScrollbars.min.css",
     "/dashboard/assets/vendor/daterangepicker/daterangepicker.css",
     "/dashboard/assets/vendor/summernote/summernote-bs4.css",

@@ -26,14 +26,20 @@ function sendRecoveryMail() {
     oForm = oModal.find('form');
     oForm.validator();
     oModal.modal("show");
+    console.log("Function");
     oForm.submit(function (e) {
-       e.preventDefault();
+        console.log(this);
+        e.preventDefault();
         $.ajax({
-            url: ARURA_API_DIR + 'user/',
+            url: ARURA_API_DIR + 'user/passwordrecovery.php?type=get-token',
             type: 'post',
             dataType: 'json',
             data: (oForm.serializeArray()),
-            success: function () {
+            beforeSend: function(){
+              console.log("AJAX Call");
+            },
+            success: function (response) {
+                console.log(response);
                 oModal.modal("hide");
                 addSuccessMessage("Email Verzonden")
             },
