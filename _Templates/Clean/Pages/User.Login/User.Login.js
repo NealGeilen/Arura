@@ -2,7 +2,34 @@ $(document).ready(function () {
    $('.inlog-form').submit(function (e) {
        e.preventDefault();
        validateRequest($(this));
-   })
+   });
+    oModal = $('.modal-recovery-mail');
+    oModal.find("form").submit(function (e) {
+        e.preventDefault();
+        oForm = $(this);
+        $.ajax({
+            url: ARURA_API_DIR + 'user/passwordrecovery.php?type=get-token',
+            type: 'post',
+            dataType: 'json',
+            data: (oForm.serializeArray()),
+            beforeSend: function(){
+                console.log("AJAX Call");
+            },
+            success: function (response) {
+                console.log(response);
+                oModal.modal("hide");
+                addSuccessMessage("Email Verzonden, Controlleer je mail om verder te gaan.")
+            },
+            error: function (data) {
+                oModal.modal("hide");
+            },
+            statusCode: {
+                500: function() {
+                    addErrorMessage('Email is al verzonden!');
+                }
+            }
+        });
+    })
 });
 function validateRequest(oForm) {
     $.ajax({
@@ -23,31 +50,5 @@ function validateRequest(oForm) {
 }
 function sendRecoveryMail() {
     oModal = $('.modal-recovery-mail');
-    oForm = oModal.find('form');
-    oForm.validator();
     oModal.modal("show");
-    console.log("Function");
-    oForm.submit(function (e) {
-        console.log(this);
-        e.preventDefault();
-        $.ajax({
-            url: ARURA_API_DIR + 'user/passwordrecovery.php?type=get-token',
-            type: 'post',
-            dataType: 'json',
-            data: (oForm.serializeArray()),
-            beforeSend: function(){
-              console.log("AJAX Call");
-            },
-            success: function (response) {
-                console.log(response);
-                oModal.modal("hide");
-                addSuccessMessage("Email Verzonden")
-            },
-            error: function () {
-                oModal.modal("hide");
-                addErrorMessage('Email is niet verzonden, controleer gegevens');
-            }
-        });
-    });
-
 }
