@@ -2,6 +2,7 @@
 namespace Arura\FileManger;
 
 use NG\Exceptions\NotAcceptable;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class FileManger{
 
@@ -11,6 +12,10 @@ class FileManger{
             $sPath = __FILES__ . $sDir . $file['name'];
             if (!is_file($sPath) && !is_dir($sPath)){
                 move_uploaded_file($file['tmp_name'], $sPath);
+                if(exif_imagetype($sPath)) {
+                    $optimizerChain = OptimizerChainFactory::create();
+                    $optimizerChain->optimize((string)$sPath);
+                }
             } else {
                 unlink($file['tmp_name']);
                 throw new \Exception('file or directorie already exits',500);
