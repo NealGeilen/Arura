@@ -43,8 +43,16 @@ function validateRequest(oForm) {
                 location.replace("/dashboard/home");
             },500);
         },
-        error: function () {
-            addErrorMessage('Inloggen mislukt, controleer gegevens');
+        statusCode: {
+            500: function () {
+                addErrorMessage('Server fout, Contacteert systeem beheerder wanneer dit aanhoudt');
+            },
+            403: function () {
+              addErrorMessage('Gegegevens onjuist, probeer opnieuw');
+            },
+            401: function() {
+                addErrorMessage('U heeft meerderen malen fout ingeloged, probeer later opnieuw');
+            }
         }
     });
 }

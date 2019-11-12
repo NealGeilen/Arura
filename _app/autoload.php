@@ -19,5 +19,11 @@ define('__RESOURCES__',         __APP__         . 'Resources'  . DIRECTORY_SEPAR
 define('__DATAFILES__',         __RESOURCES__   . DIRECTORY_SEPARATOR. 'DataFiles'  . DIRECTORY_SEPARATOR);
 
 
+define("__DB_USERNAME__",   "root");
+define("__DB_PASSWORD__",   "");
+define("__DB_HOST__",       "localhost");
+define("__DB_NAME__",       "webserver");
+
+
 require_once __VENDOR__ . "autoload.php";
 require_once __APP__    . "Rights.php";
