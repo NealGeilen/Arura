@@ -7,8 +7,8 @@ define('__APP_ROOT__',          realpath(__WEB__ROOT__ . '/../../'));
 
 define('__ARURA__ROOT__', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__);
 
-define("__ARURA__TEMPLATES__", __ARURA__ROOT__  .DIRECTORY_SEPARATOR. '_Templates' . DIRECTORY_SEPARATOR);
-
+define("__ARURA_TEMPLATES__",  __ARURA__ROOT__  .DIRECTORY_SEPARATOR. '_Templates' . DIRECTORY_SEPARATOR);
+define("__WEB_TEMPLATES__",     __WEB__ROOT__ . DIRECTORY_SEPARATOR . "Templates" . DIRECTORY_SEPARATOR);
 define('__APP__',               __ARURA__ROOT__ . DIRECTORY_SEPARATOR. '_app'       . DIRECTORY_SEPARATOR);
 define('__VENDOR__',            __WEB__ROOT__   . DIRECTORY_SEPARATOR. 'vendor'     . DIRECTORY_SEPARATOR);
 define('__SETTINGS__',          __APP_ROOT__    . DIRECTORY_SEPARATOR. 'settings'   . DIRECTORY_SEPARATOR);

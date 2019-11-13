@@ -1,6 +1,6 @@
 <?php
-namespace AruraSite\Addons;
-use AruraSite\Page;
+namespace Arura\View\Addons;
+use Arura\View\Page;
 
 class Handler{
 

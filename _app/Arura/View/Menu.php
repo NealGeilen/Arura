@@ -1,11 +1,11 @@
 <?php
 
-namespace AruraSite;
+namespace Arura\View;
 
 
 class  Menu{
 
-    protected static $sFilePath = __TEMPLATES__ . 'menu.json';
+    protected static $sFilePath = __ARURA_TEMPLATES__ . 'menu.json';
 
     public static function getMenuStructure(){
         return json_array_decode(file_get_contents(self::$sFilePath));

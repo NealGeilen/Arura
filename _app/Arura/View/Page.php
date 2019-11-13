@@ -1,5 +1,5 @@
 <?php
-namespace AruraSite;
+namespace Arura\View;
 
 use NG\Database;
 
