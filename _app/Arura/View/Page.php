@@ -118,7 +118,7 @@ class Page{
                                 $aContentBlock['Template'] = $aContentBlock['Content_Value'];
                                 break;
                             case 'Picture':
-                                $aContentBlock['Template'] = "<img src='".FILES . $aContentBlock['Content_Value']."'>";
+                                $aContentBlock['Template'] = "<img src='".__FILES__ . $aContentBlock['Content_Value']."'>";
                                 break;
 
                             case 'widget':
@@ -159,7 +159,7 @@ class Page{
         $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
 
         $smarty->assign('body_head', $smarty->fetch(self::TemplatePath . 'Sections/body_head.html'));
-        $smarty->assign('aMainNav', \AruraSite\Menu::getMenuStructure());
+        $smarty->assign('aMainNav', \Arura\View\Menu::getMenuStructure());
         $smarty->assign('navbar', $smarty->fetch(self::TemplatePath . 'Sections/nav.html'));
 
 
