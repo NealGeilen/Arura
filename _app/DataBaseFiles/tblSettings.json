@@ -1,0 +1,96 @@
+{
+  "columns": {
+    "Setting_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
+    "Setting_Name": "VARCHAR(255) NOT NULL",
+    "Setting_Value": "VARCHAR(255) NULL",
+    "Setting_Required": "TINYINT(1) NOT NULL",
+    "Setting_Type": "VARCHAR(255) NOT NULL",
+    "Setting_Plg": "VARCHAR(255) NOT NULL"
+  },
+  "data": [
+    {
+      "Setting_Name": "reciever",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "email",
+      "Setting_Plg": "plg.contact"
+    },
+    {
+      "Setting_Name": "template",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "text",
+      "Setting_Plg": "plg.contact"
+    },
+    {
+      "Setting_Name": "username",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "text",
+      "Setting_Plg": "smtp"
+    },
+    {
+      "Setting_Name": "server",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "text",
+      "Setting_Plg": "smtp"
+    },
+    {
+      "Setting_Name": "password",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "password",
+      "Setting_Plg": "smtp"
+    },
+    {
+      "Setting_Name": "port",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "number",
+      "Setting_Plg": "smtp"
+    },
+    {
+      "Setting_Name": "secure",
+      "Setting_Value": "",
+      "Setting_Required": 0,
+      "Setting_Type": "text",
+      "Setting_Plg": "smtp"
+    },
+    {
+      "Setting_Name": "template",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "text",
+      "Setting_Plg": "plg.notify"
+    },
+    {
+      "Setting_Name": "template",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "text",
+      "Setting_Plg": "plg.recovery"
+    },
+    {
+      "Setting_Name": "url",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "url",
+      "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "name",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "text",
+      "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "banner",
+      "Setting_Value": "",
+      "Setting_Required": 1,
+      "Setting_Type": "text",
+      "Setting_Plg": "website"
+    }
+  ]
+}
