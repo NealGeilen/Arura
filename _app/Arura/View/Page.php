@@ -118,7 +118,7 @@ class Page{
                                 $aContentBlock['Template'] = $aContentBlock['Content_Value'];
                                 break;
                             case 'Picture':
-                                $aContentBlock['Template'] = "<img src='".__FILES__ . $aContentBlock['Content_Value']."'>";
+                                $aContentBlock['Template'] = "<img src='/files" . $aContentBlock['Content_Value']."'>";
                                 break;
 
                             case 'widget':
