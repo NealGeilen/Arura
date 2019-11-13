@@ -185,8 +185,8 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
         $P->setUrl($sUrl);
         $P->setTitle($aProperties['Title']);
         $P->setRight($aProperties["Right"]);
-        $P->setMasterPath(__ARURA__TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR);
-        $P->setFileLocation(__ARURA__TEMPLATES__  .DIRECTORY_SEPARATOR . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
+        $P->setMasterPath(__ARURA_TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR);
+        $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
         $Host->addPage($P);
     }
 }
