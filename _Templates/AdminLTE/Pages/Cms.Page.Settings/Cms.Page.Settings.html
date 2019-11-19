@@ -6,11 +6,21 @@
 </header>
 
 <section class="card">
-    <header class="card-header">
+    <div class="card-header">
         <h2 class="card-title">Basis informatie</h2>
-    </header>
+        <div class="card-tools">
+            <div class="btn-group btn-group-sm">
+                <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/content?c={$aCmsPage.Page_Id}" target="_blank">
+                    <i class="fas fa-pen"></i>
+                </a>
+                <button class="btn btn-primary" onclick="savePageSettings()">
+                    <i class="fas fa-save"></i>
+                </button>
+            </div>
+        </div>
+    </div>
     <div class="card-body">
-        <form action="/{$aArura.dir}/{$aArura.api}/cms/Page.Settings.php" method="post" class="form-sender">
+        <form action="/{$aArura.dir}/{$aArura.api}/cms/Page.Settings.php" method="post" class="page-settings">
             <input type="hidden" name="type" value="save-settings">
             <input type="hidden" name="Page_Id" value="{$aCmsPage.Page_Id}">
             <div class="row">
@@ -27,8 +37,11 @@
                     <label>Omschrijving</label>
                     <textarea class="form-control" maxlength="1000" name="Page_Description">{$aCmsPage.Page_Description}</textarea>
                 </div>
-                <div class="col-xs-12">
-                    <input type="submit" value="Opslaan" class="btn btn-primary">
+                <div class="form-group col-4">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="pagepublic" name="Page_Visible" {if $aCmsPage.Page_Visible}checked{/if}>
+                        <label class="custom-control-label" for="pagepublic">Pagina openbaar</label>
+                    </div>
                 </div>
             </div>
         </form>

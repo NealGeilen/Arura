@@ -52,7 +52,10 @@ function save(){
         }),
         dataType: 'json',
         success: function (response) {
-            console.log(aNavData);
+            addSuccessMessage("Navigatie opgeslagen");
+        },
+        error: function () {
+            addErrorMessage("Opslaan mislukt")
         }
     });
 

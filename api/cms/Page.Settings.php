@@ -6,6 +6,7 @@ $request = new \NG\Client\RequestHandler();
 $Pages = new \Arura\CMS\Page\Page();
 $request->setRight(Rights::CMS_PAGES);
 $request->TriggerEvent();
+$response->isDebug(true);
 $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response,$Pages){
     $aOutcome=[];

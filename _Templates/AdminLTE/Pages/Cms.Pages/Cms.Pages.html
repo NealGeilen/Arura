@@ -1,7 +1,10 @@
 <section class="card">
     <header class="card-header">
         <div class="card-tools">
-            <a href="javascript:Pages.createPage()" class="far fa-plus-square"></a>
+            <div class="btn-group btn-group-sm">
+                <button onclick="Pages.createPage()" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+            </div>
+
         </div>
         <h2 class="card-title">Pagina's</h2>
     </header>
@@ -24,10 +27,10 @@
 <div style="display: none">
     <div class="template-pages-btns">
         <div class="btn-group">
-            <a class="btn btn-secondary" href="" type="button" page="p">
+            <a class="btn btn-secondary" href="" page="p">
                 <i class="fas fa-cog"></i>
             </a>
-            <a href="" type="button" class="btn btn-primary" page="c">
+            <a href="" class="btn btn-primary" page="c">
                 <i class="fas fa-pen"></i>
             </a>
             <button type="button" class="btn btn-danger" onclick="Pages.Delete($(this))" >

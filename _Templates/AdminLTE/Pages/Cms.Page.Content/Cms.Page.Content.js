@@ -307,8 +307,14 @@ var Builder = {
             });
         },
         Delete : function (oElement) {
-            Builder.Structure.DeleteItems.aGroups.push(parseInt(this.getData(oElement).Group_Id));
-            oElement.remove();
+            Modals.Warning({
+                Title: "Groep verwijderen",
+                Message: "Weet je zeker dat je deze groep wilt verwijderen?",
+                onConfirm: function () {
+                    Builder.Structure.DeleteItems.aGroups.push(parseInt(Builder.Group.getData(oElement).Group_Id));
+                    oElement.remove();
+                }
+            });
         },
         State:{
             Activate: function (oElement) {
@@ -406,8 +412,14 @@ var Builder = {
             return oBlock;
         },
         Delete: function(oElement){
-            Builder.Structure.DeleteItems.aBlocks.push(parseInt(this.getData(oElement).Content_Id));
-            oElement.remove();
+            Modals.Warning({
+                Title: "Content verwijderen",
+                Message: "Weet je zeker dat je deze content wilt verwijderen?",
+                onConfirm: function () {
+                    Builder.Structure.DeleteItems.aBlocks.push(parseInt(Builder.Block.getData(oElement).Content_Id));
+                    oElement.remove();
+                }
+            });
         },
         Create:function(oElement){
             oElement.css('display', 'none');
@@ -446,9 +458,9 @@ var Builder = {
         getValue:function(oBlock){
             var value;
             aBlock = this.getData(oBlock);
+            console.log(aBlock.Content_Type);
             switch(aBlock.Content_Type){
                 case 'widget':
-                case 'plugin':
                 case 'custom':
                     value = Builder.ContentTypes.Addons[aBlock.Content_Type].value(oBlock.find('.Block-Item-Content'));
                     break;
