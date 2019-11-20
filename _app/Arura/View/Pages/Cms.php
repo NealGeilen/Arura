@@ -1,35 +1,24 @@
 <?php
-namespace Arura\View;
+namespace Arura\View\Pages;
 
 use NG\Database;
 
-class Page{
-
-    //Objects
-    protected $oDatabase;
-    Public static $smarty;
-    public static $pageJsCssFiles;
+class Cms extends Page{
 
     const PluginPath =              __ROOT__ . '/_Addons/';
     const PluginPathStandard =      self::PluginPath . 'Widgets/';
     const PluginPathCustom =        self::PluginPath . 'Custom/';
-    const TemplatePath =            __ROOT__ . '/Templates/';
 
 
     //Class controllers
     protected $hasLoaded = false;
-    protected $hasContentBuild = false;
 
     //Page variables
     protected $Id;
-    protected $Url;
-    protected $Title;
-
-    protected $PageContend = null;
 
     public function __construct($iId){
+        parent::__construct();
         $this->Id = $iId;
-        $this->oDatabase = new Database();
     }
 
 
@@ -50,7 +39,7 @@ class Page{
 
     protected function load(){
         if (!$this->hasLoaded){
-            $aData = $this->oDatabase->fetchRow('SELECT * FROM tblCmsPages WHERE Page_Id = ? ',
+            $aData = $this->db->fetchRow('SELECT * FROM tblCmsPages WHERE Page_Id = ? ',
                 [
                     $this->Id
                 ]);
@@ -64,7 +53,7 @@ class Page{
     protected function getGroups(){
         $this->load();
         $aOutcome = [];
-        $aGroups = $this->oDatabase->fetchAll('SELECT * FROM tblCmsGroups WHERE Group_Page_Id = ? ORDER BY Group_Position',
+        $aGroups = $this->db->fetchAll('SELECT * FROM tblCmsGroups WHERE Group_Page_Id = ? ORDER BY Group_Position',
             [
                 $this->Id
             ]);
@@ -77,7 +66,7 @@ class Page{
 
     protected function getContentBlocks($iGroupId){
         $this->load();
-        $aData = $this->oDatabase->fetchAll('SELECT * FROM tblCmsContentBlocks WHERE Content_Group_Id = ? ORDER BY Content_Position',
+        $aData = $this->db->fetchAll('SELECT * FROM tblCmsContentBlocks WHERE Content_Group_Id = ? ORDER BY Content_Position',
             [
                 $iGroupId
             ]);
@@ -92,14 +81,14 @@ class Page{
     }
 
     protected function getAddonData($iAddonId){
-        return $this->oDatabase->fetchRow('SELECT * FROM tblCmsAddons WHERE Addon_Id = ? ',
+        return $this->db->fetchRow('SELECT * FROM tblCmsAddons WHERE Addon_Id = ? ',
             [
                 $iAddonId
             ]);
     }
 
     protected function buildPageContent(){
-        if (!$this->hasContentBuild && !is_null($this->PageContend)){
+        if (is_null($this->PageContend)){
             foreach ($this->getGroups() as $aGroup){
                 $aBlocks = [];
                 foreach ($this->getContentBlocks((int)$aGroup['Group_Id']) as $aContentBlock){
@@ -129,10 +118,6 @@ class Page{
                                 break;
                         }
                     }
-
-
-
-
                     $aBlocks[(int)$aContentBlock['Content_Position']] = $aContentBlock;
 
                 }
@@ -141,32 +126,12 @@ class Page{
                 $this->PageContend[(int)$aGroup['Group_Position']] = $aGroup;
 
             }
-
-            $this->hasContentBuild = true;
         }
-    }
-
-    public function getPageContent(){
-        $this->buildPageContent();
-        return $this->PageContend;
     }
 
     public function showPage(){
-        $smarty = self::$smarty;
-        self::$pageJsCssFiles = json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
-
-        $smarty->assign('content', $this->getPageContent());
-        $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
-        $smarty->assign('aMainNav', Menu::getMenuStructure());
-        foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
-            if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
-                $sName = str_replace('.html', '', $item);
-                $smarty->assign($sName, $smarty->fetch(self::TemplatePath .'Sections'.DIRECTORY_SEPARATOR. $item));
-            }
-        }
-
-
-        $smarty->display(self::TemplatePath. 'index.html');
+        $this->buildPageContent();
+        parent::showPage();
     }
 
     public static function displayView($sUrl){
@@ -174,13 +139,13 @@ class Page{
         if (self::urlExists($sUrl)){
             $oPage = self::fromUrl($sUrl);
             $oPage->showPage();
+
         } else {
+            $oPage = new Page();
+            $oPage->setPageContend("TEST");
+            $oPage->showPage();
         }
     }
-
-    /**
-     * Page setters & getters
-     */
 
     /**
      * @return mixed
@@ -200,36 +165,12 @@ class Page{
     }
 
     /**
-     * @param mixed $Title
-     */
-    public function setTitle($Title)
-    {
-        $this->Title = $Title;
-    }
-
-    /**
      * @return mixed
      */
     public function getUrl()
     {
         $this->load();
         return $this->Url;
-    }
-
-    /**
-     * @param mixed $Url
-     */
-    public function setUrl($Url)
-    {
-        $this->Url = $Url;
-    }
-
-    /**
-     * @param null $PageContend
-     */
-    public function setPageContend($PageContend)
-    {
-        $this->PageContend = $PageContend;
     }
 
 }

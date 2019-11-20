@@ -22,3 +22,4 @@ define('__DATAFILES__',         __RESOURCES__   . DIRECTORY_SEPARATOR. 'DataFile
 require_once __WEB__ROOT__ . "/_config.php";
 require_once __VENDOR__ . "autoload.php";
 require_once __APP__    . "Rights.php";
+\Arura\View\Pages\Page::$smarty = new Smarty();
