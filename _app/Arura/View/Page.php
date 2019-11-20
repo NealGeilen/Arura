@@ -11,7 +11,7 @@ class Page{
     public static $pageJsCssFiles;
 
     const PluginPath =              __ROOT__ . '/_Addons/';
-    const PluginPathStandard =      self::PluginPath . 'Standard/';
+    const PluginPathStandard =      self::PluginPath . 'Widgets/';
     const PluginPathCustom =        self::PluginPath . 'Custom/';
     const TemplatePath =            __ROOT__ . '/Templates/';
 
@@ -157,22 +157,26 @@ class Page{
 
         $smarty->assign('content', $this->getPageContent());
         $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
-
-        $smarty->assign('body_head', $smarty->fetch(self::TemplatePath . 'Sections/body_head.html'));
-        $smarty->assign('aMainNav', \Arura\View\Menu::getMenuStructure());
-        $smarty->assign('navbar', $smarty->fetch(self::TemplatePath . 'Sections/nav.html'));
-
-
-
-        $smarty->assign('footer', $smarty->fetch(self::TemplatePath . 'Sections/footer.html'));
-
-        $smarty->assign('body_end', $smarty->fetch(self::TemplatePath . 'Sections/body_end.html'));
+        $smarty->assign('aMainNav', Menu::getMenuStructure());
+        foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
+            if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
+                $sName = str_replace('.html', '', $item);
+                $smarty->assign($sName, $smarty->fetch(self::TemplatePath .'Sections'.DIRECTORY_SEPARATOR. $item));
+            }
+        }
 
 
         $smarty->display(self::TemplatePath. 'index.html');
     }
 
+    public static function displayView($sUrl){
+        if (self::urlExists($sUrl)){
+            $oPage = self::fromUrl($sUrl);
+            $oPage->showPage();
+        } else {
 
+        }
+    }
 
     /**
      * Page setters & getters

@@ -33,6 +33,8 @@ class Page{
                 "url" => Application::get("website", 'url'),
                 "banner" => Application::get("website", "banner")
             ]);
+        self::getSmarty()->assign("aManifest", json_array_decode(file_get_contents(__ARURA__ROOT__ . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR . "manifest.json")));
+
         self::getSmarty()->assign("aArura" ,[
             "dir" => __ARURA__DIR_NAME__,
             "api" => "api"
