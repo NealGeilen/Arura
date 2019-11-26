@@ -44,7 +44,7 @@
     background: gray;
 }
 .Block-Item.active .Block-Item-Content.active{
-    z-index: 120;
+    z-index: 2100;
 }
 .Block-Item.active .Block-Item-Control{
     display: block!important;
@@ -118,7 +118,7 @@ Active group
     bottom: 0;
     right: 0;
     background: rgba(0,0,0,0.8);
-    z-index: 100;
+    z-index: 1500;
     display: none;
 }
 .block-editor-background.active{
@@ -130,7 +130,7 @@ Active group
     top: 100px;
     font-size: 24px;
     margin: 15px;
-    z-index: 101;
+    z-index: 2100;
     opacity: unset;
 }
 .Block-Editor{
@@ -142,6 +142,7 @@ Active group
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.3);
+    z-index: 2200;
 }
 img.Block-Item-Field{
     /*min-height: 40px;*/
@@ -163,8 +164,9 @@ img.Block-Item-Field:after{
     margin: 0 auto;
 }
 .Block-Editor .btn-group{
-    position: absolute;
-    top: 30%;
-    left: 40%;
+    /*position: absolute;*/
+    /*top: 30%;*/
+    /*left: 40%;*/
+    /*z-index: 2100;*/
     /*right: 40%;*/
 }
