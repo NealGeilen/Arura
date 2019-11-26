@@ -12,9 +12,6 @@ $(document).ready(function () {
             type: 'post',
             dataType: 'json',
             data: (oForm.serializeArray()),
-            beforeSend: function(){
-                console.log("AJAX Call");
-            },
             success: function (response) {
                 console.log(response);
                 oModal.modal("hide");

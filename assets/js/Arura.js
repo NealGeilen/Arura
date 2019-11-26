@@ -41,8 +41,7 @@ function LogOutUser(){
 
 function serializeArray(oForm) {
     aList = {};
-    console.log(oForm);
-    $.each(oForm.find('input[name], textarea[name]'), function (iKey, oField) {
+    $.each(oForm.find('input, textarea[name]'), function (iKey, oField) {
         value = $(oField).val();
         if (value !== ""){
             aList[$(oField).attr('name')] =  value;

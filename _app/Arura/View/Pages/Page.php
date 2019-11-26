@@ -3,6 +3,7 @@ namespace Arura\View\Pages;
 
 use Arura\View\Menu;
 use NG\Database;
+use NG\Settings\Application;
 
 class Page{
 
@@ -35,6 +36,11 @@ class Page{
         $smarty->assign('content', $this->getPageContent());
         $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
         $smarty->assign('aMainNav', Menu::getMenuStructure());
+        $smarty->assign('sPageTitle', $this->getTitle());
+        $smarty->assign('aWebsite', [
+            "name" => Application::get('website', 'name'),
+            "url" => Application::get("website", 'url')
+        ]);
         foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
             if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
                 $sName = str_replace('.html', '', $item);
