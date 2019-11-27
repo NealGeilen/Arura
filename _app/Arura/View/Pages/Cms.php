@@ -2,6 +2,7 @@
 namespace Arura\View\Pages;
 
 use NG\Database;
+use NG\Permissions\Restrict;
 use NG\User\User;
 
 class Cms extends Page{
@@ -48,6 +49,7 @@ class Cms extends Page{
             $this->Url = $aData['Page_Url'];
             $this->Title = $aData['Page_Title'];
             $this->isVisible = (bool)$aData["Page_Visible"];
+            $this->Description = $aData["Page_Description"];
 
             $this->hasLoaded = true;
         }
@@ -141,13 +143,14 @@ class Cms extends Page{
         $_SERVER["REDIRECT_URL"] = $sUrl;
         if (self::urlExists($sUrl)){
             $oPage = self::fromUrl($sUrl);
-            if ($oPage->isVisible() || User::isLogged()){
+            if ($oPage->isVisible() || Restrict::Validation(\Rights::CMS_PAGES)){
                 $oPage->showPage();
                 exit;
             }
         }
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
+        $oPage->setDescription("Deze pagina bestaat niet");
         $oPage->setPageContend(self::$smarty->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
         $oPage->showPage();
     }
@@ -185,6 +188,12 @@ class Cms extends Page{
     {
         $this->load();
         return $this->isVisible;
+    }
+
+    public function getDescription()
+    {
+        $this->load();
+        return parent::getDescription();
     }
 
 }

@@ -18,6 +18,7 @@ class Page{
     //Page variables
     protected $Url;
     protected $Title;
+    protected $Description;
 
     protected $PageContend = null;
 
@@ -37,6 +38,7 @@ class Page{
         $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('sPageTitle', $this->getTitle());
+        $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', [
             "name" => Application::get('website', 'name'),
             "url" => Application::get("website", 'url')
@@ -90,6 +92,22 @@ class Page{
     public function setPageContend($PageContend)
     {
         $this->PageContend = $PageContend;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->Description;
+    }
+
+    /**
+     * @param mixed $Description
+     */
+    public function setDescription($Description)
+    {
+        $this->Description = $Description;
     }
 
 }
