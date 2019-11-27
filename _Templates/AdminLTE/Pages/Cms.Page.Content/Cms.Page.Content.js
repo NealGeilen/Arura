@@ -25,8 +25,10 @@ var Builder = {
             $(sSelectors.Content_Type_Selector).draggable({
                 helper: function (event) {
                     aBlock = Builder.ContentTypes.DefaultBlock;
-                    aBlock['Content_Type'] = $(event.target).attr('content-type');
-                    aBlock['Content_Addon_Id'] = parseInt($(event.target).attr('content-addon-id'));
+                    oObject = $(event.target).parents("li").find("a");
+                    console.log($(event.target).parents("li").find("a"));
+                    aBlock['Content_Type'] = oObject.attr('content-type');
+                    aBlock['Content_Addon_Id'] = parseInt(oObject.attr('content-addon-id'));
                     oElement = Builder.Block.Build(aBlock);
                     return oElement;
                 },
@@ -473,6 +475,7 @@ var Builder = {
     },
     Item:{
         Build: function (aBlock) {
+            console.log(aBlock);
             var oItem;
             switch(aBlock.Content_Type){
                 case 'widget':
@@ -481,6 +484,7 @@ var Builder = {
                     oItem = Builder.ContentTypes.Addons[aBlock.Content_Type].init(aBlock);
                     break;
                 default:
+                    console.log(aBlock.Content_Type);
                     oItem = Builder.ContentTypes.Types[aBlock.Content_Type].init(aBlock.Content_Value).addClass('Block-Item-Field');
                     break;
             }
