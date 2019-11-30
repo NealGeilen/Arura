@@ -110,3 +110,20 @@ function validateUser(){
         }
     });
 }
+
+
+var ControlSidebarPosition = $('.control-sidebar').offset();
+var ToolbarPosition = $('.page-toolbar').offset();
+var ToolbarWidth = $('.page-toolbar').parents(".card").width();
+$(window).scroll(function(){
+    if($(window).scrollTop() > ControlSidebarPosition.top){
+        $('.control-sidebar').css('position','fixed').css('top','0').css("height", "100%");
+    } else {
+        $('.control-sidebar').attr("style", null);
+    }
+    if($(window).scrollTop() > ToolbarPosition.top){
+        $('.page-toolbar').addClass("active").css("width", ToolbarWidth);
+    } else {
+        $('.page-toolbar').attr("style", null).removeClass("active");
+    }
+});

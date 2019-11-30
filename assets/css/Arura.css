@@ -90,3 +90,33 @@ Templates
     padding: 15px;
     background: rgba(255,255,255,0.7) ;
 }
+.brand-link .brand-text{
+    /*margin: 15px;*/
+    white-space: normal;
+    text-align: center;
+}
+.brand-link .brand-image{
+    margin-top: 4%;
+}
+
+@media (min-width: 768px) {
+    .sidebar-mini-md.sidebar-collapse .brand-text {
+        white-space: unset;
+    }
+    .sidebar-mini-md.sidebar-collapse .main-sidebar:hover .brand-text{
+        white-space: normal;
+        text-align: center;
+    }
+}
+.layout-fixed .control-sidebar{
+    top: calc(3.5rem + 1px);
+}
+.page-toolbar.active{
+    /*min-width: 300px;*/
+    border-radius: unset;
+    position: fixed;
+    top: 0;
+    padding: 10px;
+    z-index: 200;
+    background: rgba(0,0,0,0.6);
+}

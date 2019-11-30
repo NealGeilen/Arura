@@ -12,8 +12,14 @@ $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
     switch ($_GET["type"]){
         case "get-token":
-            $R = \NG\User\Recovery::requestToken(\NG\User\User::getUserOnEmail($aData["email"]));
-            $R->sendRecoveryMail();
+            if (\NG\User\User::isEmailActive($aData["email"])){
+                $R = \NG\User\Recovery::requestToken(\NG\User\User::getUserOnEmail($aData["email"]));
+               if (!$R->sendRecoveryMail()){
+                   throw new Error();
+               }
+            } else {
+                throw new Exception("Email not found", 404);
+            }
             break;
         case 'set-password':
             $R = new \NG\User\Recovery($aData["Token"]);

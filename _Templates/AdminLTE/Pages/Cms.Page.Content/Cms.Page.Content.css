@@ -170,3 +170,6 @@ img.Block-Item-Field:after{
     /*z-index: 2100;*/
     /*right: 40%;*/
 }
+.ContentType-Selector{
+    cursor: move;
+}
