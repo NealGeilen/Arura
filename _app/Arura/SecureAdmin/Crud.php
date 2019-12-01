@@ -1,41 +1,52 @@
 <?php
 namespace Arura\SecureAdmin;
+use NG\User\User;
+
 class Crud extends Database {
 
     protected $sHtml;
     protected $aDataFile;
     protected $aColumnInfo;
+    protected $oAdmin;
 
-    public function __construct($aData, $sKey){
+    public function __construct($aData, $sKey, SecureAdmin $oAdmin){
         $this->aDataFile = $aData;
+        $this->oAdmin = $oAdmin;
         parent::__construct($sKey);
     }
-
-
+    private function isActionAllowed($iRight){
+        return $this->oAdmin->hasUserRight(User::activeUser(), $iRight);
+    }
     private function Actions(){
         try{
             switch ($_GET['action']){
                 case 'create':
-                    $this -> sHtml = $this->buildInputField([],'save') . $this->sHtml;
+                    if ($this->isActionAllowed(SecureAdmin::CREATE)){
+                        $this -> sHtml = $this->buildInputField([],'save') . $this->sHtml;
+                    }
                     break;
                 case 'save':
-                    if (isset($_POST[$this->aDataFile["primarykey"]])){
-                        unset($_POST[$this->aDataFile["primarykey"]]);
-                    }
-                    foreach ($_POST as $sName => $sValue){
-                        if (str_contains("auto_increment",$this->aColumnInfo[$sName]['Extra'])){
-                            unset($_POST[$sName]);
+                    if ($this->isActionAllowed(SecureAdmin::CREATE)){
+                        if (isset($_POST[$this->aDataFile["primarykey"]])){
+                            unset($_POST[$this->aDataFile["primarykey"]]);
                         }
+                        foreach ($_POST as $sName => $sValue){
+                            if (str_contains("auto_increment",$this->aColumnInfo[$sName]['Extra'])){
+                                unset($_POST[$sName]);
+                            }
+                        }
+                        $this->createRecord($this->aDataFile["table"], $_POST);
                     }
-                    $this->createRecord($this->aDataFile["table"], $_POST);
                     break;
                 case 'edit':
-                    if (isset($_GET['_key'])){
-                        $this -> sHtml = $this->buildInputField($this->SelectRow($this->aDataFile["table"], $_GET['_key'],$this->aDataFile["primarykey"])). $this->sHtml;
+                    if ($this->isActionAllowed(SecureAdmin::EDIT)){
+                        if (isset($_GET['_key'])){
+                            $this -> sHtml = $this->buildInputField($this->SelectRow($this->aDataFile["table"], $_GET['_key'],$this->aDataFile["primarykey"])). $this->sHtml;
+                        }
                     }
                     break;
                 case 'update':
-                    if (isset($_POST[$this->aDataFile["primarykey"]])){
+                    if (isset($_POST[$this->aDataFile["primarykey"]]) && $this->isActionAllowed(SecureAdmin::EDIT)){
                         $this->updateRecord($this->aDataFile["table"], $_POST, $this->aDataFile["primarykey"]);
                         if ($this->isQuerySuccessful()){
                             header('Location:' . $_SERVER["REDIRECT_URL"]);
@@ -43,7 +54,7 @@ class Crud extends Database {
                     }
                     break;
                 case 'delete':
-                    if (isset($_GET['_key'])){
+                    if (isset($_GET['_key']) || $this->isActionAllowed(SecureAdmin::DELETE)){
                         $this->query('DELETE FROM '. $this->aDataFile["table"] . ' WHERE ' . $this->aDataFile["primarykey"] . ' = :'.$this->aDataFile["primarykey"], [$this->aDataFile["primarykey"] => $_GET['_key']]);
                     }
                     break;
@@ -70,7 +81,9 @@ class Crud extends Database {
 
         $sQuery .= " FROM " . $this->aDataFile["table"];
         $aData = $this->fetchAll($sQuery);
-        $this->sHtml .= "<a href='".$_SERVER["REDIRECT_URL"]."?action=create'>Toevoegen</a>";
+        if ($this->isActionAllowed(SecureAdmin::CREATE)){
+            $this->sHtml .= "<a href='".$_SERVER["REDIRECT_URL"]."?action=create'>Toevoegen</a>";
+        }
         $this->sHtml .= "<table class='table'>";
         $this->sHtml .= "<tr>";
         foreach ($this->aDataFile["columns"] as $Column){
@@ -91,12 +104,11 @@ class Crud extends Database {
 
     protected function getActionButtons($iRowId = null){
         $s = "";
-        $aButtons = [
-            "Verwijder"     => "delete",
-            "Veranderen"    => "edit"
-        ];
-        foreach ($aButtons as $name =>  $aButton){
-            $s .= "<a href='".$_SERVER["REDIRECT_URL"]."?action=".$aButton."&_key=".$iRowId."' class='btn btn-primary'>".$name."</a>";
+        if ($this->isActionAllowed(SecureAdmin::DELETE)){
+            $s .= "<a href='".$_SERVER["REDIRECT_URL"]."?action=delete&_key=".$iRowId."' class='btn btn-primary'>Verwijderen</a>";
+        }
+        if ($this->isActionAllowed(SecureAdmin::EDIT)){
+            $s .= "<a href='".$_SERVER["REDIRECT_URL"]."?action=edit&_key=".$iRowId."' class='btn btn-primary'>Veranderen</a>";
         }
         return $s;
     }
