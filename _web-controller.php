@@ -145,6 +145,18 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "Children" => null
         ],
+        '/administration' => [
+            "Right" =>
+                (
+                \NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION)
+                ),
+            "Title" => "Beveiligde administartie",
+            "FileName" => "Secure.Administration.Tables",
+            "Icon" => "fas fa-shield-alt",
+            "isChild" => false,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
         /*
          * Singel Pages
          */
@@ -198,6 +210,10 @@ try{
     $oCurrentPage->showPage();
 
 } catch (Exception $e){
+    if ($e->getCode() === 403){
+        header("Location: /" . __ARURA__DIR_NAME__);
+        exit;
+    }
     var_dump($e);
     exit;
 //    $Host->showErrorPage($e->getCode());
