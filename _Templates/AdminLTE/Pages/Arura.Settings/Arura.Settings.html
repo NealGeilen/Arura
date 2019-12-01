@@ -21,11 +21,19 @@
                     <td>{$aSetting.Setting_Plg}</td>
                     <td>{$aSetting.Setting_Name}</td>
                     <td class="form-group">
-                        <input type="{$aSetting.Setting_Type}" class="form-control" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value}"
-                        {if $aSetting.Setting_Required}
+                        {if $aSetting.Setting_Type === "file"}
+                        <input type="text" class="form-control file-selector" file-type="img" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value}"
+                               {if $aSetting.Setting_Required}
                                required
                                {/if}
                         >
+                        {else}
+                        <input type="{$aSetting.Setting_Type}" class="form-control" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value}"
+                               {if $aSetting.Setting_Required}
+                               required
+                               {/if}
+                        >
+                        {/if}
                         <div class="help-block with-errors"></div>
                     </td>
                 </tr>

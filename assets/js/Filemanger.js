@@ -1,3 +1,14 @@
+$('input[type=text].file-selector').on("click",function () {
+    oInput = $(this);
+    Filemanger.Selector(oInput.attr("file-type"), function (node) {
+        if (node !== []){
+            aFile = node[0];
+            oInput.val("/files/" + aFile.original.dir);
+        }
+    });
+});
+
+
 var Filemanger = {
     oFileThree : $('.FileManger-Three'),
     loadDirThree: function (sType = null) {
@@ -89,7 +100,6 @@ var Filemanger = {
                 Message: "Weet je zeker dat je deze items wilt verwijderen?",
                 onConfirm: function () {
                     var nodes = Filemanger.oFileThree.jstree('get_selected',true);
-                    console.log(nodes);
                     aData = [];
                     $.each(nodes, function (i,Node) {
                         aData[i] = Node.original;
@@ -213,7 +223,6 @@ var Filemanger = {
            Message: this.oFileThree,
            onConfirm: function () {
                var nodes = oThree.jstree('get_selected',true);
-               console.log(nodes);
                callback.call(this,nodes);
            }
         });

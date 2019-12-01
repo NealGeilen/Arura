@@ -39,10 +39,7 @@ class Page{
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
-        $smarty->assign('aWebsite', [
-            "name" => Application::get('website', 'name'),
-            "url" => Application::get("website", 'url')
-        ]);
+        $smarty->assign('aWebsite', Application::getAll()['website']);
         foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
             if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
                 $sName = str_replace('.html', '', $item);

@@ -94,6 +94,7 @@ class FileManger{
                 case 'png':
                 case 'jpg':
                 case 'gif':
+                case "ico":
                     $sType = 'img';
                     break;
                 default:

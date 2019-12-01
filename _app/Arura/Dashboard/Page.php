@@ -28,11 +28,7 @@ class Page{
                 throw new \Exception('No Access', 403);
             }
         }
-        self::getSmarty()->assign("aWebsite" ,[
-                "name" => Application::get('website', 'name'),
-                "url" => Application::get("website", 'url'),
-                "banner" => Application::get("website", "banner")
-            ]);
+        self::getSmarty()->assign("aWebsite" ,Application::getAll()["website"]);
         self::getSmarty()->assign("aManifest", json_array_decode(file_get_contents(__ARURA__ROOT__ . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR . "manifest.json")));
 
         self::getSmarty()->assign("aArura" ,[
