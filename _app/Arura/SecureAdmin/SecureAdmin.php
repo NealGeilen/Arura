@@ -46,30 +46,27 @@ class SecureAdmin{
             ]);
     }
 
-    public static function Create($sName , $aTableData, User $Owner){
-        $sFile = "";
-        $db = new \NG\Database();
+    public static function Create($aTableData, User $Owner){
         do {
             $sFile = __RESOURCES__ . "SecureAdmin" . DIRECTORY_SEPARATOR . str_random() . ".json";
-        } while(!is_file($sFile));
-        fopen($sFile, "w");
-        do {
-            $sDBTable = "SA-" . str_random();
-        } while (count($db -> fetchRow("SHOW TABLES LIKE '" .$sDBTable."'")) > 0);
-
-        if (file_put_contents($sFile, $aTableData)){
+        } while(is_file($sFile));
+        fopen($sFile, 'w');
+        if (file_put_contents($sFile, json_encode($aTableData))){
+            $db = new \NG\Database();
+            do {
+                $sDBTable = "SA_" . str_random(10);
+            } while (count($db -> fetchAll("SHOW TABLES LIKE '" .$sDBTable."'")) != 0);
             $i = $db ->createRecord("tblSecureAdministration",[
-                "Table_Name" => $sName,
+                "Table_Name" => str_random(4),
                 "Table_DB_Name" => $sDBTable,
                 "Table_DataFile" => $sFile,
-                "Table_Owner_Id" => $Owner->getId(),
-                "Table_Key" => getHash("tblSecureAdministration", "Table_Key")
+                "Table_Owner_User_Id" => $Owner->getId(),
+                "Table_Key" => "dawdawdawdawdawd"
             ]);
 
             $sQuery = "CREATE TABLE " . $sDBTable . " (";
             foreach ($aTableData["columns"] as $sColumnName => $sColumnsData){
-//                $sQuery .= $sColumnName ." ". $sColumnsData . ", ";
-                //TODO input field types to database types
+                $sQuery .= $sColumnName ." VARCHAR(255), ";
             }
             $sQuery = trim($sQuery,", ");
             $sQuery .= ")";

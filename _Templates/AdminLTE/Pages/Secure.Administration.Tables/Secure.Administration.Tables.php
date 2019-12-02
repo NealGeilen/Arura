@@ -12,7 +12,10 @@ if (isset($_GET["s"])){
 //        $oSmarty->assign("sCrud", (string)$oTable->getCrud());
         return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Crud.html");
     }
-} else {
+} else if(\NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION_CREATE) && isset($_GET["c"])) {
+    return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Create.html");
+}
+else {
     $oSmarty->assign("aTables", \Arura\SecureAdmin\SecureAdmin::getAllTablesForUser(\NG\User\User::activeUser()));
     return Page::getHtml(__DIR__);
 }
