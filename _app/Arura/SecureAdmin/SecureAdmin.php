@@ -38,6 +38,50 @@ class SecureAdmin{
         }
     }
 
+    public static function getAllTablesForUser(User $oUser){
+        $db = new \NG\Database();
+//        return $db->fetchAll("SELECT * FROM tblSecureAdministration LEFT JOIN tblSecureAdministrationShares ON Table_Id = Share_Table_Id WHERE Table_Owner_User_Id = :User_Id OR Share_User_Id = :User_Id",
+//            [
+//                "User_Id" => $oUser->getId()
+//            ]);
+        return [];
+    }
+
+    public static function Create($sName , $aTableData, User $Owner){
+        $sFile = "";
+        $db = new \NG\Database();
+        do {
+            $sFile = __RESOURCES__ . "SecureAdmin" . DIRECTORY_SEPARATOR . str_random() . ".json";
+        } while(!is_file($sFile));
+        fopen($sFile, "w");
+        do {
+            $sDBTable = "SA-" . str_random();
+        } while (count($db -> fetchRow("SHOW TABLES LIKE '" .$sDBTable."'")) > 0);
+
+        if (file_put_contents($sFile, $aTableData)){
+            $i = $db ->createRecord("tblSecureAdministration",[
+                "Table_Name" => $sName,
+                "Table_DB_Name" => $sDBTable,
+                "Table_DataFile" => $sFile,
+                "Table_Owner_Id" => $Owner->getId(),
+                "Table_Key" => getHash("tblSecureAdministration", "Table_Key")
+            ]);
+
+            $sQuery = "CREATE TABLE " . $sDBTable . " (";
+            foreach ($aTableData["columns"] as $sColumnName => $sColumnsData){
+//                $sQuery .= $sColumnName ." ". $sColumnsData . ", ";
+                //TODO input field types to database types
+            }
+            $sQuery = trim($sQuery,", ");
+            $sQuery .= ")";
+            $db->query($sQuery);
+            if ($db->isQuerySuccessful()){
+                return new self($i);
+            }
+        }
+        return false;
+    }
+
     public function getCrud(){
         return new Crud($this->getDataFile(), $this->getKey(), $this);
     }

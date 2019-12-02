@@ -1,0 +1,21 @@
+<div class="card">
+    <div class="card-body table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Rol</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {foreach from=$aTable key=$iKey item=aTab}
+            <tr>
+                <td>{$aTab.Table_Name}</td>
+                <td></td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
+    </div>
+</div>
