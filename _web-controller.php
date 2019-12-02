@@ -10,7 +10,9 @@ if (!\NG\User\User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages
 
 $Host = new \Arura\Dashboard\Host();
 $smarty = new Smarty();
-$aPermissions = [];
+foreach (Rights::getConstants() as $sName => $iValue){
+    $aPermissions[$sName] = \NG\Permissions\Restrict::Validation($iValue);
+}
 $aNavBarPages =
     [
         "/home" => [
@@ -216,7 +218,6 @@ try{
     }
     var_dump($e);
     exit;
-//    $Host->showErrorPage($e->getCode());
 }
 
 

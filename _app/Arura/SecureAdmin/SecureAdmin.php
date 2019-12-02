@@ -32,7 +32,7 @@ class SecureAdmin{
             $aTable = $this -> db -> fetchRow("SELECT * FROM  tblSecureAdministration WHERE Table_Id", [$this -> getId()]);
             $this->name = $aTable["Table_Name"];
             $this->key = $aTable["Table_Key"];
-            $this->owner = new User($aTable["Table_Owner_Id"]);
+            $this->owner = new User($aTable["Table_Owner_User_Id"]);
             $this->setDataFile($aTable["Table_DataFile"]);
             $this -> isLoaded = true;
         }
@@ -40,11 +40,10 @@ class SecureAdmin{
 
     public static function getAllTablesForUser(User $oUser){
         $db = new \NG\Database();
-//        return $db->fetchAll("SELECT * FROM tblSecureAdministration LEFT JOIN tblSecureAdministrationShares ON Table_Id = Share_Table_Id WHERE Table_Owner_User_Id = :User_Id OR Share_User_Id = :User_Id",
-//            [
-//                "User_Id" => $oUser->getId()
-//            ]);
-        return [];
+        return $db->fetchAll("SELECT Table_Id, Table_Owner_User_Id, Table_DataFile, Table_Name  FROM tblSecureAdministration LEFT JOIN tblSecureAdministrationShares ON Table_Id = Share_Table_Id WHERE Table_Owner_User_Id = :User_Id OR Share_User_Id = :User_Id",
+            [
+                "User_Id" => $oUser->getId()
+            ]);
     }
 
     public static function Create($sName , $aTableData, User $Owner){

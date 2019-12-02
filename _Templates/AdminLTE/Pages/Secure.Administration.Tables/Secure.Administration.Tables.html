@@ -1,4 +1,13 @@
 <div class="card">
+    <div class="card-header">
+        <div class="card-tools">
+            {if $aPermissions.SECURE_ADMINISTRATION_CREATE}
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                </button>
+            {/if}
+        </div>
+    </div>
     <div class="card-body table-responsive">
         <table class="table">
             <thead>
@@ -9,10 +18,16 @@
                 </tr>
             </thead>
             <tbody>
-            {foreach from=$aTable key=$iKey item=aTab}
+            {foreach from=$aTables key=$iKey item=aTable}
             <tr>
-                <td>{$aTab.Table_Name}</td>
-                <td></td>
+                <td>{$aTable.Table_Name}</td>
+                <td>{if $aTable.Table_Owner_User_Id = $aUser.User_Id}Eigenaar{else}Gebruiker{/if}</td>
+                <td>
+                    <div class="btn-group text-white">
+                        {if $aTable.Table_Owner_User_Id = $aUser.User_Id}<a class="btn btn-primary" href="/{$aArura.dir}/administration?s={$aTable.Table_Id}"><i class="fas fa-cogs"></i></a>{/if}
+                        <a class="btn btn-secondary" href="/{$aArura.dir}/administration?t={$aTable.Table_Id}"><i class="fas fa-pen"></i></a>
+                    </div>
+                </td>
             </tr>
             {/foreach}
             </tbody>

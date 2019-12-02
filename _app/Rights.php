@@ -15,6 +15,7 @@ class Rights{
     const FILES_UPLOAD = 32;
 
     const SECURE_ADMINISTRATION = 40;
+    const SECURE_ADMINISTRATION_CREATE = 41;
 
     static function getConstants() {
         $oClass = new ReflectionClass(__CLASS__);
