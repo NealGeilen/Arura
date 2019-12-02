@@ -90,6 +90,12 @@ Templates
     padding: 15px;
     background: rgba(255,255,255,0.7) ;
 }
+.login-page .login-logo img{
+    display: block;
+    margin: 0 auto;
+    max-width: 75%;
+    max-height: 250px;
+}
 .brand-link .brand-text{
     /*margin: 15px;*/
     white-space: normal;
