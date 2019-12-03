@@ -152,7 +152,7 @@ $aNavBarPages =
                 (
                 \NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION)
                 ),
-            "Title" => "Beveiligde administartie",
+            "Title" => "Beveiligde administratie",
             "FileName" => "Secure.Administration.Tables",
             "Icon" => "fas fa-shield-alt",
             "isChild" => false,

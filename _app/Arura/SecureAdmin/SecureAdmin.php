@@ -44,6 +44,17 @@ class SecureAdmin{
         }
     }
 
+    public function __toArray(){
+        $this->load();
+        return [
+            "Table_Id" => $this->id,
+          "Table_Name" => $this->name,
+          "Table_Key" => $this->key,
+          "Table_Owner_User_Id" => $this->getOwner()->getId(),
+            "Table_DB_Name" => $this->dbName
+        ];
+    }
+
     public static function doesTableExits($iTableId){
         $db = new \NG\Database();
         return (count($db->fetchAll("SELECT * FROM tblSecureAdministration WHERE Table_Id = :Table_Id", ["Table_Id" => $iTableId])) > 0 );

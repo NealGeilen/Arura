@@ -22,3 +22,4 @@ define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/
 require_once __WEB__ROOT__ . "/_config.php";
 require_once __VENDOR__ . "autoload.php";
 require_once __APP__    . "Rights.php";
+\NG\Sessions::Start();
