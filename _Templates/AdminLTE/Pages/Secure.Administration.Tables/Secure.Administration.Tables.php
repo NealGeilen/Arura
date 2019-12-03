@@ -1,15 +1,15 @@
 <?php
 use Arura\Dashboard\Page;
 $oSmarty =  Page::getSmarty();
-if (isset($_GET["s"])){
+if (isset($_GET["s"]) && !empty($_GET["s"])){
     $oTable = new Arura\SecureAdmin\SecureAdmin((int)$_GET["s"]);
     if ($oTable->isUserOwner(\NG\User\User::activeUser())){
         return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Settings.html");
     }
-} else if (isset($_GET["t"])){
+} else if (isset($_GET["t"]) && !empty($_GET["t"])){
     $oTable = new Arura\SecureAdmin\SecureAdmin((int)$_GET["t"]);
     if ($oTable->hasUserRight(\NG\User\User::activeUser(), \Arura\SecureAdmin\SecureAdmin::READ)){
-//        $oSmarty->assign("sCrud", (string)$oTable->getCrud());
+        $oSmarty->assign("sCrud", (string)$oTable->getCrud());
         return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Crud.html");
     }
 } else if(\NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION_CREATE) && isset($_GET["c"])) {

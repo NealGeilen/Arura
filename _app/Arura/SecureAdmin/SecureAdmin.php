@@ -14,6 +14,7 @@ class SecureAdmin{
     protected $id;
     protected $name;
     protected $dataFile;
+    protected $dbName;
     protected $owner;
     protected $key;
 
@@ -23,8 +24,12 @@ class SecureAdmin{
 
 
     public function __construct($id){
-        $this->setId($id);
-        $this->db = new \NG\Database();
+        if (self::doesTableExits($id)){
+            $this->setId($id);
+            $this->db = new \NG\Database();
+        } else {
+            throw new \Error();
+        }
     }
 
     public function load($force = false){
@@ -34,8 +39,14 @@ class SecureAdmin{
             $this->key = $aTable["Table_Key"];
             $this->owner = new User($aTable["Table_Owner_User_Id"]);
             $this->setDataFile($aTable["Table_DataFile"]);
+            $this->dbName = $aTable["Table_DB_Name"];
             $this -> isLoaded = true;
         }
+    }
+
+    public static function doesTableExits($iTableId){
+        $db = new \NG\Database();
+        return (count($db->fetchAll("SELECT * FROM tblSecureAdministration WHERE Table_Id = :Table_Id", ["Table_Id" => $iTableId])) > 0 );
     }
 
     public static function getAllTablesForUser(User $oUser){
@@ -61,7 +72,7 @@ class SecureAdmin{
                 "Table_DB_Name" => $sDBTable,
                 "Table_DataFile" => $sFile,
                 "Table_Owner_User_Id" => $Owner->getId(),
-                "Table_Key" => "dawdawdawdawdawd"
+                "Table_Key" => str_random(100)
             ]);
 
             $sQuery = "CREATE TABLE " . $sDBTable . " (";
@@ -151,7 +162,7 @@ class SecureAdmin{
      */
     public function setDataFile($dataFile)
     {
-        $this->dataFile = json_array_decode(file_get_contents(__RESOURCES__ . "SecureAdmin" . DIRECTORY_SEPARATOR . $dataFile));
+        $this->dataFile = json_array_decode(file_get_contents($dataFile));
     }
 
     /**
@@ -185,6 +196,22 @@ class SecureAdmin{
     public function setKey($key)
     {
         $this->key = $key;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDbName()
+    {
+        return $this->dbName;
+    }
+
+    /**
+     * @param mixed $dbName
+     */
+    public function setDbName($dbName)
+    {
+        $this->dbName = $dbName;
     }
 
 }
