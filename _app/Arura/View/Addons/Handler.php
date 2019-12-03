@@ -10,10 +10,10 @@ class Handler{
 
     protected $oDatabase;
 
-    public static $PlgDir;
+//    public static $PlgDir;
 
     public function __construct(){
-        self::$PlgDir = "/_Plugins/" .$_GET['PluginData']['Addon']['Addon_Name'] . '/';
+//        self::$PlgDir = "/_Plugins/" .$_GET['PluginData']['Addon']['Addon_Name'] . '/';
     }
 
     public function addCssFile($sFile){
@@ -39,7 +39,7 @@ class Handler{
                 $_GET['PluginData']['Addon']
             );
         } catch (\Exception $e){
-
+            var_dump($e);
         }
     }
 

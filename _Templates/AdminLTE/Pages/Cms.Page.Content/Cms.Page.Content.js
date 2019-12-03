@@ -42,9 +42,10 @@ var Builder = {
             });
         },
         DefaultBlock:{
-            Content_Size: 2,
+            Content_Size: 6,
             Content_Value: null,
             Content_Type: null,
+            Content_Raster: 12,
             Content_Id: 0,
             Content_Addon_Id : 1
         },
@@ -404,7 +405,7 @@ var Builder = {
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
             this.setArray(oBlock, aBlock);
-
+            console.log(aBlock);
             oBlock
                 .addClass('col-' + aBlock.Content_Size)
                 .attr('block-id', aBlock.Content_Id);
