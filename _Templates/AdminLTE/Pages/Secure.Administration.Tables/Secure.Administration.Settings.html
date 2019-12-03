@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <h2 class="card-title">{$aTable.Table_Name}</h2>
+        <h2 class="card-title">Gebruikers - {$aTable.Table_Name}</h2>
         <div class="card-tools">
             <div class="btn-group">
                 <a class="btn btn-primary" href="/{$aArura.dir}/administration"><i class="fas fa-long-arrow-alt-left"></i></a>
@@ -9,5 +9,57 @@
         </div>
     </div>
     <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Naam gebruiker</th>
+                    <th>Recht</th>
+                    <th><button class="btn btn-primary"><i class="fas fa-plus"></i></button></th>
+                </tr>
+            </thead>
+            <tbody>
+                {foreach from=$aUsers item=user}
+                    <tr>
+                        <td>{$user.User_Username}</td>
+                        <td>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons" user-id="{$user.User_Id}">
+                                <label class="btn btn-secondary {if $user.Share_Permission & 1}active{/if}">
+                                    <input type="checkbox" autocomplete="off" {if $user.Share_Permission & 1}cheked{/if}>Lezen
+                                </label>
+                                <label class="btn btn-secondary {if $user.Share_Permission & 2}active{/if}">
+                                    <input type="checkbox" autocomplete="off" {if $user.Share_Permission & 2}cheked{/if}>Aanmaken
+                                </label>
+                                <label class="btn btn-secondary {if $user.Share_Permission & 4}active{/if}">
+                                    <input type="checkbox" autocomplete="off" {if $user.Share_Permission & 4}cheked{/if}>Aanpassen
+                                </label>
+                                <label class="btn btn-secondary {if $user.Share_Permission & 8}active{/if}">
+                                    <input type="checkbox" autocomplete="off" {if $user.Share_Permission & 8}cheked{/if}>Verwijderen
+                                </label>
+                                <label class="btn btn-secondary {if $user.Share_Permission & 16}active{/if}">
+                                    <input type="checkbox" autocomplete="off" {if $user.Share_Permission & 16}cheked{/if}>Exporteren
+                                </label>
+                                <label class="btn btn-secondary {if $user.Share_Permission & 32}active{/if}">
+                                    <input type="checkbox" autocomplete="off" {if $user.Share_Permission & 32}cheked{/if}>Importeren
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger">
+                                Verwijderen
+                            </button>
+                        </td>
+                    </tr>
+                {/foreach}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Instelling - {$aTable.Table_Name}</h2>
+    </div>
+    <div class="card-body">
+
     </div>
 </div>

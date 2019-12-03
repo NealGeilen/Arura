@@ -10,6 +10,8 @@ class SecureAdmin{
     const CREATE = 2;
     const EDIT = 4;
     const DELETE = 8;
+    const EXPORT = 16;
+    const IMPORT = 32;
 
     protected $id;
     protected $name;
@@ -122,7 +124,39 @@ class SecureAdmin{
         if (empty($this->aUser)){
             return false;
         }
-        return (int)$this->aUser["Share_Permission"] & $iRight == $iRight;
+        return (bool)(((int)$this->aUser["Share_Permission"]) & $iRight);
+    }
+
+    public function getUserShares(){
+        return $this->db->fetchAll("SELECT * FROM tblUsers JOIN tblSecureAdministrationShares ON User_Id = Share_User_Id WHERE Share_Table_Id = :Table_Id",[
+            "Table_Id" => $this->getId()
+        ]);
+    }
+
+    public function shareTable(User $oUser, $iRights = 0){
+        $this->db->createRecord("tblSecureAdministrationShares", [
+            "Share_Permission" => $iRights,
+            "Share_Table_Id" => $this->getId(),
+            "Share_User_Id" => $oUser->getId()
+        ]);
+        return $this->db->isQuerySuccessful();
+    }
+
+    public function removeUserShare(User $oUser){
+        $this->db->query("DELETE FROM tblSecureAdministrationShares WHERE Share_Table_Id = :Table_Id AND Share_User_Id = :User_Id",[
+            "Table_Id" => $this->getId(),
+            "User_Id" => $oUser->getId()
+        ]);
+        return $this->db->isQuerySuccessful();
+    }
+
+    public function setUserRights(User $user, $iRights){
+        $this->db->query("UPDATE tblSecureAdministrationShares SET Share_Permission = :Permission WHERE Share_Table_Id = :Table_Id AND Share_User_Id = :User_Id",[
+            "Permission" => $iRights,
+            "Table_Id" => $this->getId(),
+            "User_Id" => $user->getId()
+        ]);
+        return $this->db->isQuerySuccessful();
     }
 
 

@@ -79,17 +79,18 @@ class Crud extends Database {
 
     private function buildTable(){
         $aData = $this->SelectAll($this->oAdmin->getDbName(), $this->aDataFile["primarykey"]);
+        $this->sHtml .= "<table class='table'>";
+        $this->sHtml .= "<thead><tr>";
+        foreach ($this->aDataFile["columns"] as $Column){
+            $this->sHtml .= "<th>" . $Column['name'] . "</th>";
+        }
+        $this->sHtml .= "<th>";
         if ($this->isActionAllowed(SecureAdmin::CREATE)){
             if ($_GET["action"] !== "create" && $_GET["action"] !== "edit"){
                 $this->sHtml .= "<a class='btn btn-primary' href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=create'><i class=\"fas fa-plus\"></i></a>";
             }
         }
-        $this->sHtml .= "<table class='table'>";
-        $this->sHtml .= "<tr>";
-        foreach ($this->aDataFile["columns"] as $Column){
-            $this->sHtml .= "<th>" . $Column['name'] . "</th>";
-        }
-        $this->sHtml .= "</tr>";
+        $this->sHtml .= "</th></tr></thead><tbody>";
         foreach ($aData as $record){
             $this->sHtml  .= "<tr>";
             foreach ($record as $column){
@@ -99,7 +100,7 @@ class Crud extends Database {
             $this->sHtml  .= "</tr>";
 
         }
-        $this->sHtml  .= "</table>";
+        $this->sHtml  .= "</tbody></table>";
     }
 
     protected function getActionButtons($iRowId = null){

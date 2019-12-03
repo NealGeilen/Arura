@@ -5,6 +5,7 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
     $oTable = new Arura\SecureAdmin\SecureAdmin((int)$_GET["s"]);
     if ($oTable->isUserOwner(\NG\User\User::activeUser())){
         $oSmarty->assign("aTable", $oTable->__toArray());
+        $oSmarty->assign("aUsers", $oTable->getUserShares());
         return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Settings.html");
     }
 } else if (isset($_GET["t"]) && !empty($_GET["t"])){
