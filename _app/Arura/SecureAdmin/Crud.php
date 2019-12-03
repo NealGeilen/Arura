@@ -100,6 +100,9 @@ class Crud extends Database {
             $this->sHtml  .= "</tr>";
 
         }
+        if (count($aData) === 0){
+            $this->sHtml .= "<td colspan='".count($this->aDataFile["columns"])."'><div class='alert alert-secondary'>Er zijn geen gegegevens aanwezig</div></td>";
+        }
         $this->sHtml  .= "</tbody></table>";
     }
 

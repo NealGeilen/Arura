@@ -134,29 +134,38 @@ class SecureAdmin{
     }
 
     public function shareTable(User $oUser, $iRights = 0){
-        $this->db->createRecord("tblSecureAdministrationShares", [
-            "Share_Permission" => $iRights,
-            "Share_Table_Id" => $this->getId(),
-            "Share_User_Id" => $oUser->getId()
-        ]);
-        return $this->db->isQuerySuccessful();
+        if ($this->isUserOwner(User::activeUser())){
+            $this->db->createRecord("tblSecureAdministrationShares", [
+                "Share_Permission" => $iRights,
+                "Share_Table_Id" => $this->getId(),
+                "Share_User_Id" => $oUser->getId()
+            ]);
+            return $this->db->isQuerySuccessful();
+        }
+        return false;
     }
 
     public function removeUserShare(User $oUser){
-        $this->db->query("DELETE FROM tblSecureAdministrationShares WHERE Share_Table_Id = :Table_Id AND Share_User_Id = :User_Id",[
-            "Table_Id" => $this->getId(),
-            "User_Id" => $oUser->getId()
-        ]);
-        return $this->db->isQuerySuccessful();
+        if ($this->isUserOwner(User::activeUser())){
+            $this->db->query("DELETE FROM tblSecureAdministrationShares WHERE Share_Table_Id = :Table_Id AND Share_User_Id = :User_Id",[
+                "Table_Id" => $this->getId(),
+                "User_Id" => $oUser->getId()
+            ]);
+            return $this->db->isQuerySuccessful();
+        }
+        false;
     }
 
     public function setUserRights(User $user, $iRights){
-        $this->db->query("UPDATE tblSecureAdministrationShares SET Share_Permission = :Permission WHERE Share_Table_Id = :Table_Id AND Share_User_Id = :User_Id",[
-            "Permission" => $iRights,
-            "Table_Id" => $this->getId(),
-            "User_Id" => $user->getId()
-        ]);
-        return $this->db->isQuerySuccessful();
+        if ($this->isUserOwner(User::activeUser())){
+            $this->db->query("UPDATE tblSecureAdministrationShares SET Share_Permission = :Permission WHERE Share_Table_Id = :Table_Id AND Share_User_Id = :User_Id",[
+                "Permission" => $iRights,
+                "Table_Id" => $this->getId(),
+                "User_Id" => $user->getId()
+            ]);
+            return $this->db->isQuerySuccessful();
+        }
+        return false;
     }
 
 
