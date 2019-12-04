@@ -19,7 +19,6 @@
     "https://cdn.datatables.net/v/bs4/dt-1.10.18/r-2.2.2/datatables.min.js",
     "https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.5.1/dropzone.js",
     "/dashboard/assets/vendor/bootstrap-notify/bootstrap-notify.js",
-    "http://malsup.github.io/jquery.form.js",
     "/dashboard/assets/js/Modals.js",
     "/dashboard/assets/js/Filemanger.js",
     "/dashboard/assets/js/adminlte.js",

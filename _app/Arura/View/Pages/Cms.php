@@ -3,6 +3,7 @@ namespace Arura\View\Pages;
 
 use NG\Database;
 use NG\Permissions\Restrict;
+use NG\Settings\Application;
 use NG\User\User;
 
 class Cms extends Page{
@@ -141,13 +142,24 @@ class Cms extends Page{
 
     public static function displayView($sUrl){
         $_SERVER["REDIRECT_URL"] = $sUrl;
-        if (self::urlExists($sUrl)){
-            $oPage = self::fromUrl($sUrl);
-            if ($oPage->isVisible() || Restrict::Validation(\Rights::CMS_PAGES)){
-                $oPage->showPage();
-                exit;
+        if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation(\Rights::CMS_PAGES)){
+            if (self::urlExists($sUrl)){
+                $oPage = self::fromUrl($sUrl);
+                if ($oPage->isVisible() || Restrict::Validation(\Rights::CMS_PAGES)){
+                    $oPage->showPage();
+                    exit;
+                }
             }
+        } else {
+            $oPage = new Page();
+            $oPage::$MasterPage = "Launchpage.html";
+            $oPage->setTitle("Home");
+            $oPage->showPage();
+            exit;
+
         }
+
+
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");

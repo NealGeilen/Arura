@@ -13,6 +13,7 @@ class Page{
     public static $pageJsCssFiles;
 
     const TemplatePath =            __ROOT__ . '/Templates/';
+    public static $MasterPage = "index.html";
 
 
     //Page variables
@@ -61,7 +62,7 @@ class Page{
         }
 
 
-        $smarty->display(self::TemplatePath. 'index.html');
+        $smarty->display(self::TemplatePath. self::$MasterPage);
     }
 
     /**
