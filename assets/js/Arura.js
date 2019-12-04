@@ -41,9 +41,9 @@ function LogOutUser(){
 
 function serializeArray(oForm) {
     aList = {};
-    $.each(oForm.find('input, textarea[name]'), function (iKey, oField) {
+    $.each(oForm.find('input, textarea[name], select'), function (iKey, oField) {
         value = $(oField).val();
-        if (value !== ""){
+        if (value !== "" && $(oField).attr('name') !== undefined){
             aList[$(oField).attr('name')] =  value;
         }
     });
@@ -80,7 +80,7 @@ $.fn.FormAjax = function( options = {} ) {
             var settings = $.extend({
                 type: $(this).attr('method'),
                 dataType: 'json',
-                data: $(this).serializeArray(),
+                data: serializeArray($(this)),
                 url : $(this).attr('action'),
                 success: function(){
                     addSuccessMessage('Opgeslagen');
@@ -106,7 +106,9 @@ function validateUser(){
                 Message:"Je sessie is verlopen, je wordt nu uitgelogd",
                 button: []
             });
-            setTimeout(location.replace("/"+ARURA_DIR + '/login'), 90000);
+            setTimeout(function () {
+                location.replace("/"+ARURA_DIR + '/login');
+            }, 2000);
         }
     });
 }

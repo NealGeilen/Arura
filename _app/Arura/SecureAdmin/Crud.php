@@ -101,7 +101,7 @@ class Crud extends Database {
 
         }
         if (count($aData) === 0){
-            $this->sHtml .= "<td colspan='".count($this->aDataFile["columns"])."'><div class='alert alert-secondary'>Er zijn geen gegegevens aanwezig</div></td>";
+            $this->sHtml .= "<td colspan='".count($this->aDataFile["columns"])."'><div class='alert alert-info'>Er zijn geen gegegevens aanwezig</div></td>";
         }
         $this->sHtml  .= "</tbody></table>";
     }
@@ -120,16 +120,17 @@ class Crud extends Database {
 
     protected  function buildInputField($aData = [],$sAction = null){
         $sHtml = "<h2>".(($sAction==="save") ? "Toevoegen" : "Bewerken")."</h2>";
-        $sHtml .= "<form method='post' action='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=".$sAction."' class='form-row'>";
+        $sHtml .= "<form method='post' action='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=".$sAction."' class='form-row bg-secondary p-1 border-4 border-dark rounded'>";
         foreach ($this->aDataFile["columns"] as $tag => $column){
             $value = null;
             if (isset($aData[$tag])){
                 $value = $aData[$tag];
             }
-            $sInputGroup = "<div class='form-group col-md-6'>";
+            $sInputGroup = "<div class='form-group col-xl-3 col-md-3 col-sm-6 col-12'>";
             if (!str_contains("auto_increment",$this->aColumnInfo[$tag]["Extra"])){
+                ;
                 $sInputGroup .= "<label>".$column['name']."</label>";
-                $sInputGroup.= "<input type='".$column["type"]."' name='".$tag."' value='".$value."' class='form-control'/>";
+                $sInputGroup.= "<input type='".$column["type"]."' name='".$tag."' value='".$value."' class='form-control' ".(($sAction = "edit" && $tag === $this->aDataFile["primarykey"]) ? "readonly" : null)."/>";
             } else {
                 $sInputGroup = "<input type='hidden' name='".$tag."' value='".$value."'/>";
             }
@@ -137,7 +138,7 @@ class Crud extends Database {
             $sHtml .= $sInputGroup;
         }
 
-        $sHtml .= "<div class='col-md-12'><div class='btn-group'><input type='submit' class='btn btn-primary' value='Opslaan'><a class='btn btn-secondary' href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."'>Annuleren</a></div></div>";
+        $sHtml .= "<div class='col-md-12'><div class='btn-group'><input type='submit' class='btn btn-success' value='Opslaan'><a class='btn btn-danger' href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."'>Annuleren</a></div></div>";
         $sHtml .= "";
         $sHtml .= "</form>";
         return $sHtml;

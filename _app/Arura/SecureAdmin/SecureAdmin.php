@@ -64,10 +64,16 @@ class SecureAdmin{
 
     public static function getAllTablesForUser(User $oUser){
         $db = new \NG\Database();
-        return $db->fetchAll("SELECT Table_Id, Table_Owner_User_Id, Table_DataFile, Table_Name  FROM tblSecureAdministration LEFT JOIN tblSecureAdministrationShares ON Table_Id = Share_Table_Id WHERE Table_Owner_User_Id = :User_Id OR Share_User_Id = :User_Id",
+        $aTables = [];
+        $aList=  $db->fetchAll("SELECT Table_Id, Table_Owner_User_Id, Table_DataFile, Table_Name, Table_DB_Name FROM tblSecureAdministration LEFT JOIN tblSecureAdministrationShares ON Table_Id = Share_Table_Id WHERE Table_Owner_User_Id = :User_Id OR Share_User_Id = :User_Id",
             [
                 "User_Id" => $oUser->getId()
             ]);
+        foreach ($aList as $aTable){
+            $aTable["ROWCOUNT"] = $db->fetchRow("SELECT COUNT(*) AS ROWCOUNT FROM " . $aTable["Table_DB_Name"])["ROWCOUNT"];
+            $aTables[] = $aTable;
+        }
+        return $aTables;
     }
 
     public static function Create($aTableData, User $Owner){

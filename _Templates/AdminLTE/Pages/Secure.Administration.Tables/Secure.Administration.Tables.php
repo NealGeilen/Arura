@@ -16,9 +16,6 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
 
 
 } else if (isset($_GET["t"]) && !empty($_GET["t"])){
-
-
-
     $oTable = new Arura\SecureAdmin\SecureAdmin((int)$_GET["t"]);
     if ($oTable->hasUserRight(\NG\User\User::activeUser(), \Arura\SecureAdmin\SecureAdmin::READ)){
         $oSmarty->assign("sCrud", (string)$oTable->getCrud());

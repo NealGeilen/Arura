@@ -66,20 +66,27 @@
                 <h2 class="card-title">Instelling - {$aTable.Table_Name}</h2>
             </div>
             <div class="card-body">
-                <form>
+                <form class="form-update-table" method="post" action="/{$aArura.dir}/api/secureadmin.php?type=save-table">
+                    <input value="{$aTable.Table_Id}" type="hidden" name="Table_Id">
                     <div class="form-row">
                         <div class="col-6 form-group">
                             <label>Naam</label>
-                            <input type="text" class="form-control" value="{$aTable.Table_Name}">
+                            <input type="text" class="form-control" value="{$aTable.Table_Name}" name="Table_Name">
                         </div>
                         <div class="col-6 form-group">
                             <label>Eigenaar</label>
-                            <select class="form-control">
-                                <option>Huidige: <bold>{$aUser.User_Username}</bold></option>
+                            <select class="form-control" onclick="warning()" onfocus="warning()" name="Table_Owner_User_Id">
+                                <option value="{$aUser.User_Id}">Huidige: <bold>{$aUser.User_Username}</bold></option>
                                 {foreach from=$aUsers item=$user}
                                 <option value="{$user.User_Id}">{$user.User_Username}</option>
                                 {/foreach}
                             </select>
+                            <div class="alert alert-warning" style="display: none">
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                Als je de eigenaar wijzigt heb je geen toegang meer tot deze gegevens.
+                            </div>
                         </div>
                     </div>
                     <input type="submit" value="Opslaan" class="btn btn-primary">

@@ -89,6 +89,18 @@ $aNavBarPages =
             "Icon" => "fas fa-file",
             "Children" => null
         ],
+        '/administration' => [
+            "Right" =>
+                (
+                \NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION)
+                ),
+            "Title" => "Beveiligde administratie",
+            "FileName" => "Secure.Administration.Tables",
+            "Icon" => "fas fa-shield-alt",
+            "isChild" => false,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
         /**
          * Arura Beheer
          */
@@ -147,18 +159,6 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "Children" => null
         ],
-        '/administration' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION)
-                ),
-            "Title" => "Beveiligde administratie",
-            "FileName" => "Secure.Administration.Tables",
-            "Icon" => "fas fa-shield-alt",
-            "isChild" => false,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
         /*
          * Singel Pages
          */
@@ -187,6 +187,7 @@ $aNavBarPages =
     ];
 if (\NG\User\User::isLogged()){
     $oUser = \NG\User\User::activeUser();
+    $oUser->TriggerEvent();
     $aUser  = $oUser->__toArray();
     $smarty->assign('aUser', $aUser);
     $smarty->assign('aPermissions', $aPermissions);
@@ -216,8 +217,6 @@ try{
         header("Location: /" . __ARURA__DIR_NAME__);
         exit;
     }
-    var_dump($e);
-    exit;
 }
 
 

@@ -21,6 +21,12 @@ $request->sandbox(function ($aData) use ($response){
             $oTable->setUserRights(new \NG\User\User($aData["User_Id"]), $aData["Right"]);
             break;
         case "save-table":
+            $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
+            if ($oTable->isUserOwner(\NG\User\User::activeUser())){
+                $db = new \NG\Database();
+                $db -> updateRecord("tblSecureAdministration", $aData, "Table_Id");
+                $response->exitSuccess($db->isQuerySuccessful());
+            }
             break;
         case "drop-table":
             break;
@@ -32,7 +38,6 @@ $request->sandbox(function ($aData) use ($response){
             }
             break;
     }
-    $response->exitSuccess($aData);
 });
 
 $response->exitScript();

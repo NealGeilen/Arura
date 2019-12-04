@@ -1,3 +1,4 @@
+saveSettings();
 function addUser() {
     oModal = $("#add-user");
     oModal.modal("show");
@@ -15,6 +16,10 @@ function addUser() {
             }
         })
     });
+}
+
+function warning() {
+    $(".form-update-table").find(".alert").show();
 }
 
 function removeUser(iUserId) {
@@ -55,7 +60,11 @@ function updateRights(iUserId) {
 }
 
 function saveSettings() {
-
+    $(".form-update-table").FormAjax({
+        success: function () {
+            location.reload();
+        }
+    });
 }
 
 function dumpDB() {
