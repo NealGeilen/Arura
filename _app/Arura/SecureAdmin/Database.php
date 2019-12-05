@@ -3,18 +3,20 @@ namespace Arura\SecureAdmin;
 class Database extends \NG\Database {
 
     protected $sKey;
+    protected $sPrimaryKey;
 
-    public function __construct($sKey, $host = null, $username = null, $password = null, $database = null)
+    public function __construct($sKey, $sPrimaryKey,$host = null, $username = null, $password = null, $database = null)
     {
         $this->sKey = $sKey;
+        $this->sPrimaryKey = $sPrimaryKey;
         parent::__construct($host, $username, $password, $database);
     }
 
-    public function createRecord($sTable, $aData, $sPrimaryKey)
+    public function createRecord($sTable, $aData)
     {
         $record = [];
         foreach ($aData as $sField => $sValue){
-            if ($sField === $sPrimaryKey){
+            if ($sField === $this->sPrimaryKey){
                 $record[$sField] = $sValue;
             } else {
                 $record[$sField] = $this->encrypt($sValue);
@@ -36,7 +38,7 @@ class Database extends \NG\Database {
         return parent::updateRecord($sTable, $record, $sPrimaryKey);
     }
 
-    public function SelectAll($sTable, $sPrimaryId)
+    public function SelectAll($sTable, $sPrimaryId) : array
     {
         $aData = parent::fetchAll("SELECT * FROM " . $sTable);
         $aList = [];

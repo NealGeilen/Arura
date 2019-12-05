@@ -12,7 +12,7 @@ class Crud extends Database {
     public function __construct($aData, $sKey, SecureAdmin $oAdmin){
         $this->aDataFile = $aData;
         $this->oAdmin = $oAdmin;
-        parent::__construct($sKey);
+        parent::__construct($sKey, $this->aDataFile["primarykey"]);
     }
     private function isActionAllowed($iRight){
         return $this->oAdmin->hasUserRight(User::activeUser(), $iRight);
@@ -32,7 +32,7 @@ class Crud extends Database {
                                 unset($_POST[$sName]);
                             }
                         }
-                        $this->createRecord($this->oAdmin->getDbName(), $_POST, $this->aDataFile["primarykey"]);
+                        $this->createRecord($this->oAdmin->getDbName(), $_POST);
                         header('Location:' . $_SERVER["REDIRECT_URL"] . "?t=" . $this->oAdmin->getId());
                     }
                     break;
@@ -93,8 +93,16 @@ class Crud extends Database {
         $this->sHtml .= "</th></tr></thead><tbody>";
         foreach ($aData as $record){
             $this->sHtml  .= "<tr>";
-            foreach ($record as $column){
-                $this->sHtml  .= "<td>" . $column . "</td>";;
+            foreach ($record as $tag => $column){
+                switch ($this->aDataFile["columns"][$tag]["type"]){
+                    case "dropdown":
+                        $this->sHtml  .= "<td>" . $this->aDataFile["columns"][$tag]["options"][$column] . "</td>";
+                        break;
+                    default:
+                        $this->sHtml  .= "<td>" . $column . "</td>";
+                        break;
+
+                }
             }
             $this->sHtml .= "<td>".$this->getActionButtons($record[$this->aDataFile["primarykey"]])."</td>";
             $this->sHtml  .= "</tr>";
@@ -128,9 +136,23 @@ class Crud extends Database {
             }
             $sInputGroup = "<div class='form-group col-xl-3 col-md-3 col-sm-6 col-12'>";
             if (!str_contains("auto_increment",$this->aColumnInfo[$tag]["Extra"])){
-                ;
                 $sInputGroup .= "<label>".$column['name']."</label>";
-                $sInputGroup.= "<input type='".$column["type"]."' name='".$tag."' value='".$value."' class='form-control' ".(($sAction = "edit" && $tag === $this->aDataFile["primarykey"]) ? "readonly" : null)."/>";
+                switch ($column["type"]){
+                    case "dropdown":
+                        $sInputGroup .= "<select class='form-control' value='".$value."' name='".$tag."'>";
+                        if (isset($column["options"])){
+                            foreach ($column["options"] as $i => $x){
+                                $sInputGroup .= "<option value='".$i."'>" . $x . "</option>";
+                            }
+                        }
+                        $sInputGroup .= "</select>";
+                        break;
+                    default:
+                        $sInputGroup.= "<input type='".$column["type"]."' name='".$tag."' value='".$value."' class='form-control' ".(($sAction === "update" && $tag === $this->aDataFile["primarykey"]) ? "readonly" : null)."/>";
+                        break;
+                }
+                ;
+
             } else {
                 $sInputGroup = "<input type='hidden' name='".$tag."' value='".$value."'/>";
             }

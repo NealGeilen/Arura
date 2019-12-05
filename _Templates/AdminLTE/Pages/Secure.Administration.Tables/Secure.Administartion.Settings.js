@@ -6,7 +6,7 @@ function addUser() {
         $.ajax({
             type: 'post',
             dataType: 'json',
-            url : ARURA_API_DIR+'secureadmin.php?type=add-user',
+            url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=add-user',
             data: ({
                 User_Id : oModal.find("select").val(),
                 Table_Id : oModal.find("select").attr("table-id")
@@ -23,16 +23,22 @@ function warning() {
 }
 
 function removeUser(iUserId) {
-    $.ajax({
-        type: 'post',
-        dataType: 'json',
-        url : ARURA_API_DIR+'secureadmin.php?type=remove-user',
-        data: ({
-            User_Id : iUserId,
-            Table_Id : _TABLE_ID
-        }),
-        success: function () {
-            location.reload();
+    Modals.Warning({
+        Title: "Gebruiker verwijderen",
+        Message: "Weet je zeker dat je deze gebruiker wilt verwijderen",
+        onConfirm: function () {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=remove-user',
+                data: ({
+                    User_Id : iUserId,
+                    Table_Id : _TABLE_ID
+                }),
+                success: function () {
+                    location.reload();
+                }
+            })
         }
     })
 }
@@ -46,7 +52,7 @@ function updateRights(iUserId) {
         $.ajax({
             type: 'post',
             dataType: 'json',
-            url : ARURA_API_DIR+'secureadmin.php?type=set-right-user',
+            url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=set-right-user',
             data: ({
                 User_Id : iUserId,
                 Table_Id : _TABLE_ID,
@@ -66,7 +72,41 @@ function saveSettings() {
         }
     });
 }
-
+function Export() {
+    Modals.Warning({
+        Title: "Export",
+        Message: "Weet je zeker dat je deze administartie wilt exporteren?",
+        onConfirm: function () {
+            window.open(WEB_URL + ARURA_API_DIR + "secureadmin/export.php?type=export&Table_Id="+_TABLE_ID);
+        }
+    })
+}
 function dumpDB() {
-
+    Modals.Warning({
+        Title: "Verwijderen administartie",
+        Message: "Weet je zeker dat je deze administartie wilt verwijderen??",
+        onConfirm: function () {
+            $.ajax({
+                type: 'post',
+                dataType: 'json',
+                url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=drop-table',
+                data: ({
+                    Table_Id : _TABLE_ID,
+                }),
+                success: function () {
+                    Modals.Success({
+                        Title: "Verwijderd",
+                        Message : "Administartie succesvol verwijdert",
+                        Buttons: [Modals.Buttons.confirm],
+                        onConfirm: function () {
+                            location.reload();
+                        }
+                    })
+                },
+                error : function () {
+                    addErrorMessage("Niet kunnen verwijderen")
+                }
+            })
+        }
+    })
 }

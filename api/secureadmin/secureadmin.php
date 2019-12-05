@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../_app/autoload.php';
+require_once __DIR__ . '/../../_app/autoload.php';
 $response = new \NG\Client\ResponseHandler();
 $request = new \NG\Client\RequestHandler();
 $response->isDebug(true);
@@ -29,6 +29,10 @@ $request->sandbox(function ($aData) use ($response){
             }
             break;
         case "drop-table":
+            $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
+            if (!$oTable->Drop()){
+                throw new Error();
+            }
             break;
         default:
             foreach ($_FILES as $file){

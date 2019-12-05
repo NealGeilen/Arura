@@ -1,6 +1,6 @@
 {
   "primarykey": "Page_Id",
-  "table": "tblCmsPages",
+  "table": "Test",
   "columns": {
       "Page_Id": {
         "name": "Titel",
@@ -8,7 +8,12 @@
       },
       "Page_Title": {
           "name": "Titel",
-          "type": "text"
+          "type": "dropdown",
+          "options" : {
+              "ja" : "Ja",
+              "nee" : "Nee",
+              "NVT" : "N.v.t."
+          }
       },
       "Page_Url": {
         "name": "Url",

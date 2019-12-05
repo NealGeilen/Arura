@@ -43,9 +43,6 @@
                                 <label onclick="updateRights({$user.User_Id})" class="btn btn-secondary {if $user.Share_Permission & 16}active{/if}">
                                     <input type="checkbox" value="16" autocomplete="off" {if $user.Share_Permission & 16}checked{/if}>Exporteren
                                 </label>
-                                <label onclick="updateRights({$user.User_Id})" class="btn btn-secondary {if $user.Share_Permission & 32}active{/if}">
-                                    <input type="checkbox" value="32" autocomplete="off" {if $user.Share_Permission & 32}checked{/if}>Importeren
-                                </label>
                             </div>
                         </td>
                         <td>
@@ -66,7 +63,7 @@
                 <h2 class="card-title">Instelling - {$aTable.Table_Name}</h2>
             </div>
             <div class="card-body">
-                <form class="form-update-table" method="post" action="/{$aArura.dir}/api/secureadmin.php?type=save-table">
+                <form class="form-update-table" method="post" action="/{$aArura.dir}/api/secureadmin/secureadmin.php?type=save-table">
                     <input value="{$aTable.Table_Id}" type="hidden" name="Table_Id">
                     <div class="form-row">
                         <div class="col-6 form-group">
@@ -106,7 +103,7 @@
                     </button>
                     <span>Wanneer je de database verwijdert gaat alle data verloren!!</span>
                 </div>
-                <button class="btn btn-danger">Verwijder {$aTable.Table_Name}</button>
+                <button class="btn btn-danger" onclick="dumpDB()">Verwijder {$aTable.Table_Name}</button>
             </div>
         </div>
     </div>

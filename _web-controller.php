@@ -217,6 +217,8 @@ try{
         header("Location: /" . __ARURA__DIR_NAME__);
         exit;
     }
+    var_dump($e);
+    exit;
 }
 
 

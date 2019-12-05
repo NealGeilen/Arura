@@ -6,12 +6,12 @@ use NG\User\User;
 
 class SecureAdmin{
 
+
     const READ = 1;
     const CREATE = 2;
     const EDIT = 4;
     const DELETE = 8;
     const EXPORT = 16;
-    const IMPORT = 32;
 
     protected $id;
     protected $name;
@@ -50,9 +50,9 @@ class SecureAdmin{
         $this->load();
         return [
             "Table_Id" => $this->id,
-          "Table_Name" => $this->name,
-          "Table_Key" => $this->key,
-          "Table_Owner_User_Id" => $this->getOwner()->getId(),
+            "Table_Name" => $this->name,
+            "Table_Key" => $this->key,
+            "Table_Owner_User_Id" => $this->getOwner()->getId(),
             "Table_DB_Name" => $this->dbName
         ];
     }
@@ -173,6 +173,61 @@ class SecureAdmin{
         }
         return false;
     }
+    public function Drop(){
+        if ($this->isUserOwner(User::activeUser())){
+            if (unlink($this->db->fetchRow("SELECT Table_DataFile FROM tblSecureAdministration WHERE Table_Id = :Table_Id", ["Table_Id" => $this->getId()])["Table_DataFile"])){
+                $this->db->query("DELETE FROM tblSecureAdministration WHERE Table_Id = :Table_Id", ["Table_Id"=> $this->getId()]);
+                if ($this->db->isQuerySuccessful()){
+                    $this->db->query("DELETE FROM tblSecureAdministrationShares WHERE Share_Table_Id = :Table_Id", ["Table_Id" => $this->getId()]);
+                    if ($this->db->isQuerySuccessful()){
+                        $this -> db -> query("DROP TABLE " . $this->getDbName());
+                        return $this->db->isQuerySuccessful();
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+
+    public function Export(){
+        if ($this->hasUserRight(User::activeUser(), self::EXPORT)){
+            function download_send_headers($filename) {
+                // disable caching
+                $now = gmdate("D, d M Y H:i:s");
+                header("Expires: Tue, 03 Jul 2001 06:00:00 GMT");
+                header("Cache-Control: max-age=0, no-cache, must-revalidate, proxy-revalidate");
+                header("Last-Modified: {$now} GMT");
+
+                // force download
+                header("Content-Type: application/force-download");
+                header("Content-Type: application/octet-stream");
+                header("Content-Type: application/download");
+
+                // disposition / encoding on response body
+                header("Content-Disposition: attachment;filename={$filename}");
+                header("Content-Transfer-Encoding: binary");
+            }
+            function array2csv($array)
+            {
+                if (count($array) == 0) {
+                    return null;
+                }
+                ob_start();
+                $df = fopen("php://output", 'w');
+                fputcsv($df, array_keys(reset($array)));
+                foreach ($array as $row) {
+                    fputcsv($df, $row);
+                }
+                fclose($df);
+                return ob_get_clean();
+            }
+            $db = new Database($this->getKey(), $this->getDataFile()["primarykey"]);
+            download_send_headers($this->getName(). "_" . date("Y-m-d") . ".csv");
+            echo array2csv($db->SelectAll($this->getDbName(), $this->getDataFile()["primarykey"]));
+            die();
+        }
+    }
 
 
     /**
@@ -247,6 +302,7 @@ class SecureAdmin{
      */
     public function getKey()
     {
+        $this->load();
         return $this->key;
     }
 

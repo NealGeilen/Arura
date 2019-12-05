@@ -22,10 +22,10 @@
             {foreach from=$aTables key=$iKey item=aTable}
             <tr>
                 <td>{$aTable.Table_Name}</td>
-                <td>{if $aTable.Table_Owner_User_Id === $aUser.User_Id}Eigenaar{else}Gebruiker{/if}</td>
+                <td>{if $aTable.Table_Owner_User_Id == $aUser.User_Id}Eigenaar{else}Gebruiker{/if}</td>
                 <td>
                     <div class="btn-group text-white">
-                        {if $aTable.Table_Owner_User_Id === $aUser.User_Id}<a class="btn btn-primary" href="/{$aArura.dir}/administration?s={$aTable.Table_Id}"><i class="fas fa-cogs"></i></a>{/if}
+                        {if $aTable.Table_Owner_User_Id == $aUser.User_Id}<a class="btn btn-primary" href="/{$aArura.dir}/administration?s={$aTable.Table_Id}"><i class="fas fa-cogs"></i></a>{/if}
                         <a class="btn btn-secondary" href="/{$aArura.dir}/administration?t={$aTable.Table_Id}"><i class="fas fa-pen"></i></a>
                     </div>
                 </td>
