@@ -657,7 +657,6 @@ var TinyMce = {
             target: oElement[0],
             themes: "modern",
             inline: true,
-
             toolbar: 'bold italic | forecolor backcolor |styleselect | table link unlink | bullist numlist | blockquote codesample' ,
             contextmenu: "code undo redo codesample removeformat",
             menubar: false,

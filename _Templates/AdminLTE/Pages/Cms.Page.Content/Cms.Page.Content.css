@@ -145,7 +145,10 @@ Active group
     z-index: 2200;
 }
 img.Block-Item-Field{
-    /*min-height: 40px;*/
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
 }
 img.Block-Item-Field:after{
     font-family: "Font Awesome 5 Free";
