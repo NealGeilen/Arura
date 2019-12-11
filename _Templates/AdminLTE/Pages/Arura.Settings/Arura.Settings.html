@@ -27,6 +27,12 @@
                                required
                                {/if}
                         >
+                        {elseif $aSetting.Setting_Type === "checkbox"}
+                        <input type="checkbox" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" {if $aSetting.Setting_Value}checked{/if}
+                               {if $aSetting.Setting_Required}
+                               required
+                               {/if}
+                        >
                         {else}
                         <input type="{$aSetting.Setting_Type}" class="form-control" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value}"
                                {if $aSetting.Setting_Required}

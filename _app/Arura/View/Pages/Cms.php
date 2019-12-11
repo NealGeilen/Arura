@@ -59,7 +59,7 @@ class Cms extends Page{
     protected function getGroups(){
         $this->load();
         $aOutcome = [];
-        $aGroups = $this->db->fetchAll('SELECT * FROM tblCmsGroups WHERE Group_Page_Id = ? ORDER BY Group_Position',
+        $aGroups = $this->db->fetchAll('SELECT * FROM tblCmsGroups WHERE Group_Page_Id = ? AND Group_Position >= 0   ORDER BY Group_Position',
             [
                 $this->Id
             ]);
@@ -72,7 +72,7 @@ class Cms extends Page{
 
     protected function getContentBlocks($iGroupId){
         $this->load();
-        $aData = $this->db->fetchAll('SELECT * FROM tblCmsContentBlocks WHERE Content_Group_Id = ? ORDER BY Content_Position',
+        $aData = $this->db->fetchAll('SELECT * FROM tblCmsContentBlocks WHERE Content_Group_Id = ? AND Content_Position >= 0 ORDER BY Content_Position',
             [
                 $iGroupId
             ]);
@@ -124,12 +124,14 @@ class Cms extends Page{
                                 break;
                         }
                     }
-                    $aBlocks[(int)$aContentBlock['Content_Position']] = $aContentBlock;
-
+                    if (!empty($aContentBlock["Template"])){
+                        $aBlocks[(int)$aContentBlock['Content_Position']] = $aContentBlock;
+                    }
                 }
-                $aGroup['Content_Blocks'] = $aBlocks;
-
-                $this->PageContend[(int)$aGroup['Group_Position']] = $aGroup;
+                if (!empty($aBlocks)){
+                    $aGroup['Content_Blocks'] = $aBlocks;
+                    $this->PageContend[(int)$aGroup['Group_Position']] = $aGroup;
+                }
 
             }
         }
@@ -143,12 +145,20 @@ class Cms extends Page{
     public static function displayView($sUrl){
         $_SERVER["REDIRECT_URL"] = $sUrl;
         if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation(\Rights::CMS_PAGES)){
-            if (self::urlExists($sUrl)){
-                $oPage = self::fromUrl($sUrl);
-                if ($oPage->isVisible() || Restrict::Validation(\Rights::CMS_PAGES)){
-                    $oPage->showPage();
-                    exit;
+            if (!Application::get("website", "maintenance") || Restrict::Validation(\Rights::CMS_PAGES)){
+                if (self::urlExists($sUrl)){
+                    $oPage = self::fromUrl($sUrl);
+                    if ($oPage->isVisible() || Restrict::Validation(\Rights::CMS_PAGES)){
+                        $oPage->showPage();
+                        exit;
+                    }
                 }
+            } else {
+                $oPage = new Page();
+                $oPage->setPageContend("<section><h1 class='text-center'>Website is op het moment in onderhoud, Probeer later opnieuw!</h1></section>");
+                $oPage->setTitle("Onderhoud");
+                $oPage->showPage();
+                exit;
             }
         } else {
             $oPage = new Page();
@@ -158,8 +168,6 @@ class Cms extends Page{
             exit;
 
         }
-
-
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");

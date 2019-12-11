@@ -6,6 +6,7 @@ $request = new \NG\Client\RequestHandler();
 $request->TriggerEvent();
 $request->setRequestMethod('POST');
 $request->setRight(Rights::ARURA_SETTINGS);
+$response->isDebug(true);
 $request->sandbox(function ($aData) use ($response){
 
     $db = new \NG\Database();
