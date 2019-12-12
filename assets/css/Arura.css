@@ -119,11 +119,11 @@ Templates
     top: calc(3.5rem + 1px);
 }
 .page-toolbar.active{
-    /*min-width: 300px;*/
+    min-width: 300px;
     border-radius: unset;
     position: fixed;
     top: 0;
     padding: 10px;
-    z-index: 200;
+    z-index: 1200;
     background: rgba(0,0,0,0.6);
 }

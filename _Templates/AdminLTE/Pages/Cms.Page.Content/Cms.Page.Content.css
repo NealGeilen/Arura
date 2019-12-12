@@ -30,7 +30,7 @@
     z-index: 1000;
 }
 .Block-Item{
-    background: lightgrey;
+    /*background: lightgrey;*/
     position: relative;
     padding: unset;
 }
@@ -39,6 +39,7 @@
     position: relative;
     padding: 16px;
     width: 100%;
+    background: lightgrey;
 }
 .Block-Item.active .Block-Item-Content{
     background: gray;
@@ -175,4 +176,7 @@ img.Block-Item-Field:after{
 }
 .ContentType-Selector{
     cursor: move;
+}
+.tox.tox-tinymce.tox-tinymce-inline{
+    z-index: 1100!important;
 }

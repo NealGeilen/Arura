@@ -114,23 +114,22 @@ function validateUser(){
 }
 
 
-var ControlSidebarPosition = $('.control-sidebar').offset();
+var ControlSidebar = $('.control-sidebar');
 var Toolbar = $('.page-toolbar');
-var ToolbarWidth = $('.page-toolbar').parents(".card").width();
 $(window).scroll(function(){
-    if (ControlSidebarPosition.length !== 0){
-        if($(window).scrollTop() > ControlSidebarPosition.top){
-            $('.control-sidebar').css('position','fixed').css('top','0').css("height", "100%");
+    if (ControlSidebar.length !== 0){
+        if($(window).scrollTop() > 40){
+            ControlSidebar.css('top','0').css("height", "100%");
         } else {
-            $('.control-sidebar').attr("style", null);
+            ControlSidebar.attr("style", null);
         }
     }
     if (Toolbar.length !== 0){
         if($(window).scrollTop() > Toolbar.offset().top){
-            $('.page-toolbar').addClass("active").css("width", ToolbarWidth);
+            var ToolbarWidth = Toolbar.parents(".card").find(".card-body").innerWidth();
+            Toolbar.addClass("active").css("width", ToolbarWidth);
         } else if($(window).scrollTop() < 100){
-            console.log("Deactive");
-            $('.page-toolbar').attr("style", null).removeClass("active");
+            Toolbar.attr("style", null).removeClass("active");
         }
     }
 });

@@ -115,7 +115,9 @@ class Cms extends Page{
                             case 'Picture':
                                 $aContentBlock['Template'] = "<img src='/files/" . $aContentBlock['Content_Value']."'>";
                                 break;
-
+                            case "Iframe":
+                                $aContentBlock['Template'] = "<iframe style='height: 100%; width: 100%' src='".$aContentBlock['Content_Value']."'></iframe>";
+                                break;
                             case 'widget':
                                 $_GET['PluginData'] = ['Addon' => $aAddon,'Content' => $aContentBlock['Content_Value'], 'Smarty' => self::$smarty];
                                 self::$smarty->assign('aContentBlock', $aContentBlock);

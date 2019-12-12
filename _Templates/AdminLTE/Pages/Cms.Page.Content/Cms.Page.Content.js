@@ -4,6 +4,7 @@ var sSelectors = {
     Group_Control : '.CMS-Group-Control',
     Group_Content : '.CMS-Group-Content',
     Block_Item: '.Block-Item',
+    Block_Item_Content: '.Block-Item-Content',
     Content_Type_Selector: '.ContentType-Selector',
 };
 var Addons = {};
@@ -137,6 +138,18 @@ var Builder = {
                 value: function (oInput) {
                     return oInput.val();
                 }
+            },
+            Iframe: {
+                oTemplate: $('<input placeholder="Webpagina url">').addClass('form-control'),
+                init: function (sValue) {
+                    sValue = (sValue === null) ? '' : sValue;
+                    oInput = this.oTemplate.clone();
+                    oInput.attr('type', 'text').val(sValue);
+                    return oInput;
+                },
+                value: function (oInput) {
+                    return oInput.val();
+                }
             }
         },
         Addons:{
@@ -183,9 +196,6 @@ var Builder = {
                     return 1;
                 }
             },
-            plugin:{
-
-            }
         }
     },
     Structure: {
@@ -412,6 +422,7 @@ var Builder = {
             this.Events(oBlock);
             oField = Builder.Item.Build(aBlock);
             oBlock.find('.Block-Item-Content').append(oField);
+            oBlock.attr("style", null);
             return oBlock;
         },
         Delete: function(oElement){
@@ -433,12 +444,12 @@ var Builder = {
                 success: function (returned) {
                    Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
                    oElement.attr('block-id', returned.data.Content_Id);
-                   oElement.css('display', 'block');
+                   oElement.attr("style", null);
                 }
             });
         },
         Events: function(oElement = null){
-            Selector = (oElement === null) ? $(sSelectors.Block_Item) : oElement;
+            Selector = (oElement === null) ? $(sSelectors.Block_Item_Content) : oElement;
             this.Resizable.resizable(Selector);
             Selector.on('click', function () {
                 Builder.Block.State.Activate($(this));
@@ -461,7 +472,6 @@ var Builder = {
         getValue:function(oBlock){
             var value;
             aBlock = this.getData(oBlock);
-            console.log(aBlock.Content_Type);
             switch(aBlock.Content_Type){
                 case 'widget':
                 case 'custom':
@@ -476,19 +486,17 @@ var Builder = {
     },
     Item:{
         Build: function (aBlock) {
-            console.log(aBlock);
             var oItem;
             switch(aBlock.Content_Type){
                 case 'widget':
-                case 'plugin':
                 case 'custom':
                     oItem = Builder.ContentTypes.Addons[aBlock.Content_Type].init(aBlock);
                     break;
                 default:
-                    console.log(aBlock.Content_Type);
                     oItem = Builder.ContentTypes.Types[aBlock.Content_Type].init(aBlock.Content_Value).addClass('Block-Item-Field');
                     break;
             }
+            console.log(oItem);
             return oItem;
         }
     }
@@ -635,27 +643,12 @@ var Sidebar = {
 };
 var TinyMce = {
     Count : 0,
-    SetHeader: function(oElement){
-        oElement.attr('id', 'tinymce_' + this.Count);
-        tinymce.init({
-            // language : "nl",
-            target: oElement[0],
-            themes: "modern",
-            inline: true,
-            // toolbar: "undo redo | align | bold italic underline",
-            statusbar: false,
-            menubar: false,
-            theme_advanced_resizing : true,
-            theme_advanced_resize_horizontal : false
-        });
-        ++this.Count;
-    },
     SetText: function (oElement) {
         oElement.attr('id', 'tinymce_' + this.Count);
         tinymce.init({
             language : "nl",
             target: oElement[0],
-            themes: "modern",
+            // themes: "modern",
             inline: true,
             toolbar: 'bold italic | forecolor backcolor |styleselect | table link unlink | bullist numlist | blockquote codesample' ,
             contextmenu: "code undo redo codesample removeformat",
@@ -681,7 +674,11 @@ var TinyMce = {
 $(document).ready(function () {
    Builder.Structure.set();
    $(document).on('click', function (e) {
-       if ($(e.target).parents(sSelectors.Group).length < 1 && !$(e.target).hasClass('CMS-Group') && $(e.target).parents('.control-sidebar').length < 1){
+       console.log($(e.target).parents(".FileManger-Three").length);
+       if ($(e.target).parents(sSelectors.Group).length < 1
+           && !$(e.target).hasClass('CMS-Group')
+           && $(e.target).parents('.control-sidebar').length < 1
+       ){
            Builder.Group.State.Deactivate();
        }
        if (
@@ -690,6 +687,8 @@ $(document).ready(function () {
            && $(e.target).parents('.control-sidebar').length < 1
            && !$(e.target).hasClass('btn')
            && $(e.target).parent('.btn').length < 1
+           && $(e.target).parents(".modal-dialog").length === 0
+           && $(e.target).parents(".FileManger-Three").length === 0
        ){
            Builder.Block.State.Deactivate();
        }
