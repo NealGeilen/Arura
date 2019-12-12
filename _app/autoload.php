@@ -23,4 +23,4 @@ require_once __WEB__ROOT__ . "/_config.php";
 require_once __VENDOR__ . "autoload.php";
 require_once __APP__    . "Rights.php";
 \NG\Sessions::Start();
-session_set_cookie_params(180, "/", "");
+session_set_cookie_params(0, "/", "");
