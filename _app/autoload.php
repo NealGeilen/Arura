@@ -22,5 +22,5 @@ define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/
 require_once __WEB__ROOT__ . "/_config.php";
 require_once __VENDOR__ . "autoload.php";
 require_once __APP__    . "Rights.php";
-session_set_cookie_params(1800000, "/", \NG\Settings\Application::get("website", "url"));
 \NG\Sessions::Start();
+session_set_cookie_params(180, "/", "");
