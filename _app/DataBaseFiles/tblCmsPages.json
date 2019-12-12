@@ -1,11 +1,1 @@
-{
-  "columns": {
-    "Page_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
-    "Page_Title" : "VARCHAR(255) NOT NULL",
-    "Page_Url" : "TEXT NOT NULL",
-    "Page_Visible" : "TINYINT(1) NULL DEFAULT '0'",
-    "Page_Description" : "TEXT NULL"
-  },
-  "data": [
-  ]
-}
+{"columns":{"Page_Id":{"Type":"int(11)","Null":"NO","Key":"PRI","Default":null,"Extra":"auto_increment"},"Page_Title":{"Type":"varchar(255)","Null":"YES","Key":"","Default":null,"Extra":""},"Page_Url":{"Type":"text","Null":"YES","Key":"","Default":null,"Extra":""},"Page_Visible":{"Type":"tinyint(1)","Null":"YES","Key":"","Default":"0","Extra":""},"Page_Description":{"Type":"text","Null":"YES","Key":"","Default":null,"Extra":""}}}

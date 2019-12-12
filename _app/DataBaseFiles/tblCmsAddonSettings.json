@@ -1,11 +1,1 @@
-{
-  "columns": {
-    "AddonSetting_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
-    "AddonSetting_Addon_Id" : "INT(11) NOT NULL",
-    "AddonSetting_Type" : "VARCHAR(255) NOT NULL",
-    "AddonSetting_Position" : "INT(11) NOT NULL",
-    "AddonSetting_Tag" : "VARCHAR(255) NOT NULL"
-  },
-  "data": [
-  ]
-}
+{"columns":{"AddonSetting_Id":{"Type":"int(11)","Null":"NO","Key":"PRI","Default":null,"Extra":"auto_increment"},"AddonSetting_Addon_Id":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""},"AddonSetting_Type":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""},"AddonSetting_Position":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""},"AddonSetting_Tag":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""}}}

@@ -1,19 +1,46 @@
 {
   "columns": {
-    "User_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
-    "User_Username" : "VARCHAR(255) NOT NULL",
-    "User_Firstname" : "VARCHAR(255) NOT NULL",
-    "User_Lastname" : "VARCHAR(255) NOT NULL",
-    "User_Email" : "VARCHAR(255) NOT NULL",
-    "User_Password" : "VARCHAR(255) NOT NULL"
-  },
-  "data": [
-    {
-      "User_Username" : "Neal",
-      "User_Firstname" : "Neal",
-      "User_Lastname" : "Geilen",
-      "User_Email" : "nealgeilen@gmail.com",
-      "User_Password" : "$2y$10$Xd06wpoKrAyIbcOwhTAj9OJiv8YJnDLSFtN76yf0APPG9StTAPrf6"
+    "User_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": null,
+      "Extra": "auto_increment"
+    },
+    "User_Username": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "User_Firstname": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "User_Lastname": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "User_Email": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "User_Password": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
     }
-  ]
+  }
 }

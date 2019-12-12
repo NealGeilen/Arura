@@ -1,8 +1,1 @@
-{
-  "columns": {
-    "Role_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
-    "Role_Name" : "VARCHAR(255) NOT NULL"
-  },
-  "data": [
-  ]
-}
+{"columns":{"Role_Id":{"Type":"int(11)","Null":"NO","Key":"PRI","Default":null,"Extra":"auto_increment"},"Role_Name":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""}}}

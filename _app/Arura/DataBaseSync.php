@@ -22,7 +22,6 @@ class DataBaseSync{
             foreach (scandir($this->sDataFilesDir) as $sFile){
                 $sPath = $this->sDataFilesDir . DIRECTORY_SEPARATOR . $sFile;
                 if (pathinfo($sPath, PATHINFO_EXTENSION) === "json"){
-                    var_dump(basename($sPath));
                     $this->aTables[pathinfo($sPath, PATHINFO_FILENAME)] = json_array_decode(file_get_contents($sPath));
                 }
             }
@@ -31,20 +30,47 @@ class DataBaseSync{
 
     public function Reload(){
         foreach ($this->aTables as $sTable => $aData){
-            if ($this -> db -> fetchRow("SHOW TABLES LIKE '" .$sTable."'")){
+            if (count($this -> db -> fetchall("SHOW TABLES LIKE '" .$sTable."'")) > 0){
+                //Table exits
+                foreach ($aData["columns"] as $sColumn => $aSQL){
+                    $aColumn = $this->getColumn($sColumn, $sTable);
+                    if (!empty($aColumn)){
+                        $b["Field"] = $sColumn;
+                        $b = array_merge($b, $this->aTables[$sTable]["columns"][$sColumn]);
+                        if ($aColumn !== $b){
+                            //Column needs changing;
+                            $this->alterColumn($sTable,$sColumn,$this->aTables[$sTable]["columns"][$sColumn]);
+                        }
+                    } else {
+                        $this->addColumn($sTable, $sColumn,$aSQL);
+                    }
+                }
+                //Check for columns in databse what are not needed. when found drop these columns
+                foreach ($this->getAllColumns($sTable) as $column){
+                    if (!isset($this->aTables[$sTable]["columns"][$column["Field"]])){
+                        $this->dropColumn($sTable, $column["Field"]);
+                    }
+                }
                 $this->fillData($sTable);
             } else {
+                //Create Table
                 $this->createTable($sTable);
             }
         }
-
-
+        //Drop Tables if they dont have a file, When found drop table
+        foreach ($this->getAllTables() as $sTable){
+            if (!isset($this->aTables[$sTable]) && substr( $sTable, 0, 3 ) !== "SA_" ){
+                $this->dropTable($sTable);
+            }
+        }
     }
 
     private function fillData($sTableName){
-        foreach ($this->aTables[$sTableName]["data"] as $aData){
-            if (!$this->doesRecordExits($sTableName, $aData)){
-                $this->db->createRecord($sTableName, $aData);
+        if (isset($this->aTables[$sTableName]["data"])){
+            foreach ($this->aTables[$sTableName]["data"] as $aData){
+                if (!$this->doesRecordExits($sTableName, $aData)){
+                    $this->db->createRecord($sTableName, $aData);
+                }
             }
         }
     }
@@ -52,17 +78,13 @@ class DataBaseSync{
     private function createTable($sTableName){
         $aTable = $this->aTables[$sTableName];
         $sQuery = "CREATE TABLE " . $sTableName . " (";
-        foreach ($aTable["columns"] as $sColumnName => $sColumnsData){
-            $sQuery .= $this->formatColumn($sColumnName,$sColumnsData) . ", ";
+        foreach ($aTable["columns"] as $sColumnName => $aColumnData){
+            $sQuery .= $sColumnName . " " . $this->ColDataToStr($aColumnData) . ", ";
         }
         $sQuery = trim($sQuery,", ");
         $sQuery .= ")";
         $this->db->query($sQuery);
         $this->fillData($sTableName);
-    }
-
-    private function formatColumn($sColumnName,$sColumnsData){
-        return $sColumnName ." ". $sColumnsData;
     }
 
     private function doesRecordExits($sTableName, $aRecord){
@@ -72,6 +94,62 @@ class DataBaseSync{
         }
         $sQuery = trim($sQuery,"AND ");
         return (count($this->db->fetchAll($sQuery)) !== 0 );
+    }
+
+    private function getColumn($sColumn, $sTable){
+        return $this->db->fetchRow("SHOW COLUMNS FROM `".$sTable."` LIKE '".$sColumn."'");
+    }
+
+    private function getAllColumns($sTable){
+        return $this->db->fetchAll("SHOW COLUMNS FROM `".$sTable."`");
+    }
+
+    private function getAllTables(){
+        return $this -> db -> fetchAllColumn("SHOW TABLES");
+    }
+
+
+    private function addColumn($sTable, $sName, $aData){
+        $sSQL = "ALTER TABLE " . $sTable . " ADD " . $sName . " " . $this->ColDataToStr($aData);
+        $this->db->query($sSQL);
+    }
+
+    private function alterColumn($sTable, $sName, $aData){
+        $sSQL = "ALTER TABLE " . $sTable . " MODIFY COLUMN " . $sName . " " . $this->ColDataToStr($aData);
+        $this->db->query($sSQL);
+    }
+
+    private function dropColumn($sTable, $sColumn){
+        $this->db->query("ALTER TABLE ".$sTable." DROP COLUMN " . $sColumn);
+    }
+
+    private function dropTable($sTable){
+        $this->db->query("DROP TABLE ".$sTable);
+    }
+
+    private function ColDataToStr($aData){
+        $s ="";
+        $s .= $aData["Type"] . " ";
+        $s .= (($aData["Null"] === "NO") ? "NOT NULL " : null) ;
+        $s .= (($aData["Key"] === "PRI") ? "PRIMARY KEY " : null);
+        $s .= (!empty($aData["Default"]))? "DEFAULT '" .$aData["Default"]."' " : null;
+        $s .= $aData["Extra"];
+        return $s;
+
+    }
+
+    public function getJsonFormat($sTable, $andData = false){
+        $aColumns = $this->db->fetchAll("SHOW COLUMNS FROM `".$sTable."`");
+        $aList = [];
+        foreach ($aColumns as $aColumn){
+            $sName = $aColumn["Field"];
+            unset($aColumn["Field"]);
+            $aList["columns"][$sName]  = $aColumn;
+        }
+        if ($andData){
+            $aList["data"] = $this->db->fetchAll("SELECT * FROM " . $sTable);
+        }
+        return $aList;
     }
 
 

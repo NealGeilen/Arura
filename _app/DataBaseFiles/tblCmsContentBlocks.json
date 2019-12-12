@@ -1,16 +1,1 @@
-{
-  "columns": {
-    "Content_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
-    "Content_Group_Id" : "INT(11) NULL",
-    "Content_Addon_Id" : "INT(11) NULL",
-    "Content_Type" : "VARCHAR(255) NULL",
-    "Content_Value" : "LONGTEXT NULL",
-    "Content_Position" : "INT(11) NULL",
-    "Content_Size" : "INT(11) NULL",
-    "Content_Raster" : "INT(11) NULL",
-    "Content_Css_Background_Color" : "VARCHAR(11) NOT NULL",
-    "Content_Css_Background_Img" : "VARCHAR(255) NOT NULL"
-  },
-  "data": [
-  ]
-}
+{"columns":{"Content_Id":{"Type":"int(11)","Null":"NO","Key":"PRI","Default":null,"Extra":"auto_increment"},"Content_Group_Id":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Addon_Id":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Type":{"Type":"varchar(255)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Value":{"Type":"longtext","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Position":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Size":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Raster":{"Type":"int(11)","Null":"YES","Key":"","Default":"2","Extra":""},"Content_Css_Background_Color":{"Type":"varchar(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Css_Background_Img":{"Type":"varchar(255)","Null":"YES","Key":"","Default":null,"Extra":""}}}

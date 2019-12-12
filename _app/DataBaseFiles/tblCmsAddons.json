@@ -1,13 +1,1 @@
-{
-  "columns": {
-    "Addon_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
-    "Addon_Name" : "VARCHAR(255) NOT NULL",
-    "Addon_FileName" : "VARCHAR(255) NOT NULL",
-    "Addon_Type" : "VARCHAR(255) NOT NULL",
-    "Addon_Active" : "TINYINT(255) NOT NULL",
-    "Addon_Multipel_Values" : "TINYINT(255) NOT NULL",
-    "Addon_Custom" : "TINYINT(255) NOT NULL"
-  },
-  "data": [
-  ]
-}
+{"columns":{"Addon_Id":{"Type":"int(11)","Null":"NO","Key":"PRI","Default":null,"Extra":"auto_increment"},"Addon_Name":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""},"Addon_FileName":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""},"Addon_Type":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""},"Addon_Active":{"Type":"tinyint(1)","Null":"NO","Key":"","Default":null,"Extra":""},"Addon_Multipel_Values":{"Type":"tinyint(1)","Null":"NO","Key":"","Default":null,"Extra":""},"Addon_Custom":{"Type":"tinyint(1)","Null":"YES","Key":"","Default":null,"Extra":""}}}

@@ -1,8 +1,1 @@
-{
-  "columns": {
-    "RoleRight_Role_Id" : "INT(11) NOT NULL",
-    "RoleRight_Right_Id" : "INT(11) NOT NULL"
-  },
-  "data": [
-  ]
-}
+{"columns":{"RoleRight_Role_Id":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""},"RoleRight_Right_Id":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""}}}

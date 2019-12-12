@@ -1,95 +1,143 @@
 {
   "columns": {
-    "Setting_Id" : "INT(11) AUTO_INCREMENT PRIMARY KEY",
-    "Setting_Name": "VARCHAR(255) NOT NULL",
-    "Setting_Value": "VARCHAR(255) NULL",
-    "Setting_Required": "TINYINT(1) NOT NULL",
-    "Setting_Type": "VARCHAR(255) NOT NULL",
-    "Setting_Plg": "VARCHAR(255) NOT NULL"
+    "Setting_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": null,
+      "Extra": "auto_increment"
+    },
+    "Setting_Name": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Setting_Value": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Setting_Required": {
+      "Type": "tinyint(1)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Setting_Type": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Setting_Plg": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    }
   },
   "data": [
     {
       "Setting_Name": "reciever",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "0",
       "Setting_Type": "email",
       "Setting_Plg": "plg.contact"
     },
     {
-      "Setting_Name": "template",
-      "Setting_Value": "",
-      "Setting_Required": 1,
-      "Setting_Type": "text",
-      "Setting_Plg": "plg.contact"
-    },
-    {
       "Setting_Name": "username",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
       "Setting_Type": "text",
       "Setting_Plg": "smtp"
     },
     {
       "Setting_Name": "server",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
       "Setting_Type": "text",
       "Setting_Plg": "smtp"
     },
     {
       "Setting_Name": "password",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
       "Setting_Type": "password",
       "Setting_Plg": "smtp"
     },
     {
       "Setting_Name": "port",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
       "Setting_Type": "number",
       "Setting_Plg": "smtp"
     },
     {
       "Setting_Name": "secure",
-      "Setting_Value": "",
-      "Setting_Required": 0,
+      "Setting_Required": "0",
       "Setting_Type": "text",
       "Setting_Plg": "smtp"
     },
     {
       "Setting_Name": "template",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
       "Setting_Type": "text",
-      "Setting_Plg": "plg.notify"
-    },
-    {
-      "Setting_Name": "template",
-      "Setting_Value": "",
-      "Setting_Required": 1,
-      "Setting_Type": "text",
-      "Setting_Plg": "plg.recovery"
+      "Setting_Plg": "plg.contact"
     },
     {
       "Setting_Name": "url",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
       "Setting_Type": "url",
       "Setting_Plg": "website"
     },
     {
       "Setting_Name": "name",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
       "Setting_Type": "text",
       "Setting_Plg": "website"
     },
     {
       "Setting_Name": "banner",
-      "Setting_Value": "",
-      "Setting_Required": 1,
+      "Setting_Required": "1",
+      "Setting_Type": "file",
+      "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "template",
+      "Setting_Required": "1",
       "Setting_Type": "text",
+      "Setting_Plg": "plg.notify"
+    },
+    {
+      "Setting_Name": "template",
+      "Setting_Required": "1",
+      "Setting_Type": "text",
+      "Setting_Plg": "plg.recovery"
+    },
+    {
+      "Setting_Name": "favicon",
+      "Setting_Required": "1",
+      "Setting_Type": "file",
+      "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "logo",
+      "Setting_Required": "1",
+      "Setting_Type": "file",
+      "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "Launchdate",
+      "Setting_Required": "1",
+      "Setting_Type": "datetime-local",
+      "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "maintenance",
+      "Setting_Required": "0",
+      "Setting_Type": "checkbox",
       "Setting_Plg": "website"
     }
   ]
