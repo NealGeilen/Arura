@@ -8,7 +8,7 @@ class Git extends GitRepository {
 
     public function getStatus(){
         return $this->extractFromCommand("git remote -v update", function($value) {
-            return trim(substr($value, 1));
+            return substr($value, 0);
         });
     }
 
