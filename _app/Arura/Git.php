@@ -7,7 +7,7 @@ use Cz\Git\GitRepository;
 class Git extends GitRepository {
 
     public function getStatus(){
-        return $this->extractFromCommand("git status", function($value) {
+        return $this->extractFromCommand("git remote update && git status ", function($value) {
             return trim(substr($value, 1));
         });
     }
