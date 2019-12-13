@@ -109,7 +109,8 @@ $aNavBarPages =
                 (
                     \NG\Permissions\Restrict::Validation(Rights::ARURA_USERS) ||
                     \NG\Permissions\Restrict::Validation(Rights::ARURA_ROLLES) ||
-                    \NG\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS)
+                    \NG\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS) ||
+                    \NG\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
                 ),
             "Title" => "Arura",
             "FileName" => null,
@@ -120,7 +121,8 @@ $aNavBarPages =
                 [
                     '/arura/users',
                     '/arura/roles',
-                    '/arura/settings'
+                    '/arura/settings',
+                    '/arura/updater'
                 ]
         ],
         '/arura/users' => [
@@ -155,6 +157,18 @@ $aNavBarPages =
             "Title" => "Instellingen",
             "FileName" => "Arura.Settings",
             "Icon" => "fas fa-cogs",
+            "isChild" => true,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        '/arura/updater' => [
+            "Right" =>
+                (
+                \NG\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
+                ),
+            "Title" => "Updaten",
+            "FileName" => "Arura.Updater",
+            "Icon" => "fas fa-server",
             "isChild" => true,
             "MasterPage" => "AdminLTE",
             "Children" => null
