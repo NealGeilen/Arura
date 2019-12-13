@@ -6,13 +6,13 @@ $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
 $smarty->assign("Status", $repo->getStatus());
 
 if (isset($_POST["gitpull"])){
-    $repo->Reset();
-    $repo->pull("origin");
+    $repo->Reset(true);
+    $repo->pull();
     $Data = new \Arura\DataBaseSync(__APP__ . "DataBaseFiles");
     $Data->Reload();
 }
 
 if (isset($_POST["gitreset"])){
-    $repo->Reset();
+    $repo->Reset(true);
 }
 return \Arura\Dashboard\Page::getHtml(__DIR__);
