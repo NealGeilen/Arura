@@ -158,7 +158,7 @@ var Builder = {
                     return oInput;
                 },
                 value: function (oInput) {
-                    return null
+                    return "filler"
                 }
             }
         },
