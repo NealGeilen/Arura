@@ -150,6 +150,16 @@ var Builder = {
                 value: function (oInput) {
                     return oInput.val();
                 }
+            },
+            Filler: {
+                oTemplate: $('<div><p class="text-center">Leeg blok</p></div>'),
+                init: function (sValue) {
+                    oInput = this.oTemplate.clone();
+                    return oInput;
+                },
+                value: function (oInput) {
+                    return null
+                }
             }
         },
         Addons:{

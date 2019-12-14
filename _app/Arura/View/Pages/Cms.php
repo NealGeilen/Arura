@@ -115,6 +115,9 @@ class Cms extends Page{
                             case 'Picture':
                                 $aContentBlock['Template'] = "<img src='/files/" . $aContentBlock['Content_Value']."'>";
                                 break;
+                            case "Filler":
+                                $aContentBlock['Template'] = "<div class='filler'></div>";
+                                break;
                             case "Iframe":
                                 $aContentBlock['Template'] = "<iframe style='height: 100%; width: 100%' src='".$aContentBlock['Content_Value']."'></iframe>";
                                 break;
