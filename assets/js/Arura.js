@@ -134,3 +134,11 @@ $(window).scroll(function(){
     }
 });
 
+function startPageLoad() {
+    $('body').append('<div class="loader-container"><div class="loader"></div></div>');
+}
+
+function endPageLoad() {
+    $('.loader-container').remove()
+}
+
