@@ -6,7 +6,7 @@ namespace Arura\View\Pages;
 
 interface PageEnum
 {
-    public function __construct();
+    public function __construct($id);
 
     public function getPageContent();
 
