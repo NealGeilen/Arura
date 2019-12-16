@@ -36,45 +36,39 @@ $aNavBarPages =
             "MasterPage" => null,
             "Children" =>
                 [
-                    '/content/pagina',
-                    '/content/menu'
+                    "/content/pagina" => [
+                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Title" => "Pagina's",
+                        "FileName" => "Cms.Pages",
+                        "Icon" => "fas fa-file",
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
+                    "/content/menu" => [
+                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_MENU),
+                        "Title" => "Menu",
+                        "FileName" => "Cms.Menu",
+                        "Icon" => "fas fa-bars",
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
+                    "/content/pagina/content" => [
+                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "FileName" => "Cms.Page.Content",
+                        "Title" => "Pagina content",
+                        "Icon" => null,
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
+                    "/content/pagina/instellingen" => [
+                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Title" => "Pagina instellingen",
+                        "FileName" => "Cms.Page.Settings",
+                        "Icon" => null,
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
                 ]
-        ],
-        "/content/pagina" => [
-            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
-            "Title" => "Pagina's",
-            "FileName" => "Cms.Pages",
-            "Icon" => "fas fa-file",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        "/content/menu" => [
-            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_MENU),
-            "Title" => "Menu",
-            "FileName" => "Cms.Menu",
-            "Icon" => "fas fa-bars",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        "/content/pagina/content" => [
-            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
-            "FileName" => "Cms.Page.Content",
-            "Title" => "Pagina content",
-            "Icon" => "fas fa-file",
-            "MasterPage" => "AdminLTE",
-            "isChild" => true,
-            "Children" => null
-        ],
-        "/content/pagina/instellingen" => [
-            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
-            "Title" => "Pagina instellingen",
-            "FileName" => "Cms.Page.Settings",
-            "Icon" => "fas fa-file",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
         ],
         "/files" => [
             "Title" => "Bestanden",
@@ -82,9 +76,9 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "isChild" => false,
             "Right" => (
-            \NG\Permissions\Restrict::Validation(Rights::FILES_UPLOAD) &&
-            \NG\Permissions\Restrict::Validation(Rights::FILES_READ) &&
-            \NG\Permissions\Restrict::Validation(Rights::FILES_EDIT)
+                \NG\Permissions\Restrict::Validation(Rights::FILES_UPLOAD) &&
+                \NG\Permissions\Restrict::Validation(Rights::FILES_READ) &&
+                \NG\Permissions\Restrict::Validation(Rights::FILES_EDIT)
             ),
             "Icon" => "fas fa-file",
             "Children" => null
@@ -116,72 +110,59 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "Children" =>
                 [
-                    '/winkel/betalingen',
-                    '/winkel/producten',
-                    '/winkel/evenementen',
-                    '/winkel/tickets'
+                    '/winkel/betalingen' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
+                            ),
+                        "Title" => "Betalingen",
+                        "FileName" => null,
+                        "Icon" => "fas fa-money-bill-wave-alt",
+                        "isChild" => true,
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
+                    '/winkel/producten' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
+                            ),
+                        "Title" => "Producten",
+                        "FileName" => null,
+                        "Icon" => "fas fa-box-open",
+                        "isChild" => true,
+                        "MasterPage" => "AdminLTE",
+                        "Children" => [
+
+                        ]
+                    ],
+                    '/winkel/evenementen' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                            ),
+                        "Title" => "Evenementen",
+                        "FileName" => "Shop.Events",
+                        "Icon" => "far fa-calendar-alt",
+                        "isChild" => true,
+                        "MasterPage" => "AdminLTE",
+                        "Children" => [
+                            '/winkel/tickets' => [
+                                "Right" =>
+                                    (
+                                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                                    ),
+                                "Title" => "Tickets",
+                                "FileName" => null,
+                                "Icon" => "fas fa-ticket-alt",
+                                "isChild" => true,
+                                "MasterPage" => "AdminLTE",
+                                "Children" => null
+                            ],
+                        ]
+                    ]
                 ]
         ],
-        '/winkel/betalingen' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
-                ),
-            "Title" => "Betalingen",
-            "FileName" => null,
-            "Icon" => "fas fa-money-bill-wave-alt",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        '/winkel/producten' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
-                ),
-            "Title" => "Producten",
-            "FileName" => null,
-            "Icon" => "fas fa-box-open",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        '/winkel/evenementen' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
-                ),
-            "Title" => "Evenementen",
-            "FileName" => "Shop.Events",
-            "Icon" => "far fa-calendar-alt",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        '/winkel/tickets' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
-                ),
-            "Title" => "Tickets",
-            "FileName" => null,
-            "Icon" => "fas fa-ticket-alt",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        /**
-         * Shop
-         */
-        /**
-         * Events
-         */
-        /**
-         * Producten
-         */
-        /**
-         * Arura Beheer
-         */
         '/arura' => [
             "Right" =>
                 (
@@ -193,90 +174,80 @@ $aNavBarPages =
             "Title" => "Arura",
             "FileName" => null,
             "Icon" => "fas fa-cube",
-            "isChild" => false,
             "MasterPage" => "AdminLTE",
             "Children" =>
                 [
-                    '/arura/users',
-                    '/arura/roles',
-                    '/arura/settings',
-                    '/arura/updater'
+                    '/arura/users' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::ARURA_USERS)
+                            ),
+                        "Title" => "Gebruikers",
+                        "FileName" => "Arura.Users",
+                        "Icon" => "fas fa-users",
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
+                    '/arura/roles' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::ARURA_ROLLES)
+                            ),
+                        "Title" => "Rollen",
+                        "FileName" => "Arura.Roles",
+                        "Icon" => "fas fa-key",
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
+                    '/arura/settings' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS)
+                            ),
+                        "Title" => "Instellingen",
+                        "FileName" => "Arura.Settings",
+                        "Icon" => "fas fa-cogs",
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
+                    '/arura/updater' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
+                            ),
+                        "Title" => "Updaten",
+                        "FileName" => "Arura.Updater",
+                        "Icon" => "fas fa-server",
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
                 ]
         ],
-        '/arura/users' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::ARURA_USERS)
-                ),
-            "Title" => "Gebruikers",
-            "FileName" => "Arura.Users",
-            "Icon" => "fas fa-users",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        '/arura/roles' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::ARURA_ROLLES)
-                ),
-            "Title" => "Rollen",
-            "FileName" => "Arura.Roles",
-            "Icon" => "fas fa-key",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        '/arura/settings' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS)
-                ),
-            "Title" => "Instellingen",
-            "FileName" => "Arura.Settings",
-            "Icon" => "fas fa-cogs",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        '/arura/updater' => [
-            "Right" =>
-                (
-                \NG\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
-                ),
-            "Title" => "Updaten",
-            "FileName" => "Arura.Updater",
-            "Icon" => "fas fa-server",
-            "isChild" => true,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
-        ],
-        /*
-         * Singel Pages
-         */
         "/profile" => [
             "Title" => "Profiel",
             "FileName" => "User.Profile",
             "MasterPage" => "AdminLTE",
-            "isChild" => true,
             "Right" => \NG\User\User::isLogged(),
-            "Icon" => ""
+            "Icon" => null
         ],
         "/login" => [
             "Title" => "Home",
             "FileName" => "User.Login",
             "MasterPage" => "Clean",
             "Right" => !\NG\User\User::isLogged(),
-            "Icon" => ""
+            "Icon" => null
         ],
         "/login/password" => [
             "Title" => "Nieuw wachtwoord",
             "FileName" => "User.Login.Password",
             "MasterPage" => "Clean",
             "Right" => !\NG\User\User::isLogged(),
-            "Icon" => ""
+            "Icon" => null
         ]
+
     ];
+$a = [
+];
 if (\NG\User\User::isLogged()){
     $oUser = \NG\User\User::activeUser();
     $oUser->TriggerEvent();
@@ -295,6 +266,30 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
         $P->setMasterPath(__ARURA_TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR);
         $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
         $Host->addPage($P);
+    }
+    if ($aProperties["Children"] !== null){
+        foreach ($aProperties["Children"] as $ChildUrl => $aChildProperties){
+            $P = new \Arura\Dashboard\Page();
+            $P->setUrl($ChildUrl);
+            $P->setTitle($aChildProperties['Title']);
+            $P->setRight($aChildProperties["Right"]);
+            $P->setMasterPath(__ARURA_TEMPLATES__   . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR);
+            $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aChildProperties['FileName']);
+            $Host->addPage($P);
+
+            if ($aChildProperties["Children"] !== null){
+                foreach ($aChildProperties["Children"] as $GrandUrl => $aGrandProperties){
+                    $P = new \Arura\Dashboard\Page();
+                    $P->setUrl($GrandUrl);
+                    $P->setTitle($aGrandProperties['Title']);
+                    $P->setRight($aGrandProperties["Right"]);
+                    $P->setMasterPath(__ARURA_TEMPLATES__   . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR);
+                    $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aGrandProperties['FileName']);
+                    $Host->addPage($P);
+                }
+            }
+
+        }
     }
 }
 try{
