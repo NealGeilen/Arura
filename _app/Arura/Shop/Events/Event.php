@@ -1,19 +1,21 @@
 <?php
-namespace Arura\Events;
+namespace Arura\Shop\Events;
 
+use Arura\Shop\ProductEnum;
 use NG\Database;
 use NG\User\User;
 
-class Event{
+class Event implements ProductEnum{
 
     //Properties
-    private $sHash;
+    private $id;
+    private $sSlug;
     private $sName;
     private $sDescription;
     private $dStart;
     private $dEnd;
     private $sLocation;
-    private $sBanner;
+    private $sImg;
     private $oOrganizer;
     private $bIsActive;
     private $bIsVisible;
@@ -45,11 +47,11 @@ class Event{
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             //load user properties from database
-            $aEvent = $this -> db -> fetchRow("SELECT * FROM tblEvents WHERE Event_Hash = ? ", [$this -> getHash()]);
+            $aEvent = $this -> db -> fetchRow("SELECT * FROM tblEvents WHERE Event_Id = ? ", [$this -> getId()]);
             $this -> isLoaded = true;
             $this->setName($aEvent["Event_Name"]);
             $this->setLocation($aEvent["Event_Location"]);
-            $this->setBanner($aEvent["Event_Banner"]);
+            $this->setImg($aEvent["Event_Banner"]);
             $this->setOrganizer(new User($aEvent["Event_Organizer_User_Id"]));
             $StartDate = new \DateTime();
             $StartDate->setTimestamp($aEvent["Event_Start_Timestamp"]);
@@ -195,18 +197,18 @@ class Event{
     /**
      * @return mixed
      */
-    public function getBanner()
+    public function getImg()
     {
         $this->load();
-        return $this->sBanner;
+        return $this->sImg;
     }
 
     /**
      * @param mixed $sBanner
      */
-    public function setBanner($sBanner)
+    public function setImg($sBanner)
     {
-        $this->sBanner = $sBanner;
+        $this->sImg = $sBanner;
     }
 
     /**
@@ -331,18 +333,37 @@ class Event{
     /**
      * @return mixed
      */
-    public function getHash()
+    public function getId()
     {
-        return $this->sHash;
+        return $this->id;
     }
 
     /**
-     * @param mixed $sHash
+     * @param mixed $id
      */
-    public function setHash($sHash)
+    public function setId($id)
     {
-        $this->sHash = $sHash;
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->sSlug;
+    }
+
+    /**
+     * @param mixed $sSlug
+     */
+    public function setSlug($sSlug)
+    {
+        $this->sSlug = $sSlug;
     }
 
 
+    public function doesProductExist(): bool
+    {
+    }
 }

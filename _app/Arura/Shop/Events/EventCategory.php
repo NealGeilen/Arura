@@ -1,9 +1,9 @@
 <?php
-namespace Arura\Events;
+namespace Arura\Shop\Events;
 
 use NG\Database;
 
-class EventType{
+class EventCategory{
     private $iId;
     private $sName;
 
@@ -18,13 +18,13 @@ class EventType{
     }
 
     public function getEvents() : array{
-        return $this->db -> fetchAll("SELECT * FROM tblEvents WHERE Event_Type_Id = :Event_Type_Id", ["Event_Type_Id" => $this->getId()]);
+        return $this->db -> fetchAll("SELECT * FROM tblEvents WHERE Event_Category_Id = :Event_Category_Id", ["Event_Category_Id" => $this->getId()]);
     }
 
-    public static function getAllEventsTypes() : array
+    public static function getAllEventsCategories() : array
     {
         $db = new Database();
-        return $db -> fetchAll("SELECT * FROM tblEventTypes");
+        return $db -> fetchAll("SELECT * FROM tblEventCategories");
     }
 
     /**
@@ -34,17 +34,17 @@ class EventType{
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             //load user properties from database
-            $aEventType = $this -> db -> fetchRow("SELECT * FROM tblEventTypes WHERE EventType_Id = ? ", [$this -> getId()]);
+            $aEventType = $this -> db -> fetchRow("SELECT * FROM tblEventCategories WHERE EventCategory_Id = ? ", [$this -> getId()]);
             $this -> isLoaded = true;
-            $this->setName($aEventType["EventType_Name"]);
+            $this->setName($aEventType["EventCategory_Name"]);
         }
     }
 
     public function __ToArray() : array
     {
         return [
-            "EventType_Id" => $this->getId(),
-            "EventType_Name" => $this->getName()
+            "EventCategory_Id" => $this->getId(),
+            "EventCategory_Name" => $this->getName()
         ];
     }
 

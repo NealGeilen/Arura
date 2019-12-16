@@ -5,7 +5,7 @@ use Arura\View\Menu;
 use NG\Database;
 use NG\Settings\Application;
 
-class Page{
+class Page implements PageEnum{
 
     //Objects
     protected $db;
