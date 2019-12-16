@@ -101,7 +101,6 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "Children" => null
         ],
-
         '/winkel' => [
             "Right" =>
                 (
@@ -111,9 +110,63 @@ $aNavBarPages =
                     \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                 ),
             "Title" => "Webshop",
-            "FileName" => "Secure.Administration.Tables",
-            "Icon" => "fas fa-shield-alt",
+            "FileName" => null,
+            "Icon" => "fas fa-shopping-bag",
             "isChild" => false,
+            "MasterPage" => "AdminLTE",
+            "Children" =>
+                [
+                    '/winkel/betalingen',
+                    '/winkel/producten',
+                    '/winkel/evenementen',
+                    '/winkel/tickets'
+                ]
+        ],
+        '/winkel/betalingen' => [
+            "Right" =>
+                (
+                \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
+                ),
+            "Title" => "Betalingen",
+            "FileName" => null,
+            "Icon" => "fas fa-money-bill-wave-alt",
+            "isChild" => true,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        '/winkel/producten' => [
+            "Right" =>
+                (
+                \NG\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
+                ),
+            "Title" => "Producten",
+            "FileName" => null,
+            "Icon" => "fas fa-box-open",
+            "isChild" => true,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        '/winkel/evenementen' => [
+            "Right" =>
+                (
+                \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                ),
+            "Title" => "Evenementen",
+            "FileName" => "Shop.Events",
+            "Icon" => "far fa-calendar-alt",
+            "isChild" => true,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        '/winkel/tickets' => [
+            "Right" =>
+                (
+                \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                ),
+            "Title" => "Tickets",
+            "FileName" => null,
+            "Icon" => "fas fa-ticket-alt",
+            "isChild" => true,
             "MasterPage" => "AdminLTE",
             "Children" => null
         ],
