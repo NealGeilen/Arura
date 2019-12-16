@@ -23,7 +23,7 @@ class Page implements PageEnum{
 
     protected $PageContend = null;
 
-    public function __construct(){
+    public function __construct($id = 0){
         $this->db = new Database();
     }
 
