@@ -8,8 +8,10 @@ class Rights{
     const CMS_PAGES = 10;
     const CMS_MENU = 11;
 
-    const EVENTS_MANGE= 20;
-    const EVENTS_REGISTRATION = 21;
+    const SHOP_PAYMENTS = 20;
+    const SHOP_PRODUCTS_MANAGEMENT = 21;
+    const SHOP_EVENTS_MANAGEMENT = 22;
+    const SHOP_EVENTS_REGISTRATION = 23;
 
     const FILES_READ = 30;
     const FILES_EDIT = 31;
@@ -17,6 +19,8 @@ class Rights{
 
     const SECURE_ADMINISTRATION = 40;
     const SECURE_ADMINISTRATION_CREATE = 41;
+
+
 
     static function getConstants() {
         $oClass = new ReflectionClass(__CLASS__);

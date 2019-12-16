@@ -101,6 +101,31 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "Children" => null
         ],
+
+        '/winkel' => [
+            "Right" =>
+                (
+                    \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS) ||
+                    \NG\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT) ||
+                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||
+                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                ),
+            "Title" => "Webshop",
+            "FileName" => "Secure.Administration.Tables",
+            "Icon" => "fas fa-shield-alt",
+            "isChild" => false,
+            "MasterPage" => "AdminLTE",
+            "Children" => null
+        ],
+        /**
+         * Shop
+         */
+        /**
+         * Events
+         */
+        /**
+         * Producten
+         */
         /**
          * Arura Beheer
          */

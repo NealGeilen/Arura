@@ -28,9 +28,9 @@ class Event implements ProductEnum{
     private $isLoaded = false;
     private $db;
 
-    public function __construct($sHash)
+    public function __construct($iId)
     {
-        $this->setHash($sHash);
+        $this->setId($iId);
         $this->db = new Database();
     }
 
@@ -39,7 +39,6 @@ class Event implements ProductEnum{
         $db = new Database();
         return $db -> fetchAll("SELECT * FROM tblEvents");
     }
-
     /**
      * Set values on properties
      * @param bool $force
@@ -81,14 +80,14 @@ class Event implements ProductEnum{
     public function __ToArray() : array
     {
         return [
-            "Event_Hash" => $this->getHash(),
+            "Event_Id" => $this->getId(),
             "Event_Name" => $this->getName(),
             "Event_Description" => $this->getDescription(),
             "Event_Start_Timestamp" => $this->getStart()->getTimestamp(),
             "Event_End_Timestamp" => $this->getEnd()->getTimestamp(),
             "Event_Location" => $this->getLocation(),
             "Event_Price" => (float)$this->getPrice(),
-            "Event_Banner" => $this->getBanner(),
+            "Event_Banner" => $this->getImg(),
             "Event_Organizer_User_Id" => $this->getOrganizer()->getId(),
             "Event_IsActive" => (int)$this->getIsActive(),
             "Event_IsVisible" => (int)$this->getIsVisible(),
@@ -100,13 +99,12 @@ class Event implements ProductEnum{
 
     public static function Create($aData){
         $db = new Database();
-        $aData["Event_Hash"] = getHash("tblEvents", "Event_Hash");
         $db -> createRecord("tblEvents",$aData);
         return new self($aData["Event_Hash"]);
     }
 
     public function Remove(){
-        $this->db->query("DELETE FROM tblEvents WHERE Event_Hash = :Event_Hash", ["Event_Hash" => $this->getHash()]);
+        $this->db->query("DELETE FROM tblEvents WHERE Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
     }
 
     /**
