@@ -227,11 +227,13 @@ try{
     $oCurrentPage->showPage();
 
 } catch (Exception $e){
-    if ($e->getCode() === 403){
-        header("Location: /" . __ARURA__DIR_NAME__);
-        exit;
+    switch ($e->getCode()){
+        case 403:
+            header("Location: /" . __ARURA__DIR_NAME__);
+            break;
+        case 404:
+            header("Location: /" . __ARURA__DIR_NAME__);
     }
-    var_dump($e);
     exit;
 }
 
