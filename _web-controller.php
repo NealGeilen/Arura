@@ -233,6 +233,10 @@ try{
             break;
         case 404:
             header("Location: /" . __ARURA__DIR_NAME__);
+            break;
+        default:
+            var_dump($e);
+            break;
     }
     exit;
 }
