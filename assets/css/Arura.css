@@ -152,3 +152,19 @@ Templates
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+.has-treeview{
+    border-radius: 5px;
+}
+.has-treeview.menu-open{
+    background-color: rgba(255,255,255,0.4);
+}
+.has-treeview.menu-open .nav-link{
+    color: #343a40!important;
+}
+.has-treeview .has-treeview.menu-open{
+    background-color: rgba(255,255,255,0.6);
+}
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active{
+    background-color: white;
+    color: #343a40;
+}
