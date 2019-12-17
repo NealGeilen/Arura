@@ -168,3 +168,7 @@ Templates
     background-color: white;
     color: #343a40;
 }
+.nav-sidebar .nav-link{
+    margin: unset!important;
+    margin-top: .2rem;
+}
