@@ -122,6 +122,18 @@ $aNavBarPages =
                         "MasterPage" => "AdminLTE",
                         "Children" => null
                     ],
+                    '/winkel/categorieen' => [
+                        "Right" =>
+                            (
+                            \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
+                            ),
+                        "Title" => "Categorieën",
+                        "FileName" => null,
+                        "Icon" => "fas fa-tag",
+                        "isChild" => true,
+                        "MasterPage" => "AdminLTE",
+                        "Children" => null
+                    ],
                     '/winkel/producten' => [
                         "Right" =>
                             (
@@ -132,9 +144,7 @@ $aNavBarPages =
                         "Icon" => "fas fa-box-open",
                         "isChild" => true,
                         "MasterPage" => "AdminLTE",
-                        "Children" => [
-
-                        ]
+                        "Children" => null
                     ],
                     '/winkel/evenementen' => [
                         "Right" =>
@@ -144,10 +154,9 @@ $aNavBarPages =
                         "Title" => "Evenementen",
                         "FileName" => "Shop.Events",
                         "Icon" => "far fa-calendar-alt",
-                        "isChild" => true,
                         "MasterPage" => "AdminLTE",
                         "Children" => [
-                            '/winkel/tickets' => [
+                            '/winkel/evenementen/tickets' => [
                                 "Right" =>
                                     (
                                     \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
@@ -155,6 +164,18 @@ $aNavBarPages =
                                 "Title" => "Tickets",
                                 "FileName" => null,
                                 "Icon" => "fas fa-ticket-alt",
+                                "isChild" => true,
+                                "MasterPage" => "AdminLTE",
+                                "Children" => null
+                            ],
+                            '/winkel/evenementen/beheer' => [
+                                "Right" =>
+                                    (
+                                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    ),
+                                "Title" => "Evenementen beheer",
+                                "FileName" => "Shop.Events",
+                                "Icon" => "fas fa-calendar-day",
                                 "isChild" => true,
                                 "MasterPage" => "AdminLTE",
                                 "Children" => null
