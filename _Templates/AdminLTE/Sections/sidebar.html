@@ -12,7 +12,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 {foreach from=$aNavPages key=Href item=aPage}
                 {if $aPage.Right && $aPage.Icon != Null}
-                <li class="nav-item {if $aPage.Children !== NULL}has-treeview{if in_array($sRequestUrl,array_keys($aPage.Children))} menu-open{/if}{/if}">
+                <li class="nav-item {if $aPage.Children !== NULL}has-treeview{if in_array($sRequestUrl,array_keys($aPage.Children)) || $aPage.Open == 1} menu-open{/if}{/if}">
                     <a href="/{$aArura.dir}{$Href}" class="nav-link {if $Href === $sRequestUrl}active{/if}">
                         <i class="nav-icon {$aPage.Icon}"></i>
                         <p>

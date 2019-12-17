@@ -286,6 +286,10 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
                     $P->setMasterPath(__ARURA_TEMPLATES__   . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR);
                     $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aGrandProperties['FileName']);
                     $Host->addPage($P);
+                    if (substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl()){
+                        $aNavBarPages[$sUrl]["Open"] = true;
+//                        $aChildProperties["Open"] = true;
+                    }
                 }
             }
 
@@ -294,7 +298,6 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
 }
 try{
     $oCurrentPage = $Host->getRequestPage();
-
     $smarty->assign('aNavPages', $aNavBarPages);
     $smarty->assign('sRequestUrl', substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__) ));
     $oCurrentPage->showPage();
