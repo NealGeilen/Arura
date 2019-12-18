@@ -34,55 +34,55 @@
       "Key": "",
       "Default": null,
       "Extra": ""
+    },
+    "Event_Location": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Event_Banner": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Event_Description": {
+      "Type": "longtext",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Event_Organizer_User_Id": {
+      "Type": "Int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Event_IsActive": {
+      "Type": "tinyint(1)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Event_IsVisible": {
+      "Type": "tinyint(1)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Event_Capacity": {
+      "Type": "Int(100)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
     }
-  },
-  "Event_Location": {
-    "Type": "varchar(255)",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
-  },
-  "Event_Banner": {
-    "Type": "varchar(255)",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
-  },
-  "Event_Description": {
-    "Type": "longtext",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
-  },
-  "Event_Organizer_User_Id": {
-    "Type": "Int(11)",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
-  },
-  "Event_IsActive": {
-    "Type": "tinyint(1)",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
-  },
-  "Event_IsVisible": {
-    "Type": "tinyint(1)",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
-  },
-  "Event_Capacity": {
-    "Type": "Int(100)",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
   }
 }
