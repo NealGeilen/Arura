@@ -79,7 +79,7 @@
     "Extra": ""
   },
   "Event_Capacity": {
-    "Type": "int(100)",
+    "Type": "Int(100)",
     "Null": "NO",
     "Key": "",
     "Default": null,
