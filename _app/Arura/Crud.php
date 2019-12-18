@@ -9,15 +9,22 @@ class Crud extends Database {
     protected $aDataFile;
     protected $aColumnInfo;
     protected $aParas;
+    protected $aDefaultValues;
+    protected $sCssId;
 
-    public function __construct($aData,$aParas){
-        $this->aDataFile = $aData;
+    public function __construct($sData,$aParas = [], $aDefaultValues = [], $sCssId = null){
+        $this->aDataFile = json_array_decode(file_get_contents($sData));
         $this->aParas = $aParas;
+        $this->aDefaultValues = $aDefaultValues;
+        $this->sCssId = $sCssId;
+        foreach ($this->fetchAll('SHOW columns FROM '. $this->aDataFile["table"]) as $column){
+            $this -> aColumnInfo[$column["Field"]] = $column;
+        }
         parent::__construct();
     }
 
-    protected function getUrl(){
-        return $_SERVER["REDIRECT_URL"] . http_build_query($this->aParas);
+    protected function getUrl($aParams = []){
+        return $_SERVER["REDIRECT_URL"] ."?". http_build_query(array_merge($aParams, $this->aParas)) . "#" . $this->sCssId;
     }
 
     private function Actions(){
@@ -32,7 +39,7 @@ class Crud extends Database {
                             unset($_POST[$sName]);
                         }
                     }
-                    $this->createRecord($this->aDataFile["table"], $_POST);
+                    $this->createRecord($this->aDataFile["table"], array_merge($this->aDefaultValues, $_POST));
                     header('Location:' . $this->getUrl());
                     break;
                 case 'edit':
@@ -41,7 +48,7 @@ class Crud extends Database {
                     }
                     break;
                 case 'update':
-                    $this->updateRecord($this->aDataFile["table"], $_POST, $this->aDataFile["primarykey"]);
+                    $this->updateRecord($this->aDataFile["table"], array_merge($this->aDefaultValues, $_POST), $this->aDataFile["primarykey"]);
                     if ($this->isQuerySuccessful()){
                         header('Location:' . $this->getUrl());
                     }
@@ -79,18 +86,18 @@ class Crud extends Database {
         }
         $this->sHtml .= "<th>";
         if ($_GET["action"] !== "create" && $_GET["action"] !== "edit"){
-            $this->sHtml .= "<a class='btn btn-primary' href='".$this->getUrl()."&action=create'><i class=\"fas fa-plus\"></i></a>";
+            $this->sHtml .= "<a class='btn btn-primary' href='".$this->getUrl(["action" => "create"])."'><i class=\"fas fa-plus\"></i></a>";
         }
         $this->sHtml .= "</th></tr></thead><tbody>";
         foreach ($aData as $record){
             $this->sHtml  .= "<tr>";
-            foreach ($record as $tag => $column){
+            foreach ($this->aDataFile["columns"] as $tag => $column){
                 switch ($this->aDataFile["columns"][$tag]["type"]){
                     case "dropdown":
-                        $this->sHtml  .= "<td>" . $this->aDataFile["columns"][$tag]["options"][$column] . "</td>";
+                        $this->sHtml  .= "<td>" . $this->aDataFile["columns"][$tag]["options"][$record[$tag]] . "</td>";
                         break;
                     default:
-                        $this->sHtml  .= "<td>" . $column . "</td>";
+                        $this->sHtml  .= "<td>" . $record[$tag] . "</td>";
                         break;
 
                 }
@@ -107,22 +114,23 @@ class Crud extends Database {
 
     protected function getActionButtons($iRowId = null){
         $s = "<div class='btn-group'>";
-        $s .= "<a href='".$this->getUrl()."&action=delete&_key=".$iRowId."' class='btn btn-danger'><i class=\"fas fa-trash\"></i></a>";
-        $s .= "<a href='".$this->getUrl()."&action=edit&_key=".$iRowId."' class='btn btn-primary'><i class=\"fas fa-pen\"></i></a>";
+        $s .= "<a href='".$this->getUrl(["action" => "delete", "_key" => $iRowId])."' class='btn btn-danger'><i class=\"fas fa-trash\"></i></a>";
+        $s .= "<a href='".$this->getUrl(["action" => "edit", "_key" => $iRowId])."' class='btn btn-primary'><i class=\"fas fa-pen\"></i></a>";
         $s .= "</div>";
         return $s;
     }
 
     protected  function buildInputField($aData = [],$sAction = null){
         $sHtml = "<h2>".(($sAction==="save") ? "Toevoegen" : "Bewerken")."</h2>";
-        $sHtml .= "<form method='post' action='".$this->getUrl()."&action=".$sAction."' class='form-row bg-secondary p-1 border-4 border-dark rounded'>";
+        $sHtml .= "<form method='post' action='".$this->getUrl(["action" => $sAction])."' class='form-row bg-secondary p-1 border-4 border-dark rounded'>";
         foreach ($this->aDataFile["columns"] as $tag => $column){
             $value = null;
             if (isset($aData[$tag])){
                 $value = $aData[$tag];
             }
-            $sInputGroup = "<div class='form-group col-xl-3 col-md-3 col-sm-6 col-12'>";
+
             if (!str_contains("auto_increment",$this->aColumnInfo[$tag]["Extra"])){
+                $sInputGroup = "<div class='form-group col-xl-3 col-md-3 col-sm-6 col-12'>";
                 $sInputGroup .= "<label>".$column['name']."</label>";
                 switch ($column["type"]){
                     case "dropdown":
@@ -138,16 +146,15 @@ class Crud extends Database {
                         $sInputGroup.= "<input type='".$column["type"]."' name='".$tag."' value='".$value."' class='form-control' ".(($sAction === "update" && $tag === $this->aDataFile["primarykey"]) ? "readonly" : null)."/>";
                         break;
                 }
-                ;
 
+                $sInputGroup .= "</div>";
             } else {
                 $sInputGroup = "<input type='hidden' name='".$tag."' value='".$value."'/>";
             }
-            $sInputGroup .= "</div>";
+
             $sHtml .= $sInputGroup;
         }
-
-        $sHtml .= "<div class='col-md-12'><div class='btn-group'><input type='submit' class='btn btn-success' value='Opslaan'><a class='btn btn-danger' href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."'>Annuleren</a></div></div>";
+        $sHtml .= "<div class='col-md-12'><div class='btn-group'><input type='submit' class='btn btn-success' value='Opslaan'><a class='btn btn-danger' href='".$this->getUrl()."'>Annuleren</a></div></div>";
         $sHtml .= "";
         $sHtml .= "</form>";
         return $sHtml;
@@ -156,5 +163,9 @@ class Crud extends Database {
     public function __toString()
     {
         return $this->getHTMLTable();
+    }
+
+    public static function drop($sFile,$aParams = [], $aDefaultValues = [], $sCssId = null){
+        return new self($sFile, $aParams, $aDefaultValues, $sCssId);
     }
 }

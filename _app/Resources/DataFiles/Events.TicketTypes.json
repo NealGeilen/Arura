@@ -1,0 +1,26 @@
+{
+  "primarykey" : "Ticket_Id",
+  "table": "tblEventTickets",
+  "columns": {
+    "Ticket_Id": {
+      "name": "Id",
+      "type": "number"
+    },
+    "Ticket_Name": {
+      "name": "Naam",
+      "type": "text"
+    },
+    "Ticket_Price": {
+      "name": "Prijs per ticket",
+      "type": "number"
+    },
+    "Ticket_Description": {
+      "name": "Omschrijving",
+      "type": "text"
+    },
+    "Ticket_Capacity": {
+      "name": "Ticket capsiteit",
+      "type": "number"
+    }
+  }
+}

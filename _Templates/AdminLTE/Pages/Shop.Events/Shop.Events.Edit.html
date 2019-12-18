@@ -82,7 +82,7 @@
 
 <div class="row">
     <div class="col-12">
-        <div class="card">
+        <div class="card" id="tickets">
             <div class="card-header">
                 <h2 class="card-title">Tickets</h2>
                 <div class="card-tools">
@@ -90,31 +90,10 @@
                 </div>
             </div>
             <div class="card-body table-responsive">
-                <table class="table">
-                    <thead>
-                    <tr>
-                        <th>Naam</th>
-                        <th>Prijs per ticket</th>
-                        <th>Omschrijving</th>
-                        <th>Ticket capaciteit</th>
-                        <th>
-                            <div class="btn-group btn-group-sm">
-                                <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
-                            </div>
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {foreach from=$aTickets item=aTicket}
-                    <tr>
-                        <td>{$aTicket.Ticket_Name}</td>
-                        <td>{$aTicket.Ticket_Price}</td>
-                        <td>{$aTicket.Ticket_Description}</td>
-                        <td>{$aTicket.Ticket_Capacity}</td>
-                    </tr>
-                    {/foreach}
-                    </tbody>
-                </table>
+                <div class="alert alert-info">
+                    Tickets kunnen niet gewijzigd worden wanneer er tickets verkocht zijn of inschrijving mogelijk is.
+                </div>
+                {$sTicketsCrud}
             </div>
         </div>
     </div>
@@ -149,7 +128,7 @@
             </div>
             <div class="card-body">
                 <div class="alert alert-info">
-                    <span>Een evenement kan niet verwijdert worden wanneer er verkochte tickts zijn. </span>
+                    <span>Een evenement kan niet verwijdert worden wanneer er verkochte tickts zijn of inschrijven mogelijk is. </span>
                 </div>
                 <button class="btn btn-danger">
                     <i class="fas fa-trash"></i>

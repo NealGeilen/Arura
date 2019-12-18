@@ -16,7 +16,7 @@ if (isset($_GET["c"])){
 } else if (isset($_GET["e"]) && !empty($_GET["e"])){
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
     $oSmarty->assign("aEvent", $db->fetchRow("SELECT * FROM tblEvents WHERE Event_Id = :Event_Id", ["Event_Id" => $_GET["e"]]));
-    $oSmarty->assign("aTickets", $db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $_GET["e"]]));
+    $oSmarty->assign("sTicketsCrud", (string)\Arura\Crud::drop(__DATAFILES__ . "Events.TicketTypes.json", ["e" => $_GET["e"]], ["Ticket_Event_Id" => $_GET["e"]], "tickets"));
     return Page::getHtml(__DIR__ . "/Shop.Events.Edit.html");
 }
 $oSmarty->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));
