@@ -12,41 +12,41 @@
             <div class="col-12">
                 <h6>Basis</h6>
             </div>
-            <div class="form-group col-md-6 col-6">
+            <div class="form-group col-md-4 col-6">
                 <label>Naam</label>
-                <input type="text" class="form-control" name="" value="">
+                <input type="text" class="form-control" name="Event_Name" value="" required>
             </div>
-            <div class="form-group col-md-6 col-6">
+            <div class="form-group col-md-4 col-6">
+                <label>Slug</label>
+                <input type="text" class="form-control" name="Event_Slug" value="" required>
+            </div>
+            <div class="form-group col-md-4 col-6">
                 <label>Locatie</label>
-                <input type="text" class="form-control" name="" value="">
+                <input type="text" class="form-control" name="Event_Location" value="" required>
             </div>
             <div class="form-group col-12">
                 <label>Omschrijving</label>
-                <textarea class="form-control" name="" ></textarea>
+                <textarea class="form-control" name="Event_Description" required></textarea>
             </div>
             <div class="form-group col-md-6 col-6">
                 <label>Start datum</label>
-                <input type="datetime-local" class="form-control" name="" value="">
+                <input type="datetime-local" class="form-control" name="Event_Start_Timestamp" value="" required>
             </div>
             <div class="form-group col-md-6 col-6">
                 <label>Eind datum</label>
-                <input type="datetime-local" class="form-control" name="" value="">
+                <input type="datetime-local" class="form-control" name="Event_End_Timestamp" value="" required>
             </div>
             <div class="col-12">
                 <hr/>
                 <h6>Details</h6>
             </div>
             <div class="form-group col-md-6 col-6">
-                <label>Prijs</label>
-                <input type="number" class="form-control" name="" min="0" placeholder="€5,00">
-            </div>
-            <div class="form-group col-md-6 col-6">
-                <label>Banner afbeelding</label>
-                <input type="text" class="form-control file-selector" name="" value="">
+                <label>Banner evenement</label>
+                <input type="text" class="form-control file-selector" name="Event_Banner" value="" required>
             </div>
             <div class="form-group col-md-6 col-6">
                 <label>Organizator</label>
-                <select class="form-control" value="{$aUser.User_Id}">
+                <select class="form-control" value="{$aUser.User_Id}" name="Event_Organizer_User_Id" required>
                     {foreach from=$aUsers item=user}
                     <option value="{$user.User_Id}">{$user.User_Username} | {$user.User_Email}</option>
                     {/foreach}
@@ -54,7 +54,7 @@
             </div>
             <div class="form-group col-md-6 col-6">
                 <label>Capaciteit</label>
-                <input type="number" class="form-control" name="" value="" min="0">
+                <input type="number" class="form-control" name="Event_Capacity" value="" min="0" required>
             </div>
             <div class="form-group col-12">
                 <input type="submit" class="btn btn-primary" name="" value="Aanmaken">

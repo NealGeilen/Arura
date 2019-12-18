@@ -43,13 +43,6 @@
     "Default": null,
     "Extra": ""
   },
-  "Event_Price": {
-    "Type": "float(5,2)",
-    "Null": "NO",
-    "Key": "",
-    "Default": null,
-    "Extra": ""
-  },
   "Event_Banner": {
     "Type": "varchar(255)",
     "Null": "NO",

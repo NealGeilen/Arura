@@ -4,7 +4,9 @@ $oSmarty =  Page::getSmarty();
 $db = new \NG\Database();
 if (isset($_GET["c"])){
 
-    if (isset($_POST["awdawdawd"])){
+    if (isset($_POST["Event_Name"])){
+        $_POST["Event_Start_Timestamp"] = strtotime($_POST["Event_Start_Timestamp"]);
+        $_POST["Event_End_Timestamp"] = strtotime($_POST["Event_End_Timestamp"]);
         $e = \Arura\Shop\Events\Event::Create($_POST);
     }
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
