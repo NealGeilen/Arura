@@ -1,3 +1,7 @@
+startPageLoad();
+$(document).ready(function () {
+    endPageLoad();
+});
 function addSuccessMessage(sMessage) {
     var oSettings = {
         placement: {
@@ -97,6 +101,10 @@ $("textarea.richtext").ready(function () {
             ]
         });
     });
+});
+
+$("a").onclick(function () {
+    startPageLoad();
 });
 
 $.fn.FormAjax = function( options = {} ) {
