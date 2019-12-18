@@ -5,7 +5,30 @@
             <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/beheer?c"><i class="fas fa-plus"></i></a>
         </div>
     </div>
-    <div class="card-body">
-
+    <div class="card-body table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Naam</th>
+                    <th>Slug</th>
+                    <th>Capaciteit</th>
+                    <th>Tijd</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            {foreach from=$aEvents key=$iKey item=aEvent}
+            <tr>
+                <td>{$aEvent.Event_Name}</td>
+                <td>{$aEvent.Event_Slug}</td>
+                <td>{$aEvent.Event_Capacity}</td>
+                <td>{$aEvent.Event_Start_Timestamp|date_format:"%H:%M %d-%m-%y"} t/m {$aEvent.Event_End_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
+                <td class="btn-group btn-group-sm">
+                    <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/beheer?e={$aEvent.Event_Id}"><i class="fas fa-pen"></i></a>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+        </table>
     </div>
 </div>
