@@ -62,7 +62,7 @@ $('form.form-sender').submit(function (e) {
         url: $(this).attr('action'),
         type: $(this).attr('method'),
         dataType: 'json',
-        data: ($(this).serializeArray()),
+        data: (serializeArray($(this))),
         success: function () {
             addSuccessMessage('Opgelsagen');
         },

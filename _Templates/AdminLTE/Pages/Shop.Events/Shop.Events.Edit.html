@@ -8,7 +8,8 @@
         </div>
     </div>
     <div class="card-body">
-        <form class="form-row">
+        <form class="form-row form-sender" action="/{$aArura.dir}/api/shop/event.php?type=save-event" method="post">
+            <input type="hidden" name="Event_Id" value="{$aEvent.Event_Id}" required>
             <div class="col-12">
                 <h6>Basis</h6>
             </div>
@@ -62,13 +63,13 @@
             </div>
             <div class="form-group col-12">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="Event_IsActive"{if $Event.Event_IsActive} checked{/if}>
+                    <input type="checkbox" class="custom-control-input" id="customCheck1" name="Event_IsActive"{if $aEvent.Event_IsActive === "1"} checked{/if}>
                     <label class="custom-control-label" for="customCheck1">Inschrijving mogelijk</label>
                 </div>
             </div>
             <div class="form-group col-12">
                 <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="customCheck2" name="Event_isVisible"{if $Event.Event_IsVisable} checked{/if}>
+                    <input type="checkbox" class="custom-control-input" id="customCheck2" name="Event_isVisible"{if $aEvent.Event_IsVisible === "1"} checked{/if}>
                     <label class="custom-control-label" for="customCheck2">Zichtbaar</label>
                 </div>
             </div>
@@ -79,26 +80,78 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h2 class="card-title">Tickets</h2>
-        <div class="card-tools">
-            <div class="btn-group btn-group-sm">
-                <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
+<div class="row">
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Tickets</h2>
+                <div class="card-tools">
+
+                </div>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Naam</th>
+                        <th>Prijs per ticket</th>
+                        <th>Omschrijving</th>
+                        <th>Hoeveelheid beschikbaar</th>
+                        <th>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                            </div>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {foreach from=$aTickets item=aTicket}
+                    <tr>
+                        <td>{$aTicket.Ticket_Name}</td>
+                        <td>{$aTicket.Ticket_Price}</td>
+                        <td>{$aTicket.Ticket_Description}</td>
+                        <td>{$aTicket.Ticket_Capacity}</td>
+                    </tr>
+                    {/foreach}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <div class="card-body table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Naam</th>
-                    <th>Prijs per ticket</th>
-                    <th>Omschrijving</th>
-                    <th>Hoeveelheid beschikbaar</th>
-                    <th></th>
-                </tr>
-            </thead>
-        </table>
+    <div class="col-md-6 col-12">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Categoriën</h2>
+            </div>
+            <div class="card-body table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Catgeroie</th>
+                            <th>
+                                <div class="btn-group btn-group-sm">
+                                    <button class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Evenement verwijderen</h2>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
     </div>
 </div>
