@@ -14,6 +14,13 @@
       "Default": null,
       "Extra": ""
     },
+    "Ticket_Price": {
+      "Type": "float(5,2)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
     "Ticket_Event_Id": {
       "Type": "int(11)",
       "Null": "NO",
