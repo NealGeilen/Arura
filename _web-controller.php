@@ -161,7 +161,7 @@ $aNavBarPages =
                                     (
                                     \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                                     ),
-                                "Title" => "Tickets",
+                                "Title" => "Inschrijvingen",
                                 "FileName" => null,
                                 "Icon" => "fas fa-ticket-alt",
                                 "isChild" => true,
