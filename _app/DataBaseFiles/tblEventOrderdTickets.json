@@ -1,0 +1,25 @@
+{
+  "columns": {
+    "Ticket_Hash": {
+      "Type": "varchar(100)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": null,
+      "Extra": ""
+    },
+    "Ticket_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Ticket_OrderRow_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    }
+  }
+}
