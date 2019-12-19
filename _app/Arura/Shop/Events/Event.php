@@ -87,37 +87,17 @@ class Event Extends Page{
         return $instance !== false;
     }
 
-    public static function displayView($sSlug){
-        if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
-            if (!Application::get("website", "maintenance") || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
-                if (self::urlExists($sSlug)){
-                    $oPage = self::fromUrl($sSlug);
-                    if ($oPage->getIsVisible() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
-                        $oPage->setTitle($oPage->getName());
-                        $oPage->showPage();
-                        exit;
-                    }
+    public static function displayView($sSlug, $iRight = null,callable $function = null){
+        parent::displayView($sSlug, \Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
+            if (self::urlExists($sUrl)){
+                $oPage = self::fromUrl($sUrl);
+                if ($oPage->getIsVisible() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
+                    $oPage->setTitle($oPage->getName());
+                    $oPage->showPage();
+                    exit;
                 }
-            } else {
-                $oPage = new Page();
-                $oPage->setPageContend("<section><h1 class='text-center'>Website is op het moment in onderhoud, Probeer later opnieuw!</h1></section>");
-                $oPage->setTitle("Onderhoud");
-                $oPage->showPage();
-                exit;
             }
-        } else {
-            $oPage = new Page();
-            $oPage::$MasterPage = "Launchpage.html";
-            $oPage->setTitle("Home");
-            $oPage->showPage();
-            exit;
-
-        }
-        $oPage = new Page();
-        $oPage->setTitle("Pagina niet gevonden");
-        $oPage->setDescription("Deze pagina bestaat niet");
-        $oPage->setPageContend(self::$smarty->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
-        $oPage->showPage();
+        });
     }
 
     public function save() : bool

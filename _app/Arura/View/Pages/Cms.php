@@ -143,37 +143,16 @@ class Cms extends Page implements PageEnum {
         parent::showPage();
     }
 
-    public static function displayView($sUrl){
-        $_SERVER["REDIRECT_URL"] = $sUrl;
-        if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation(\Rights::CMS_PAGES)){
-            if (!Application::get("website", "maintenance") || Restrict::Validation(\Rights::CMS_PAGES)){
-                if (self::urlExists($sUrl)){
-                    $oPage = self::fromUrl($sUrl);
-                    if ($oPage->isVisible() || Restrict::Validation(\Rights::CMS_PAGES)){
-                        $oPage->showPage();
-                        exit;
-                    }
+    public static function displayView($sSlug, $iRight = null,callable $function = null){
+        parent::displayView($sSlug, \Rights::CMS_PAGES, function ($sUrl){
+            if (self::urlExists($sUrl)){
+                $oPage = self::fromUrl($sUrl);
+                if ($oPage->isVisible() || Restrict::Validation(\Rights::CMS_PAGES)){
+                    $oPage->showPage();
+                    exit;
                 }
-            } else {
-                $oPage = new Page();
-                $oPage->setPageContend("<section><h1 class='text-center'>Website is op het moment in onderhoud, Probeer later opnieuw!</h1></section>");
-                $oPage->setTitle("Onderhoud");
-                $oPage->showPage();
-                exit;
             }
-        } else {
-            $oPage = new Page();
-            $oPage::$MasterPage = "Launchpage.html";
-            $oPage->setTitle("Home");
-            $oPage->showPage();
-            exit;
-
-        }
-        $oPage = new Page();
-        $oPage->setTitle("Pagina niet gevonden");
-        $oPage->setDescription("Deze pagina bestaat niet");
-        $oPage->setPageContend(self::$smarty->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
-        $oPage->showPage();
+        });
     }
 
     /**

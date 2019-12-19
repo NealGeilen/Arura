@@ -4,6 +4,7 @@ namespace Arura\View\Pages;
 use Arura\Modal;
 use Arura\View\Menu;
 use NG\Database;
+use NG\Permissions\Restrict;
 use NG\Settings\Application;
 
 class Page extends Modal implements PageEnum{
@@ -63,6 +64,34 @@ class Page extends Modal implements PageEnum{
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
     }
+
+    public static function displayView($sSlug, $iRight = \Rights::CMS_PAGES ,callable $function = null){
+        $_SERVER["REDIRECT_URL"] = $sSlug;
+        if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation($iRight)){
+            if (!Application::get("website", "maintenance") || Restrict::Validation($iRight)){
+                $function($sSlug);
+            } else {
+                $oPage = new self();
+                $oPage->setPageContend("<section><h1 class='text-center'>Website is op het moment in onderhoud, Probeer later opnieuw!</h1></section>");
+                $oPage->setTitle("Onderhoud");
+                $oPage->showPage();
+                exit;
+            }
+        } else {
+            $oPage = new self();
+            $oPage::$MasterPage = "Launchpage.html";
+            $oPage->setTitle("Home");
+            $oPage->showPage();
+            exit;
+
+        }
+        $oPage = new Page();
+        $oPage->setTitle("Pagina niet gevonden");
+        $oPage->setDescription("Deze pagina bestaat niet");
+        $oPage->setPageContend(self::$smarty->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
+        $oPage->showPage();
+    }
+
 
     /**
      * @return mixed
