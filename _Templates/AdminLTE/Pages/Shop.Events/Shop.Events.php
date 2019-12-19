@@ -9,14 +9,19 @@ if (isset($_GET["c"])){
         $_POST["Event_End_Timestamp"] = strtotime($_POST["Event_End_Timestamp"]);
         $_POST["Event_IsActive"] = 0;
         $_POST["Event_IsVisible"] = 0;
-        $e = \Arura\Shop\Events\Event::Create($_POST);
+        $e = \Arura\Shop\Event::Create($_POST);
     }
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
     return Page::getHtml(__DIR__ . "/Shop.Events.Create.html");
 } else if (isset($_GET["e"]) && !empty($_GET["e"])){
+    $oEvent = new \Arura\Shop\Event($_GET["e"]);
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
-    $oSmarty->assign("aEvent", $db->fetchRow("SELECT * FROM tblEvents WHERE Event_Id = :Event_Id", ["Event_Id" => $_GET["e"]]));
-    $oSmarty->assign("sTicketsCrud", (string)\Arura\Crud::drop(__DATAFILES__ . "Events.TicketTypes.json", ["e" => $_GET["e"]], ["Ticket_Event_Id" => $_GET["e"]], "tickets"));
+    $oSmarty->assign("aEvent", $oEvent->__ToArray());
+    $bTicketsSold = $oEvent->hasEventTicketsSold();
+    $oSmarty->assign("bHasEventTicketsSold", $bTicketsSold);
+    if (!$bTicketsSold && !$oEvent->getIsActive()){
+        $oSmarty->assign("sTicketsCrud", (string)\Arura\Crud::drop(__DATAFILES__ . "Events.TicketTypes.json", ["e" => $_GET["e"]], ["Ticket_Event_Id" => $_GET["e"]], "tickets"));
+    }
     return Page::getHtml(__DIR__ . "/Shop.Events.Edit.html");
 }
 $oSmarty->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));

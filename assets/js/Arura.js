@@ -103,10 +103,6 @@ $("textarea.richtext").ready(function () {
     });
 });
 
-$("a").onclick(function () {
-    startPageLoad();
-});
-
 $.fn.FormAjax = function( options = {} ) {
     return this.each(function() {
         $(this).submit(function (e) {

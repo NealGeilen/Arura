@@ -6,7 +6,7 @@ use NG\Permissions\Restrict;
 use NG\Settings\Application;
 use NG\User\User;
 
-class Cms extends Page{
+class Cms extends Page implements PageEnum {
 
     const PluginPath =              __ROOT__ . '/_Addons/';
     const PluginPathStandard =      self::PluginPath . 'Widgets/';

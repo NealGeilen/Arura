@@ -1,11 +1,14 @@
 <?php
-namespace Arura\Shop\Events;
+namespace Arura\Shop;
 
 use Arura\Shop\ProductEnum;
+use Arura\View\Pages\Page;
 use NG\Database;
+use NG\Permissions\Restrict;
+use NG\Settings\Application;
 use NG\User\User;
 
-class Event implements ProductEnum{
+class Event Extends Page implements ProductEnum{
 
     //Properties
     private $id;
@@ -20,18 +23,14 @@ class Event implements ProductEnum{
     private $bIsActive;
     private $bIsVisible;
     private $iCapacity;
-    private $oCategory;
-    private $oType;
-    private $fPrice;
 
     //Class Objects
     private $isLoaded = false;
-    private $db;
 
     public function __construct($iId)
     {
         $this->setId($iId);
-        $this->db = new Database();
+        parent::__construct($iId);
     }
 
     public static function getAllEvents() : array
@@ -57,14 +56,71 @@ class Event implements ProductEnum{
             $this->setStart($StartDate);
             $EndDate = new \DateTime();
             $EndDate->setTimestamp($aEvent["Event_End_Timestamp"]);
-            $this->setStart($EndDate);
+            $this->setEnd($EndDate);
             $this->setDescription($aEvent["Event_Description"]);
             $this->setCapacity((int)$aEvent["Event_Capacity"]);
             $this->setIsActive((boolean)$aEvent["Event_IsActive"]);
             $this->setIsVisible((boolean)$aEvent["Event_IsVisible"]);
-            $this->setType(new EventType($aEvent["Event_Type_Id"]));
-            $this->setCategory(new EventCategory($aEvent["Event_Category_Id"]));
+            $this->setSlug($aEvent["Event_Slug"]);
         }
+    }
+
+    public function showPage()
+    {
+        $smarty = self::$smarty;
+        $smarty->assign("aEvent", $this->__ToArray());
+        $smarty->assign("aTickets", $this->db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
+        $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . "event.html"));
+        parent::showPage();
+    }
+
+
+    public static function fromUrl($sUrl){
+        $db = new Database();
+        $i = $db ->fetchRow('SELECT Event_Id FROM tblEvents WHERE Event_Slug = ?',
+            [
+                $sUrl
+            ]);
+        return (empty($i)) ? false : new self((int)$i['Event_Id']);
+    }
+
+    public static function urlExists($url)
+    {
+        $instance = self::fromUrl($url);
+        return $instance !== false;
+    }
+
+    public static function displayView($sSlug){
+        if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
+            if (!Application::get("website", "maintenance") || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
+                if (self::urlExists($sSlug)){
+                    $oPage = self::fromUrl($sSlug);
+                    if ($oPage->getIsVisible() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
+                        $oPage->setTitle($oPage->getName());
+                        $oPage->showPage();
+                        exit;
+                    }
+                }
+            } else {
+                $oPage = new Page();
+                $oPage->setPageContend("<section><h1 class='text-center'>Website is op het moment in onderhoud, Probeer later opnieuw!</h1></section>");
+                $oPage->setTitle("Onderhoud");
+                $oPage->showPage();
+                exit;
+            }
+        } else {
+            $oPage = new Page();
+            $oPage::$MasterPage = "Launchpage.html";
+            $oPage->setTitle("Home");
+            $oPage->showPage();
+            exit;
+
+        }
+        $oPage = new Page();
+        $oPage->setTitle("Pagina niet gevonden");
+        $oPage->setDescription("Deze pagina bestaat niet");
+        $oPage->setPageContend(self::$smarty->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
+        $oPage->showPage();
     }
 
     public function save() : bool
@@ -86,15 +142,17 @@ class Event implements ProductEnum{
             "Event_Start_Timestamp" => $this->getStart()->getTimestamp(),
             "Event_End_Timestamp" => $this->getEnd()->getTimestamp(),
             "Event_Location" => $this->getLocation(),
-            "Event_Price" => (float)$this->getPrice(),
             "Event_Banner" => $this->getImg(),
             "Event_Organizer_User_Id" => $this->getOrganizer()->getId(),
             "Event_IsActive" => (int)$this->getIsActive(),
             "Event_IsVisible" => (int)$this->getIsVisible(),
             "Event_Capacity" => $this->getCapacity(),
-            "Event_Type_Id" => $this->getType()->getId(),
-            "Event_Category_Id" => $this->getCategory()->getId()
+            "Event_Slug" => $this->getSlug()
         ];
+    }
+
+    public function hasEventTicketsSold(){
+        return (count($this->db->fetchAll("SELECT Ticket_Hash FROM tblEventOrderdTickets JOIN tblEventTickets ON tblEventTickets.Ticket_Id = tblEventOrderdTickets.Ticket_Id WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
     }
 
     public static function Create($aData){
@@ -277,56 +335,6 @@ class Event implements ProductEnum{
         $this->iCapacity = $iCapacity;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getCategory() : EventCategory
-    {
-        $this->load();
-        return $this->oCategory;
-    }
-
-    /**
-     * @param mixed $oCategory
-     */
-    public function setCategory(EventCategory $oCategory)
-    {
-        $this->oCategory = $oCategory;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getType() : EventType
-    {
-        $this->load();
-        return $this->oType;
-    }
-
-    /**
-     * @param mixed $oType
-     */
-    public function setType(EventType $oType)
-    {
-        $this->oType = $oType;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getPrice() : float
-    {
-        $this->load();
-        return (float)$this->fPrice;
-    }
-
-    /**
-     * @param mixed $fPrice
-     */
-    public function setPrice($fPrice)
-    {
-        $this->fPrice = $fPrice;
-    }
 
     /**
      * @return mixed
@@ -363,5 +371,22 @@ class Event implements ProductEnum{
 
     public function doesProductExist(): bool
     {
+
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getPrice()
+    {
+        return false;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setPrice($price)
+    {
+        return false;
     }
 }
