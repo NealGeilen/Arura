@@ -9,12 +9,12 @@ if (isset($_GET["c"])){
         $_POST["Event_End_Timestamp"] = strtotime($_POST["Event_End_Timestamp"]);
         $_POST["Event_IsActive"] = 0;
         $_POST["Event_IsVisible"] = 0;
-        $e = \Arura\Shop\Event::Create($_POST);
+        $e = \Arura\Shop\Events\Event::Create($_POST);
     }
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
     return Page::getHtml(__DIR__ . "/Shop.Events.Create.html");
 } else if (isset($_GET["e"]) && !empty($_GET["e"])){
-    $oEvent = new \Arura\Shop\Event($_GET["e"]);
+    $oEvent = new \Arura\Shop\Events\Event($_GET["e"]);
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
     $oSmarty->assign("aEvent", $oEvent->__ToArray());
     $bTicketsSold = $oEvent->hasEventTicketsSold();

@@ -12,10 +12,6 @@ class Cms extends Page implements PageEnum {
     const PluginPathStandard =      self::PluginPath . 'Widgets/';
     const PluginPathCustom =        self::PluginPath . 'Custom/';
 
-
-    //Class controllers
-    protected $hasLoaded = false;
-
     //Page variables
     protected $Id;
     protected $isVisible;
@@ -42,7 +38,7 @@ class Cms extends Page implements PageEnum {
     }
 
     protected function load(){
-        if (!$this->hasLoaded){
+        if (!$this->isLoaded){
             $aData = $this->db->fetchRow('SELECT * FROM tblCmsPages WHERE Page_Id = ? ',
                 [
                     $this->Id
@@ -52,7 +48,7 @@ class Cms extends Page implements PageEnum {
             $this->isVisible = (bool)$aData["Page_Visible"];
             $this->Description = $aData["Page_Description"];
 
-            $this->hasLoaded = true;
+            $this->isLoaded = true;
         }
     }
 

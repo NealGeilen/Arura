@@ -1,14 +1,13 @@
 <?php
 namespace Arura\View\Pages;
 
+use Arura\Modal;
 use Arura\View\Menu;
 use NG\Database;
 use NG\Settings\Application;
 
-class Page implements PageEnum{
+class Page extends Modal implements PageEnum{
 
-    //Objects
-    protected $db;
     Public static $smarty;
     public static $pageJsCssFiles;
 
@@ -24,7 +23,7 @@ class Page implements PageEnum{
     protected $PageContend = null;
 
     public function __construct($id = 0){
-        $this->db = new Database();
+        parent::__construct();
     }
 
     public function getPageContent(){

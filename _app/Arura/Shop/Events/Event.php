@@ -1,14 +1,13 @@
 <?php
-namespace Arura\Shop;
+namespace Arura\Shop\Events;
 
-use Arura\Shop\ProductEnum;
 use Arura\View\Pages\Page;
 use NG\Database;
 use NG\Permissions\Restrict;
 use NG\Settings\Application;
 use NG\User\User;
 
-class Event Extends Page implements ProductEnum{
+class Event Extends Page{
 
     //Properties
     private $id;
@@ -23,9 +22,6 @@ class Event Extends Page implements ProductEnum{
     private $bIsActive;
     private $bIsVisible;
     private $iCapacity;
-
-    //Class Objects
-    private $isLoaded = false;
 
     public function __construct($iId)
     {
@@ -70,6 +66,7 @@ class Event Extends Page implements ProductEnum{
         $smarty = self::$smarty;
         $smarty->assign("aEvent", $this->__ToArray());
         $smarty->assign("aTickets", $this->db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
+//        $smarty->assign("iTicketCount", $this->db->fetchRow("SELECT SUM(Registration_Amount) FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
         $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . "event.html"));
         parent::showPage();
     }
@@ -366,27 +363,5 @@ class Event Extends Page implements ProductEnum{
     public function setSlug($sSlug)
     {
         $this->sSlug = $sSlug;
-    }
-
-
-    public function doesProductExist(): bool
-    {
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPrice()
-    {
-        return false;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function setPrice($price)
-    {
-        return false;
     }
 }

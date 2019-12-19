@@ -2,8 +2,7 @@
 namespace Arura\Shop;
 
 use Mollie_API_Client;
-use SC\Client\DataTables;
-use SC\Mail\Notifications;
+
 
 class Payment{
 
