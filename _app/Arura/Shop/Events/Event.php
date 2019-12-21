@@ -128,6 +128,10 @@ class Event Extends Page{
         ];
     }
 
+    public function hasEventTickets(){
+        return (count($this->db->fetchAll("SELECT Ticket_Hash FROM tblEventOrderdTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
+    }
+
     public function hasEventTicketsSold(){
         return (count($this->db->fetchAll("SELECT Ticket_Hash FROM tblEventOrderdTickets JOIN tblEventTickets ON tblEventTickets.Ticket_Id = tblEventOrderdTickets.Ticket_Id WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
     }

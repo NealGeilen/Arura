@@ -1,21 +1,16 @@
 <?php
-namespace Arura\Shop;
+namespace Arura\Shop\Products;
 
+use Arura\Modal;
 use NG\Database;
 use NG\Exceptions\Forbidden;
 use NG\Sessions;
 
-class Customer{
+class Customer extends Modal {
     /**
      * Object
      */
-    protected $db;
     protected static $activeCustomer = null;
-
-    /**
-     * Validators
-     */
-    protected $isLoaded = false;
 
     /**
      * Database tables
@@ -45,7 +40,7 @@ class Customer{
     public function __construct($iCostumerId)
     {
         $this -> setId((int)$iCostumerId);
-        $this->db = new Database();
+        parent::__construct();
     }
 
     /**

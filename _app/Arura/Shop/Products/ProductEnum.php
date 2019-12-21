@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Arura\Shop;
+namespace Arura\Shop\Products;
 
 interface ProductEnum
 {

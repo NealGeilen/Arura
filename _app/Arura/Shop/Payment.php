@@ -4,7 +4,8 @@ namespace Arura\Shop;
 use Mollie_API_Client;
 
 
-class Payment{
+class
+Payment{
 
     private static $Mollie;
 

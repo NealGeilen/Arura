@@ -1,5 +1,5 @@
 <?php
-namespace Arura\Shop;
+namespace Arura\Shop\Products;
 
 use NG\Database;
 
