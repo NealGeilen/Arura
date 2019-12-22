@@ -33,6 +33,9 @@ class Registration extends Modal {
             "Registration_Tel" => $tel,
             "Registration_Amount" => $Amount
         ]);
+        if (!$db->isQuerySuccessful()){
+            throw new \Error();
+        }
         return new self($i);
     }
 

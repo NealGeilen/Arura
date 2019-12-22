@@ -17,7 +17,7 @@ if (isset($_GET["c"])){
     $oEvent = new \Arura\Shop\Events\Event($_GET["e"]);
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
     $oSmarty->assign("aEvent", $oEvent->__ToArray());
-    $bTicketsSold = $oEvent->hasEventTicketsSold();
+    $bTicketsSold = $oEvent->hasEventRegistrations();
     $oSmarty->assign("bHasEventTicketsSold", $bTicketsSold);
     if (!$bTicketsSold && !$oEvent->getIsActive()){
         $oSmarty->assign("sTicketsCrud", (string)\Arura\Crud::drop(__DATAFILES__ . "Events.TicketTypes.json", ["e" => $_GET["e"]], ["Ticket_Event_Id" => $_GET["e"]], "tickets"));

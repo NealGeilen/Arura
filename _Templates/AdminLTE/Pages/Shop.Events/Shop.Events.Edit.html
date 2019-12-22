@@ -92,7 +92,7 @@
             <div class="card-body table-responsive">
                 {if $sTicketsCrud === NULL}
                 <div class="alert alert-info">
-                    Tickets kunnen niet gewijzigd worden wanneer er tickets verkocht zijn of inschrijving mogelijk is.
+                    Tickets kunnen niet gewijzigd worden wanneer er inschrijvingen binnen zijn of inschrijving mogelijk is.
                 </div>
                 {/if}
                 {$sTicketsCrud}
@@ -131,7 +131,7 @@
             <div class="card-body">
                 {if $sTicketsCrud === NULL}
                 <div class="alert alert-info">
-                    Een evenement kan niet verwijdert worden wanneer er verkochte tickts zijn of inschrijven mogelijk is.
+                    Een evenement kan niet verwijdert worden wanneer er inschrijvingen zijn of inschrijven mogelijk is.
                 </div>
                 {else}
                 <button class="btn btn-danger">

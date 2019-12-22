@@ -1,21 +1,35 @@
 {
   "columns": {
-    "Ticket_Hash": {
+    "OrderedTicket_Hash": {
       "Type": "varchar(100)",
       "Null": "NO",
       "Key": "PRI",
       "Default": null,
       "Extra": ""
     },
-    "Ticket_Id": {
+    "OrderedTicket_Registration_Id": {
       "Type": "int(11)",
       "Null": "NO",
       "Key": "",
       "Default": null,
       "Extra": ""
     },
-    "Ticket_OrderRow_Id": {
+    "OrderedTicket_Ticket_Id": {
       "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "OrderedTicket_Price": {
+      "Type": "float(5,2)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "OrderedTicket_LastValided_Timestamp": {
+      "Type": "int(10)",
       "Null": "NO",
       "Key": "",
       "Default": null,

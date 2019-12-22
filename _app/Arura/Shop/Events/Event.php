@@ -66,7 +66,7 @@ class Event Extends Page{
         $smarty = self::$smarty;
         $smarty->assign("aEvent", $this->__ToArray());
         $smarty->assign("aTickets", $this->db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
-//        $smarty->assign("iTicketCount", $this->db->fetchRow("SELECT SUM(Registration_Amount) FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
+        $smarty->assign("iTicketCount", $this->db->fetchRow("SELECT SUM(Registration_Amount) FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
         $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . "event.html"));
         parent::showPage();
     }
@@ -129,11 +129,11 @@ class Event Extends Page{
     }
 
     public function hasEventTickets(){
-        return (count($this->db->fetchAll("SELECT Ticket_Hash FROM tblEventOrderdTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
+        return (count($this->db->fetchAll("SELECT Ticket_Id FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
     }
 
-    public function hasEventTicketsSold(){
-        return (count($this->db->fetchAll("SELECT Ticket_Hash FROM tblEventOrderdTickets JOIN tblEventTickets ON tblEventTickets.Ticket_Id = tblEventOrderdTickets.Ticket_Id WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
+    public function hasEventRegistrations(){
+        return (count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
     }
 
     public static function Create($aData){
