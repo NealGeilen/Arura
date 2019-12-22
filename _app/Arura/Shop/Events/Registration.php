@@ -4,7 +4,6 @@ namespace Arura\Shop\Events;
 
 use Arura\Modal;
 use NG\Database;
-use NG\User\User;
 
 class Registration extends Modal {
 
@@ -66,14 +65,16 @@ class Registration extends Modal {
         }
     }
 
-    public function addTicket($iTicketId = 0, $fPrice = 0.0,$iAmount = 0){
-        $this->db->createRecord("tblEventOrderdTickets", [
-            "OrderdTicket_Hash" => getHash("tblEventOrderdTickets", "OrderdTicket_Hash"),
-            "OrderdTicket_Ticket_Id" => $iTicketId,
-            "OrderdTicket_Registartion_Id" => $this->getId(),
-            "OrderdTicket_IsPayed" => null,
-            "OrderdTicket_Price" => $fPrice
-        ]);
+    public function addTicket($iTicketId = 0, $fPrice = 0.0,$iAmount = 1){
+        for ($i =0; $i > $iAmount; $i++){
+            $this->db->createRecord("tblEventOrderdTickets", [
+                "OrderdTicket_Hash" => getHash("tblEventOrderdTickets", "OrderdTicket_Hash"),
+                "OrderdTicket_Ticket_Id" => $iTicketId,
+                "OrderdTicket_Registartion_Id" => $this->getId(),
+                "OrderdTicket_IsPayed" => null,
+                "OrderdTicket_Price" => $fPrice
+            ]);
+        }
         return $this->db->isQuerySuccessful();
     }
 
