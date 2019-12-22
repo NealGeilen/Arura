@@ -62,27 +62,6 @@
       "Key": "",
       "Default": null,
       "Extra": ""
-    },
-    "Event_IsActive": {
-      "Type": "tinyint(1)",
-      "Null": "NO",
-      "Key": "",
-      "Default": null,
-      "Extra": ""
-    },
-    "Event_IsVisible": {
-      "Type": "tinyint(1)",
-      "Null": "NO",
-      "Key": "",
-      "Default": null,
-      "Extra": ""
-    },
-    "Event_Capacity": {
-      "Type": "Int(100)",
-      "Null": "NO",
-      "Key": "",
-      "Default": null,
-      "Extra": ""
     }
   }
 }
