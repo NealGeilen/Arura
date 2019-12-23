@@ -1,9 +1,11 @@
 <?php
 namespace Arura\Shop\Events;
 
+use Arura\Shop\Payment;
 use Arura\View\Pages\Page;
 use NG\Database;
 use NG\Permissions\Restrict;
+use NG\Settings\Application;
 use NG\User\User;
 
 class Event Extends Page{
@@ -66,8 +68,7 @@ class Event Extends Page{
     {
         $smarty = self::$smarty;
         $smarty->assign("aEvent", $this->__ToArray());
-        $smarty->assign("aTickets", $this->db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
-        $smarty->assign("iTicketCount", $this->db->fetchRow("SELECT SUM(Registration_Amount) FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
+        $smarty->assign('aWebsite', Application::getAll()['website']);
         $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . self::$MasterPage));
         parent::showPage();
     }
@@ -89,9 +90,31 @@ class Event Extends Page{
     }
 
     public function checkout(){
-        $this->setTitle("Checkout | ". $this->getName());
-        self::$MasterPage = "Events/checkout.html";
-        $this->showPage();
+        if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"])){
+            $aTickets = [];
+            $iTotalAmount = 0;
+            foreach ($_POST["Tickets"] as $iTicket => $iAmount){
+                if ((int)$iAmount > 0){
+                    $aTicket = $this->db->fetchRow("SELECT * FROM tblEventTickets WHERE Ticket_Id = :Ticket_Id AND Ticket_Event_Id = :Event_Id",[
+                        "Event_Id" => $this->getId(),
+                        "Ticket_Id" => $iTicket
+                    ]);
+                    if (!empty($aTicket)){
+                        $aTicket["Amount"] = (int)$iAmount;
+                        $iTotalAmount += ((int)$iAmount * (float)$aTicket["Ticket_Price"]);
+                        $aTickets[] = $aTicket;
+                    }
+                }
+            }
+            if (!empty($aTickets)){
+                $this->setTitle("Checkout | ". $this->getName());
+                self::$smarty->assign("iTotalAmount", $iTotalAmount);
+                self::$smarty->assign("aTickets", $aTickets);
+                self::$smarty->assign("aIssuers", Payment::getIdealIssuers());
+                self::$MasterPage = "Events/checkout.html";
+                $this->showPage();
+            }
+        }
     }
 
     public static function displayView($sSlug, $iRight = null,callable $function = null){
@@ -116,6 +139,10 @@ class Event Extends Page{
                             }
                             break;
                         default:
+                            $db = new Database();
+                            $smarty = self::$smarty;
+                            $smarty->assign("aTickets", $db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]));
+                            $smarty->assign("iTicketCount", $db->fetchRow("SELECT SUM(Registration_Amount) FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]));
                             $oPage->setTitle($oPage->getName());
                             $oPage->showPage();
                             break;
@@ -165,6 +192,13 @@ class Event Extends Page{
         $db = new Database();
         $db -> createRecord("tblEvents",$aData);
         return new self($aData["Event_Hash"]);
+    }
+
+    public function hasThisTicket($iTicket){
+        return count($this->db->fetchAll("SELECT Ticket_Id FROM tblEventTickets WHERE Ticket_Id = :Ticket_Id AND Ticket_Event_Id = :Event_Id",[
+            "Event_Id" => $this->getId(),
+            "Ticket_Id" => $iTicket
+        ])) > 0;
     }
 
     public function Remove(){

@@ -36,7 +36,7 @@ class Payment extends Modal {
     }
 
     public static function getIdealIssuers(){
-        return self::getMollie()->methods->get(\Mollie\Api\Types\PaymentMethod::IDEAL, ["include" => "issuers"])->issuers();
+        return json_decode(json_encode(self::getMollie()->methods->get("ideal", ["include" => "issuers"])->issuers), true);
     }
 
     public static function CreatePayment($fAmount, $PaymentType, $description, $sOrderType ,$sIssuer = null){
