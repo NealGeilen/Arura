@@ -4,7 +4,6 @@ namespace Arura\Shop\Events;
 use Arura\View\Pages\Page;
 use NG\Database;
 use NG\Permissions\Restrict;
-use NG\Settings\Application;
 use NG\User\User;
 
 class Event Extends Page{
@@ -22,6 +21,8 @@ class Event Extends Page{
     private $bIsActive;
     private $bIsVisible;
     private $iCapacity;
+
+    public static $MasterPage = "Events/event.html";
 
     public function __construct($iId)
     {
@@ -67,7 +68,7 @@ class Event Extends Page{
         $smarty->assign("aEvent", $this->__ToArray());
         $smarty->assign("aTickets", $this->db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
         $smarty->assign("iTicketCount", $this->db->fetchRow("SELECT SUM(Registration_Amount) FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]));
-        $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . "event.html"));
+        $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . self::$MasterPage));
         parent::showPage();
     }
 
@@ -87,14 +88,38 @@ class Event Extends Page{
         return $instance !== false;
     }
 
+    public function checkout(){
+        $this->setTitle("Checkout | ". $this->getName());
+        self::$MasterPage = "Events/checkout.html";
+        $this->showPage();
+    }
+
     public static function displayView($sSlug, $iRight = null,callable $function = null){
         parent::displayView($sSlug, \Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
                 if ($oPage->getIsVisible() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
-                    $oPage->setTitle($oPage->getName());
-                    $oPage->showPage();
-                    exit;
+                    switch ($_GET["type"]){
+                        case "checkout":
+                            if ($oPage->getIsActive()){
+                                $oPage->checkout();
+                            }
+                            break;
+                        case "payment":
+                            if ($oPage->getIsActive()){
+
+                            }
+                            break;
+                        case "done":
+                            if ($oPage->getIsActive()){
+
+                            }
+                            break;
+                        default:
+                            $oPage->setTitle($oPage->getName());
+                            $oPage->showPage();
+                            break;
+                    }
                 }
             }
         });

@@ -63,6 +63,7 @@ class Page extends Modal implements PageEnum{
 
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
+        exit;
     }
 
     public static function displayView($sSlug, $iRight = \Rights::CMS_PAGES ,callable $function = null){
