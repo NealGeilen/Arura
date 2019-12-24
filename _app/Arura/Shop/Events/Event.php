@@ -111,7 +111,7 @@ class Event Extends Page{
         ];
     }
 
-    private function checkout(){
+    public function checkout(){
         if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"])){
             $aCollection = $this->collectTicketsPOST();
             if (!empty($aCollection["Tickets"])){
@@ -125,12 +125,12 @@ class Event Extends Page{
         }
     }
 
-    private function payment(){
+    public function payment(){
         if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"]) && isset($_POST["firstname"])){
             $aCollection = $this->collectTicketsPOST();
             if (!empty($aCollection["Tickets"])){
                 Payment::$REDIRECT_URL = Application::get("website", "url")."/event/".$this->getSlug()."/done";
-                $R = Registration::NewRegistration($this, $_POST["fisrtname"], $_POST["lastname"], $_POST["email"], $_POST["tel"]);
+                $R = Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"]);
                 $P = Payment::CreatePayment(
                     $aCollection["Amount"],
                     Payment::METHOD_IDEAL,
@@ -156,12 +156,14 @@ class Event Extends Page{
                             break;
                         case "payment":
                             if ($oPage->getIsActive()){
-
+                                $oPage->payment();
                             }
                             break;
                         case "done":
                             if ($oPage->getIsActive()){
-
+                                $oPage->setTitle("Voltooid | ". $oPage->getName());
+                                self::$MasterPage = "Events/done.html";
+                                $oPage->showPage();
                             }
                             break;
                         default:
@@ -218,13 +220,6 @@ class Event Extends Page{
         $db = new Database();
         $db -> createRecord("tblEvents",$aData);
         return new self($aData["Event_Hash"]);
-    }
-
-    public function hasThisTicket($iTicket){
-        return count($this->db->fetchAll("SELECT Ticket_Id FROM tblEventTickets WHERE Ticket_Id = :Ticket_Id AND Ticket_Event_Id = :Event_Id",[
-            "Event_Id" => $this->getId(),
-            "Ticket_Id" => $iTicket
-        ])) > 0;
     }
 
     public function Remove(){

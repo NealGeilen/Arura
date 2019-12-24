@@ -2,14 +2,15 @@
 namespace Arura\Shop;
 
 use Arura\Modal;
-use Mollie_API_Client;
+use Arura\SecureAdmin\Database;
+use Mollie\Api\MollieApiClient;
 use NG\Settings\Application;
 
 
 class Payment extends Modal {
 
-    const METHOD_IDEAL = "IDEAL";
-    const METHOD_PAYPAL = "PAYPAL";
+    const METHOD_IDEAL = \Mollie\Api\Types\PaymentMethod::IDEAL;
+    const METHOD_PAYPAL = \Mollie\Api\Types\PaymentMethod::PAYPAL;
 
     public static $REDIRECT_URL = null;
     public static $WEBHOOk_URL = null;
@@ -19,32 +20,33 @@ class Payment extends Modal {
     protected $id;
     protected $payment = null;
 
-    public static function getMollie(): Mollie_API_Client{
+    public static function getMollie(): MollieApiClient{
         if (is_null(self::$Mollie)){
-            self::$Mollie = new Mollie_API_Client();
-            self::$Mollie->setApiKey("test_yTPJQjAdFTHCH9My3yHRzJuNebf57P");
+            $oMollie =new MollieApiClient();
+            $oMollie->setApiKey("test_yTPJQjAdFTHCH9My3yHRzJuNebf57P");
+            self::$Mollie=$oMollie;
         }
         return self::$Mollie;
     }
 
     public function __construct($sId)
     {
-        self::$REDIRECT_URL = Application::get("website", "url") . "/betaling";
-        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment";
+        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php";
         $this->id = $sId;
         parent::__construct();
     }
 
     public static function getIdealIssuers(){
-        return json_decode(json_encode(self::getMollie()->methods->get("ideal", ["include" => "issuers"])->issuers), true);
+        return json_decode(json_encode(self::getMollie()->methods->get(\Mollie\Api\Types\PaymentMethod::IDEAL, ["include" => "issuers"])->issuers), true);
     }
 
-    public static function CreatePayment($fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []){
+    public static function CreatePayment($fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []) : self{
         $oMollie = self::getMollie();
+        $db = new \NG\Database();
         $payment = $oMollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
-                "value" => $fAmount // You must send the correct number of decimals, thus we enforce the use of strings
+                "value" => strval(number_format((float)$fAmount, 2, '.', '')) // You must send the correct number of decimals, thus we enforce the use of strings
             ],
             "metadata" => $metadata,
             "method" => $PaymentType,
@@ -53,13 +55,22 @@ class Payment extends Modal {
             "webhookUrl" => self::$WEBHOOk_URL,
             "issuer" => $sIssuer
         ]);
+        $db->createRecord("tblPayments", [
+            "Payment_Id" => $payment->id,
+            "Payment_Amount" => $fAmount,
+            "Payment_Type" => $PaymentType,
+            "Payment_Description" => $description,
+            "Payment_Issuer" => $sIssuer,
+            "Payment_Metadata"=> json_encode($metadata),
+            "Payment_Status" => 0
+        ]);
         $self = new self($payment->id);
         $self->setPayment($payment);
         return $self;
     }
 
     public function redirectToMollie(){
-        if ($this->getPayment()->isOpen()){
+        if ($this->getPayment()){
             header("Location: " . $this->getPayment()->getCheckoutUrl(), true, 303);
             exit;
         }
@@ -69,7 +80,7 @@ class Payment extends Modal {
     /**
      * @return null
      */
-    public function getPayment() : \Mollie_API_Object_Payment
+    public function getPayment() : \Mollie\Api\Resources\Payment
     {
         return $this->payment;
     }
@@ -77,7 +88,7 @@ class Payment extends Modal {
     /**
      * @param null $payment
      */
-    public function setPayment(\Mollie_API_Object_Payment $payment)
+    public function setPayment(\Mollie\Api\Resources\Payment $payment)
     {
         $this->payment = $payment;
     }
