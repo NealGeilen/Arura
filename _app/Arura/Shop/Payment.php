@@ -39,13 +39,14 @@ class Payment extends Modal {
         return json_decode(json_encode(self::getMollie()->methods->get("ideal", ["include" => "issuers"])->issuers), true);
     }
 
-    public static function CreatePayment($fAmount, $PaymentType, $description, $sOrderType ,$sIssuer = null){
+    public static function CreatePayment($fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []){
         $oMollie = self::getMollie();
         $payment = $oMollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
                 "value" => $fAmount // You must send the correct number of decimals, thus we enforce the use of strings
             ],
+            "metadata" => $metadata,
             "method" => $PaymentType,
             "description" => $description,
             "redirectUrl" => self::$REDIRECT_URL,
