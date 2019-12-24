@@ -3,6 +3,7 @@ namespace Arura\Shop\Events;
 
 
 use Arura\Modal;
+use Arura\Shop\Payment;
 use NG\Database;
 
 class Registration extends Modal {
@@ -22,7 +23,7 @@ class Registration extends Modal {
         parent::__construct();
     }
 
-    public static function NewRegistration(Event $oEvent, $firstname,$lastname,$email,$tel, $Amount= null){
+    public static function NewRegistration(Event $oEvent, $firstname,$lastname,$email,$tel, $Amount= null, $PaymentId = null){
         $db = new Database();
         $i = $db->createRecord("tblEventRegistration",[
             "Registration_Event_Id" => $oEvent->getId(),
@@ -31,7 +32,8 @@ class Registration extends Modal {
             "Registration_Lastname" => $lastname,
             "Registration_Email" => $email,
             "Registration_Tel" => $tel,
-            "Registration_Amount" => $Amount
+            "Registration_Amount" => $Amount,
+            "Registration_Payment_Id" => $PaymentId
         ]);
         if (!$db->isQuerySuccessful()){
             throw new \Error();

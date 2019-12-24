@@ -30,12 +30,13 @@ class Event Extends Page{
     {
         $this->setId($iId);
         parent::__construct($iId);
+
     }
 
     public static function getAllEvents() : array
     {
         $db = new Database();
-        return $db -> fetchAll("SELECT * FROM tblEvents");
+        return $db -> fetchAll("SELECT * FROM tblEvents WHERE Event_IsVisible = 1 AND Event_Start_Timestamp > UNIX_TIMESTAMP()");
     }
     /**
      * Set values on properties
@@ -147,7 +148,7 @@ class Event Extends Page{
         parent::displayView($sSlug, \Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
-                if ($oPage->getIsVisible() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)){
+                if (($oPage->getIsVisible() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)) && $oPage->getStart()->getTimestamp() > time()){
                     switch ($_GET["type"]){
                         case "checkout":
                             if ($oPage->getIsActive()){
@@ -169,8 +170,7 @@ class Event Extends Page{
                         default:
                             $db = new Database();
                             $smarty = self::$smarty;
-                            $smarty->assign("aTickets", $db->fetchAll("SELECT * FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]));
-                            $smarty->assign("iTicketCount", $db->fetchRow("SELECT SUM(Registration_Amount) FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]));
+                            $smarty->assign("aTickets", $db->fetchAll("SELECT Ticket_Id,Ticket_Capacity,Ticket_Description, Ticket_Name,Ticket_Price , (SELECT count(OrderedTicket_Hash) AS Count FROM tblEventOrderdTickets JOIN tblEventTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE Ticket_Event_Id = :Event_Id) AS Count FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]));
                             $oPage->setTitle($oPage->getName());
                             $oPage->showPage();
                             break;
@@ -246,7 +246,7 @@ class Event Extends Page{
     /**
      * @return mixed
      */
-    public function getStart()
+    public function getStart() : \DateTime
     {
         $this->load();
         return $this->dStart;

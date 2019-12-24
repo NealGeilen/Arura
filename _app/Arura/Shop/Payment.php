@@ -19,6 +19,12 @@ class Payment extends Modal {
 
     protected $id;
     protected $payment = null;
+    protected $amount = 0.00;
+    protected $description;
+    protected $issuer;
+    protected $metadata;
+    protected $card;
+    protected $status;
 
     public static function getMollie(): MollieApiClient{
         if (is_null(self::$Mollie)){
@@ -31,9 +37,30 @@ class Payment extends Modal {
 
     public function __construct($sId)
     {
-        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php";
-        $this->id = $sId;
         parent::__construct();
+        if (count($this->db->fetchAll("SELECT Payment_Id FROM tblPayments WHERE Payment_Id = :Payment_Id", ["Payment_Id"=>$sId])) < 0){
+            throw new \Exception("Payment not found", 404);
+        }
+        $this->id = $sId;
+
+    }
+
+    /**
+     * Set values on properties
+     * @param bool $force
+     */
+    public function load($force = false){
+        if (!$this->isLoaded || $force) {
+            //load user properties from database
+            $aPayment = $this -> db -> fetchRow("SELECT * FROM tblPayments WHERE Payment_Id = ? ", [$this -> getId()]);
+            $this -> isLoaded = true;
+            $this->setPayment(self::getMollie()->payments->get($this->getId()));
+            $this->setAmount($aPayment["Payment_Amount"]);
+            $this->setCard($aPayment["Payment_Card"]);
+            $this->setDescription($aPayment["Payment_Description"]);
+            $this->setIssuer($aPayment["Payment_Issuer"]);
+            $this->setStatus($aPayment["Payment_Status"]);
+        }
     }
 
     public static function getIdealIssuers(){
@@ -43,6 +70,7 @@ class Payment extends Modal {
     public static function CreatePayment($fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []) : self{
         $oMollie = self::getMollie();
         $db = new \NG\Database();
+        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php";
         $payment = $oMollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
@@ -62,7 +90,7 @@ class Payment extends Modal {
             "Payment_Description" => $description,
             "Payment_Issuer" => $sIssuer,
             "Payment_Metadata"=> json_encode($metadata),
-            "Payment_Status" => 0
+            "Payment_Status" => $payment->status
         ]);
         $self = new self($payment->id);
         $self->setPayment($payment);
@@ -75,6 +103,13 @@ class Payment extends Modal {
             exit;
         }
         return false;
+    }
+
+    public function isPaymentFromProducts(){
+        return false;
+    }
+    public function isPaymentFromEvents(){
+        return count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Payment_Id = :Payment_Id", ["Payment_Id" => $this->getId()])) > 0;
     }
 
     /**
@@ -91,6 +126,109 @@ class Payment extends Modal {
     public function setPayment(\Mollie\Api\Resources\Payment $payment)
     {
         $this->payment = $payment;
+    }
+
+    public function updatePayment(){
+        $this->db->updateRecord("tblPayments",[
+            "Payment_Status" => $this->getPayment()->status,
+            "Payment_Card" => $this->card
+        ], "Payment_Id");
+    }
+
+    /**
+     * @return float
+     */
+    public function getAmount()
+    {
+        return $this->amount;
+    }
+
+    /**
+     * @param float $amount
+     */
+    public function setAmount($amount)
+    {
+        $this->amount = $amount;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIssuer()
+    {
+        return $this->issuer;
+    }
+
+    /**
+     * @param mixed $issuer
+     */
+    public function setIssuer($issuer)
+    {
+        $this->issuer = $issuer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCard()
+    {
+        return $this->card;
+    }
+
+    /**
+     * @param mixed $card
+     */
+    public function setCard($card)
+    {
+        $this->card = $card;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param mixed $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
 
