@@ -131,13 +131,14 @@ class Event Extends Page{
             $aCollection = $this->collectTicketsPOST();
             if (!empty($aCollection["Tickets"])){
                 Payment::$REDIRECT_URL = Application::get("website", "url")."/event/".$this->getSlug()."/done";
-                $R = Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"]);
                 $P = Payment::CreatePayment(
                     $aCollection["Amount"],
                     Payment::METHOD_IDEAL,
                     "Betaling tickets voor " . $this->getName(),
                     $_POST["issuer"],
                     ["Tickets" => $aCollection["Tickets"]]);
+                $R = Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"], null, $P->getId());
+
 
                 $P->redirectToMollie();
             }
