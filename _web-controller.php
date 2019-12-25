@@ -309,7 +309,6 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
                     $Host->addPage($P);
                     if (substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl()){
                         $aNavBarPages[$sUrl]["Open"] = true;
-//                        $aChildProperties["Open"] = true;
                     }
                 }
             }

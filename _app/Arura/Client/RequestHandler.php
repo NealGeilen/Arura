@@ -1,15 +1,15 @@
 <?php
 namespace Arura\Client;
 
-use NG\Database;
-use NG\Exceptions\BadRequest;
-use NG\Exceptions\Forbidden;
-use NG\Exceptions\MethodNotAllowed;
-use NG\Exceptions\NotAcceptable;
-use NG\Exceptions\Unauthorized;
-use NG\Permissions\Restrict;
-use NG\Sessions;
-use NG\User\User;
+use Arura\Database;
+use Arura\Exceptions\BadRequest;
+use Arura\Exceptions\Forbidden;
+use Arura\Exceptions\MethodNotAllowed;
+use Arura\Exceptions\NotAcceptable;
+use Arura\Exceptions\Unauthorized;
+use Arura\Permissions\Restrict;
+use Arura\Sessions;
+use Arura\User\User;
 
 
 class RequestHandler{
@@ -19,6 +19,8 @@ class RequestHandler{
     protected $aData = [];
 
     protected $Right = null;
+
+    protected $aTypes = [];
 
 
     public function __construct()
@@ -95,9 +97,20 @@ class RequestHandler{
                 $callback(
                     $this -> aData
                 );
+                if (!empty($this->aTypes) && isset($_GET["type"])){
+                    if (isset($this->aTypes[$_GET["type"]])){
+                        $this->aTypes[$_GET["type"]]($this->aData);
+                    } else {
+                        throw new MethodNotAllowed();
+                    }
+                }
             }catch (\Exception $e){
                 ResponseHandler::setErrorData($e);
             }
         }
+    }
+
+    public function addType($sType, callable $function){
+        $this->aTypes[$sType] = $function;
     }
 }
