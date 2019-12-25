@@ -1,10 +1,11 @@
 <?php
 namespace Arura\SecureAdmin;
 use Arura\Exceptions\Forbidden;
+use Arura\Modal;
 use Arura\Permissions\Restrict;
 use Arura\User\User;
 
-class SecureAdmin{
+class SecureAdmin extends Modal {
 
 
     const READ = 1;
@@ -19,16 +20,13 @@ class SecureAdmin{
     protected $dbName;
     protected $owner;
     protected $key;
-
-    private $isLoaded;
-    protected $db;
     protected $aUser = null;
 
 
     public function __construct($id){
+        parent::__construct();
         if (self::doesTableExits($id)){
             $this->setId($id);
-            $this->db = new \NG\Database();
         } else {
             throw new \Error();
         }
@@ -58,12 +56,12 @@ class SecureAdmin{
     }
 
     public static function doesTableExits($iTableId){
-        $db = new \NG\Database();
+        $db = new \Arura\Database();
         return (count($db->fetchAll("SELECT * FROM tblSecureAdministration WHERE Table_Id = :Table_Id", ["Table_Id" => $iTableId])) > 0 );
     }
 
     public static function getAllTablesForUser(User $oUser){
-        $db = new \NG\Database();
+        $db = new \Arura\Database();
         $aTables = [];
         $aList=  $db->fetchAll("SELECT Table_Id, Table_Owner_User_Id, Table_DataFile, Table_Name, Table_DB_Name FROM tblSecureAdministration LEFT JOIN tblSecureAdministrationShares ON Table_Id = Share_Table_Id WHERE Table_Owner_User_Id = :User_Id OR Share_User_Id = :User_Id",
             [
@@ -82,7 +80,7 @@ class SecureAdmin{
         } while(is_file($sFile));
         fopen($sFile, 'w');
         if (file_put_contents($sFile, json_encode($aTableData))){
-            $db = new \NG\Database();
+            $db = new \Arura\Database();
             do {
                 $sDBTable = "SA_" . str_random(10);
             } while (count($db -> fetchAll("SHOW TABLES LIKE '" .$sDBTable."'")) != 0);

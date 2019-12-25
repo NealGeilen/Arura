@@ -1,5 +1,5 @@
 <?php
-namespace NG\User;
+namespace Arura\User;
 class Password{
 
     public static function Create($pw){

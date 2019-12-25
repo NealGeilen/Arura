@@ -68,7 +68,7 @@ function str_after($str, $needle)
 
 
 function getHash($sTable, $sColumn){
-    $db = new \NG\Database();
+    $db = new \Arura\Database();
     do {
         $str = str_random(25);
         $aData = $db -> fetchRow("SELECT " . $sColumn . " FROM " . $sTable . " WHERE " .$sColumn . " = :".$sColumn, [$sColumn => $str]);

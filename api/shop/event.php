@@ -8,7 +8,7 @@ $request->setRequestMethod('POST');
 $request->setRight(Rights::SHOP_EVENTS_MANAGEMENT);
 $response->isDebug(true);
 $request->sandbox(function ($aData) use ($response){
-    $db = new \NG\Database();
+    $db = new \Arura\Database();
     switch ($_GET["type"]){
         case "save-event":
             $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);

@@ -10,19 +10,19 @@ $request->sandbox(function ($aData) use ($response){
     switch ($_GET["type"]){
         case "add-user":
             $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
-            $oTable->shareTable(new \NG\User\User($aData["User_Id"]), 1);
+            $oTable->shareTable(new \Arura\User\User($aData["User_Id"]), 1);
             break;
         case "remove-user":
             $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
-            $oTable->removeUserShare(new \NG\User\User($aData["User_Id"]));
+            $oTable->removeUserShare(new \Arura\User\User($aData["User_Id"]));
             break;
         case "set-right-user":
             $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
-            $oTable->setUserRights(new \NG\User\User($aData["User_Id"]), $aData["Right"]);
+            $oTable->setUserRights(new \Arura\User\User($aData["User_Id"]), $aData["Right"]);
             break;
         case "save-table":
             $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
-            if ($oTable->isUserOwner(\NG\User\User::activeUser())){
+            if ($oTable->isUserOwner(\Arura\User\User::activeUser())){
                 $db = new \Arura\Database();
                 $db -> updateRecord("tblSecureAdministration", $aData, "Table_Id");
                 $response->exitSuccess($db->isQuerySuccessful());

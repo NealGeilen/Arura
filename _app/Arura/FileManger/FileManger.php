@@ -1,7 +1,7 @@
 <?php
 namespace Arura\FileManger;
 
-use NG\Exceptions\NotAcceptable;
+use Arura\Exceptions\NotAcceptable;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class FileManger{

@@ -1,24 +1,21 @@
 <?php
-namespace NG\User;
+namespace Arura\User;
 
-use NG\Database;
-use NG\Exceptions\NotAcceptable;
-use NG\Mailer\Mailer;
-use NG\Mailer\TemplateHelper;
-use NG\Settings\Application;
+use Arura\Modal;
+use Arura\Database;
+use Arura\Exceptions\NotAcceptable;
+use Arura\Mailer\Mailer;
+use Arura\Settings\Application;
 
-class Recovery{
-    protected $db;
-
+class Recovery extends Modal {
     protected $iTimeOfCreation;
     protected $oUser;
     protected $sToken;
-    protected $isLoaded = false;
 
     public function __construct($sToken)
     {
+        parent::__construct();
         $this->sToken = $sToken;
-        $this->db = new Database();
     }
 
     public function load($force = false){
@@ -70,18 +67,18 @@ class Recovery{
     }
 
     public function sendRecoveryMail(){
-        $oMailer = new Mailer();
-        $oMailer->isHTML(true);
-        $oTemplate = TemplateHelper::fromFile(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . \NG\Settings\Application::get('plg.recovery','template'));
-        $oTemplate->replace("USERNAME", $this->getUser()->getUsername());
-        $oTemplate->replace("EMAIL", $this->getUser()->getEmail());
-        $oTemplate->replace("TOKEN", $this->getToken());
-        $oTemplate->replace("URL", Application::get("website", 'url'));
-        $oTemplate->replace("TIME", date('m/d/Y H:i:s', $this->getTimeOfCreation()));
-        $oMailer->setBodyFromTemplate($oTemplate);
-        $oMailer->setSubject("Wachtwoord herstel");
-        $oMailer->addBCC($this->getUser()->getEmail());
-        return $oMailer->send();
+//        $oMailer = new Mailer();
+//        $oMailer->isHTML(true);
+//        $oTemplate = TemplateHelper::fromFile(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . \NG\Settings\Application::get('plg.recovery','template'));
+//        $oTemplate->replace("USERNAME", $this->getUser()->getUsername());
+//        $oTemplate->replace("EMAIL", $this->getUser()->getEmail());
+//        $oTemplate->replace("TOKEN", $this->getToken());
+//        $oTemplate->replace("URL", Application::get("website", 'url'));
+//        $oTemplate->replace("TIME", date('m/d/Y H:i:s', $this->getTimeOfCreation()));
+//        $oMailer->setBodyFromTemplate($oTemplate);
+//        $oMailer->setSubject("Wachtwoord herstel");
+//        $oMailer->addBCC($this->getUser()->getEmail());
+//        return $oMailer->send();
     }
 
     public function setPassword($sPassword, $sToken){

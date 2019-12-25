@@ -1,6 +1,6 @@
 <?php
 namespace Arura\SecureAdmin;
-use NG\User\User;
+use Arura\User\User;
 
 class Crud extends Database {
 

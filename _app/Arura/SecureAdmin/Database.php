@@ -1,6 +1,6 @@
 <?php
 namespace Arura\SecureAdmin;
-class Database extends \NG\Database {
+class Database extends \Arura\Database {
 
     protected $sKey;
     protected $sPrimaryKey;

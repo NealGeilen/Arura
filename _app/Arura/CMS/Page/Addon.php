@@ -1,9 +1,9 @@
 <?php
 namespace Arura\CMS\Page;
 
-use NG\Database;
+use Arura\Database;
 
-class Addon{
+class Addon {
 
     protected $oDatabase;
 

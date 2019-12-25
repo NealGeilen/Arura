@@ -5,7 +5,7 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
     if (\Arura\SecureAdmin\SecureAdmin::doesTableExits($_GET["s"])){
         $oTable = new Arura\SecureAdmin\SecureAdmin((int)$_GET["s"]);
         if ($oTable->isUserOwner(\Arura\User\User::activeUser())){
-            $db = new \NG\Database();
+            $db = new \Arura\Database();
             $oSmarty->assign("aTable", $oTable->__toArray());
             $oSmarty->assign("aUsersTable", $oTable->getUserShares());
             $oSmarty->assign("aUsers", $db -> fetchAll("SELECT User_Id, User_Username FROM tblUsers WHERE User_Id != :User_Id", ["User_Id" => $oTable->getOwner()->getId()]));
@@ -28,7 +28,7 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
 
 
 
-} else if(\NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION_CREATE) && isset($_GET["c"])) {
+} else if(\Arura\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION_CREATE) && isset($_GET["c"])) {
     return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Create.html");
 }
 else {

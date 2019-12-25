@@ -1,16 +1,16 @@
 <?php
 require_once __DIR__ . '/../../_app/autoload.php';
-if (!\NG\User\User::isLogged()){
+if (!\Arura\User\User::isLogged()){
     die("YOU WON'T :)");
 }
-$response = new \NG\Client\ResponseHandler();
-$request = new \NG\Client\RequestHandler();
+$response = new \Arura\Client\ResponseHandler();
+$request = new \Arura\Client\RequestHandler();
 
 $response->isDebug(true);
 $request->setRequestMethod('POST');
 $request->sandbox(function ($aData) use ($response){
-    \NG\Sessions::Start();
-    $user = \NG\User\User::activeUser();
+    \Arura\Sessions::Start();
+    $user = \Arura\User\User::activeUser();
     $user->load(true);
 
     $user -> setEmail(htmlentities($aData['User_Email']));
@@ -19,11 +19,11 @@ $request->sandbox(function ($aData) use ($response){
     $user -> setLastname(htmlentities($aData['User_Lastname']));
 
     if ($aData['Password1'] === $aData['Password2'] && $aData['Password1'] !== '' && $aData['Password2'] !== ''){
-        $user -> setPassword(\NG\User\Password::Create(htmlentities($aData['Password1'])));
+        $user -> setPassword(\Arura\User\Password::Create(htmlentities($aData['Password1'])));
     }
 
     if (!$user->save()){
-        throw new \NG\Exceptions\Error();
+        throw new \Arura\Exceptions\Error();
     }
     $response->exitSuccess($aData);
 });

@@ -69,7 +69,7 @@ class Payment extends Modal {
 
     public static function CreatePayment($fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []) : self{
         $oMollie = self::getMollie();
-        $db = new \NG\Database();
+        $db = new \Arura\Database();
         self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php";
         $payment = $oMollie->payments->create([
             "amount" => [

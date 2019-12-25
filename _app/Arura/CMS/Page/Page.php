@@ -1,7 +1,7 @@
 <?php
 namespace Arura\CMS\Page;
 
-use NG\Database;
+use Arura\Database;
 
 class Page extends Group{
 
