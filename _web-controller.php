@@ -2,7 +2,7 @@
 
 require_once __DIR__ . "/_app/autoload.php";
 $aExceptionPages = ["/login", "/login/password"];
-if (!\NG\User\User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages)){
+if (!\Arura\User\User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages)){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
 }
@@ -11,7 +11,7 @@ if (!\NG\User\User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages
 $Host = new \Arura\Dashboard\Host();
 $smarty = new Smarty();
 foreach (Rights::getConstants() as $sName => $iValue){
-    $aPermissions[$sName] = \NG\Permissions\Restrict::Validation($iValue);
+    $aPermissions[$sName] = \Arura\Permissions\Restrict::Validation($iValue);
 }
 $aNavBarPages =
     [
@@ -19,7 +19,7 @@ $aNavBarPages =
             "Title" => "Home",
             "FileName" => "Home",
             "MasterPage" => "AdminLTE",
-            "Right" => \NG\User\User::isLogged(),
+            "Right" => \Arura\User\User::isLogged(),
             "Icon" => "fas fa-tachometer-alt",
             "isChild" => false,
             "Children" => Null
@@ -28,7 +28,7 @@ $aNavBarPages =
          * CMS Beheer
          */
         "/content" => [
-            "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_MENU) || \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+            "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_MENU) || \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
             "Title" => "Website content",
             "FileName" => null,
             "Icon" => "fas fa-globe-europe",
@@ -37,7 +37,7 @@ $aNavBarPages =
             "Children" =>
                 [
                     "/content/pagina" => [
-                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
                         "Title" => "Pagina's",
                         "FileName" => "Cms.Pages",
                         "Icon" => "fas fa-file",
@@ -45,7 +45,7 @@ $aNavBarPages =
                         "Children" => null
                     ],
                     "/content/menu" => [
-                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_MENU),
+                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_MENU),
                         "Title" => "Menu",
                         "FileName" => "Cms.Menu",
                         "Icon" => "fas fa-bars",
@@ -53,17 +53,17 @@ $aNavBarPages =
                         "Children" => null
                     ],
                     "/content/pagina/content" => [
-                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
                         "FileName" => "Cms.Page.Content",
                         "Title" => "Pagina content",
                         "Icon" => null,
                         "MasterPage" => "AdminLTE",
                         "Children" => null
                     ],
-                    "/content/pagina/instellingen" => [
-                        "Right" => \NG\Permissions\Restrict::Validation(Rights::CMS_PAGES),
-                        "Title" => "Pagina instellingen",
-                        "FileName" => "Cms.Page.Settings",
+                    "/content/pagina/instelliAruraen" => [
+                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Title" => "Pagina instelliAruraen",
+                        "FileName" => "Cms.Page.SettiAruras",
                         "Icon" => null,
                         "MasterPage" => "AdminLTE",
                         "Children" => null
@@ -76,9 +76,9 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "isChild" => false,
             "Right" => (
-                \NG\Permissions\Restrict::Validation(Rights::FILES_UPLOAD) &&
-                \NG\Permissions\Restrict::Validation(Rights::FILES_READ) &&
-                \NG\Permissions\Restrict::Validation(Rights::FILES_EDIT)
+                \Arura\Permissions\Restrict::Validation(Rights::FILES_UPLOAD) &&
+                \Arura\Permissions\Restrict::Validation(Rights::FILES_READ) &&
+                \Arura\Permissions\Restrict::Validation(Rights::FILES_EDIT)
             ),
             "Icon" => "fas fa-file",
             "Children" => null
@@ -86,7 +86,7 @@ $aNavBarPages =
         '/administration' => [
             "Right" =>
                 (
-                \NG\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION)
+                \Arura\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION)
                 ),
             "Title" => "Beveiligde administratie",
             "FileName" => "Secure.Administration.Tables",
@@ -98,10 +98,10 @@ $aNavBarPages =
         '/winkel' => [
             "Right" =>
                 (
-                    \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS) ||
-                    \NG\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT) ||
-                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||
-                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS) ||
+                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT) ||
+                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||
+                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                 ),
             "Title" => "Webshop",
             "FileName" => null,
@@ -113,7 +113,7 @@ $aNavBarPages =
                     '/winkel/betalingen' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
+                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
                             ),
                         "Title" => "Betalingen",
                         "FileName" => null,
@@ -125,7 +125,7 @@ $aNavBarPages =
                     '/winkel/categorieen' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
+                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
                             ),
                         "Title" => "Categorieën",
                         "FileName" => null,
@@ -137,7 +137,7 @@ $aNavBarPages =
                     '/winkel/producten' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
+                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
                             ),
                         "Title" => "Producten",
                         "FileName" => null,
@@ -149,7 +149,7 @@ $aNavBarPages =
                     '/winkel/evenementen' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
                             ),
                         "Title" => "Evenementen",
                         "FileName" => "Shop.Events",
@@ -159,7 +159,7 @@ $aNavBarPages =
                             '/winkel/evenementen/tickets' => [
                                 "Right" =>
                                     (
-                                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                                     ),
                                 "Title" => "Inschrijvingen",
                                 "FileName" => null,
@@ -171,7 +171,7 @@ $aNavBarPages =
                             '/winkel/evenementen/beheer' => [
                                 "Right" =>
                                     (
-                                    \NG\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
                                     ),
                                 "Title" => "Evenementen beheer",
                                 "FileName" => "Shop.Events",
@@ -187,10 +187,10 @@ $aNavBarPages =
         '/arura' => [
             "Right" =>
                 (
-                    \NG\Permissions\Restrict::Validation(Rights::ARURA_USERS) ||
-                    \NG\Permissions\Restrict::Validation(Rights::ARURA_ROLLES) ||
-                    \NG\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS) ||
-                    \NG\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
+                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_USERS) ||
+                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_ROLLES) ||
+                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS) ||
+                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
                 ),
             "Title" => "Arura",
             "FileName" => null,
@@ -201,7 +201,7 @@ $aNavBarPages =
                     '/arura/users' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::ARURA_USERS)
+                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_USERS)
                             ),
                         "Title" => "Gebruikers",
                         "FileName" => "Arura.Users",
@@ -212,7 +212,7 @@ $aNavBarPages =
                     '/arura/roles' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::ARURA_ROLLES)
+                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_ROLLES)
                             ),
                         "Title" => "Rollen",
                         "FileName" => "Arura.Roles",
@@ -220,13 +220,13 @@ $aNavBarPages =
                         "MasterPage" => "AdminLTE",
                         "Children" => null
                     ],
-                    '/arura/settings' => [
+                    '/arura/settiAruras' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS)
+                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS)
                             ),
-                        "Title" => "Instellingen",
-                        "FileName" => "Arura.Settings",
+                        "Title" => "InstelliAruraen",
+                        "FileName" => "Arura.SettiAruras",
                         "Icon" => "fas fa-cogs",
                         "MasterPage" => "AdminLTE",
                         "Children" => null
@@ -234,7 +234,7 @@ $aNavBarPages =
                     '/arura/updater' => [
                         "Right" =>
                             (
-                            \NG\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
+                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
                             ),
                         "Title" => "Updaten",
                         "FileName" => "Arura.Updater",
@@ -248,29 +248,29 @@ $aNavBarPages =
             "Title" => "Profiel",
             "FileName" => "User.Profile",
             "MasterPage" => "AdminLTE",
-            "Right" => \NG\User\User::isLogged(),
+            "Right" => \Arura\User\User::isLogged(),
             "Icon" => null
         ],
         "/login" => [
             "Title" => "Home",
             "FileName" => "User.Login",
             "MasterPage" => "Clean",
-            "Right" => !\NG\User\User::isLogged(),
+            "Right" => !\Arura\User\User::isLogged(),
             "Icon" => null
         ],
         "/login/password" => [
             "Title" => "Nieuw wachtwoord",
             "FileName" => "User.Login.Password",
             "MasterPage" => "Clean",
-            "Right" => !\NG\User\User::isLogged(),
+            "Right" => !\Arura\User\User::isLogged(),
             "Icon" => null
         ]
 
     ];
 $a = [
 ];
-if (\NG\User\User::isLogged()){
-    $oUser = \NG\User\User::activeUser();
+if (\Arura\User\User::isLogged()){
+    $oUser = \Arura\User\User::activeUser();
     $oUser->TriggerEvent();
     $aUser  = $oUser->__toArray();
     $smarty->assign('aUser', $aUser);

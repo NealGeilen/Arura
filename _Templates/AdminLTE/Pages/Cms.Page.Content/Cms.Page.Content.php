@@ -1,7 +1,7 @@
 <?php
 
 use Arura\Dashboard\Page;
-use NG\Database;
+use Arura\Database;
 
 $db = new Database();
 $smarty = Page::getSmarty();

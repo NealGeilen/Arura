@@ -1,7 +1,7 @@
 <?php
 namespace Arura\Dashboard;
 
-use NG\Exceptions\BadRequest;
+use Arura\Exceptions\BadRequest;
 
 class Tabs{
 

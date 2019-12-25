@@ -1,7 +1,7 @@
 <?php
 namespace Arura\Shop\Products;
 
-use NG\Database;
+use Arura\Database;
 
 class Order{
 

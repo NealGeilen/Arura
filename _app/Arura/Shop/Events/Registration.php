@@ -4,7 +4,7 @@ namespace Arura\Shop\Events;
 
 use Arura\Modal;
 use Arura\Shop\Payment;
-use NG\Database;
+use Arura\Database;
 
 class Registration extends Modal {
 

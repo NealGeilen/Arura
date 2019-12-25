@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../_app/autoload.php';
-$response = new \NG\Client\ResponseHandler();
-$request = new \NG\Client\RequestHandler();
+$response = new \Arura\Client\ResponseHandler();
+$request = new \Arura\Client\RequestHandler();
 $response->isDebug(true);
 $request->TriggerEvent();
 $request->setRequestMethod('POST');
@@ -23,7 +23,7 @@ $request->sandbox(function ($aData) use ($response){
         case "save-table":
             $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
             if ($oTable->isUserOwner(\NG\User\User::activeUser())){
-                $db = new \NG\Database();
+                $db = new \Arura\Database();
                 $db -> updateRecord("tblSecureAdministration", $aData, "Table_Id");
                 $response->exitSuccess($db->isQuerySuccessful());
             }
@@ -37,7 +37,7 @@ $request->sandbox(function ($aData) use ($response){
         default:
             foreach ($_FILES as $file){
                 if ($file["type"] === "application/json"){
-                    $oSecure = \Arura\SecureAdmin\SecureAdmin::Create(json_array_decode(file_get_contents($file["tmp_name"])), \NG\User\User::activeUser());
+                    $oSecure = \Arura\SecureAdmin\SecureAdmin::Create(json_array_decode(file_get_contents($file["tmp_name"])), \Arura\User\User::activeUser());
                 }
             }
             break;

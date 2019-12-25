@@ -7,7 +7,7 @@ Abstract class Modal{
 
     public function __construct()
     {
-        $this->db = new \NG\Database();
+        $this->db = new Database();
     }
 
 

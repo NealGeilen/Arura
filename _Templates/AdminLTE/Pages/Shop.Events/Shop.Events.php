@@ -1,7 +1,7 @@
 <?php
 use Arura\Dashboard\Page;
 $oSmarty =  Page::getSmarty();
-$db = new \NG\Database();
+$db = new \Arura\Database();
 if (isset($_GET["c"])){
 
     if (isset($_POST["Event_Name"])){

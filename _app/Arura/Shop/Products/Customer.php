@@ -2,9 +2,9 @@
 namespace Arura\Shop\Products;
 
 use Arura\Modal;
-use NG\Database;
-use NG\Exceptions\Forbidden;
-use NG\Sessions;
+use Arura\Database;
+use Arura\Exceptions\Forbidden;
+use Arura\Sessions;
 
 class Customer extends Modal {
     /**
@@ -12,9 +12,6 @@ class Customer extends Modal {
      */
     protected static $activeCustomer = null;
 
-    /**
-     * Database tables
-     */
 
 
 

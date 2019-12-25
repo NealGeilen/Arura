@@ -1,10 +1,8 @@
 <?php
 namespace Arura\View\Pages;
 
-use NG\Database;
-use NG\Permissions\Restrict;
-use NG\Settings\Application;
-use NG\User\User;
+use Arura\Database;
+use Arura\Permissions\Restrict;
 
 class Cms extends Page implements PageEnum {
 

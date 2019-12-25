@@ -3,10 +3,10 @@ namespace Arura\Shop\Events;
 
 use Arura\Shop\Payment;
 use Arura\View\Pages\Page;
-use NG\Database;
-use NG\Permissions\Restrict;
-use NG\Settings\Application;
-use NG\User\User;
+use Arura\Database;
+use Arura\Permissions\Restrict;
+use Arura\Settings\Application;
+use Arura\User\User;
 
 class Event Extends Page{
 

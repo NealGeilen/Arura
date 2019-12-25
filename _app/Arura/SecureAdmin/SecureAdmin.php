@@ -1,8 +1,8 @@
 <?php
 namespace Arura\SecureAdmin;
-use NG\Exceptions\Forbidden;
-use NG\Permissions\Restrict;
-use NG\User\User;
+use Arura\Exceptions\Forbidden;
+use Arura\Permissions\Restrict;
+use Arura\User\User;
 
 class SecureAdmin{
 

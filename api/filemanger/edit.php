@@ -1,7 +1,7 @@
 <?php
 require_once __DIR__ . '/../../_app/autoload.php';
-$response = new \NG\Client\ResponseHandler();
-$request = new \NG\Client\RequestHandler();
+$response = new \Arura\Client\ResponseHandler();
+$request = new \Arura\Client\RequestHandler();
 $request->setRight(Rights::FILES_EDIT);
 $request->setRequestMethod('POST');
 $request->TriggerEvent();

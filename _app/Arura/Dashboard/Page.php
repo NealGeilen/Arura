@@ -1,8 +1,7 @@
 <?php
 namespace Arura\Dashboard;
 
-use NG\Settings\Application;
-use function Composer\Autoload\includeFile;
+use Arura\Settings\Application;
 
 class Page{
 

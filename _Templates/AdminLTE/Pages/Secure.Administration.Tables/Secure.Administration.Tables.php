@@ -4,7 +4,7 @@ $oSmarty =  Page::getSmarty();
 if (isset($_GET["s"]) && !empty($_GET["s"])){
     if (\Arura\SecureAdmin\SecureAdmin::doesTableExits($_GET["s"])){
         $oTable = new Arura\SecureAdmin\SecureAdmin((int)$_GET["s"]);
-        if ($oTable->isUserOwner(\NG\User\User::activeUser())){
+        if ($oTable->isUserOwner(\Arura\User\User::activeUser())){
             $db = new \NG\Database();
             $oSmarty->assign("aTable", $oTable->__toArray());
             $oSmarty->assign("aUsersTable", $oTable->getUserShares());
@@ -18,10 +18,10 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
 } else if (isset($_GET["t"]) && !empty($_GET["t"])){
     if (\Arura\SecureAdmin\SecureAdmin::doesTableExits($_GET["t"])){
         $oTable = new Arura\SecureAdmin\SecureAdmin((int)$_GET["t"]);
-        if ($oTable->hasUserRight(\NG\User\User::activeUser(), \Arura\SecureAdmin\SecureAdmin::READ)){
+        if ($oTable->hasUserRight(\Arura\User\User::activeUser(), \Arura\SecureAdmin\SecureAdmin::READ)){
             $oSmarty->assign("sCrud", (string)$oTable->getCrud());
             $oSmarty->assign("aTable", $oTable->__toArray());
-            $oSmarty->assign("bCanExport", $oTable->hasUserRight(\NG\User\User::activeUser(),\Arura\SecureAdmin\SecureAdmin::EXPORT));
+            $oSmarty->assign("bCanExport", $oTable->hasUserRight(\Arura\User\User::activeUser(),\Arura\SecureAdmin\SecureAdmin::EXPORT));
             return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Crud.html");
         }
     }
@@ -32,7 +32,7 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
     return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Create.html");
 }
 else {
-    $oSmarty->assign("aTables", \Arura\SecureAdmin\SecureAdmin::getAllTablesForUser(\NG\User\User::activeUser()));
+    $oSmarty->assign("aTables", \Arura\SecureAdmin\SecureAdmin::getAllTablesForUser(\Arura\User\User::activeUser()));
     return Page::getHtml(__DIR__);
 }
 header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."administration");

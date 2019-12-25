@@ -3,9 +3,9 @@ namespace Arura\View\Pages;
 
 use Arura\Modal;
 use Arura\View\Menu;
-use NG\Database;
-use NG\Permissions\Restrict;
-use NG\Settings\Application;
+use Arura\Database;
+use Arura\Permissions\Restrict;
+use Arura\Settings\Application;
 
 class Page extends Modal implements PageEnum{
 

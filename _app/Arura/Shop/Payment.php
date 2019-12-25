@@ -4,7 +4,7 @@ namespace Arura\Shop;
 use Arura\Modal;
 use Arura\SecureAdmin\Database;
 use Mollie\Api\MollieApiClient;
-use NG\Settings\Application;
+use Arura\Settings\Application;
 
 
 class Payment extends Modal {
