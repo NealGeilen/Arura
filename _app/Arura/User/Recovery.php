@@ -67,18 +67,14 @@ class Recovery extends Modal {
     }
 
     public function sendRecoveryMail(){
-//        $oMailer = new Mailer();
-//        $oMailer->isHTML(true);
-//        $oTemplate = TemplateHelper::fromFile(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . \NG\Settings\Application::get('plg.recovery','template'));
-//        $oTemplate->replace("USERNAME", $this->getUser()->getUsername());
-//        $oTemplate->replace("EMAIL", $this->getUser()->getEmail());
-//        $oTemplate->replace("TOKEN", $this->getToken());
-//        $oTemplate->replace("URL", Application::get("website", 'url'));
-//        $oTemplate->replace("TIME", date('m/d/Y H:i:s', $this->getTimeOfCreation()));
-//        $oMailer->setBodyFromTemplate($oTemplate);
-//        $oMailer->setSubject("Wachtwoord herstel");
-//        $oMailer->addBCC($this->getUser()->getEmail());
-//        return $oMailer->send();
+        $oMailer = new Mailer();
+        $oMailer->isHTML(true);
+        Mailer::getSmarty()->assign("TOKEN", $this->getToken());
+        Mailer::getSmarty()->assign("aUser", $this->getUser()->__toArray());
+        $oMailer->setBody(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . \Arura\Settings\Application::get('plg.recovery','template'));
+        $oMailer->setSubject("Wachtwoord herstel");
+        $oMailer->addBCC($this->getUser()->getEmail());
+        return $oMailer->send();
     }
 
     public function setPassword($sPassword, $sToken){
