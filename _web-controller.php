@@ -220,13 +220,13 @@ $aNavBarPages =
                         "MasterPage" => "AdminLTE",
                         "Children" => null
                     ],
-                    '/arura/settiAruras' => [
+                    '/arura/settings' => [
                         "Right" =>
                             (
                             \Arura\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS)
                             ),
-                        "Title" => "InstelliAruraen",
-                        "FileName" => "Arura.SettiAruras",
+                        "Title" => "Instellingen",
+                        "FileName" => "Arura.Settings",
                         "Icon" => "fas fa-cogs",
                         "MasterPage" => "AdminLTE",
                         "Children" => null
