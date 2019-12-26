@@ -116,9 +116,8 @@ $aNavBarPages =
                             \Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
                             ),
                         "Title" => "Betalingen",
-                        "FileName" => null,
+                        "FileName" => "Shop.Payments",
                         "Icon" => "fas fa-money-bill-wave-alt",
-                        "isChild" => true,
                         "MasterPage" => "AdminLTE",
                         "Children" => null
                     ],

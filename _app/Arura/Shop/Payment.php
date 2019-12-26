@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Shop;
 
+use Arura\Database;
 use Arura\Modal;
 use Mollie\Api\MollieApiClient;
 use Arura\Settings\Application;
@@ -117,6 +118,11 @@ class Payment extends Modal {
     }
     public function isPaymentFromEvents(){
         return count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Payment_Id = :Payment_Id", ["Payment_Id" => $this->getId()])) > 0;
+    }
+
+    public static function getPaymentsFromLast($iHours = 0){
+        $db = new Database();
+        return $db->fetchAll("SELECT * FROM tblPayments WHERE Payment_Timestamp > UNIX_TIMESTAMP(NOW() - INTERVAL ".$iHours." HOUR)");
     }
 
     /**
