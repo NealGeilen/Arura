@@ -95,7 +95,8 @@ class Payment extends Modal {
             "Payment_Description" => $description,
             "Payment_Issuer" => $sIssuer,
             "Payment_Metadata"=> json_encode($metadata),
-            "Payment_Status" => $payment->status
+            "Payment_Status" => $payment->status,
+            "Payment_Timestamp" => time()
         ]);
         $self = new self($Payment_Id);
         $self->isLoaded=true;
@@ -139,7 +140,8 @@ class Payment extends Modal {
         $this->db->updateRecord("tblPayments",[
             "Payment_Id" => $this->getId(),
             "Payment_Status" => $this->getPayment()->status,
-            "Payment_Card" => $this->getPayment()->details->consumerAccount
+            "Payment_Card" => $this->getPayment()->details->consumerAccount,
+            "Payment_Timestamp" => time()
         ], "Payment_Id");
     }
 

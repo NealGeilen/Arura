@@ -10,11 +10,13 @@ var sSelectors = {
 var Addons = {};
 var Builder = {
     Xhr:function(options){
+        startPageLoad();
         var settings = $.extend({
             url: ARURA_API_DIR + '/cms/Page.Content.php',
             type: 'post',
             dataType: 'json',
             error: function () {
+                endPageLoad();
                 addErrorMessage('Handeling is niet opgeslagen');
             }
         }, options);
@@ -221,6 +223,7 @@ var Builder = {
                    Page_Id: this.Page_Id
                }),
                success: function (aData) {
+                   endPageLoad();
                    callback.call(this,aData);
                }
             });
@@ -279,6 +282,7 @@ var Builder = {
                         Data: aData
                     }),
                     success: function (data) {
+                        endPageLoad();
                         addSuccessMessage('Content opgeslagen');
                     }
                 });
@@ -325,6 +329,7 @@ var Builder = {
                    Page_Id: _Page_Id
                }),
                 success: function (aData) {
+                   endPageLoad();
                     $(sSelectors.Editor).append(Builder.Group.Build(aData.data));
                 }
             });
@@ -452,6 +457,7 @@ var Builder = {
                    type: 'Create-Block'
                }),
                 success: function (returned) {
+                   endPageLoad();
                    Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
                    oElement.attr('block-id', returned.data.Content_Id);
                    oElement.attr("style", null);

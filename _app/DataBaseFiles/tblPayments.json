@@ -57,7 +57,14 @@
       "Extra": ""
     },
     "Payment_Status": {
-      "Type": "int(1)",
+      "Type": "varchar(10)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Payment_Timestamp": {
+      "Type": "int(12)",
       "Null": "NO",
       "Key": "",
       "Default": null,
