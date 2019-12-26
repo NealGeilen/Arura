@@ -17,6 +17,7 @@ if (isset($_GET["c"])){
     $oEvent = new \Arura\Shop\Events\Event($_GET["e"]);
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
     $oSmarty->assign("aEvent", $oEvent->__ToArray());
+    $oSmarty->assign("bTickets", $oEvent->hasEventTickets());
     $bTicketsSold = $oEvent->hasEventRegistrations();
     $oSmarty->assign("bHasEventTicketsSold", $bTicketsSold);
     if (!$bTicketsSold && !$oEvent->getIsActive()){

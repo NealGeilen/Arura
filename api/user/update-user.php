@@ -12,14 +12,17 @@ $request->sandbox(function ($aData) use ($response){
     \Arura\Sessions::Start();
     $user = \Arura\User\User::activeUser();
     $user->load(true);
-
     $user -> setEmail(htmlentities($aData['User_Email']));
     $user -> setUsername(htmlentities($aData['User_Username']));
     $user -> setFirstname(htmlentities($aData['User_Firstname']));
     $user -> setLastname(htmlentities($aData['User_Lastname']));
 
-    if ($aData['Password1'] === $aData['Password2'] && $aData['Password1'] !== '' && $aData['Password2'] !== ''){
-        $user -> setPassword(\Arura\User\Password::Create(htmlentities($aData['Password1'])));
+    if (isset($aData['Password1']) && isset($aData['Password2'])){
+        if ($aData['Password1'] === $aData['Password2'] && $aData['Password1'] !== '' && $aData['Password2'] !== ''){
+            $user -> setPassword(\Arura\User\Password::Create(htmlentities($aData['Password1'])));
+        } else {
+            throw new \Arura\Exceptions\NotAcceptable();
+        }
     }
 
     if (!$user->save()){
