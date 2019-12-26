@@ -67,10 +67,10 @@ function str_after($str, $needle)
 
 
 
-function getHash($sTable, $sColumn){
+function getHash($sTable, $sColumn, $iLength = 25){
     $db = new \Arura\Database();
     do {
-        $str = str_random(25);
+        $str = str_random($iLength);
         $aData = $db -> fetchRow("SELECT " . $sColumn . " FROM " . $sTable . " WHERE " .$sColumn . " = :".$sColumn, [$sColumn => $str]);
     } while(isset($aData[$sColumn]));
     return $str;

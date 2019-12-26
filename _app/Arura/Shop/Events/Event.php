@@ -130,8 +130,10 @@ class Event Extends Page{
         if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"]) && isset($_POST["firstname"])){
             $aCollection = $this->collectTicketsPOST();
             if (!empty($aCollection["Tickets"])){
-                Payment::$REDIRECT_URL = Application::get("website", "url")."/event/".$this->getSlug()."/done";
+                $Payment_ID = Payment::CreatPaymentId();
+                Payment::$REDIRECT_URL = Application::get("website", "url")."/event/".$this->getSlug()."/done?i=".$Payment_ID;
                 $P = Payment::CreatePayment(
+                    $Payment_ID,
                     $aCollection["Amount"],
                     Payment::METHOD_IDEAL,
                     "Betaling tickets voor " . $this->getName(),
@@ -162,7 +164,9 @@ class Event Extends Page{
                             }
                             break;
                         case "done":
-                            if ($oPage->getIsActive()){
+                            if ($oPage->getIsActive() && isset($_GET["i"])){
+                                $P = new Payment($_GET["i"]);
+                                self::$smarty->assign("sStatus", $P->getPayment()->status);
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
                                 self::$MasterPage = "Events/done.html";
                                 $oPage->showPage();

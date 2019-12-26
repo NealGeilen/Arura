@@ -23,5 +23,5 @@ require_once __WEB__ROOT__ . "/_config.php";
 require_once __APP__    . "Rights.php";
 require_once __APP__ . "Functions.php";
 require_once __VENDOR__ . "autoload.php";
-\Arura\Sessions::Start();
 session_set_cookie_params(0, "/", "");
+\Arura\Sessions::Start();

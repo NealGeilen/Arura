@@ -2,7 +2,6 @@
 namespace Arura\Shop;
 
 use Arura\Modal;
-use Arura\SecureAdmin\Database;
 use Mollie\Api\MollieApiClient;
 use Arura\Settings\Application;
 
@@ -48,13 +47,14 @@ class Payment extends Modal {
     /**
      * Set values on properties
      * @param bool $force
+     * @throws \Mollie\Api\Exceptions\ApiException
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             //load user properties from database
             $aPayment = $this -> db -> fetchRow("SELECT * FROM tblPayments WHERE Payment_Id = ? ", [$this -> getId()]);
             $this -> isLoaded = true;
-            $this->setPayment(self::getMollie()->payments->get($this->getId()));
+            $this->setPayment(self::getMollie()->payments->get($aPayment["Payment_Mollie_Id"]));
             $this->setAmount($aPayment["Payment_Amount"]);
             $this->setCard($aPayment["Payment_Card"]);
             $this->setDescription($aPayment["Payment_Description"]);
@@ -67,10 +67,14 @@ class Payment extends Modal {
         return json_decode(json_encode(self::getMollie()->methods->get(\Mollie\Api\Types\PaymentMethod::IDEAL, ["include" => "issuers"])->issuers), true);
     }
 
-    public static function CreatePayment($fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []) : self{
+    public static function CreatPaymentId(){
+        return getHash("tblPayments", "Payment_Id", 20);
+    }
+
+    public static function CreatePayment($Payment_Id, $fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []) : self{
         $oMollie = self::getMollie();
         $db = new \Arura\Database();
-        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php";
+        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php?id=" . $Payment_Id ;
         $payment = $oMollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
@@ -84,7 +88,8 @@ class Payment extends Modal {
             "issuer" => $sIssuer
         ]);
         $db->createRecord("tblPayments", [
-            "Payment_Id" => $payment->id,
+            "Payment_Id" => $Payment_Id,
+            "Payment_Mollie_Id" => $payment->id,
             "Payment_Amount" => $fAmount,
             "Payment_Type" => $PaymentType,
             "Payment_Description" => $description,
@@ -92,7 +97,8 @@ class Payment extends Modal {
             "Payment_Metadata"=> json_encode($metadata),
             "Payment_Status" => $payment->status
         ]);
-        $self = new self($payment->id);
+        $self = new self($Payment_Id);
+        $self->isLoaded=true;
         $self->setPayment($payment);
         return $self;
     }
@@ -117,6 +123,7 @@ class Payment extends Modal {
      */
     public function getPayment() : \Mollie\Api\Resources\Payment
     {
+        $this->load();
         return $this->payment;
     }
 
@@ -130,8 +137,9 @@ class Payment extends Modal {
 
     public function updatePayment(){
         $this->db->updateRecord("tblPayments",[
+            "Payment_Id" => $this->getId(),
             "Payment_Status" => $this->getPayment()->status,
-            "Payment_Card" => $this->card
+            "Payment_Card" => $this->getPayment()->details->consumerAccount
         ], "Payment_Id");
     }
 
@@ -140,6 +148,7 @@ class Payment extends Modal {
      */
     public function getAmount()
     {
+        $this->load();
         return $this->amount;
     }
 
@@ -156,6 +165,7 @@ class Payment extends Modal {
      */
     public function getDescription()
     {
+        $this->load();
         return $this->description;
     }
 
@@ -172,6 +182,7 @@ class Payment extends Modal {
      */
     public function getIssuer()
     {
+        $this->load();
         return $this->issuer;
     }
 
@@ -180,6 +191,7 @@ class Payment extends Modal {
      */
     public function setIssuer($issuer)
     {
+        $this->load();
         $this->issuer = $issuer;
     }
 
@@ -188,6 +200,7 @@ class Payment extends Modal {
      */
     public function getCard()
     {
+        $this->load();
         return $this->card;
     }
 
@@ -196,6 +209,7 @@ class Payment extends Modal {
      */
     public function setCard($card)
     {
+        $this->load();
         $this->card = $card;
     }
 
@@ -204,6 +218,7 @@ class Payment extends Modal {
      */
     public function getStatus()
     {
+        $this->load();
         return $this->status;
     }
 
@@ -212,6 +227,7 @@ class Payment extends Modal {
      */
     public function setStatus($status)
     {
+        $this->load();
         $this->status = $status;
     }
 

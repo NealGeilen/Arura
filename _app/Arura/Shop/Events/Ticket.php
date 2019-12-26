@@ -3,8 +3,19 @@
 namespace Arura\Shop\Events;
 
 use Arura\Modal;
-use Arura\Shop\Products\ProductEnum;
+use Arura\PDF;
+use Arura\QR;
 
-class Ticket extends Modal implements ProductEnum {
+class Ticket extends Modal {
+
+
+
+    public function getPDFTicket(){
+        $oPDF = new PDF();
+        $oPDF->assign("QR", QR::Create(""));
+        $oPDF->SetHTMLHeader();
+        $oPDF->SetHTMLFooter();
+
+    }
 
 }

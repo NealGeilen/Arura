@@ -1,9 +1,16 @@
 {
   "columns": {
     "Payment_Id": {
-      "Type": "varchar(11)",
+      "Type": "varchar(20)",
       "Null": "NO",
       "Key": "PRI",
+      "Default": null,
+      "Extra": ""
+    },
+    "Payment_Mollie_Id": {
+      "Type": "varchar(15)",
+      "Null": "NO",
+      "Key": "",
       "Default": null,
       "Extra": ""
     },
