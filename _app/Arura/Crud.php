@@ -1,7 +1,5 @@
 <?php
 namespace Arura;
-use Arura\Database;
-use Arura\User\User;
 
 class Crud extends Database {
 
