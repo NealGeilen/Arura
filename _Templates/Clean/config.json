@@ -7,6 +7,7 @@
     "/dashboard/assets/vendor/chart.js/Chart.min.js",
     "/dashboard/assets/vendor/sparklines/sparkline.js",
     "/dashboard/assets/vendor/jqvmap/jquery.vmap.min.js",
+    "/dashboard/assets/vendor/tinymce/tinymce/tinymce.min.js",
     "/dashboard/assets/vendor/jqvmap/maps/jquery.vmap.usa.js",
     "/dashboard/assets/vendor/jquery-knob/jquery.knob.min.js",
     "/dashboard/assets/vendor/moment/moment.min.js",

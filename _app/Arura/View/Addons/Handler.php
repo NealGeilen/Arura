@@ -8,8 +8,6 @@ class Handler{
 
     protected $Template = null;
 
-    protected $oDatabase;
-
 //    public static $PlgDir;
 
     public function __construct(){

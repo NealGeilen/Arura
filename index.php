@@ -1,6 +1,6 @@
 <?php
 
-use NG\User\User;
+use Arura\User\User;
 
 require_once __DIR__ . "/_app/autoload.php";
 if(!User::isLogged()){

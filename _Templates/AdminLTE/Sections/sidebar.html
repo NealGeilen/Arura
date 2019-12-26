@@ -11,8 +11,8 @@
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 {foreach from=$aNavPages key=Href item=aPage}
-                {if $aPage.Right && !$aPage.isChild}
-                <li class="nav-item {if $aPage.Children !== NULL}has-treeview{if in_array($sRequestUrl,$aPage.Children)} menu-open{/if}{/if}">
+                {if $aPage.Right && $aPage.Icon != Null}
+                <li class="nav-item {if $aPage.Children !== NULL}has-treeview{if in_array($sRequestUrl,array_keys($aPage.Children)) || $aPage.Open == 1} menu-open{/if}{/if}">
                     <a href="/{$aArura.dir}{$Href}" class="nav-link {if $Href === $sRequestUrl}active{/if}">
                         <i class="nav-icon {$aPage.Icon}"></i>
                         <p>
@@ -24,13 +24,32 @@
                     </a>
                     {if $aPage.Children !== null}
                     <ul class="nav nav-treeview">
-                        {foreach from=$aPage.Children item=ChildHref}
-                            {if $aNavPages[$ChildHref].Right}
-                                <li class="nav-item">
+                        {foreach from=$aPage.Children item=Child key=ChildHref}
+                            {if $Child.Right && $Child.Icon != NULL}
+                                <li class="nav-item {if $Child.Children !== NULL}has-treeview{if in_array($sRequestUrl,array_keys($Child.Children))} menu-open{/if}{/if}">
                                     <a href="/{$aArura.dir}{$ChildHref}" class="nav-link{if $ChildHref === $sRequestUrl} active{/if}">
-                                        <i class="{$aNavPages[$ChildHref].Icon} nav-icon"></i>
-                                        <p>{$aNavPages[$ChildHref].Title}</p>
+                                        <i class="{$Child.Icon} nav-icon"></i>
+                                        <p>
+                                            {$Child.Title}
+                                            {if $Child.Children !== null}
+                                            <i class="right fas fa-angle-left"></i>
+                                            {/if}
+                                        </p>
                                     </a>
+                                    {if $Child.Children != Null}
+                                    <ul class="nav nav-treeview">
+                                        {foreach from=$Child.Children item=Grand key=GrandHref}
+                                            {if $Grand.Right && $Grand.Icon != NULL}
+                                            <li class="nav-item">
+                                                <a href="/{$aArura.dir}{$GrandHref}" class="nav-link{if $GrandHref === $sRequestUrl} active{/if}">
+                                                    <i class="{$Grand.Icon} nav-icon"></i>
+                                                    <p>{$Grand.Title}</p>
+                                                </a>
+                                            </li>
+                                            {/if}
+                                        {/foreach}
+                                    </ul>
+                                    {/if}
                                 </li>
                             {/if}
                         {/foreach}

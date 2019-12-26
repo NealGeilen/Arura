@@ -1,0 +1,44 @@
+<div class="card">
+    <div class="card-header">
+        <h2 class="card-title">Afgelopen 48 Uur</h2>
+    </div>
+    <div class="card-body table-responsive">
+        {assign var="iPayments48Amount" value="0"}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Omschrijving</th>
+                    <th>Bedrag</th>
+                    <th>Tijd</th>
+                    <th>Status</th>
+                    <th>IBAN</th>
+                </tr>
+            </thead>
+            <tbody>
+            {foreach from=$aPayments48 key=$iKey item=aPayment}
+            <tr>
+                <td>{$aPayment.Payment_Description}</td>
+                <td>€ {$aPayment.Payment_Amount|number_format:2:",":"."}{$iPayments48Amount =+ $aPayment.Payment_Amount}</td>
+                <td>{$aPayment.Payment_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
+                <td>{$aPayment.Payment_Status}</td>
+                <td>{$aPayment.Payment_Card}</td>
+            </tr>
+            {foreachelse}
+            <tr>
+                <td colspan="5">
+                    <div class="alert alert-info">
+                        Er zijn de afgelopen 48 uur geen betalingen gedaan.
+                    </div>
+                </td>
+            </tr>
+            {/foreach}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><strong>Totaal:</strong></td>
+                    <td><strong>€ {$iPayments48Amount|number_format:2:",":"."}</strong></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

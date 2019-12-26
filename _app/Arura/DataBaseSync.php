@@ -1,9 +1,7 @@
 <?php
 namespace Arura;
 
-class DataBaseSync{
-
-    private $db;
+class DataBaseSync extends Modal {
 
     private $sDataFilesDir;
 
@@ -12,7 +10,7 @@ class DataBaseSync{
 
     public function __construct($sDataFilesDir)
     {
-        $this->db = new \NG\Database();
+        parent::__construct();
         $this->sDataFilesDir = $sDataFilesDir;
         $this->loadDataFiles();
     }

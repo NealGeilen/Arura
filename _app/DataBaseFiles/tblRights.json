@@ -59,6 +59,22 @@
     {
       "Right_Id": "41",
       "Right_Name": "SECURE_ADMINISTRATION_CREATE"
+    },
+    {
+      "Right_Id": "20",
+      "Right_Name": "SHOP_PAYMENTS"
+    },
+    {
+      "Right_Id": "21",
+      "Right_Name": "SHOP_PRODUCTS_MANAGEMENT"
+    },
+    {
+      "Right_Id": "22",
+      "Right_Name": "SHOP_EVENTS_MANAGEMENT"
+    },
+    {
+      "Right_Id": "23",
+      "Right_Name": "SHOP_EVENTS_REGISTRATION"
     }
   ]
 }

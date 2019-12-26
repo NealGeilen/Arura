@@ -12,6 +12,7 @@ $.ajax({
             maxDepth: 3,
             includeContent: false,
             contentCallback: function (item) {
+                console.log(item);
                 return createNavTabBar(item);
             },
             itemRenderer: function(item_attrs, content, children, options, item) {
@@ -94,7 +95,8 @@ function creatNavBarItemModal() {
 
 
 function editNavBarItemModal(oRow) {
-    oRow = oRow.parents('.dd-item');
+    oRow = $(oRow.parent().parent().parent().parent().parent().parent());
+    console.log(oRow);
     oTemplate = $($('.template-input').html());
     oTemplate.find('[name=name]').val(oRow.attr('data-name'));
     oTemplate.find('[name=url]').val(oRow.attr('data-url'));

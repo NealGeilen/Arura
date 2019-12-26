@@ -1,0 +1,67 @@
+{
+  "columns": {
+    "Registration_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": null,
+      "Extra": "auto_increment"
+    },
+    "Registration_Event_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_Timestamp": {
+      "Type": "int(10)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_Firstname": {
+      "Type": "varchar(20)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_Lastname": {
+      "Type": "varchar(20)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_Email": {
+      "Type": "varchar(150)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_Tel": {
+      "Type": "varchar(20)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_Amount": {
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_Payment_Id": {
+      "Type": "varchar(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    }
+  }
+}

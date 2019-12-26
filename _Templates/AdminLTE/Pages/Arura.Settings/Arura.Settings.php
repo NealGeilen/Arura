@@ -1,7 +1,7 @@
 <?php
 
 use Arura\Dashboard\Page;
-use NG\Database;
+use Arura\Database;
 
 $db = new Database();
 $aSettings = $db -> fetchAll('SELECT * FROM tblSettings ORDER BY Setting_plg');
