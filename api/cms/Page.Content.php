@@ -4,6 +4,7 @@ require_once __DIR__ . '/../../_app/autoload.php';
 $response = new \Arura\Client\ResponseHandler();
 $request = new \Arura\Client\RequestHandler();
 $Pages = new \Arura\CMS\Page\Page();
+$response->isDebug(true);
 $request->setRight(Rights::CMS_PAGES);
 $request->TriggerEvent();
 $request->setRequestMethod('POST');

@@ -282,6 +282,7 @@ var Builder = {
                         Data: aData
                     }),
                     success: function (data) {
+                        console.log(aData);
                         endPageLoad();
                         addSuccessMessage('Content opgeslagen');
                     }
