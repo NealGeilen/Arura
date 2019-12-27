@@ -32,6 +32,12 @@ class Group extends ContentBlock {
             [
                 (int)$iGroupId
             ]);
+        if ($this->oDatabase->isQuerySuccessful()){
+            $this->oDatabase->query("DELETE FROM tblCmsContentBlocks WHERE Content_Group_Id = ?",
+                [(int)$iGroupId]);
+            return $this->oDatabase->isQuerySuccessful();
+        }
+        return false;
     }
 
 }
