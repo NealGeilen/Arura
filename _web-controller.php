@@ -60,10 +60,10 @@ $aNavBarPages =
                         "MasterPage" => "AdminLTE",
                         "Children" => null
                     ],
-                    "/content/pagina/instelliAruraen" => [
+                    "/content/pagina/instellingen" => [
                         "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
-                        "Title" => "Pagina instelliAruraen",
-                        "FileName" => "Cms.Page.SettiAruras",
+                        "Title" => "Pagina instellingen",
+                        "FileName" => "Cms.Page.Settings",
                         "Icon" => null,
                         "MasterPage" => "AdminLTE",
                         "Children" => null
