@@ -34,6 +34,9 @@ class ContentBlock extends Addon{
 
     public function setContentBlock($iBlockId,$aBlock){
         $aBlock['Content_Id'] = $iBlockId;
+        if (!isset($aBlock["Content_Value"])){
+            $aBlock["Content_Value"] = "";
+        }
         if (is_array($aBlock['Content_Value'])){
             $aBlock['Content_Value'] = json_encode($aBlock['Content_Value']);
         }

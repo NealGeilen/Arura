@@ -29,7 +29,6 @@ var Builder = {
                 helper: function (event) {
                     aBlock = Builder.ContentTypes.DefaultBlock;
                     oObject = $(event.target).parents("li").find("a");
-                    console.log($(event.target).parents("li").find("a"));
                     aBlock['Content_Type'] = oObject.attr('content-type');
                     aBlock['Content_Addon_Id'] = parseInt(oObject.attr('content-addon-id'));
                     oElement = Builder.Block.Build(aBlock);
@@ -264,7 +263,7 @@ var Builder = {
                 $.each(oGroup.find(sSelectors.Block_Item), function (iContentPosition, oBlock) {
                     oBlock = $(oBlock);
                     var aBlock = Builder.Block.getData(oBlock);
-                    iContentId = parseInt(aBlock.Content_Id);
+                    iContentId = parseInt(oBlock.attr("block-id"));
                     value = Builder.Block.getValue(oBlock);
                     Builder.Block.setData(oBlock, 'Content_Value', value);
                     Builder.Block.setData(oBlock, 'Content_Position', iContentPosition);
@@ -282,7 +281,6 @@ var Builder = {
                         Data: aData
                     }),
                     success: function (data) {
-                        console.log(aData);
                         endPageLoad();
                         addSuccessMessage('Content opgeslagen');
                     }
@@ -402,7 +400,6 @@ var Builder = {
 
                 Element.removeClass('col-' + aData.Content_Size);
                 i = parseInt((Element.width() / ($(sSelectors.Group_Content).innerWidth() / 100 * (100/12)))) + 1;
-                console.log(i);
                 Element.addClass('col-' + i).css('width', 'unset');
                 Builder.Block.setData(Element, 'Content_Size', i);
 
@@ -431,7 +428,6 @@ var Builder = {
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
             this.setArray(oBlock, aBlock);
-            console.log(aBlock);
             oBlock
                 .addClass('col-' + aBlock.Content_Size)
                 .attr('block-id', aBlock.Content_Id);
@@ -513,7 +509,6 @@ var Builder = {
                     oItem = Builder.ContentTypes.Types[aBlock.Content_Type].init(aBlock.Content_Value).addClass('Block-Item-Field');
                     break;
             }
-            console.log(oItem);
             return oItem;
         }
     }
@@ -691,7 +686,6 @@ var TinyMce = {
 $(document).ready(function () {
    Builder.Structure.set();
    $(document).on('click', function (e) {
-       console.log($(e.target).parents(".FileManger-Three").length);
        if ($(e.target).parents(sSelectors.Group).length < 1
            && !$(e.target).hasClass('CMS-Group')
            && $(e.target).parents('.control-sidebar').length < 1
