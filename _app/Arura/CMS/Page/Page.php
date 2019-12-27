@@ -2,6 +2,7 @@
 namespace Arura\CMS\Page;
 
 use Arura\Database;
+use Arura\Exceptions\Error;
 
 class Page extends Group{
 
@@ -57,14 +58,15 @@ class Page extends Group{
             foreach ($aData['Groups'] as $iGroupId => $aGroup){
                 if (isset($aGroup['Blocks'])){
                     foreach ($aGroup['Blocks'] as $iBlockId => $aBlock){
-                        $this -> setContentBlock($iBlockId,$aBlock);
+                        if(!$this -> setContentBlock($iBlockId,$aBlock)){
+                            throw new Error("Cannot save content block :". $iBlockId);
+                        }
                     }
                 }
                 unset($aGroup['Blocks']);
-                $this->setGroup($iGroupId,$aGroup);
-
-
-
+                if (!$this->setGroup($iGroupId,$aGroup)){
+                    throw new Error("Cannot save Group :". $iGroupId);
+                }
             }
         }
     }

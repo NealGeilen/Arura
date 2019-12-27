@@ -37,7 +37,9 @@ class ContentBlock extends Addon{
         if (is_array($aBlock['Content_Value'])){
             $aBlock['Content_Value'] = json_encode($aBlock['Content_Value']);
         }
-        return $this -> oDatabase -> updateRecord('tblCmsContentBlocks',$aBlock,'Content_Id');
+        $aBlock["Content_Value"] = utf8_encode($aBlock["Content_Value"]);
+        $this -> oDatabase -> updateRecord('tblCmsContentBlocks',$aBlock,'Content_Id');
+        return $this->oDatabase->isQuerySuccessful();
     }
 
     public function CreateContentBlock(){
@@ -49,6 +51,7 @@ class ContentBlock extends Addon{
             [
                 (int)$iBlockId
             ]);
+        return $this->oDatabase->isQuerySuccessful();
     }
 
 }
