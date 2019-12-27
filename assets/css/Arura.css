@@ -172,3 +172,6 @@ Templates
     margin: unset!important;
     margin-top: .2rem;
 }
+.alert{
+    margin: unset!important;
+}
