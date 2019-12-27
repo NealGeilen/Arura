@@ -139,6 +139,12 @@
       "Setting_Required": "0",
       "Setting_Type": "checkbox",
       "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "Mollie_Api",
+      "Setting_Required": "0",
+      "Setting_Type": "text",
+      "Setting_Plg": "plg.shop"
     }
   ]
 }
