@@ -2,6 +2,9 @@ Pages = {
     oTable: null,
     setTable: function () {
         this.oTable = $('.pages-overvieuw').DataTable({
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+            },
             dataSource: ARURA_API_DIR+'cms/Page.Settings.php',
             dataSrc: 'data',
             "columns":[
