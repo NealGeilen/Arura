@@ -23,7 +23,6 @@ Filemanger.oFileThree.on('select_node.jstree', function(e) {
    $(".url").html("<a target='_blank' href='"+document.location.origin+"/files/" + aNode.original.dir+ "'>"+document.location.origin+"/files/" + aNode.original.dir+ "</a>");
    $(".name").text(aNode.original.text);
    $(".type").text(aNode.original.type);
-   console.log(oElement);
    $(".file").append(oElement)
 });
 Filemanger.loadDirThree();
