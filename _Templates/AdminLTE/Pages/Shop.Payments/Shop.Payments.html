@@ -1,9 +1,9 @@
 <div class="card">
     <div class="card-header">
-        <h2 class="card-title">Afgelopen 48 Uur</h2>
+        <h2 class="card-title">Allen betalingen</h2>
     </div>
     <div class="card-body table-responsive">
-        {assign var="iPayments48Amount" value="0"}
+        {assign var="iPaymentsAmount" value="0"}
         <table class="table Arura-Table">
             <thead>
                 <tr>
@@ -15,7 +15,7 @@
                 </tr>
             </thead>
             <tbody>
-            {foreach from=$aPayments48 key=$iKey item=aPayment}
+            {foreach from=$aPayments key=$iKey item=aPayment}
             <tr>
                 <td>{$aPayment.Payment_Description}</td>
                 <td>€ {$aPayment.Payment_Amount|number_format:2:",":"."}{$iPayments48Amount =+ $aPayment.Payment_Amount}</td>
@@ -28,7 +28,7 @@
             <tfoot>
                 <tr>
                     <td><strong>Totaal:</strong></td>
-                    <td><strong>€ {$iPayments48Amount|number_format:2:",":"."}</strong></td>
+                    <td><strong>€ {$iPaymentsAmount|number_format:2:",":"."}</strong></td>
                 </tr>
             </tfoot>
         </table>

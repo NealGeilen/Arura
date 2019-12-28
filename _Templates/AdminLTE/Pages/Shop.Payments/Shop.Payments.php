@@ -1,7 +1,8 @@
 <?php
 use Arura\Dashboard\Page;
 $oSmarty = Page::getSmarty();
-$oSmarty->assign("aPayments48",\Arura\Shop\Payment::getPaymentsFromLast(48));
+$db = new \Arura\Database();
+$oSmarty->assign("aPayments",$db->fetchAll("SELECT * FROM tblPayments"));
 return Page::getHtml(__DIR__);
 
 
