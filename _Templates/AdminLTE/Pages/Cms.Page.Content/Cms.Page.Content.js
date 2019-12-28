@@ -9,6 +9,10 @@ var sSelectors = {
 };
 var Addons = {};
 var Builder = {
+    DataSet : {
+        Groups : [],
+        Blocks : [],
+    },
     Xhr:function(options){
         startPageLoad();
         var settings = $.extend({
@@ -31,6 +35,7 @@ var Builder = {
                     oObject = $(event.target).parents("li").find("a");
                     aBlock['Content_Type'] = oObject.attr('content-type');
                     aBlock['Content_Addon_Id'] = parseInt(oObject.attr('content-addon-id'));
+                    aBlock["Content_Id"] = 0;
                     oElement = Builder.Block.Build(aBlock);
                     return oElement;
                 },
@@ -240,9 +245,6 @@ var Builder = {
                    oHelper.find('a').attr('content-type',aAddon.Addon_Type).attr('content-addon-id', aAddon.Addon_Id).html("<i class=\"fas fa-arrows-alt\"></i> "+aAddon.Addon_Name);
                    $('[addon-types='+aAddon.Addon_Type+']').append(oHelper);
                });
-
-
-
                 Builder.Editor.sortable();
                 Builder.Group.sortable();
                 Builder.ContentTypes.draggable();
@@ -252,27 +254,28 @@ var Builder = {
         save: function (bSendData = true) {
             aData={};
             aData.DeleteItems = this.DeleteItems;
-            aData.Groups = {};
+            aData.Groups = [];
             $.each($('.CMS-Page-Editor .CMS-Group'), function (iGroupPosition, oGroup) {
                 oGroup = $(oGroup);
-                iGroupId = parseInt(Builder.Group.getData(oGroup).Group_Id);
+                iGroupId = parseInt(oGroup.attr('group-id'));
                 aGroup = Builder.Group.getData(oGroup);
                 aGroup.Group_Position = iGroupPosition;
-                aGroup.Blocks = {};
                 aData.Groups[iGroupId] = aGroup;
+                aData.Groups[iGroupId].Blocks = [];
+
+                console.log(aData.Groups[iGroupId]);
+                aBlocks = [];
                 $.each(oGroup.find(sSelectors.Block_Item), function (iContentPosition, oBlock) {
-                    oBlock = $(oBlock);
-                    var aBlock = Builder.Block.getData(oBlock);
-                    iContentId = parseInt(oBlock.attr("block-id"));
-                    value = Builder.Block.getValue(oBlock);
-                    Builder.Block.setData(oBlock, 'Content_Value', value);
-                    Builder.Block.setData(oBlock, 'Content_Position', iContentPosition);
-                    Builder.Block.setData(oBlock, 'Content_Group_Id', iGroupId);
-                    aBlock.Content_Position = iContentPosition;
-                    aBlock.Content_Value = value;
-                    aBlock.Content_Group_Id = iGroupId;
-                    aData.Groups[iGroupId].Blocks[iContentId] = aBlock;
+                    value = Builder.Block.getValue($(oBlock));
+                    Builder.Block.setData($(oBlock), 'Content_Value', value);
+                    Builder.Block.setData($(oBlock), 'Content_Position', iContentPosition);
+                    Builder.Block.setData($(oBlock), 'Content_Group_Id', iGroupId);
+                    var aBlock = Builder.Block.getData($(oBlock));
+                    console.log("Save Block",aBlock, $(oBlock));
+                    iContentId = parseInt(aBlock.Content_Id);
+                    aBlocks[iContentId] = aBlock;
                 });
+                aData.Groups[iGroupId].Blocks = aBlocks;
             });
             if (bSendData){
                 Builder.Xhr({
@@ -298,13 +301,15 @@ var Builder = {
       }
     },
     Group: {
+        setArray: function(oGroup, aArray){
+            Builder.DataSet.Groups[parseInt(oGroup.attr('group-id'))] = {};
+            Builder.DataSet.Groups[parseInt(oGroup.attr('group-id'))] = aArray;
+        },
         setData: function(oGroup, sField, sValue){
-            a = this.getData(oGroup);
-            a[sField] =sValue;
-            oGroup.data('group-data', a);
+            Builder.DataSet.Groups[parseInt(oGroup.attr('group-id'))][sField] = sValue;
         },
         getData: function(oGroup){
-            return oGroup.data('group-data');
+            return Builder.DataSet.Groups[parseInt(oGroup.attr('group-id'))];
         },
         Build : function(aGroup){
             oTemplate = $($('.template-page-group').html());
@@ -313,11 +318,9 @@ var Builder = {
                 $.each(aGroup.Blocks,function (ikey,aBlock) {
                    oTemplate.find(sSelectors.Group_Content).append(Builder.Block.Build(aBlock));
                 });
+                delete  aGroup.Blocks;
             }
-            if ("Blocks" in aGroup){
-                delete aGroup.Blocks;
-            }
-            oTemplate.data('group-data', aGroup);
+            this.setArray(oTemplate, aGroup);
             this.Events(oTemplate);
             return oTemplate;
         },
@@ -415,7 +418,8 @@ var Builder = {
             },
         },
         setArray: function(oBlock, aArray){
-            oBlock.data('block-data', aArray);
+            Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))] = {};
+            Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))] = aArray;
         },
         setData: function(oBlock, sField,sValue){
             a = this.getData(oBlock);
@@ -423,14 +427,16 @@ var Builder = {
             this.setArray(oBlock,a);
         },
         getData: function(oBlock){
-            return oBlock.data('block-data');
+            BlockData = Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))];
+            BlockData.Content_Id = parseInt(oBlock.attr('block-id'));
+            return BlockData;
         },
         Build: function(aBlock = null){
             oBlock = $($('.template-page-block').html());
-            this.setArray(oBlock, aBlock);
             oBlock
                 .addClass('col-' + aBlock.Content_Size)
                 .attr('block-id', aBlock.Content_Id);
+            this.setArray(oBlock, aBlock);
             this.Events(oBlock);
             oField = Builder.Item.Build(aBlock);
             oBlock.find('.Block-Item-Content').append(oField);
@@ -455,9 +461,14 @@ var Builder = {
                }),
                 success: function (returned) {
                    endPageLoad();
-                   Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
+                   aData = Builder.DataSet.Blocks[0];
                    oElement.attr('block-id', returned.data.Content_Id);
                    oElement.attr("style", null);
+                   aData.Content_Id = returned.data.Content_Id;
+                   Builder.DataSet.Blocks[returned.data.Content_Id] = aData;
+                   delete Builder.DataSet.Blocks[0];
+                   // Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
+                   // console.log("Id Set", Builder.Block.getData(oElement), oElement)
                 }
             });
         },
