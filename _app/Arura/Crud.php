@@ -125,7 +125,7 @@ class Crud extends Database {
 
     protected  function buildInputField($aData = [],$sAction = null){
         $sHtml = "<h2>".(($sAction==="save") ? "Toevoegen" : "Bewerken")."</h2>";
-        $sHtml .= "<form method='post' action='".$this->getUrl(["action" => $sAction])."' class='form-row bg-secondary p-1 border-4 border-dark rounded'>";
+        $sHtml .= "<form method='post' action='".$this->getUrl(["action" => $sAction])."' class='form-row bg-secondary p-1 border-4 border-dark rounded m-2'>";
         foreach ($this->aDataFile["columns"] as $tag => $column){
             $value = null;
             if (isset($aData[$tag])){
