@@ -76,15 +76,23 @@ class Crud extends Database {
     }
 
     private function buildTable(){
-        $aData = $this->fetchAll("SELECT * FROM ". $this->aDataFile["table"]);
-        $this->sHtml .= "<table class='table'>";
+        $sQuery = "SELECT * FROM ". $this->aDataFile["table"];
+        if (!empty($this->aDefaultValues)){
+            $sQuery .= " WHERE ";
+        }
+        foreach ($this->aDefaultValues as $key => $value){
+            $sQuery .= $key . ' = :' . $key. ', ';
+        }
+        $sQuery = trim($sQuery,", ");
+        $aData = $this->fetchAll($sQuery, $this->aDefaultValues);
+        $this->sHtml .= "<table class='table Arura-Table'>";
         $this->sHtml .= "<thead><tr>";
         foreach ($this->aDataFile["columns"] as $Column){
             $this->sHtml .= "<th>" . $Column['name'] . "</th>";
         }
         $this->sHtml .= "<th>";
         if ($_GET["action"] !== "create" && $_GET["action"] !== "edit"){
-            $this->sHtml .= "<a class='btn btn-primary' href='".$this->getUrl(["action" => "create"])."'><i class=\"fas fa-plus\"></i></a>";
+            $this->sHtml .= "<a class='btn btn-primary btn-sm' href='".$this->getUrl(["action" => "create"])."'><i class=\"fas fa-plus\"></i></a>";
         }
         $this->sHtml .= "</th></tr></thead><tbody>";
         foreach ($aData as $record){
@@ -104,15 +112,12 @@ class Crud extends Database {
             $this->sHtml  .= "</tr>";
 
         }
-        if (count($aData) === 0){
-            $this->sHtml .= "<td colspan='".count($this->aDataFile["columns"])."'><div class='alert alert-info'>Er zijn geen gegegevens aanwezig</div></td>";
-        }
         $this->sHtml  .= "</tbody></table>";
     }
 
     protected function getActionButtons($iRowId = null){
-        $s = "<div class='btn-group'>";
-        $s .= "<a href='".$this->getUrl(["action" => "delete", "_key" => $iRowId])."' class='btn btn-danger'><i class=\"fas fa-trash\"></i></a>";
+        $s = "<div class='btn-group btn-group-sm'>";
+        $s .= "<button class='btn btn-danger btn-delete' href='".$this->getUrl(["action" => "delete", "_key" => $iRowId])."'><i class=\"fas fa-trash\"></i></button>";
         $s .= "<a href='".$this->getUrl(["action" => "edit", "_key" => $iRowId])."' class='btn btn-primary'><i class=\"fas fa-pen\"></i></a>";
         $s .= "</div>";
         return $s;

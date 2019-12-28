@@ -1,19 +1,14 @@
 {
   "primarykey": "Page_Id",
-  "table": "Test",
+  "table": "tblCmsPages",
   "columns": {
       "Page_Id": {
-        "name": "Titel",
+        "name": "Id",
         "type": "number"
       },
       "Page_Title": {
           "name": "Titel",
-          "type": "dropdown",
-          "options" : {
-              "ja" : "Ja",
-              "nee" : "Nee",
-              "NVT" : "N.v.t."
-          }
+          "type": "text"
       },
       "Page_Url": {
         "name": "Url",

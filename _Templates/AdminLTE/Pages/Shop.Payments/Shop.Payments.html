@@ -4,7 +4,7 @@
     </div>
     <div class="card-body table-responsive">
         {assign var="iPayments48Amount" value="0"}
-        <table class="table">
+        <table class="table Arura-Table">
             <thead>
                 <tr>
                     <th>Omschrijving</th>
@@ -22,14 +22,6 @@
                 <td>{$aPayment.Payment_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
                 <td>{$aPayment.Payment_Status}</td>
                 <td>{$aPayment.Payment_Card}</td>
-            </tr>
-            {foreachelse}
-            <tr>
-                <td colspan="5">
-                    <div class="alert alert-info">
-                        Er zijn de afgelopen 48 uur geen betalingen gedaan.
-                    </div>
-                </td>
             </tr>
             {/foreach}
             </tbody>

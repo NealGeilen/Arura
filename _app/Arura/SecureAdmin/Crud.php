@@ -79,7 +79,7 @@ class Crud extends Database {
 
     private function buildTable(){
         $aData = $this->SelectAll($this->oAdmin->getDbName(), $this->aDataFile["primarykey"]);
-        $this->sHtml .= "<table class='table'>";
+        $this->sHtml .= "<table class='table Arura-Table'>";
         $this->sHtml .= "<thead><tr>";
         foreach ($this->aDataFile["columns"] as $Column){
             $this->sHtml .= "<th>" . $Column['name'] . "</th>";

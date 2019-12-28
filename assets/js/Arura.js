@@ -78,6 +78,23 @@ $('form.form-sender').submit(function (e) {
         }
     });
 });
+$(".table.Arura-Table").DataTable({
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+    }
+});
+
+$(".table.Arura-Table .btn-delete").on("click", function () {
+    oBtn = $(this);
+    Modals.Warning({
+        Title: "Verwijderen",
+        Message: "Weet je zeker dat je dit wilt verwijderen?",
+        onConfirm: function () {
+            location.replace(oBtn.attr("href"));
+        }
+    })
+});
+
 
 $("textarea.richtext").ready(function () {
     $.each($("textarea.richtext"), function (i ,oElement) {
