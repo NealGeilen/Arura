@@ -1,5 +1,13 @@
+<style>
+    .file{
+        font-size: 24px;
+        margin: 0 auto;
+        text-align: center;
+        display: block;
+    }
+</style>
 <div class="row">
-    <div class="col-md-12">
+    <div class="col-md-6 col-12">
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">Overzicht</h2>
@@ -27,13 +35,32 @@
             </div>
         </div>
     </div>
-<!--    <div class="col-md-4">-->
-<!--        <section class="card">-->
-<!--            <header class="card-header">-->
-<!--                <h2 class="card-title">Bestand informatie</h2>-->
-<!--            </header>-->
-<!--            <div class="card-body" style="">-->
-<!--            </div>-->
-<!--        </section>-->
-<!--    </div>-->
+    <div class="col-md-6 col-12">
+        <section class="card">
+            <header class="card-header">
+                <h2 class="card-title">Bestand informatie</h2>
+            </header>
+            <div class="card-body row">
+                <div class="col-md-6 table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th>Naam</th>
+                            <td class="name"></td>
+                        </tr>
+                        <tr>
+                            <th>Url</th>
+                            <td class="url"></td>
+                        </tr>
+                        <tr>
+                            <th>Typen</th>
+                            <td class="type"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-md-6 file">
+                    <i class="fas fa-file"></i>
+                </div>
+            </div>
+        </section>
+    </div>
 </div>

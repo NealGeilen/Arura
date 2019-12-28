@@ -215,6 +215,7 @@ var Filemanger = {
             }
         }
     },
+
     Selector: function (sType = 'img', callback = function () {}) {
         oThree = this.oFileThree;
         this.loadDirThree(sType);
