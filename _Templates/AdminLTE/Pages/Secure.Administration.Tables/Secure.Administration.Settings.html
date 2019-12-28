@@ -7,19 +7,19 @@
             <div class="card-header">
                 <h2 class="card-title">Gebruikers - {$aTable.Table_Name}</h2>
                 <div class="card-tools">
-                    <div class="btn-group">
+                    <div class="btn-group btn-group-sm">
                         <a class="btn btn-primary" href="/{$aArura.dir}/administration"><i class="fas fa-long-arrow-alt-left"></i></a>
                         <a class="btn btn-secondary" href="/{$aArura.dir}/administration?t={$aTable.Table_Id}"><i class="fas fa-pen"></i></a>
                     </div>
                 </div>
             </div>
             <div class="card-body table-responsive">
-                <table class="table">
+                <table class="table Arura-Table">
                     <thead>
                     <tr>
                         <th>Naam gebruiker</th>
                         <th>Recht</th>
-                        <th><button class="btn btn-primary" onclick="addUser()"><i class="fas fa-plus"></i></button></th>
+                        <th><button class="btn btn-primary btn-sm" onclick="addUser()"><i class="fas fa-plus"></i></button></th>
                     </tr>
                     </thead>
                     <tbody>

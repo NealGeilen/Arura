@@ -87,7 +87,7 @@ class Crud extends Database {
         $this->sHtml .= "<th>";
         if ($this->isActionAllowed(SecureAdmin::CREATE)){
             if ($_GET["action"] !== "create" && $_GET["action"] !== "edit"){
-                $this->sHtml .= "<a class='btn btn-primary' href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=create'><i class=\"fas fa-plus\"></i></a>";
+                $this->sHtml .= "<a class='btn btn-primary btn-sm' href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=create'><i class=\"fas fa-plus\"></i></a>";
             }
         }
         $this->sHtml .= "</th></tr></thead><tbody>";
@@ -108,14 +108,11 @@ class Crud extends Database {
             $this->sHtml  .= "</tr>";
 
         }
-        if (count($aData) === 0){
-            $this->sHtml .= "<td colspan='".count($this->aDataFile["columns"])."'><div class='alert alert-info'>Er zijn geen gegegevens aanwezig</div></td>";
-        }
         $this->sHtml  .= "</tbody></table>";
     }
 
     protected function getActionButtons($iRowId = null){
-        $s = "<div class='btn-group'>";
+        $s = "<div class='btn-group btn-group-sm'>";
         if ($this->isActionAllowed(SecureAdmin::DELETE)){
             $s .= "<a href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=delete&_key=".$iRowId."' class='btn btn-danger'><i class=\"fas fa-trash\"></i></a>";
         }
