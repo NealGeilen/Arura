@@ -12,6 +12,7 @@ class Rights{
     const SHOP_PRODUCTS_MANAGEMENT = 21;
     const SHOP_EVENTS_MANAGEMENT = 22;
     const SHOP_EVENTS_REGISTRATION = 23;
+    const SHOP_CATEGORIES = 24;
 
     const FILES_READ = 30;
     const FILES_EDIT = 31;

@@ -124,7 +124,7 @@ $aNavBarPages =
                     '/winkel/categorieen' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
+                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_CATEGORIES)
                             ),
                         "Title" => "Categorieën",
                         "FileName" => null,
