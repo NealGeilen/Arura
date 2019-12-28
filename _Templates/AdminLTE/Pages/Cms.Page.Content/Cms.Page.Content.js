@@ -35,17 +35,10 @@ var Builder = {
                     oObject = $(event.target).parents("li").find("a");
                     aBlock['Content_Type'] = oObject.attr('content-type');
                     aBlock['Content_Addon_Id'] = parseInt(oObject.attr('content-addon-id'));
-                    aBlock["Content_Id"] = 0;
-                    oElement = Builder.Block.Build(aBlock);
-                    return oElement;
+                    return Builder.Block.Create(aBlock);
                 },
                 connectToSortable: sSelectors.Group_Content,
-                revert: "invalid",
-                stop: function (event,ui) {
-                    if ($(ui.helper).parent().hasClass('CMS-Group-Content')){
-                        Builder.Block.Create($(ui.helper));
-                    }
-                }
+                revert: "invalid"
             });
         },
         DefaultBlock:{
@@ -60,7 +53,7 @@ var Builder = {
             TextArea: {
                 oTemplate: $('<div>').addClass('Tinymce'),
                 init: function (sValue) {
-                    oText  = this.oTemplate.clone();
+                    oText = this.oTemplate.clone();
                     oText.html(sValue);
                     TinyMce.SetText(oText);
                     return oText;
@@ -72,7 +65,7 @@ var Builder = {
             Header: {
                 oTemplate: $('<div>').addClass('Tinymce'),
                 init: function (sValue) {
-                    oText  = this.oTemplate.clone();
+                    oText = this.oTemplate.clone();
                     oText.html(sValue);
                     TinyMce.SetHeader(oText);
                     return oText;
@@ -241,9 +234,8 @@ var Builder = {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
                $.each(aAddons, function(iKey,aAddon){
-                   oHelper = $('<li><a class="ContentType-Selector dropdown-item"></a></li>');
-                   oHelper.find('a').attr('content-type',aAddon.Addon_Type).attr('content-addon-id', aAddon.Addon_Id).html("<i class=\"fas fa-arrows-alt\"></i> "+aAddon.Addon_Name);
-                   $('[addon-types='+aAddon.Addon_Type+']').append(oHelper);
+                   sItem = "<label class=\"btn btn-secondary\"><input type=\"radio\" name=\"Content_Type\" value='"+ aAddon.Addon_Type+ "' content-addon-id='"+ aAddon.Addon_Id+"'>"+ aAddon.Addon_Name + "</label>";
+                   $('[addon-types='+aAddon.Addon_Type+']').append(sItem);
                });
                 Builder.Editor.sortable();
                 Builder.Group.sortable();
@@ -254,28 +246,23 @@ var Builder = {
         save: function (bSendData = true) {
             aData={};
             aData.DeleteItems = this.DeleteItems;
-            aData.Groups = [];
+            aData.Groups = {};
             $.each($('.CMS-Page-Editor .CMS-Group'), function (iGroupPosition, oGroup) {
                 oGroup = $(oGroup);
                 iGroupId = parseInt(oGroup.attr('group-id'));
                 aGroup = Builder.Group.getData(oGroup);
                 aGroup.Group_Position = iGroupPosition;
                 aData.Groups[iGroupId] = aGroup;
-                aData.Groups[iGroupId].Blocks = [];
-
-                console.log(aData.Groups[iGroupId]);
-                aBlocks = [];
+                aData.Groups[iGroupId].Blocks = {};
                 $.each(oGroup.find(sSelectors.Block_Item), function (iContentPosition, oBlock) {
                     value = Builder.Block.getValue($(oBlock));
                     Builder.Block.setData($(oBlock), 'Content_Value', value);
                     Builder.Block.setData($(oBlock), 'Content_Position', iContentPosition);
                     Builder.Block.setData($(oBlock), 'Content_Group_Id', iGroupId);
                     var aBlock = Builder.Block.getData($(oBlock));
-                    console.log("Save Block",aBlock, $(oBlock));
                     iContentId = parseInt(aBlock.Content_Id);
-                    aBlocks[iContentId] = aBlock;
+                    aData.Groups[iGroupId].Blocks[iContentId] = aBlock;
                 });
-                aData.Groups[iGroupId].Blocks = aBlocks;
             });
             if (bSendData){
                 Builder.Xhr({
@@ -302,7 +289,6 @@ var Builder = {
     },
     Group: {
         setArray: function(oGroup, aArray){
-            Builder.DataSet.Groups[parseInt(oGroup.attr('group-id'))] = {};
             Builder.DataSet.Groups[parseInt(oGroup.attr('group-id'))] = aArray;
         },
         setData: function(oGroup, sField, sValue){
@@ -417,30 +403,35 @@ var Builder = {
                 }
             },
         },
-        setArray: function(oBlock, aArray){
-            Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))] = {};
-            Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))] = aArray;
+        setArray: function(oBlock, aArray= {}){
+            Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))] = {
+                Content_Id : parseInt(aArray.Content_Id),
+                Content_Type: aArray.Content_Type,
+                Content_Size: parseInt(aArray.Content_Size),
+                Content_Value: aArray.Content_Value,
+                Content_Raster: parseInt(aArray.Content_Raster),
+                Content_Addon_Id: parseInt(aArray.Content_Addon_Id),
+                Content_Group_Id: parseInt(aArray.Content_Group_Id)
+            };
         },
         setData: function(oBlock, sField,sValue){
             a = this.getData(oBlock);
             a[sField] =sValue;
             this.setArray(oBlock,a);
+            delete a;
         },
         getData: function(oBlock){
             BlockData = Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))];
-            BlockData.Content_Id = parseInt(oBlock.attr('block-id'));
             return BlockData;
         },
-        Build: function(aBlock = null){
-            oBlock = $($('.template-page-block').html());
+        Build: function(aBlock = {}){
+            oBlock = $($('.template-page-block').html()).clone();
             oBlock
                 .addClass('col-' + aBlock.Content_Size)
                 .attr('block-id', aBlock.Content_Id);
             this.setArray(oBlock, aBlock);
             this.Events(oBlock);
-            oField = Builder.Item.Build(aBlock);
-            oBlock.find('.Block-Item-Content').append(oField);
-            oBlock.attr("style", null);
+            oBlock.find('.Block-Item-Content').append(Builder.Item.Build(aBlock));
             return oBlock;
         },
         Delete: function(oElement){
@@ -453,24 +444,31 @@ var Builder = {
                 }
             });
         },
-        Create:function(oElement){
-            oElement.css('display', 'none');
-            Builder.Xhr({
-               data: ({
-                   type: 'Create-Block'
-               }),
-                success: function (returned) {
-                   endPageLoad();
-                   aData = Builder.DataSet.Blocks[0];
-                   oElement.attr('block-id', returned.data.Content_Id);
-                   oElement.attr("style", null);
-                   aData.Content_Id = returned.data.Content_Id;
-                   Builder.DataSet.Blocks[returned.data.Content_Id] = aData;
-                   delete Builder.DataSet.Blocks[0];
-                   // Builder.Block.setData(oElement, 'Content_Id', returned.data.Content_Id);
-                   // console.log("Id Set", Builder.Block.getData(oElement), oElement)
+        Create:function(oGroup){
+            Modals.Custom({
+                Title:"Content toevoegen.",
+                Message: $(".template-add-block-modal").html(),
+                onConfirm: function (oModal) {
+                    oRadio = $(oModal).find("input[type=radio]:checked");
+                    aBlock = Builder.ContentTypes.DefaultBlock;
+                    if (oRadio.val() !== ""){
+                        Builder.Xhr({
+                           data: ({
+                               type: 'Create-Block'
+                           }),
+                            success: function (returned) {
+                               endPageLoad();
+                               addSuccessMessage("Block toegevoegd");
+                               aBlock.Content_Id = returned.data.Content_Id;
+                               aBlock.Content_Type = oRadio.val();
+                               aBlock.Content_Addon_Id = parseInt(oRadio.attr('content-addon-id'));
+                               aBlock.Content_Group_Id = Builder.Group.getData(oGroup).Group_Id;
+                               oGroup.find(".CMS-Group-Content").append(Builder.Block.Build(aBlock))
+                            }
+                        });
+                    }
                 }
-            });
+            })
         },
         Events: function(oElement = null){
             Selector = (oElement === null) ? $(sSelectors.Block_Item_Content) : oElement;

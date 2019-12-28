@@ -18,7 +18,7 @@ class Group extends ContentBlock {
     }
 
     public function setGroup($iGroupId,$aGroup){
-        $aGroup['Group_Id'] = $iGroupId;
+        $aGroup["Group_Id"] = $iGroupId;
         $this->oDatabase->updateRecord('tblCmsGroups',$aGroup,'Group_Id');
         return $this->oDatabase->isQuerySuccessful();
     }

@@ -12,39 +12,18 @@
 <div class="CMS-overvieuw">
     <div class="card">
         <header class="card-header page-toolbar">
-            <div class="row">
-                <div class="btn-group col-md-3 col-1">
-                    <button class="btn btn-primary" onclick="Builder.Group.Add()">
-                        Groep <i class="fas fa-plus"></i>
-                    </button>
-                </div>
-                <div class="btn-group col-md-2 col-2">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Standaard <i class="fas fa-i-cursor"></i> </button>
-                    <ul class="dropdown-menu">
-                        <li><a class="ContentType-Selector dropdown-item" content-type="TextArea" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Tekst</a></li>
-                        <li><a class="ContentType-Selector dropdown-item" content-type="Picture" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Afbeelding</a></li>
-                        <li><a class="ContentType-Selector dropdown-item" content-type="Iframe" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Pagina insluiten</a></li>
-                        <li><a class="ContentType-Selector dropdown-item" content-type="Filler" content-addon-id="0"><i class="fas fa-arrows-alt"></i> Leeg blok</a></li>
-                    </ul>
-                </div>
-                <div class="btn-group col-md-2 col-2">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Widget <i class="fas fa-th"></i></button>
-                    <ul class="dropdown-menu" addon-types="widget">
-                    </ul>
-                </div>
-                <div class="btn-group col-md-2 col-2">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true"> Custom <i class="fas fa-square-full"></i> </button>
-                    <ul class="dropdown-menu" addon-types="custom">
-                    </ul>
-                </div>
-                <div class="btn-group col-md-3 col-1">
-                    <a class="btn btn-default" href="/{$aArura.dir}/content/pagina/instellingen?p={$aCmsPage.Page_Id}" target="_blank">
-                        <i class="fas fa-cog"></i>
-                    </a>
-                    <button class="btn btn-primary" onclick="Builder.Structure.save()">
-                        <i class="fas fa-save"></i>
-                    </button>
-                </div>
+            <div class="btn-group btn-group-sm">
+                <button class="btn btn-primary" onclick="Builder.Group.Add()">
+                    Groep <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="btn-group btn-group-sm" style="float: right">
+                <a class="btn btn-default" href="/{$aArura.dir}/content/pagina/instellingen?p={$aCmsPage.Page_Id}" target="_blank">
+                    <i class="fas fa-cog"></i>
+                </a>
+                <button class="btn btn-primary" onclick="Builder.Structure.save()">
+                    <i class="fas fa-save"></i>
+                </button>
             </div>
         </header>
         <div class="card-body">
@@ -70,6 +49,9 @@
     <div class="template-page-group">
         <div class="CMS-Group">
             <div class="btn-group btn-group-sm CMS-Group-Control ">
+                <button class="btn btn-sm btn-secondary" onclick="Builder.Block.Create($(this).parents('.CMS-Group'))">
+                    <i class="fas fa-plus"></i>
+                </button>
                 <span class="btn btn-sm btn-secondary Group-Position-Handler">
                     <i class="fas fa-arrows-alt-v"></i>
                 </span>
@@ -110,6 +92,39 @@
             <span class="btn btn-sm btn-primary Block-Item-Width-Control ui-resizable-handle ui-resizable-e">
                         <i class="fas fa-arrows-alt-h"></i>
             </span>
+        </div>
+    </div>
+</div>
+
+
+<div class="template-add-block-modal" style="display: none">
+    <div class="row">
+        <div class="col-12">
+            <h4>Standaard</h4>
+            <div class="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
+                <label class="btn btn-primary active">
+                    <input type="radio" name="Content_Type" checked value="TextArea" content-addon-id="0"> Tekst
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="Content_Type" value="Picture" content-addon-id="0"> Afbeelding
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="Content_Type" value="Iframe" content-addon-id="0"> Pagina insluiten
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="Content_Type" value="Filler" content-addon-id="0"> Leeg blok
+                </label>
+            </div>
+        </div>
+        <div class="col-12">
+            <h4>Widgets</h4>
+            <div class="btn-group btn-group-toggle btn-group-vertical" addon-types="widget" data-toggle="buttons">
+            </div>
+        </div>
+        <div class="col-12">
+            <h4>Custom</h4>
+            <div class="btn-group btn-group-toggle btn-group-vertical" addon-types="custom" data-toggle="buttons">
+            </div>
         </div>
     </div>
 </div>

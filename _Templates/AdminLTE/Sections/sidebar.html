@@ -22,7 +22,7 @@
                             {/if}
                         </p>
                     </a>
-                    {if $aPage.Children !== null}
+                    {if isset($aPage.Children)}
                     <ul class="nav nav-treeview">
                         {foreach from=$aPage.Children item=Child key=ChildHref}
                             {if $Child.Right && $Child.Icon != NULL}
@@ -36,7 +36,7 @@
                                             {/if}
                                         </p>
                                     </a>
-                                    {if $Child.Children != Null}
+                                    {if isset($Child.Children)}
                                     <ul class="nav nav-treeview">
                                         {foreach from=$Child.Children item=Grand key=GrandHref}
                                             {if $Grand.Right && $Grand.Icon != NULL}

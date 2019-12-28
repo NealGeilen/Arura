@@ -67,8 +67,8 @@ class Page extends Group{
                             throw new Error("Cannot save content block :". $iBlockId);
                         }
                     }
+                    unset($aGroup['Blocks']);
                 }
-                unset($aGroup['Blocks']);
                 if (!$this->setGroup($iGroupId,$aGroup)){
                     throw new Error("Cannot save Group :". $iGroupId);
                 }

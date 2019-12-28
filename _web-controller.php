@@ -287,7 +287,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
         $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
         $Host->addPage($P);
     }
-    if ($aProperties["Children"] !== null){
+    if (isset($aProperties["Children"])){
         foreach ($aProperties["Children"] as $ChildUrl => $aChildProperties){
             $P = new \Arura\Dashboard\Page();
             $P->setUrl($ChildUrl);
@@ -297,7 +297,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
             $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aChildProperties['FileName']);
             $Host->addPage($P);
 
-            if ($aChildProperties["Children"] !== null){
+            if (isset($aChildProperties["Children"])){
                 foreach ($aChildProperties["Children"] as $GrandUrl => $aGrandProperties){
                     $P = new \Arura\Dashboard\Page();
                     $P->setUrl($GrandUrl);
