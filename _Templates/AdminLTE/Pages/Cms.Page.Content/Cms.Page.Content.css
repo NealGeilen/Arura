@@ -180,3 +180,10 @@ img.Block-Item-Field:after{
 .tox.tox-tinymce.tox-tinymce-inline{
     z-index: 1100!important;
 }
+.btn-group-toggle input[type=radio]{
+    display: none;
+}
+.btn-group-toggle label{
+    width: 100%;
+    text-align: center;
+}

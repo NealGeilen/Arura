@@ -101,29 +101,37 @@
     <div class="row">
         <div class="col-12">
             <h4>Standaard</h4>
-            <div class="btn-group btn-group-toggle btn-group-vertical" data-toggle="buttons">
-                <label class="btn btn-primary active">
-                    <input type="radio" name="Content_Type" checked value="TextArea" content-addon-id="0"> Tekst
-                </label>
-                <label class="btn btn-primary">
-                    <input type="radio" name="Content_Type" value="Picture" content-addon-id="0"> Afbeelding
-                </label>
-                <label class="btn btn-primary">
-                    <input type="radio" name="Content_Type" value="Iframe" content-addon-id="0"> Pagina insluiten
-                </label>
-                <label class="btn btn-primary">
-                    <input type="radio" name="Content_Type" value="Filler" content-addon-id="0"> Leeg blok
-                </label>
+            <div class="btn-group-toggle row" data-toggle="buttons">
+                <div class="col-6">
+                    <label class="btn btn-primary active">
+                        <input type="radio" name="Content_Type" checked value="TextArea" content-addon-id="0"> Tekst
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label class="btn btn-primary">
+                        <input type="radio" name="Content_Type" value="Picture" content-addon-id="0"> Afbeelding
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label class="btn btn-primary">
+                        <input type="radio" name="Content_Type" value="Iframe" content-addon-id="0"> Pagina insluiten
+                    </label>
+                </div>
+                <div class="col-6">
+                    <label class="btn btn-primary">
+                        <input type="radio" name="Content_Type" value="Filler" content-addon-id="0"> Leeg blok
+                    </label>
+                </div>
             </div>
         </div>
         <div class="col-12">
             <h4>Widgets</h4>
-            <div class="btn-group btn-group-toggle btn-group-vertical" addon-types="widget" data-toggle="buttons">
+            <div class="btn-group-toggle row" addon-types="widget" data-toggle="buttons">
             </div>
         </div>
         <div class="col-12">
             <h4>Custom</h4>
-            <div class="btn-group btn-group-toggle btn-group-vertical" addon-types="custom" data-toggle="buttons">
+            <div class="btn-group-toggle row" addon-types="custom" data-toggle="buttons">
             </div>
         </div>
     </div>

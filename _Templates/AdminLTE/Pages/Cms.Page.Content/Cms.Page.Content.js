@@ -28,19 +28,6 @@ var Builder = {
         $.ajax(settings);
     },
     ContentTypes:{
-        draggable: function () {
-            $(sSelectors.Content_Type_Selector).draggable({
-                helper: function (event) {
-                    aBlock = Builder.ContentTypes.DefaultBlock;
-                    oObject = $(event.target).parents("li").find("a");
-                    aBlock['Content_Type'] = oObject.attr('content-type');
-                    aBlock['Content_Addon_Id'] = parseInt(oObject.attr('content-addon-id'));
-                    return Builder.Block.Create(aBlock);
-                },
-                connectToSortable: sSelectors.Group_Content,
-                revert: "invalid"
-            });
-        },
         DefaultBlock:{
             Content_Size: 6,
             Content_Value: null,
@@ -234,12 +221,11 @@ var Builder = {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
                $.each(aAddons, function(iKey,aAddon){
-                   sItem = "<label class=\"btn btn-secondary\"><input type=\"radio\" name=\"Content_Type\" value='"+ aAddon.Addon_Type+ "' content-addon-id='"+ aAddon.Addon_Id+"'>"+ aAddon.Addon_Name + "</label>";
+                   sItem = "<div class='col-6'><label class=\"btn btn-secondary\"><input type=\"radio\" name=\"Content_Type\" value='"+ aAddon.Addon_Type+ "' content-addon-id='"+ aAddon.Addon_Id+"'>"+ aAddon.Addon_Name + "</label></div>";
                    $('[addon-types='+aAddon.Addon_Type+']').append(sItem);
                });
                 Builder.Editor.sortable();
                 Builder.Group.sortable();
-                Builder.ContentTypes.draggable();
                 Sidebar.Block.Events();
             });
         },
@@ -409,6 +395,7 @@ var Builder = {
                 Content_Type: aArray.Content_Type,
                 Content_Size: parseInt(aArray.Content_Size),
                 Content_Value: aArray.Content_Value,
+                Content_Position: aArray.Content_Position,
                 Content_Raster: parseInt(aArray.Content_Raster),
                 Content_Addon_Id: parseInt(aArray.Content_Addon_Id),
                 Content_Group_Id: parseInt(aArray.Content_Group_Id)
@@ -446,6 +433,7 @@ var Builder = {
         },
         Create:function(oGroup){
             Modals.Custom({
+                Size: "large",
                 Title:"Content toevoegen.",
                 Message: $(".template-add-block-modal").html(),
                 onConfirm: function (oModal) {
