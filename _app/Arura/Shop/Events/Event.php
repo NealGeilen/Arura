@@ -139,9 +139,7 @@ class Event Extends Page{
                     "Betaling tickets voor " . $this->getName(),
                     $_POST["issuer"],
                     ["Tickets" => $aCollection["Tickets"]]);
-                $R = Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"], null, $P->getId());
-
-
+                $R = Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"], null, $Payment_ID);
                 $P->redirectToMollie();
             }
         }

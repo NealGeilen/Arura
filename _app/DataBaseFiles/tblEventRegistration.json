@@ -57,7 +57,7 @@
       "Extra": ""
     },
     "Registration_Payment_Id": {
-      "Type": "varchar(11)",
+      "Type": "varchar(20)",
       "Null": "YES",
       "Key": "",
       "Default": null,

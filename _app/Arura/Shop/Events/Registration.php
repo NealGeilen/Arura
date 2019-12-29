@@ -2,6 +2,8 @@
 namespace Arura\Shop\Events;
 
 
+use Arura\Exceptions\Error;
+use Arura\Mailer\Mailer;
 use Arura\Modal;
 use Arura\Shop\Payment;
 use Arura\Database;
@@ -16,6 +18,7 @@ class Registration extends Modal {
     protected $email;
     protected $tel;
     protected $amount;
+    protected $payment;
 
     public function __construct($id)
     {
@@ -23,8 +26,17 @@ class Registration extends Modal {
         parent::__construct();
     }
 
+    public static function getRegistrationFromPayment(Payment $oPayment){
+        $db = new Database();
+        $aRegi = $db->fetchRow("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Payment_Id = :Payment_Id", ["Payment_Id" => $oPayment->getId()]);
+        return new self($aRegi["Registration_Id"]);
+    }
+
     public static function NewRegistration(Event $oEvent, $firstname,$lastname,$email,$tel, $Amount= null, $PaymentId = null){
         $db = new Database();
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+            throw new Error("Email not valid");
+        }
         $i = $db->createRecord("tblEventRegistration",[
             "Registration_Event_Id" => $oEvent->getId(),
             "Registration_Timestamp" => time(),
@@ -51,7 +63,8 @@ class Registration extends Modal {
             "Registration_Lastname" => $this->getLastname(),
             "Registration_Email" => $this->getEmail(),
             "Registration_Tel" => $this->getTel(),
-            "Registration_Amount" => $this->getAmount()
+            "Registration_Amount" => $this->getAmount(),
+            "Registration_Payment_Id" => $this->getPayment()->getId()
         ];
     }
 
@@ -67,20 +80,73 @@ class Registration extends Modal {
             $CreationTime->setTimestamp($aRegistration["Registration_Timestamp"]);
             $this->setSignUpTime($CreationTime);
             $this->setAmount($aRegistration["Registration_Amount"]);
+            $this->setPayment(new Payment($aRegistration["Registration_Payment_Id"]));
         }
     }
 
-    public function addTicket($iTicketId = 0, $fPrice = 0.0,$iAmount = 1){
-        for ($i =0; $i > $iAmount; $i++){
-            $this->db->createRecord("tblEventOrderdTickets", [
-                "OrderdTicket_Hash" => getHash("tblEventOrderdTickets", "OrderdTicket_Hash"),
-                "OrderdTicket_Ticket_Id" => $iTicketId,
-                "OrderdTicket_Registartion_Id" => $this->getId(),
-                "OrderdTicket_IsPayed" => null,
-                "OrderdTicket_Price" => $fPrice
-            ]);
+    protected function addTicket($iTicketId = 0, $fPrice = 0.0){
+        $sHash = getHash("tblEventOrderedTickets", "OrderedTicket_Hash");
+        $this->db->createRecord("tblEventOrderedTickets", [
+            "OrderedTicket_Hash" => $sHash,
+            "OrderedTicket_Ticket_Id" => $iTicketId,
+            "OrderedTicket_Registration_Id" => $this->getId(),
+            "OrderedTicket_Price" => $fPrice
+        ]);
+        if ($this->db->isQuerySuccessful()){
+            return $sHash;
         }
         return $this->db->isQuerySuccessful();
+    }
+
+    protected function areTicketsMade(){
+        return (count($this->db->fetchAll("SELECT OrderedTicket_Hash FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id"=> $this->getId()])) > 0);
+    }
+
+    protected function createTickets(){
+        $aTickets = [];
+        if (!empty($this->getPayment()->getId())){
+            if (isset($this->getPayment()->getMetadata()["Tickets"])){
+                foreach ($this->getPayment()->getMetadata()["Tickets"] as $i => $aTicket){
+                    $iAmount = (int)$aTicket["Amount"];
+                    unset($aTicket["Amount"]);
+                    for ($x =0; $x < $iAmount; $x++){
+                        $sTicket = $this->addTicket($aTicket["Ticket_Id"], (float)$aTicket["Ticket_Price"]);
+                        $aTickets[$sTicket] = $aTicket;
+                    }
+                }
+                return $aTickets;
+            }
+        }
+        return false;
+    }
+
+    public function getTickets(){
+        $aData = $this->db->fetchAll("SELECT OrderedTicket_Hash, Ticket_Id, Ticket_Name, Ticket_Price, Ticket_Capacity, Ticket_Description, Ticket_Event_Id FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $this->getId()]);
+        $aList= [];
+        foreach ($aData as $aOrder){
+            $sHash = $aOrder["OrderedTicket_Hash"];
+            unset($aOrder["OrderedTicket_Hash"]);
+            $aList[$sHash] = $aOrder;
+        }
+        return $aList;
+    }
+
+    public function sendEventDetails(){
+        if (!$this->areTicketsMade()){
+            $aTickets = $this->createTickets();
+        } else {
+            $aTickets = $this->getTickets();
+        }
+        $oMailer = new Mailer();
+        $oMailer->addBCC($this->getEmail());
+        Mailer::getSmarty()->assign("aRegistration", $this->__ToArray());
+        Mailer::getSmarty()->assign("aTickets", $aTickets);
+        $oMailer->setBody(__WEB__ROOT__ . "Resources/Mails/event.html");
+        foreach ($aTickets as $sHash => $aData){
+            $oTicket = new Ticket($sHash);
+            $oMailer->addAttachment($oTicket->getPDFTicket());
+        }
+        var_dump($aTickets);
     }
 
     /**
@@ -216,4 +282,22 @@ class Registration extends Modal {
     {
         $this->amount = $amount;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPayment() : Payment
+    {
+        $this->load();
+        return $this->payment;
+    }
+
+    /**
+     * @param mixed $payment
+     */
+    public function setPayment(Payment $payment)
+    {
+        $this->payment = $payment;
+    }
+
 }

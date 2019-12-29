@@ -39,11 +39,12 @@ class Payment extends Modal {
     public function __construct($sId)
     {
         parent::__construct();
-        if (count($this->db->fetchAll("SELECT Payment_Id FROM tblPayments WHERE Payment_Id = :Payment_Id", ["Payment_Id"=>$sId])) < 0){
-            throw new \Exception("Payment not found", 404);
+        if (!is_null($sId)){
+            if (count($this->db->fetchAll("SELECT Payment_Id FROM tblPayments WHERE Payment_Id = :Payment_Id", ["Payment_Id"=>$sId])) < 0){
+                throw new \Exception("Payment not found", 404);
+            }
+            $this->id = $sId;
         }
-        $this->id = $sId;
-
     }
 
     /**
@@ -62,6 +63,7 @@ class Payment extends Modal {
             $this->setDescription($aPayment["Payment_Description"]);
             $this->setIssuer($aPayment["Payment_Issuer"]);
             $this->setStatus($aPayment["Payment_Status"]);
+            $this->setMetadata($aPayment["Payment_Metadata"]);
         }
     }
 
@@ -254,6 +256,23 @@ class Payment extends Modal {
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMetadata()
+    {
+        $this->load();
+        return json_array_decode($this->metadata);
+    }
+
+    /**
+     * @param array $metadata
+     */
+    public function setMetadata($metadata)
+    {
+        $this->metadata = $metadata;
     }
 
 
