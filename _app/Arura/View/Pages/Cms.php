@@ -115,6 +115,15 @@ class Cms extends Page implements PageEnum {
                             case "Iframe":
                                 $aContentBlock['Template'] = "<iframe style='height: 100%; width: 100%' src='".$aContentBlock['Content_Value']."'></iframe>";
                                 break;
+                            case "Number":
+                                $aContentBlock['Template'] = "<p>".$aContentBlock['Content_Value']."</p>";
+                                break;
+                            case "Icon":
+                                $aContentBlock['Template'] = "<i class='".$aContentBlock['Content_Value']."'></i>";
+                                break;
+                            case "Tekst":
+                                $aContentBlock['Template'] = "<p>".$aContentBlock['Content_Value']."</p>";
+                                break;
                             case 'widget':
                                 $_GET['PluginData'] = ['Addon' => $aAddon,'Content' => $aContentBlock['Content_Value'], 'Smarty' => self::$smarty];
                                 self::$smarty->assign('aContentBlock', $aContentBlock);

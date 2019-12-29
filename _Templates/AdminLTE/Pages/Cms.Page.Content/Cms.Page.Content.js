@@ -38,6 +38,7 @@ var Builder = {
         },
         Types: {
             TextArea: {
+                Name: "Tekst met styling",
                 oTemplate: $('<div>').addClass('Tinymce'),
                 init: function (sValue) {
                     oText = this.oTemplate.clone();
@@ -49,19 +50,8 @@ var Builder = {
                     return TinyMce.getValue(oElement);
                 }
             },
-            Header: {
-                oTemplate: $('<div>').addClass('Tinymce'),
-                init: function (sValue) {
-                    oText = this.oTemplate.clone();
-                    oText.html(sValue);
-                    TinyMce.SetHeader(oText);
-                    return oText;
-                },
-                value: function(oElement){
-                    return TinyMce.getValue(oElement);
-                }
-            },
             Picture:{
+                Name: "Afbeelding",
                 oTemplate: $('<img>'),
                 init: function (sValue) {
                     oField  = this.oTemplate.clone();
@@ -87,6 +77,7 @@ var Builder = {
                 }
             },
             Icon: {
+                Name: "Icoon",
                 oTemplate: $('<button>').addClass('btn bnt-default'),
                 init: function (sValue) {
                     sValue = (sValue === null) ? '' : sValue;
@@ -101,7 +92,9 @@ var Builder = {
                     return oPicker.find('i').attr('class');
                 }
             },
+
             Number: {
+                Name : "Nummer",
                 oTemplate: $('<input>').addClass('form-control'),
                 init: function (sValue) {
                     sValue = (sValue === null) ? '' : sValue;
@@ -114,6 +107,7 @@ var Builder = {
                 }
             },
             Text: {
+                Name : "Tekst",
                 oTemplate: $('<input>').addClass('form-control'),
                 init: function (sValue) {
                     sValue = (sValue === null) ? '' : sValue;
@@ -126,7 +120,8 @@ var Builder = {
                 }
             },
             Iframe: {
-                oTemplate: $('<input placeholder="Webpagina url">').addClass('form-control'),
+                Name: "Webpagina insluiten",
+                oTemplate: $('<input placeholder="Webpagina insluiten">').addClass('form-control'),
                 init: function (sValue) {
                     sValue = (sValue === null) ? '' : sValue;
                     oInput = this.oTemplate.clone();
@@ -138,6 +133,7 @@ var Builder = {
                 }
             },
             Filler: {
+                Name: "Leeg blok",
                 oTemplate: $('<div><p class="text-center">Leeg blok</p></div>'),
                 init: function (sValue) {
                     oInput = this.oTemplate.clone();
@@ -220,10 +216,14 @@ var Builder = {
                $.each(aStructure, function (iPosition, aGroup) {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
-               $.each(aAddons, function(iKey,aAddon){
-                   sItem = "<div class='col-6'><label class=\"btn btn-secondary\"><input type=\"radio\" name=\"Content_Type\" value='"+ aAddon.Addon_Type+ "' content-addon-id='"+ aAddon.Addon_Id+"'>"+ aAddon.Addon_Name + "</label></div>";
-                   $('[addon-types='+aAddon.Addon_Type+']').append(sItem);
-               });
+                $.each(aAddons, function(iKey,aAddon){
+                    sItem = "<div class='col-6'><label class=\"btn btn-secondary\"><input type=\"radio\" name=\"Content_Type\" value='"+ aAddon.Addon_Type+ "' content-addon-id='"+ aAddon.Addon_Id+"'>"+ aAddon.Addon_Name + "</label></div>";
+                    $('[addon-types='+aAddon.Addon_Type+']').append(sItem);
+                });
+                $.each(Builder.ContentTypes.Types, function(sKey,aData){
+                    sItem = "<div class='col-6'><label class=\"btn btn-primary\"><input type=\"radio\" name=\"Content_Type\" value='"+ sKey+ "' content-addon-id='0'>"+aData.Name+"</label></div>";
+                    $('[addon-types=standard]').append(sItem);
+                });
                 Builder.Editor.sortable();
                 Builder.Group.sortable();
                 Sidebar.Block.Events();
@@ -398,7 +398,9 @@ var Builder = {
                 Content_Position: aArray.Content_Position,
                 Content_Raster: parseInt(aArray.Content_Raster),
                 Content_Addon_Id: parseInt(aArray.Content_Addon_Id),
-                Content_Group_Id: parseInt(aArray.Content_Group_Id)
+                Content_Group_Id: parseInt(aArray.Content_Group_Id),
+                Content_Css_Background_Color :aArray.Content_Css_Background_Color,
+                Content_Css_Background_Img: aArray.Content_Css_Background_Img
             };
         },
         setData: function(oBlock, sField,sValue){
