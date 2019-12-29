@@ -33,13 +33,18 @@ class Mailer extends PHPMailer{
     public function setBody($sFile, $includeAltBody = true){
         if (is_file($sFile)){
             self::getSmarty()->assign("aWebsite", Application::getAll()["website"]);
-            $this->Body = self::getSmarty()->fetch($sFile);
+            self::getSmarty()->assign("sContent", self::getSmarty()->fetch($sFile));
+            if (is_file(__WEB__ROOT__ . "/_app/Resources/Mails/index.html")){
+                $this->Body = self::getSmarty()->fetch(__WEB__ROOT__ . "/_app/Resources/Mails/index.html");
+            } else {
+                throw new Error("Master template not set");
+            }
             if ($includeAltBody) {
                 $html2text = new Html2Text($this->Body);
                 $this->AltBody = $html2text->getText();
             }
         } else {
-            throw new Error();
+            throw new Error("No body file given");
         }
     }
 
