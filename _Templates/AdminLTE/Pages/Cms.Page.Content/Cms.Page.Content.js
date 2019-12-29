@@ -575,8 +575,15 @@ var Sidebar = {
                 $('#content-background-color').val(null);
                 $('#content-background-img').val(null);
                 $('.block-settings-items-control').show();
+                $(".type").text(null);
             };
             var set = function (aData){
+                if (aData.Content_Type === "custom" || aData.Content_Type === "widget"){
+                    $(".type").text(Addons[aData.Content_Addon_Id].Addon_Name);
+                } else {
+                    $(".type").text(aData.Content_Type);
+                }
+
                 if (parseInt(aData.Content_Addon_Id) === 0 || (parseInt(Addons[aData.Content_Addon_Id].Addon_Custom) === 1 || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0)){
                     $('.block-settings-items-control').hide();
                 } else {
