@@ -129,14 +129,6 @@
                             <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/beheer?e={$aEvent.Event_Id}"><i class="fas fa-pen"></i></a>
                         </td>
                     </tr>
-                    {foreachelse}
-                    <tr>
-                        <td colspan="3">
-                            <div class="alert alert-info">
-                                Er zijn geen evenementen gepland.
-                            </div>
-                        </td>
-                    </tr>
                     {/foreach}
                     </tbody>
                 </table>
@@ -168,14 +160,6 @@
                         <td>€ {$aPayment.Payment_Amount|number_format:2:",":"."}{$iPaymentsAmount = $iPaymentsAmount + $aPayment.Payment_Amount}</td>
                         <td>{$aPayment.Payment_Status}</td>
                         <td></td>
-                    </tr>
-                    {foreachelse}
-                    <tr>
-                        <td colspan="6">
-                            <div class="alert alert-info">
-                                Er zijn de afgelopen 24 uur geen betalingen gedaan.
-                            </div>
-                        </td>
                     </tr>
                     {/foreach}
                     </tbody>
