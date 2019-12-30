@@ -83,6 +83,16 @@ $(".table.Arura-Table").DataTable({
         "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
     }
 });
+$(".table.Arura-Table-Mini").DataTable({
+    searching: false,
+    bLengthChange: false,
+    info: false,
+    sPaginationType: "simple",
+    pageLength: 5,
+    "language": {
+        "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+    }
+});
 
 $(".table.Arura-Table .btn-delete").on("click", function () {
     oBtn = $(this);
