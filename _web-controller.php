@@ -20,9 +20,7 @@ $aNavBarPages =
             "FileName" => "Home",
             "MasterPage" => "AdminLTE",
             "Right" => \Arura\User\User::isLogged(),
-            "Icon" => "fas fa-tachometer-alt",
-            "isChild" => false,
-            "Children" => Null
+            "Icon" => "fas fa-tachometer-alt"
         ],
         /**
          * CMS Beheer
@@ -32,7 +30,6 @@ $aNavBarPages =
             "Title" => "Website content",
             "FileName" => null,
             "Icon" => "fas fa-globe-europe",
-            "isChild" => false,
             "MasterPage" => null,
             "Children" =>
                 [
@@ -41,32 +38,28 @@ $aNavBarPages =
                         "Title" => "Pagina's",
                         "FileName" => "Cms.Pages",
                         "Icon" => "fas fa-file",
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                     "/content/menu" => [
                         "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_MENU),
                         "Title" => "Menu",
                         "FileName" => "Cms.Menu",
                         "Icon" => "fas fa-bars",
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                     "/content/pagina/content" => [
                         "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
                         "FileName" => "Cms.Page.Content",
                         "Title" => "Pagina content",
                         "Icon" => null,
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                     "/content/pagina/instellingen" => [
                         "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
                         "Title" => "Pagina instellingen",
                         "FileName" => "Cms.Page.Settings",
                         "Icon" => null,
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                 ]
         ],
@@ -142,8 +135,7 @@ $aNavBarPages =
                         "FileName" => null,
                         "Icon" => "fas fa-box-open",
                         "isChild" => true,
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                     '/winkel/evenementen' => [
                         "Right" =>
@@ -164,8 +156,7 @@ $aNavBarPages =
                                 "FileName" => null,
                                 "Icon" => "fas fa-ticket-alt",
                                 "isChild" => true,
-                                "MasterPage" => "AdminLTE",
-                                "Children" => null
+                                "MasterPage" => "AdminLTE"
                             ],
                             '/winkel/evenementen/beheer' => [
                                 "Right" =>
@@ -176,8 +167,7 @@ $aNavBarPages =
                                 "FileName" => "Shop.Events",
                                 "Icon" => "fas fa-calendar-day",
                                 "isChild" => true,
-                                "MasterPage" => "AdminLTE",
-                                "Children" => null
+                                "MasterPage" => "AdminLTE"
                             ],
                         ]
                     ]
@@ -205,8 +195,7 @@ $aNavBarPages =
                         "Title" => "Gebruikers",
                         "FileName" => "Arura.Users",
                         "Icon" => "fas fa-users",
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                     '/arura/roles' => [
                         "Right" =>
@@ -216,8 +205,7 @@ $aNavBarPages =
                         "Title" => "Rollen",
                         "FileName" => "Arura.Roles",
                         "Icon" => "fas fa-key",
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                     '/arura/settings' => [
                         "Right" =>
@@ -227,8 +215,7 @@ $aNavBarPages =
                         "Title" => "Instellingen",
                         "FileName" => "Arura.Settings",
                         "Icon" => "fas fa-cogs",
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                     '/arura/updater' => [
                         "Right" =>
@@ -238,8 +225,7 @@ $aNavBarPages =
                         "Title" => "Updaten",
                         "FileName" => "Arura.Updater",
                         "Icon" => "fas fa-server",
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
+                        "MasterPage" => "AdminLTE"
                     ],
                 ]
         ],
@@ -306,9 +292,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
                     $P->setMasterPath(__ARURA_TEMPLATES__   . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR);
                     $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aGrandProperties['FileName']);
                     $Host->addPage($P);
-                    if (substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl()){
-                        $aNavBarPages[$sUrl]["Open"] = true;
-                    }
+                    $aNavBarPages[$sUrl]["Open"]= substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl();
                 }
             }
 
