@@ -130,6 +130,7 @@ class Registration extends Modal {
         $oPDF = new PDF(["config" => __APP_ROOT__ . "Tickets"]);
         $oPDF->assign("aWebsite", Application::getAll()["website"]);
         $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
+        $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), \Mpdf\HTMLParserMode::HEADER_CSS);
         //TODO Add Factuur;
 
         foreach ($aTickets as $sHash =>$aData){
@@ -137,7 +138,7 @@ class Registration extends Modal {
             $oPDF->assign("Qr", QR::Create($sHash));
             $oPDF->assign("sHash", $sHash);
             $oPDF->assign("aTicket", $aData);
-            $oPDF->SetHTMLHeader(self::TemplateDir . "head.html");
+//            $oPDF->SetHTMLHeader(self::TemplateDir . "head.html");
             $oPDF->SetHTMLFooter(self::TemplateDir . "footer.html");
             $oPDF->setTemplate(self::TemplateDir. "main.html");
         }
@@ -166,7 +167,7 @@ class Registration extends Modal {
         } else {
             $aTickets = $this->getTickets();
         }
-//        $this->GeneratePDFs($aTickets);
+        $this->GeneratePDFs($aTickets);
     }
 
     /**
