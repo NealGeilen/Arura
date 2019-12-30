@@ -5,8 +5,12 @@ namespace Arura\Shop\Events;
 use Arura\Exceptions\Error;
 use Arura\Mailer\Mailer;
 use Arura\Modal;
+use Arura\PDF;
+use Arura\QR;
+use Arura\Settings\Application;
 use Arura\Shop\Payment;
 use Arura\Database;
+use Mpdf\Output\Destination;
 
 class Registration extends Modal {
 
@@ -19,6 +23,8 @@ class Registration extends Modal {
     protected $tel;
     protected $amount;
     protected $payment;
+
+    const TemplateDir = __RESOURCES__ . "Tickets/";
 
     public function __construct($id)
     {
@@ -120,6 +126,29 @@ class Registration extends Modal {
         return false;
     }
 
+    protected function GeneratePDFs($aTickets){
+        $oPDF = new PDF(["config" => __APP_ROOT__ . "Tickets"]);
+        $oPDF->assign("aWebsite", Application::getAll()["website"]);
+        $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
+        //TODO Add Factuur;
+
+        foreach ($aTickets as $sHash =>$aData){
+            $oPDF->AddPage();
+            $oPDF->assign("Qr", QR::Create($sHash));
+            $oPDF->assign("sHash", $sHash);
+            $oPDF->assign("aTicket", $aData);
+            $oPDF->SetHTMLHeader(self::TemplateDir . "head.html");
+            $oPDF->SetHTMLFooter(self::TemplateDir . "footer.html");
+            $oPDF->setTemplate(self::TemplateDir. "main.html");
+        }
+
+
+
+//        $oPDF->SetHTMLHeader(self::TemplateDir . "head.html");
+//        $oPDF->SetHTMLFooter(self::TemplateDir . "footer.html");
+        $oPDF->Output($sHash. ".pdf", Destination::DOWNLOAD);
+    }
+
     public function getTickets(){
         $aData = $this->db->fetchAll("SELECT OrderedTicket_Hash, Ticket_Id, Ticket_Name, Ticket_Price, Ticket_Capacity, Ticket_Description, Ticket_Event_Id FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $this->getId()]);
         $aList= [];
@@ -137,16 +166,7 @@ class Registration extends Modal {
         } else {
             $aTickets = $this->getTickets();
         }
-        $oMailer = new Mailer();
-        $oMailer->addBCC($this->getEmail());
-        Mailer::getSmarty()->assign("aRegistration", $this->__ToArray());
-        Mailer::getSmarty()->assign("aTickets", $aTickets);
-        $oMailer->setBody(__WEB__ROOT__ . "Resources/Mails/event.html");
-        foreach ($aTickets as $sHash => $aData){
-            $oTicket = new Ticket($sHash);
-            $oMailer->addAttachment($oTicket->getPDFTicket());
-        }
-        var_dump($aTickets);
+//        $this->GeneratePDFs($aTickets);
     }
 
     /**

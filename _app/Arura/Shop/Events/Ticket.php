@@ -5,6 +5,8 @@ namespace Arura\Shop\Events;
 use Arura\Modal;
 use Arura\PDF;
 use Arura\QR;
+use Arura\Settings\Application;
+use Mpdf\Output\Destination;
 
 class Ticket extends Modal {
 
@@ -13,6 +15,10 @@ class Ticket extends Modal {
     protected $price;
     protected $ticketId;
 
+    protected static $smarty;
+
+    const TemplateDir = __RESOURCES__ . "Tickets/";
+
     public function __construct($hash)
     {
         parent::__construct();
@@ -20,10 +26,6 @@ class Ticket extends Modal {
     }
 
     public function getPDFTicket(){
-        $oPDF = new PDF();
-        $oPDF->assign("QR", QR::Create(""));
-        $oPDF->SetHTMLHeader();
-        $oPDF->SetHTMLFooter();
 
     }
 

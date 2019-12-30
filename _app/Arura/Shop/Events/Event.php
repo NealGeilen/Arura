@@ -173,7 +173,7 @@ class Event Extends Page{
                         default:
                             $db = new Database();
                             $smarty = self::$smarty;
-                            $smarty->assign("aTickets", $db->fetchAll("SELECT Ticket_Id,Ticket_Capacity,Ticket_Description, Ticket_Name,Ticket_Price , (SELECT count(OrderedTicket_Hash) AS Count FROM tblEventOrderdTickets JOIN tblEventTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE Ticket_Event_Id = :Event_Id) AS Count FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]));
+                            $smarty->assign("aTickets", $db->fetchAll("SELECT Ticket_Id,Ticket_Capacity,Ticket_Description, Ticket_Name,Ticket_Price , (SELECT count(OrderedTicket_Hash) AS Count FROM tblEventOrderedTickets JOIN tblEventTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE Ticket_Event_Id = :Event_Id) AS Count FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]));
                             $oPage->setTitle($oPage->getName());
                             $oPage->showPage();
                             break;
