@@ -67,6 +67,19 @@ class Payment extends Modal {
         }
     }
 
+    public function __ToArray(){
+        return [
+            "Payment_Id" => $this->getId(),
+            "Payment_Mollie_Id" => $this->getPayment()->id,
+            "Payment_Amount" => $this->getAmount(),
+            "Payment_Card" => $this->getCard(),
+            "Payment_Description" => $this->getDescription(),
+            "Payment_Issuer" => $this->getIssuer(),
+            "Payment_Status" => $this->getStatus(),
+            "Payment_Metadata" => $this->metadata
+        ];
+    }
+
     public static function getIdealIssuers(){
         return json_decode(json_encode(self::getMollie()->methods->get(\Mollie\Api\Types\PaymentMethod::IDEAL, ["include" => "issuers"])->issuers), true);
     }

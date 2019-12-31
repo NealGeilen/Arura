@@ -132,21 +132,19 @@ class Registration extends Modal {
         $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
         $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), \Mpdf\HTMLParserMode::HEADER_CSS);
         //TODO Add Factuur;
+        $oPDF->assign("aTickets", $this->getPayment()->getMetadata());
+        $oPDF->assign("aPayment", $this->getPayment()->__ToArray());
+        $oPDF->SetHTMLFooter(self::TemplateDir. "footer.html");
+        $oPDF->setTemplate(self::TemplateDir . "factuur.html");
 
         foreach ($aTickets as $sHash =>$aData){
             $oPDF->AddPage();
             $oPDF->assign("Qr", QR::Create($sHash));
             $oPDF->assign("sHash", $sHash);
             $oPDF->assign("aTicket", $aData);
-//            $oPDF->SetHTMLHeader(self::TemplateDir . "head.html");
-            $oPDF->SetHTMLFooter(self::TemplateDir . "footer.html");
+            $oPDF->SetHTMLFooter(self::TemplateDir. "footer.html");
             $oPDF->setTemplate(self::TemplateDir. "main.html");
         }
-
-
-
-//        $oPDF->SetHTMLHeader(self::TemplateDir . "head.html");
-//        $oPDF->SetHTMLFooter(self::TemplateDir . "footer.html");
         $oPDF->Output($sHash. ".pdf", Destination::DOWNLOAD);
     }
 
