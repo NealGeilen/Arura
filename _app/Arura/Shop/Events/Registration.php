@@ -130,6 +130,7 @@ class Registration extends Modal {
         $oPDF = new PDF(["config" => __APP_ROOT__ . "Tickets"]);
         $oPDF->assign("aWebsite", Application::getAll()["website"]);
         $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
+        $oPDF->assign("btwPer", Application::get("plg.shop", "BtwPer"));
         $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), \Mpdf\HTMLParserMode::HEADER_CSS);
         //TODO Add Factuur;
         $oPDF->assign("aTickets", $this->getPayment()->getMetadata());
