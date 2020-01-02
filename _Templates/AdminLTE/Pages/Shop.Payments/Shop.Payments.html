@@ -1,3 +1,39 @@
+<style>
+    .payment{
+        background: #e7e7e7;
+        border: 2px solid gray;
+        font-weight: bold;
+        color: black;
+        text-align: center;
+        text-transform: capitalize;
+        padding: 3px;
+        border-radius: 5px;
+    }
+    .open{
+        border-color: black;
+        color: white;
+    }
+    .paid{
+        border-color: green;
+        color: green;
+    }
+    .expired{
+        border-color: orange;
+        color: orange;
+    }
+    .pending{
+        border-color: yellow;
+        color: yellow;
+    }
+    .authorized{
+        border-color: green;
+        color: green;
+    }
+    .failed{
+        border-color: red;
+        color: red;
+    }
+</style>
 <div class="card">
     <div class="card-header">
         <h2 class="card-title">Allen betalingen</h2>
@@ -18,9 +54,17 @@
             {foreach from=$aPayments key=$iKey item=aPayment}
             <tr>
                 <td>{$aPayment.Payment_Description}</td>
-                <td>€ {$aPayment.Payment_Amount|number_format:2:",":"."}{$iPayments48Amount =+ $aPayment.Payment_Amount}</td>
+                <td>€ {$aPayment.Payment_Amount|number_format:2:",":"."}</td>
+                {if $aPayment.Payment_Status === "paid"}
+                {$iPaymentsAmount = $iPaymentsAmount + $aPayment.Payment_Amount}
+                {/if}
+
                 <td>{$aPayment.Payment_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
-                <td>{$aPayment.Payment_Status}</td>
+                <td>
+                    <div class="payment {$aPayment.Payment_Status}">
+                        {$aPayment.Payment_Status}
+                    </div>
+                </td>
                 <td>{$aPayment.Payment_Card}</td>
             </tr>
             {/foreach}

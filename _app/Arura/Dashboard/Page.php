@@ -58,8 +58,8 @@ class Page{
                         break;
                 }
             }
-            self::$aResourceFiles["JsPage"] = $sJsData;
-            self::$aResourceFiles["CssPage"] = $sCssData;
+            self::$aResourceFiles["JsPage"] .= $sJsData;
+            self::$aResourceFiles["CssPage"] .= $sCssData;
             self::getSmarty()->assign("sPageSideBar", self::getSideBar());
 
 
@@ -182,7 +182,7 @@ class Page{
     }
 
     /**
-     * @param mixed $sTitle
+     * @param string $sTitle
      */
     public function setTitle($sTitle)
     {
@@ -190,7 +190,7 @@ class Page{
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public static function getResourceFiles()
     {
@@ -198,7 +198,7 @@ class Page{
     }
 
     /**
-     * @param mixed $aResourceFiles
+     * @param array $aResourceFiles
      */
     public static function setResourceFiles($aResourceFiles)
     {

@@ -127,7 +127,7 @@ class Registration extends Modal {
     }
 
     protected function GeneratePDFs($aTickets){
-        $oPDF = new PDF(["config" => __APP_ROOT__ . "Tickets"]);
+        $oPDF = new PDF();
         $oPDF->assign("aWebsite", Application::getAll()["website"]);
         $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
         $oPDF->assign("btwPer", Application::get("plg.shop", "BtwPer"));
@@ -146,7 +146,12 @@ class Registration extends Modal {
             $oPDF->SetHTMLFooter(self::TemplateDir. "footer.html");
             $oPDF->setTemplate(self::TemplateDir. "main.html");
         }
-        $oPDF->Output($sHash. ".pdf", Destination::DOWNLOAD);
+        $oPDF->Output(__APP_ROOT__ . "/Tickets/" . $sHash. ".pdf", "F");
+        return  __APP_ROOT__ . "/Tickets/" . $sHash. ".pdf";
+    }
+
+    public function needsRegistrationTickets(){
+        return $this->getEvent()->hasEventTickets();
     }
 
     public function getTickets(){
@@ -161,12 +166,30 @@ class Registration extends Modal {
     }
 
     public function sendEventDetails(){
-        if (!$this->areTicketsMade()){
-            $aTickets = $this->createTickets();
+        $oMailer = new Mailer();
+        Mailer::getSmarty()->assign("aRegistration", $this->__ToArray());
+        Mailer::getSmarty()->assign("aEvent", $this->getEvent()->__ToArray());
+        if ($this->needsRegistrationTickets()){
+            if (!$this->areTicketsMade()){
+                $aTickets = $this->createTickets();
+            } else {
+                $aTickets = $this->getTickets();
+            }
+            $sFile = $this->GeneratePDFs($aTickets);
+            $oMailer->addAttachment($sFile, "Tickets voor " . $this->getEvent()->getName());
+            $oMailer->setBody(__RESOURCES__ . "Mails/event-paid.html");
+            $oMailer->setSubject("Tickets voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
         } else {
-            $aTickets = $this->getTickets();
+            $oMailer->setBody(__RESOURCES__ . "Mails/event.html");
+            $oMailer->setSubject("Aanmelding voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
         }
-        $this->GeneratePDFs($aTickets);
+
+
+        $oMailer->addBCC($this->getEmail());
+        $oMailer->send();
+        if ($this->needsRegistrationTickets()){
+            unlink($sFile);
+        }
     }
 
     /**
