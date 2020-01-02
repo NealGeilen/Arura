@@ -17,7 +17,7 @@ class Page{
 
     protected static $oSmarty;
 
-    protected static $aResourceFiles = [];
+    protected static $aResourceFiles = ["JsPage" =>"", "CssPage"=>""];
 
     protected static $sSideBar = null;
 
@@ -197,7 +197,7 @@ class Page{
      */
     public static function setResourceFiles($aResourceFiles)
     {
-        self::$aResourceFiles = $aResourceFiles;
+        self::$aResourceFiles = array_merge(self::$aResourceFiles,$aResourceFiles);
     }
 
     public static function addResourceFile($sCategory, $sFileLocation){
@@ -205,15 +205,9 @@ class Page{
     }
 
     public static function addSourceScriptCss($sScript){
-        if (!isset(self::$aResourceFiles["CssPage"])){
-            self::$aResourceFiles["CssPage"] = "";
-        }
         self::$aResourceFiles["CssPage"] .= $sScript;
     }
     public static function addSourceScriptJs($sScript){
-        if (!isset(self::$aResourceFiles["JsPage"])){
-            self::$aResourceFiles["JsPage"] = "";
-        }
         self::$aResourceFiles["JsPage"] .= $sScript;
     }
 

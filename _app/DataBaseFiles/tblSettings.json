@@ -151,6 +151,12 @@
       "Setting_Required": "0",
       "Setting_Type": "number",
       "Setting_Plg": "plg.shop"
+    },
+    {
+      "Setting_Name": "Debug",
+      "Setting_Required": "0",
+      "Setting_Type": "checkbox",
+      "Setting_Plg": "arura"
     }
   ]
 }
