@@ -314,7 +314,11 @@ try{
             header("Location: /" . __ARURA__DIR_NAME__);
             break;
         default:
-            var_dump($e);
+            if ((int)\Arura\Settings\Application::get("arura", "Debug")){
+                var_dump($e);
+                exit;
+            }
+            header("Location: /" . __ARURA__DIR_NAME__);
             break;
     }
     exit;
