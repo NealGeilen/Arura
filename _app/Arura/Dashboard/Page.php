@@ -43,23 +43,18 @@ class Page{
         } else {
             self::setResourceFiles(json_decode(file_get_contents($this->getMasterPath(). 'config.json'),true));
             self::getSmarty()->assign('sContent', include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php'));
-
             //          Load page res
-            $sJsData = "";
-            $sCssData = "";
             foreach (scandir($this->getFileLocation()) as $item){
                 $sPath = $this->getFileLocation() . DIRECTORY_SEPARATOR . $item;
                 switch (pathinfo($sPath, PATHINFO_EXTENSION)){
                     case "js":
-                        $sJsData .= file_get_contents($sPath);
+                        self::$aResourceFiles["JsPage"] .= file_get_contents($sPath);
                         break;
                     case "css":
-                        $sCssData .= file_get_contents($sPath);
+                        self::$aResourceFiles["CssPage"] .= file_get_contents($sPath);
                         break;
                 }
             }
-            self::$aResourceFiles["JsPage"] .= $sJsData;
-            self::$aResourceFiles["CssPage"] .= $sCssData;
             self::getSmarty()->assign("sPageSideBar", self::getSideBar());
 
 
@@ -207,6 +202,19 @@ class Page{
 
     public static function addResourceFile($sCategory, $sFileLocation){
         self::$aResourceFiles[$sCategory][] = $sFileLocation;
+    }
+
+    public static function addSourceScriptCss($sScript){
+        if (!isset(self::$aResourceFiles["CssPage"])){
+            self::$aResourceFiles["CssPage"] = "";
+        }
+        self::$aResourceFiles["CssPage"] .= $sScript;
+    }
+    public static function addSourceScriptJs($sScript){
+        if (!isset(self::$aResourceFiles["JsPage"])){
+            self::$aResourceFiles["JsPage"] = "";
+        }
+        self::$aResourceFiles["JsPage"] .= $sScript;
     }
 
     /**

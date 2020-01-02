@@ -10,5 +10,13 @@ $oSmarty->assign("iUserCount", (\Arura\Permissions\Restrict::Validation(Rights::
 $oSmarty->assign("aSecureTables", (\Arura\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION) ? \Arura\SecureAdmin\SecureAdmin::getAllTablesForUser(\Arura\User\User::activeUser()) : null));
 $oSmarty->assign("aEvents", (\Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ? Arura\Shop\Events\Event::getAllEvents() : null));
 $oSmarty->assign("aPayments", (\Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS) ? \Arura\Shop\Payment::getPaymentsFromLast(24) : null));
+$oChart = new \Arura\Chart("line");
+$oChart->addDataSet(
+    "SELECT COUNT(Registration_Id) AS y, from_unixtime(Registration_Timestamp, '%D-%M-%Y') AS x, Event_Name AS name FROM tblEventRegistration JOIN tblEvents ON Registration_Event_Id = Event_Id",
+    [],
+    "240, 52, 52, 1"
 
+);
+$oChart->draw();
+$oSmarty->assign("sTest", (string)$oChart);
 return Page::getHtml(__DIR__);
