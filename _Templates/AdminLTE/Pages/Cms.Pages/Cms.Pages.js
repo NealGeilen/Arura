@@ -10,6 +10,7 @@ Pages = {
             "columns":[
                 { "data": "Page_Title" },
                 { "data": "Page_Url" },
+                { "data": "Page_Visible"},
                 { "data": "Page_Id" },
             ],
             "columnDefs": [
@@ -25,6 +26,13 @@ Pages = {
 
                         });
                         return oBtns[0].outerHTML;
+                    },
+                    "targets": 3
+                },
+                {
+                    "render": function ( data, type, row ) {
+                        console.log(data);
+                        return (data === "1") ? "Ja" : "Nee";
                     },
                     "targets": 2
                 },
