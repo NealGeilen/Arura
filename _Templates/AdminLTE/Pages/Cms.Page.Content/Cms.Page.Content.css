@@ -1,11 +1,11 @@
 .CMS-Page-Editor{
-    position: relative;
+    /*position: relative;*/
     background: #fff;
     padding: 5px;
 }
 .CMS-Block-Header{
-    background: white;
-    border: darkgray 2px solid;
+    /*background: white;*/
+    /*border: darkgray 2px solid;*/
     padding: 10px;
 }
 .CMS-Group{
@@ -13,11 +13,18 @@
     position: relative;
 }
 .CMS-Group .CMS-Group-Content{
-    min-height: 80px;
-    margin: unset;
-    background: #f2f2f2;
-    height: 100%;
-    width: 100%;
+     min-height: 80px;
+     margin: unset;
+     background: white;
+     height: 100%;
+     width: 100%;
+     border-radius: 9px;
+     border: 3px solid #e1e1e1;
+ }
+.CMS-Group.active .CMS-Group-Content{
+    -moz-border-radius-topleft: unset;
+    border-top-left-radius: unset;
+    border: 3px solid var(--secondary);
 }
 .CMS-Group .CMS-Group-Content .Block-Item{
     float: left;
@@ -25,9 +32,22 @@
 .CMS-Group .CMS-Group-Control{
     display: none;
     position: absolute;
-    left: 5px;
-    top: -25px;
+    /*left: 5px;*/
+    top: -28px;
     z-index: 1000;
+}
+.group-add {
+    margin: 10px;
+    position: relative;
+    border-radius: 9px;
+    border: 3px solid #e1e1e1;
+    padding: 15px;
+}
+.group-add .content{
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    display: block;
 }
 .Block-Item{
     /*background: lightgrey;*/
@@ -35,14 +55,20 @@
     padding: unset;
 }
 .Block-Item .Block-Item-Content{
+    background: white;
+    border: 3px solid transparent;
     min-height: 80px;
     position: relative;
     padding: 16px;
+    border-radius: 5px;
     width: 100%;
-    background: lightgrey;
+    /*background: lightgrey;*/
 }
 .Block-Item.active .Block-Item-Content{
-    background: gray;
+    -moz-border-radius-topleft: unset;
+    border-top-left-radius: unset;
+    border: 3px solid var(--primary);
+    /*background: gray;*/
 }
 .Block-Item.active .Block-Item-Content.active{
     z-index: 2100;
@@ -54,8 +80,8 @@
     z-index: 1000;
     position: absolute;
     display: none;
-    top: 10px;
-    left: -25px;
+    top: 0px;
+    left: -30px;
 }
 .Block-Item.active .Block-Item-Width-Control{
     display: block!important;
@@ -72,12 +98,7 @@
 }
 .Block-Placeholder{
     background: var(--secondary);
-}
-.Tinymce{
-    padding: 2px;
-    background: unset;
-}
-.tox-tinymce-inline{
+    min-height: 80px;
 }
 .Block-Item-Field{
     width: 100%;
@@ -101,9 +122,6 @@ Active group
  */
 .CMS-Group.active .CMS-Group-Control{
     display: inline-flex!important;
-}
-.Block-Item.active .Tinymce{
-    background: white!important;
 }
 .content-body{
     /*padding: unset;*/
@@ -176,9 +194,6 @@ img.Block-Item-Field:after{
 }
 .ContentType-Selector{
     cursor: move;
-}
-.tox.tox-tinymce.tox-tinymce-inline{
-    z-index: 1100!important;
 }
 .btn-group-toggle input[type=radio]{
     display: none;

@@ -39,15 +39,15 @@ var Builder = {
         Types: {
             TextArea: {
                 Name: "Tekst met styling",
-                oTemplate: $('<div>').addClass('Tinymce'),
+                oTemplate: $('<div>').addClass('SummerNote'),
                 init: function (sValue) {
                     oText = this.oTemplate.clone();
                     oText.html(sValue);
-                    TinyMce.SetText(oText);
+                    // SummerNote.SetText(oText);
                     return oText;
                 },
                 value: function(oElement){
-                    return TinyMce.getValue(oElement);
+                    return SummerNote.getValue(oElement);
                 }
             },
             Picture:{
@@ -227,6 +227,7 @@ var Builder = {
                 Builder.Editor.sortable();
                 Builder.Group.sortable();
                 Sidebar.Block.Events();
+                SummerNote.SetText($('.SummerNote'))
             });
         },
         save: function (bSendData = true) {
@@ -344,7 +345,10 @@ var Builder = {
                 placeholder: 'Block-Placeholder',
                 forcePlaceholderSize: true,
                 handle: '.Block-Item-Position-Handle',
-                connectWith: sSelectors.Group_Content
+                connectWith: sSelectors.Group_Content,
+                start: function (event, ui) {
+                    $(ui.placeholder).css("height", $(ui.helper).height())
+                }
             });
         }
     },
@@ -453,7 +457,8 @@ var Builder = {
                                aBlock.Content_Type = oRadio.val();
                                aBlock.Content_Addon_Id = parseInt(oRadio.attr('content-addon-id'));
                                aBlock.Content_Group_Id = Builder.Group.getData(oGroup).Group_Id;
-                               oGroup.find(".CMS-Group-Content").append(Builder.Block.Build(aBlock))
+                               oGroup.find(".CMS-Group-Content").append(Builder.Block.Build(aBlock));
+                               SummerNote.SetText($('.SummerNote'))
                             }
                         });
                     }
@@ -659,35 +664,32 @@ var Sidebar = {
         }
     }
 };
-var TinyMce = {
-    Count : 0,
+var SummerNote ={
     SetText: function (oElement) {
-        oElement.attr('id', 'tinymce_' + this.Count);
-        tinymce.init({
-            language : "nl",
-            target: oElement[0],
-            // themes: "modern",
-            inline: true,
-            toolbar: 'bold italic | forecolor backcolor |styleselect | table link unlink | bullist numlist | blockquote codesample' ,
-            contextmenu: "code undo redo codesample removeformat",
-            menubar: false,
-            content_css: "demo.css, tinymceBubbleBar.css",
-            content_style: ".mce-widget.mce-tooltip {display: none !important;}",
-            fixed_toolbar_container: "#tinymceWrapperBubbleBar",
-            plugins: [
-                'noneditable codesample',
-                'autoresize advlist autolink lists link image charmap print preview hr anchor',
-                'searchreplace wordcount visualblocks visualchars code fullscreen',
-                'insertdatetime media nonbreaking save table contextmenu directionality',
-                'paste textcolor colorpicker textpattern'
-            ]
+        oElement.summernote({
+            lang: "nl-NL",
+            airMode: true,
+            popover: {
+                air: [
+                    ['style', ['style']],
+                    ['font', ['bold', 'italic', 'underline', 'clear']],
+                    ['color', ['color']],
+                    ['para', ['ul', 'ol', 'paragraph']],
+                    ['height', ['height']],
+                    ['table', ['table']],
+                    ['insert', ['link', 'hr']],
+                    ['status', ["undo", "redo"]]
+                ]
+            },
+            disableGrammar: true
         });
-        ++this.Count;
     },
     getValue: function (oElement) {
-        return tinyMCE.get(oElement.attr('id')).getContent();
+        return oElement.summernote('code');
     }
+
 };
+
 
 $(document).ready(function () {
    Builder.Structure.set();
