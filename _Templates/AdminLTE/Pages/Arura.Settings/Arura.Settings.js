@@ -7,7 +7,6 @@ $('.settings-form').submit(function (e) {
         $.each(oForm.find('input[name]'), function (iKey, oElement) {
             aList[iKey] = {'plg' : $(oElement).attr('plg'), 'name' : $(oElement).attr('name'), 'value': ($(oElement).attr("type") === "checkbox" ? $(oElement).is(':checked') ? 1 : 0 : $(oElement).val())};
         });
-        console.log(aList);
         $.ajax({
             type: 'post',
             data : (aList),

@@ -10,9 +10,11 @@
         <h2 class="card-title">Basis informatie</h2>
         <div class="card-tools">
             <div class="btn-group btn-group-sm">
+                {if !$bMobileUser}
                 <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/content?c={$aCmsPage.Page_Id}" target="_blank">
                     <i class="fas fa-pen"></i>
                 </a>
+                {/if}
                 <button class="btn btn-primary" onclick="savePageSettings()">
                     <i class="fas fa-save"></i>
                 </button>

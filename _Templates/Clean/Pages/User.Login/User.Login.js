@@ -13,7 +13,6 @@ $(document).ready(function () {
             dataType: 'json',
             data: (oForm.serializeArray()),
             success: function (response) {
-                console.log(response);
                 oModal.modal("hide");
                 addSuccessMessage("Email Verzonden, Controlleer je mail om verder te gaan.")
             },

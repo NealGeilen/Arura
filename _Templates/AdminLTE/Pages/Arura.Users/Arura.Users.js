@@ -175,7 +175,6 @@ var Users = {
                 onConfirm: function () {
                     var tr = oElement.closest('tr');
                     var row = Table.row( tr );
-                    console.log(row);
                     aData = row.data();
                     $.ajax({
                         type: 'post',

@@ -12,7 +12,6 @@ $.ajax({
             maxDepth: 3,
             includeContent: false,
             contentCallback: function (item) {
-                console.log(item);
                 return createNavTabBar(item);
             },
             itemRenderer: function(item_attrs, content, children, options, item) {

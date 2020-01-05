@@ -19,7 +19,12 @@ Pages = {
                         oBtns = $($('.template-pages-btns').html());
                         $.each(oBtns.find('a'), function (i, oElement) {
                             if ($(oElement).attr('page') === "c"){
-                                $(oElement).attr('href', window.location.href + '/content?' + $(oElement).attr('page') + '=' + data);
+                                if (MOBILE_USER !== "1"){
+                                    $(oElement).attr('href', window.location.href + '/content?' + $(oElement).attr('page') + '=' + data);
+                                }
+                                else {
+                                    $(oElement).hide();
+                                }
                             } else {
                                 $(oElement).attr('href', window.location.href + '/instellingen?' + $(oElement).attr('page') + '=' + data);
                             }
@@ -31,7 +36,6 @@ Pages = {
                 },
                 {
                     "render": function ( data, type, row ) {
-                        console.log(data);
                         return (data === "1") ? "Ja" : "Nee";
                     },
                     "targets": 2

@@ -48,7 +48,7 @@ $aNavBarPages =
                         "MasterPage" => "AdminLTE"
                     ],
                     "/content/pagina/content" => [
-                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES) && !isUserOnMobile(),
                         "FileName" => "Cms.Page.Content",
                         "Title" => "Pagina content",
                         "Icon" => null,
@@ -252,8 +252,6 @@ $aNavBarPages =
         ]
 
     ];
-$a = [
-];
 if (\Arura\User\User::isLogged()){
     $oUser = \Arura\User\User::activeUser();
     $oUser->TriggerEvent();
@@ -302,6 +300,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
 try{
     $oCurrentPage = $Host->getRequestPage();
     $smarty->assign('aNavPages', $aNavBarPages);
+    $smarty->assign("bMobileUser", (int)isUserOnMobile());
     $smarty->assign('sRequestUrl', substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__) ));
     $oCurrentPage->showPage();
 
