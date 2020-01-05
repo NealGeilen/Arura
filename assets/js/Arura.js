@@ -50,12 +50,15 @@ function serializeArray(oForm) {
         if (value !== "" && $(oField).attr('name') !== undefined){
             aList[$(oField).attr('name')] =  value;
         }
+
     });
     $.each(oForm.find('textarea.richtext'), function (iKey, oField) {
-        aList[$(oField).attr('name')]  = tinyMCE.get($(oField).attr('id')).getContent();;
+        aList[$(oField).attr('name')]  = $(oField).summernote("code");
     });
     $.each(oForm.find('input[type=checkbox]'), function (iKey, oField) {
-        aList[$(oField).attr('name')]  = $(oField).is(':checked') ? 1 : 0;
+        if ($(oField).attr('name') !== undefined){
+            aList[$(oField).attr('name')]  = $(oField).is(':checked') ? 1 : 0;
+        }
     });
     return aList;
 }
