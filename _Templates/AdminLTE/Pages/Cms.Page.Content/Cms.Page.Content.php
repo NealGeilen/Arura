@@ -11,7 +11,7 @@ $aPage = $db -> fetchRow('SELECT * FROM tblCmsPages WHERE Page_Id = ? ',
     [
         (int)$_GET['c']
     ]);
-Page::setSideBar(__DIR__. "/Cms.Page.Content.SideBar.html");
+Page::setSideBar(__DIR__. "/Cms.Page.Content.SideBar.tpl");
 $smarty -> assign('aCmsPage', $aPage);
 
 return Page::getHtml(__DIR__);

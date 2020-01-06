@@ -12,7 +12,7 @@ if (isset($_GET["c"])){
         $e = \Arura\Shop\Events\Event::Create($_POST);
     }
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
-    return Page::getHtml(__DIR__ . "/Shop.Events.Create.html");
+    return Page::getHtml(__DIR__ . "/Shop.Events.Create.tpl");
 } else if (isset($_GET["e"]) && !empty($_GET["e"])){
     $oEvent = new \Arura\Shop\Events\Event($_GET["e"]);
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
@@ -23,7 +23,7 @@ if (isset($_GET["c"])){
     if (!$bTicketsSold && !$oEvent->getIsActive()){
         $oSmarty->assign("sTicketsCrud", (string)\Arura\Crud::drop(__DATAFILES__ . "Events.TicketTypes.json", ["e" => $_GET["e"]], ["Ticket_Event_Id" => $_GET["e"]], "tickets"));
     }
-    return Page::getHtml(__DIR__ . "/Shop.Events.Edit.html");
+    return Page::getHtml(__DIR__ . "/Shop.Events.Edit.tpl");
 }
 $oSmarty->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));
 return Page::getHtml(__DIR__);

@@ -1,5 +1,5 @@
 {foreach from=$aResourceFiles.Js item=File}
-<script src="{$File}"></script>
+<script src="{$File}?{$smarty.now}"></script>
 {/foreach}
 <script>
     {$aResourceFiles.JsPage}

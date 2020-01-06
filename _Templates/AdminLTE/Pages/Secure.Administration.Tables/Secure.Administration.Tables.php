@@ -9,7 +9,7 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
             $oSmarty->assign("aTable", $oTable->__toArray());
             $oSmarty->assign("aUsersTable", $oTable->getUserShares());
             $oSmarty->assign("aUsers", $db -> fetchAll("SELECT User_Id, User_Username FROM tblUsers WHERE User_Id != :User_Id", ["User_Id" => $oTable->getOwner()->getId()]));
-            return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Settings.html");
+            return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Settings.tpl");
         }
     }
 
@@ -22,14 +22,14 @@ if (isset($_GET["s"]) && !empty($_GET["s"])){
             $oSmarty->assign("sCrud", (string)$oTable->getCrud());
             $oSmarty->assign("aTable", $oTable->__toArray());
             $oSmarty->assign("bCanExport", $oTable->hasUserRight(\Arura\User\User::activeUser(),\Arura\SecureAdmin\SecureAdmin::EXPORT));
-            return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Crud.html");
+            return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Crud.tpl");
         }
     }
 
 
 
 } else if(\Arura\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION_CREATE) && isset($_GET["c"])) {
-    return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Create.html");
+    return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Secure.Administration.Create.tpl");
 }
 else {
     $oSmarty->assign("aTables", \Arura\SecureAdmin\SecureAdmin::getAllTablesForUser(\Arura\User\User::activeUser()));

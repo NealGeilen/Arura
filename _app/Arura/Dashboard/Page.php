@@ -62,15 +62,15 @@ class Page{
 
 //          Loading page sections
             foreach (scandir($this->getMasterPath() . 'Sections'.DIRECTORY_SEPARATOR) as $item){
-                if (pathinfo($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item, PATHINFO_EXTENSION) === 'html'){
-                    $sName = str_replace('.html', '', $item);
+                if (pathinfo($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item, PATHINFO_EXTENSION) === 'tpl'){
+                    $sName = str_replace('.tpl', '', $item);
                     self::getSmarty()->assign($sName, self::getSmarty()->fetch($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item));
                 }
             }
 
 
 //          Show Master Page
-            self::getSmarty()->display(($this->getMasterPath() . 'index.html'));
+            self::getSmarty()->display(($this->getMasterPath() . 'index.tpl'));
         }
     }
 
@@ -94,7 +94,7 @@ class Page{
         if (is_file($sLocation)){
             return self::getSmarty()->fetch($sLocation);
         } else {
-            return self::getSmarty()->fetch($sLocation . '/' . basename($sLocation) . '.html');
+            return self::getSmarty()->fetch($sLocation . '/' . basename($sLocation) . '.tpl');
         }
 
     }
