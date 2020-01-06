@@ -15,14 +15,11 @@
                     <i class="fas fa-pen"></i>
                 </a>
                 {/if}
-                <button class="btn btn-primary" onclick="savePageSettings()">
-                    <i class="fas fa-save"></i>
-                </button>
             </div>
         </div>
     </div>
     <div class="card-body">
-        <form action="/{$aArura.dir}/{$aArura.api}/cms/Page.Settings.php" method="post" class="page-settings">
+        <form action="/{$aArura.dir}/{$aArura.api}/cms/Page.Settings.php" method="post" class="page-settings form-sender">
             <input type="hidden" name="type" value="save-settings">
             <input type="hidden" name="Page_Id" value="{$aCmsPage.Page_Id}">
             <div class="row">
@@ -45,6 +42,9 @@
                     </div>
                 </div>
             </div>
+            <button class="btn btn-primary btn-sm" type="submit">
+                Opslaan
+            </button>
         </form>
     </div>
 </section>

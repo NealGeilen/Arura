@@ -64,6 +64,10 @@
     width: 100%;
     /*background: lightgrey;*/
 }
+.Block-Item .form-control{
+    border-radius: 5px;
+    border: lightgrey 2px solid;
+}
 .Block-Item.active .Block-Item-Content{
     -moz-border-radius-topleft: unset;
     border-top-left-radius: unset;
