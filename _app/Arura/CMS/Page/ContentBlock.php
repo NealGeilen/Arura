@@ -40,7 +40,6 @@ class ContentBlock extends Addon{
         if (is_array($aBlock['Content_Value'])){
             $aBlock['Content_Value'] = json_encode($aBlock['Content_Value']);
         }
-        $aBlock["Content_Value"] = utf8_encode($aBlock["Content_Value"]);
         $this -> oDatabase -> updateRecord('tblCmsContentBlocks',$aBlock,'Content_Id');
         return $this->oDatabase->isQuerySuccessful();
     }
