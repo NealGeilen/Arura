@@ -13,6 +13,8 @@
     "/dashboard/assets/vendor/datatables-bs4/js/dataTables.bootstrap4.js",
     "/dashboard/assets/vendor/dropzone/dropzone.js",
     "/dashboard/assets/vendor/bootstrap-notify/bootstrap-notify.js",
+    "/dashboard/assets/vendor/jquery-validation/jquery.validate.js",
+    "/dashboard/assets/vendor/jquery-validation/localization/messages_nl.js",
     "/dashboard/assets/js/Modals.js",
     "/dashboard/assets/js/Filemanger.js",
     "/dashboard/assets/js/adminlte.js",

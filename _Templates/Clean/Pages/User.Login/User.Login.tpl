@@ -9,21 +9,11 @@
       <p class="login-box-msg">Inloggen</p>
 
       <form class="inlog-form">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email" name="email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
-            </div>
-          </div>
+        <div class="form-group mb-3">
+          <input type="email" class="form-control" placeholder="Email" name="email" required>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Wachtwoord" name="password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
+        <div class="form-group mb-3">
+          <input type="password" class="form-control" placeholder="Wachtwoord" name="password" required>
         </div>
         <button type="submit" class="btn btn-primary btn-block">Inloggen</button>
       </form>

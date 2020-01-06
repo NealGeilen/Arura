@@ -66,20 +66,21 @@ $("select[value]").each(function() {
     $(this).val(this.getAttribute("value"));
 });
 
-$('form.form-sender').submit(function (e) {
-    e.preventDefault();
-    $.ajax({
-        url: $(this).attr('action'),
-        type: $(this).attr('method'),
-        dataType: 'json',
-        data: (serializeArray($(this))),
-        success: function () {
-            addSuccessMessage('Opgelsagen');
-        },
-        error: function () {
-            addErrorMessage('opslaan mislukt');
-        }
-    });
+$("form.form-sender").validate({
+    submitHandler: function (oForm) {
+        $.ajax({
+            url: $(oForm).attr('action'),
+            type: $(oForm).attr('method'),
+            dataType: 'json',
+            data: (serializeArray($(oForm))),
+            success: function () {
+                addSuccessMessage('Opgelsagen');
+            },
+            error: function () {
+                addErrorMessage('Het opslaan is niet juist gegaan');
+            }
+        });
+    }
 });
 $(".table.Arura-Table").DataTable({
     "language": {
@@ -130,23 +131,23 @@ $("textarea.richtext").ready(function () {
 
 $.fn.FormAjax = function( options = {} ) {
     return this.each(function() {
-        $(this).submit(function (e) {
-            e.preventDefault();
+        $(this).validate({
+            submitHandler: function (oForm) {
+                var settings = $.extend({
+                    type: $(this).attr('method'),
+                    dataType: 'json',
+                    data: serializeArray($(this)),
+                    url : $(this).attr('action'),
+                    success: function(){
+                        addSuccessMessage('Opgeslagen');
+                    },
+                    error: function () {
+                        addErrorMessage('Het opslaan is niet juist gegaan');
+                    }
+                }, options);
 
-            var settings = $.extend({
-                type: $(this).attr('method'),
-                dataType: 'json',
-                data: serializeArray($(this)),
-                url : $(this).attr('action'),
-                success: function(){
-                    addSuccessMessage('Opgeslagen');
-                },
-                error: function () {
-                    addErrorMessage('Het opslaan is niet juist gegaan');
-                }
-            }, options);
-
-            $.ajax(settings);
+                $.ajax(settings);
+            }
         });
     });
 

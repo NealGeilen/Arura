@@ -7,19 +7,19 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="username-profile">Gebruikersnaam</label>
-                    <input type="text" class="form-control" id="username-profile" value="{$aUser.User_Username}" placeholder="Gebruikersnaam" name="User_Username">
+                    <input type="text" class="form-control" id="username-profile" value="{$aUser.User_Username}" placeholder="Gebruikersnaam" name="User_Username" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="firstname-profile">Voornaam</label>
-                    <input type="text" class="form-control" id="firstname-profile" value="{$aUser.User_Firstname}" placeholder="Voornaam" name="User_Firstname">
+                    <input type="text" class="form-control" id="firstname-profile" value="{$aUser.User_Firstname}" placeholder="Voornaam" name="User_Firstname" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="lastname-profile">Achternaam</label>
-                    <input type="text" class="form-control" id="lastname-profile" value="{$aUser.User_Lastname}" placeholder="Achternaam" name="User_Lastname">
+                    <input type="text" class="form-control" id="lastname-profile" value="{$aUser.User_Lastname}" placeholder="Achternaam" name="User_Lastname" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="email-profile">E-mail</label>
-                    <input type="email" class="form-control" id="email-profile" value="{$aUser.User_Email}" placeholder="E-mail" name="User_Email">
+                    <input type="email" class="form-control" id="email-profile" value="{$aUser.User_Email}" placeholder="E-mail" name="User_Email" required>
                 </div>
                 <div class="form-group col-md-6">
                     <label for="password-two-profile">Wachtwoord</label>

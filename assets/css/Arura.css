@@ -175,3 +175,9 @@ Templates
 .alert{
     margin: unset!important;
 }
+.form-control.error{
+    border-color: red;
+}
+.form-group label.error{
+    color: red;
+}
