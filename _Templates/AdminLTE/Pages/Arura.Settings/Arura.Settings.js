@@ -1,4 +1,3 @@
-
 $('.settings-form').submit(function (e) {
     e.preventDefault();
     if (!$(this).find(':submit').hasClass('disabled')){

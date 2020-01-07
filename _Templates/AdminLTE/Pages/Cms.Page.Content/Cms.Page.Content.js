@@ -7,6 +7,7 @@ var sSelectors = {
     Block_Item_Content: '.Block-Item-Content',
     Content_Type_Selector: '.ContentType-Selector',
 };
+
 var Addons = {};
 var Builder = {
     DataSet : {
@@ -230,7 +231,7 @@ var Builder = {
                 SummerNote.SetText($('.SummerNote'))
             });
         },
-        save: function (bSendData = true) {
+        save: function (bSendData) {
             aData={};
             aData.DeleteItems = this.DeleteItems;
             aData.Groups = {};
@@ -339,7 +340,8 @@ var Builder = {
                 Builder.Group.State.Activate($(this).parents(sSelectors.Group));
             });
         },
-        sortable: function (oElement = null) {
+
+        sortable: function (oElement) {
             Selector = (oElement === null) ? $(sSelectors.Group_Content) : oElement;
             Selector.sortable({
                 placeholder: 'Block-Placeholder',
@@ -354,7 +356,7 @@ var Builder = {
     },
     Block: {
         Resizable: {
-            resizable: function (oElement = null) {
+            resizable: function (oElement) {
                 Selector = (oElement === null) ? $(sSelectors.Block_Item) : oElement;
                 B = this;
                 Selector.resizable({
@@ -365,7 +367,6 @@ var Builder = {
                         B.ResizePermission(ui);
                     },
                     resize: function (event,ui) {
-                        // B.ResizePermission(ui);
                         B.OnResize(ui);
                     },
                     stop: function (event,ui) {
@@ -383,7 +384,7 @@ var Builder = {
                 Builder.Block.setData(Element, 'Content_Size', i);
 
             },
-            ResizePermission(ui){
+            ResizePermission: function(ui){
                 Element = $(ui.helper);
                 aData = Builder.Block.getData(Element);
                 if (parseInt(aData.Content_Size) > 12) {
@@ -393,7 +394,7 @@ var Builder = {
                 }
             },
         },
-        setArray: function(oBlock, aArray= {}){
+        setArray: function(oBlock, aArray){
             Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))] = {
                 Content_Id : parseInt(aArray.Content_Id),
                 Content_Type: aArray.Content_Type,
@@ -417,7 +418,7 @@ var Builder = {
             BlockData = Builder.DataSet.Blocks[parseInt(oBlock.attr('block-id'))];
             return BlockData;
         },
-        Build: function(aBlock = {}){
+        Build: function(aBlock){
             oBlock = $($('.template-page-block').html()).clone();
             oBlock
                 .addClass('col-' + aBlock.Content_Size)
@@ -465,7 +466,7 @@ var Builder = {
                 }
             })
         },
-        Events: function(oElement = null){
+        Events: function(oElement){
             Selector = (oElement === null) ? $(sSelectors.Block_Item_Content) : oElement;
             this.Resizable.resizable(Selector);
             Selector.on('click', function () {

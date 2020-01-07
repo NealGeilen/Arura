@@ -17,7 +17,6 @@ function addUser() {
         })
     });
 }
-
 function warning() {
     $(".form-update-table").find(".alert").show();
 }

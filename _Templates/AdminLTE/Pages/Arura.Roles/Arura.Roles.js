@@ -1,11 +1,11 @@
 $(document).ready(function () {
     Roles.Roles.setTable();
 });
-
 var Roles = {
     Roles: {
         oTable: null,
-        setTable: function (oElement = $('#rolles-overview')) {
+        setTable: function (o) {
+            oElement = $('#rolles-overview');
             this.oTable = oElement.DataTable({
                 dataSource: ARURA_API_DIR + 'user/roles.php',
                 dataSrc: 'data',

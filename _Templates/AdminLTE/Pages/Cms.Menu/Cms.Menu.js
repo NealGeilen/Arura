@@ -39,8 +39,6 @@ $.ajax({
         addErrorMessage('Handeling is niet opgeslagen');
     }
 });
-
-
 function save(){
     aNavData = Nestable.nestable('serialize');
     $.ajax({
@@ -112,8 +110,6 @@ function editNavBarItemModal(oRow) {
         }
     });
 }
-
-
 function getNewId(){
     iH = 1;
     $.each($('.dd-item'), function (i, oElement) {

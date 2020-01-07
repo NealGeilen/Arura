@@ -268,7 +268,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
         $P->setTitle($aProperties['Title']);
         $P->setRight($aProperties["Right"]);
         $P->setMasterPath(__ARURA_TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR);
-        $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
+        $P->setFileLocation(__ARURA_TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
         $Host->addPage($P);
     }
     if (isset($aProperties["Children"])){
@@ -278,7 +278,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
             $P->setTitle($aChildProperties['Title']);
             $P->setRight($aChildProperties["Right"]);
             $P->setMasterPath(__ARURA_TEMPLATES__   . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR);
-            $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aChildProperties['FileName']);
+            $P->setFileLocation(__ARURA_TEMPLATES__  . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aChildProperties['FileName']);
             $Host->addPage($P);
 
             if (isset($aChildProperties["Children"])){
@@ -288,7 +288,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
                     $P->setTitle($aGrandProperties['Title']);
                     $P->setRight($aGrandProperties["Right"]);
                     $P->setMasterPath(__ARURA_TEMPLATES__   . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR);
-                    $P->setFileLocation(__ARURA_TEMPLATES__  .DIRECTORY_SEPARATOR . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aGrandProperties['FileName']);
+                    $P->setFileLocation(__ARURA_TEMPLATES__  . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aGrandProperties['FileName']);
                     $Host->addPage($P);
                     $aNavBarPages[$sUrl]["Open"]= substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl();
                 }

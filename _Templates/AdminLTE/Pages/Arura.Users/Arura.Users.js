@@ -2,13 +2,11 @@ $(document).ready(function() {
     Users.Users.setTable();
     Users.Sessions.setTable();
 } );
-
-
-
 var Users = {
     Users: {
         oTable: null,
-        setTable: function (oElement = $('#users-overview')) {
+        setTable: function (o) {
+            oElement = $('#users-overview');
             this.oTable =  oElement.DataTable({
                 dataSource: ARURA_API_DIR + 'user/manage.php',
                 dataSrc: 'data',
@@ -212,7 +210,8 @@ var Users = {
     },
     Sessions: {
         oTable: null,
-        setTable: function (oElement = $('#sessions-overview')) {
+        setTable: function (o) {
+            oElement = $('#sessions-overview');
             this.oTable  = oElement.DataTable({
                 dataSource: ARURA_API_DIR + 'user/manage.php',
                 dataSrc: 'data',
