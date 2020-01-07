@@ -24,7 +24,7 @@ class Event Extends Page{
     private $bIsVisible;
     private $iCapacity;
 
-    public static $MasterPage = "Events/event.html";
+    public static $MasterPage = "Events/event.tpl";
 
     public function __construct($iId)
     {
@@ -120,7 +120,7 @@ class Event Extends Page{
                 self::$smarty->assign("iTotalAmount", $aCollection["Amount"]);
                 self::$smarty->assign("aTickets", $aCollection["Tickets"]);
                 self::$smarty->assign("aIssuers", Payment::getIdealIssuers());
-                self::$MasterPage = "Events/checkout.html";
+                self::$MasterPage = "Events/checkout.tpl";
                 $this->showPage();
             }
         }
@@ -166,7 +166,7 @@ class Event Extends Page{
                                 $P = new Payment($_GET["i"]);
                                 self::$smarty->assign("sStatus", $P->getPayment()->status);
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
-                                self::$MasterPage = "Events/done.html";
+                                self::$MasterPage = "Events/done.tpl";
                                 $oPage->showPage();
                             }
                             break;
