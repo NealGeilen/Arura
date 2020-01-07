@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Shop;
 
+use Arura\Chart;
 use Arura\Database;
 use Arura\Modal;
 use Mollie\Api\MollieApiClient;
@@ -11,6 +12,44 @@ class Payment extends Modal {
 
     const METHOD_IDEAL = \Mollie\Api\Types\PaymentMethod::IDEAL;
     const METHOD_PAYPAL = \Mollie\Api\Types\PaymentMethod::PAYPAL;
+    const PAYMENT_TYPES = [
+        "open" =>
+            [
+                "name" => "Open",
+                "bgColor" =>"yellow",
+                "brColor" =>"yellow"
+            ],
+        "paid" =>
+            [
+                "name" => "Betaald",
+                "bgColor" =>"green",
+                "brColor" =>"green"
+            ],
+        "canceled" =>
+            [
+                "name" => "Annuleerd",
+                "bgColor" =>"orange",
+                "brColor" =>"orange"
+            ],
+        "pending" =>
+            [
+                "name" => "In afwachting",
+                "bgColor" =>"yellow",
+                "brColor" =>"yellow"
+            ],
+        "expired" =>
+            [
+                "name" => "Verlopen",
+                "bgColor" =>"orange",
+                "brColor" =>"orange"
+            ],
+        "failed" =>
+            [
+                "name" => "Mislukt",
+                "bgColor" =>"red",
+                "brColor" =>"red"
+            ]
+    ];
 
     public static $REDIRECT_URL = null;
     public static $WEBHOOk_URL = null;
@@ -25,6 +64,72 @@ class Payment extends Modal {
     protected $metadata;
     protected $card;
     protected $status;
+
+    public static function getChart($sChart){
+        $aCharts = [];
+
+        $aChartsBalks = function (){
+            $db = new Database();
+            $aChartsBalks = [];
+            function getData($iYear, $iQuoter, $sStatus = "paid"){
+                $db = new Database();
+                return $db -> fetchAllColumn("
+                SELECT COUNT(Payment_Id)
+                FROM tblPayments 
+                WHERE Payment_Status = :status 
+                  AND QUARTER(FROM_UNIXTIME(Payment_Timestamp)) = :quoter
+                  AND date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y') = :year
+                GROUP BY FROM_UNIXTIME(Payment_Timestamp, 'm') 
+                ORDER BY QUARTER(FROM_UNIXTIME(Payment_Timestamp))",[
+                    "quoter" => $iQuoter,
+                    "year" => $iYear,
+                    "status" => $sStatus
+                ]);
+            }
+
+            $aQuarters = $db ->fetchAll("
+                SELECT date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y') as Year,
+                       QUARTER(FROM_UNIXTIME(Payment_Timestamp)) as Quarter 
+                FROM tblPayments 
+                GROUP BY QUARTER(FROM_UNIXTIME(Payment_Timestamp)) ORDER BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y') DESC , QUARTER(FROM_UNIXTIME(Payment_Timestamp))");
+
+            foreach ($aQuarters as $aQuarter){
+                $data = [
+                    'labels' => Chart::Quarters[((int)$aQuarter["Quarter"] - 1)],
+                    'datasets' => []
+                ];
+                foreach (self::PAYMENT_TYPES as $sName => $aData){
+                    $data["datasets"][] = [
+                        'data' => getData((int)$aQuarter["Year"],(int)$aQuarter["Quarter"] , $sName),
+                        "label" => $aData["name"],
+                        "backgroundColor" => $aData["bgColor"],
+                    ];
+                }
+                $options = [
+                    "scales" => [
+                        "yAxes" =>  [[
+                            "ticks"=> [
+                                'suggestedMin'=> 0,
+                                'suggestedMax'=> 30,
+                                "stepSize" => 1
+                            ]
+                        ]]
+                    ]
+                ];
+                $attributes = ['id' => 'example', 'width' => 200, 'height' => 200];
+
+                $aChartsBalks[] = [
+                    "year" => $aQuarter["Year"],
+                    "quarter"=> $aQuarter["Quarter"],
+                    "chart" => Chart::Build("bar",$data,$options,$attributes)
+                ];
+
+            }
+            return $aChartsBalks;
+        };
+        return $aChartsBalks();
+    }
+
 
     public static function getMollie(): MollieApiClient{
         if(!empty(Application::get("plg.shop", "Mollie_Api")))

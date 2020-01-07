@@ -34,6 +34,29 @@
         color: red;
     }
 </style>
+<div class="card card-primary card-outline card-tabs">
+    <div class="card-header p-0 pt-1 border-bottom-0">
+        <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
+            {foreach from=$aCharts item=chart}
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="pill" href="#payment-{$chart.year}-{$chart.quarter}" role="tab" aria-controls="custom-tabs-two-home" aria-selected="false">{$chart.year} - {$chart.quarter} kwartaal</a>
+                </li>
+            {/foreach}
+
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content" id="custom-tabs-two-tabContent">
+            {foreach from=$aCharts item=chart}
+                <div class="tab-pane fade" id="payment-{$chart.year}-{$chart.quarter}" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
+                    {$chart.chart}
+                </div>
+            {/foreach}
+
+        </div>
+    </div>
+    <!-- /.card -->
+</div>
 <div class="card">
     <div class="card-header">
         <h2 class="card-title">Allen betalingen</h2>
@@ -78,3 +101,4 @@
         </table>
     </div>
 </div>
+

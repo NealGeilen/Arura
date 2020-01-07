@@ -4,4 +4,5 @@
 <script>
     {$aResourceFiles.JsPage}
     setInterval(validateUser, 5000);
+    loadChartJsPhp();
 </script>
