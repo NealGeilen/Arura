@@ -16,7 +16,7 @@
                 <a class="btn btn-default" href="/{$aArura.dir}/content/pagina/instellingen?p={$aCmsPage.Page_Id}" target="_blank">
                     <i class="fas fa-cog"></i>
                 </a>
-                <button class="btn btn-primary" onclick="Builder.Structure.save()">
+                <button class="btn btn-primary" onclick="Builder.Structure.save(true)">
                     <i class="fas fa-save"></i>
                 </button>
             </div>

@@ -334,7 +334,7 @@ var Builder = {
             }
         },
         Events: function(oElement){
-            Selector = (oElement === null) ? $(sSelectors.Group) : oElement;
+            Selector = (oElement === undefined) ? $(sSelectors.Group) : oElement;
             Builder.Group.sortable(Selector.find(sSelectors.Group_Content));
             Selector.on('click', function () {
                 Builder.Group.State.Activate($(this).parents(sSelectors.Group));
@@ -342,7 +342,7 @@ var Builder = {
         },
 
         sortable: function (oElement) {
-            Selector = (oElement === null) ? $(sSelectors.Group_Content) : oElement;
+            Selector = (oElement === undefined) ? $(sSelectors.Group_Content) : oElement;
             Selector.sortable({
                 placeholder: 'Block-Placeholder',
                 forcePlaceholderSize: true,

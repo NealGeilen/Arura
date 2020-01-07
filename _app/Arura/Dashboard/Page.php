@@ -48,7 +48,7 @@ class Page{
                 $sPath = $this->getFileLocation() . DIRECTORY_SEPARATOR . $item;
                 switch (pathinfo($sPath, PATHINFO_EXTENSION)){
                     case "js":
-                        if (is_file($this->getFileLocation() . DIRECTORY_SEPARATOR . substr($item, 0, -3). ".min.js") && !str_contains(".min.js", $item)){
+                        if (is_file(($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). ".min.js")) && !str_contains(".min.js", $item)){
                             continue;
                         }
                         self::$aResourceFiles["JsPage"] .= file_get_contents($sPath);

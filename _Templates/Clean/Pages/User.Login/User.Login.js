@@ -24,6 +24,7 @@ $(document).ready(function () {
         }
     });
 });
+
 function validateRequest(oForm) {
     oForm.validate({
         submitHandler: function (oForm) {
