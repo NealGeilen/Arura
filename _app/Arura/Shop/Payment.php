@@ -50,6 +50,142 @@ class Payment extends Modal {
                 "brColor" =>"red"
             ]
     ];
+    const ISSUERS = [
+        [
+            "resource" => "issuer",
+            "id" => "ideal_ABNANL2A",
+            "color" => "#019587",
+            "name" => "ABN AMRO",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/ABNANL2A.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/ABNANL2A%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/ABNANL2A.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_INGBNL2A",
+            "name" => "ING",
+            "color" => "#ff5300",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/INGBNL2A.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/INGBNL2A%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/INGBNL2A.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_RABONL2U",
+            "color" => "#54507a",
+            "name" => "Rabobank",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/RABONL2U.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/RABONL2U%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/RABONL2U.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_ASNBNL21",
+            "name" => "ASN Bank",
+            "color" => "#d10600",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/ASNBNL21.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/ASNBNL21%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/ASNBNL21.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_BUNQNL2A",
+            "name" => "bunq",
+            "color" => "#61b64f",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/BUNQNL2A.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/BUNQNL2A%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/BUNQNL2A.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_HANDNL2A",
+            "name" => "Handelsbanken",
+            "color" => "#0174b3",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/HANDNL2A.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/HANDNL2A%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/HANDNL2A.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_KNABNL2H",
+            "name" => "Knab",
+            "color" => "#00364e",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/KNABNL2H.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/KNABNL2H%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/KNABNL2H.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_MOYONL21",
+            "name" => "Moneyou",
+            "color" => "#51aec8",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/MOYONL21.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/MOYONL21%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/MOYONL21.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_RBRBNL21",
+            "name" => "RegioBank",
+            "color" => "#cf1a21",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/RBRBNL21.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/RBRBNL21%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/RBRBNL21.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_SNSBNL2A",
+            "name" => "SNS",
+            "color" => "#4959bb",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/SNSBNL2A.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/SNSBNL2A%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/SNSBNL2A.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_TRIONL2U",
+            "name" => "Triodos Bank",
+            "color" => "#00927b",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/TRIONL2U.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/TRIONL2U%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/TRIONL2U.svg"
+            ]
+        ],
+        [
+            "resource" => "issuer",
+            "id" => "ideal_FVLBNL22",
+            "name" => "van Lanschot",
+            "color" => "#8ace00",
+            "image" => [
+                "size1x" => "https://www.mollie.com/external/icons/ideal-issuers/FVLBNL22.png",
+                "size2x" => "https://www.mollie.com/external/icons/ideal-issuers/FVLBNL22%402x.png",
+                "svg" => "https://www.mollie.com/external/icons/ideal-issuers/FVLBNL22.svg"
+            ]
+        ]
+];
+
+
 
     public static $REDIRECT_URL = null;
     public static $WEBHOOk_URL = null;
@@ -65,69 +201,117 @@ class Payment extends Modal {
     protected $card;
     protected $status;
 
-    public static function getChart($sChart){
-        $aCharts = [];
-
-        $aChartsBalks = function (){
+    public static function getLineChart(){
+        function getData($sStatus = "paid"){
             $db = new Database();
-            $aChartsBalks = [];
-            function getData($iYear, $iQuoter, $sStatus = "paid"){
-                $db = new Database();
-                return $db -> fetchAllColumn("
-                SELECT COUNT(Payment_Id)
+            $aData = $db -> fetchAll("
+                SELECT COUNT(Payment_Id) as Count,
+                      date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y-%m') as Date 
                 FROM tblPayments 
                 WHERE Payment_Status = :status 
-                  AND QUARTER(FROM_UNIXTIME(Payment_Timestamp)) = :quoter
-                  AND date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y') = :year
-                GROUP BY FROM_UNIXTIME(Payment_Timestamp, 'm') 
-                ORDER BY QUARTER(FROM_UNIXTIME(Payment_Timestamp))",[
-                    "quoter" => $iQuoter,
-                    "year" => $iYear,
-                    "status" => $sStatus
-                ]);
+                GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%m') ",[
+                "status" => $sStatus
+            ]);
+            $list =[];
+            foreach ($aData as $aRecord){
+                $list[] = ["x"=> ($aRecord["Date"]), "y" => $aRecord["Count"]];
             }
+            return $list;
+        }
 
-            $aQuarters = $db ->fetchAll("
-                SELECT date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y') as Year,
-                       QUARTER(FROM_UNIXTIME(Payment_Timestamp)) as Quarter 
-                FROM tblPayments 
-                GROUP BY QUARTER(FROM_UNIXTIME(Payment_Timestamp)) ORDER BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y') DESC , QUARTER(FROM_UNIXTIME(Payment_Timestamp))");
-
-            foreach ($aQuarters as $aQuarter){
-                $data = [
-                    'labels' => Chart::Quarters[((int)$aQuarter["Quarter"] - 1)],
-                    'datasets' => []
-                ];
-                foreach (self::PAYMENT_TYPES as $sName => $aData){
-                    $data["datasets"][] = [
-                        'data' => getData((int)$aQuarter["Year"],(int)$aQuarter["Quarter"] , $sName),
-                        "label" => $aData["name"],
-                        "backgroundColor" => $aData["bgColor"],
-                    ];
-                }
-                $options = [
-                    "scales" => [
-                        "yAxes" =>  [[
-                            "ticks"=> [
-                                'suggestedMin'=> 0,
-                                'suggestedMax'=> 30,
-                                "stepSize" => 1
-                            ]
-                        ]]
+        $data = [
+            'datasets' => []
+        ];
+        foreach (self::PAYMENT_TYPES as $sName => $aData){
+            $data["datasets"][] = [
+                'data' => getData($sName),
+                "label" => $aData["name"],
+                "borderColor" => $aData["bgColor"],
+                "backgroundColor" => "rgba(0,0,0,0)"
+            ];
+        }
+        $options = [
+            "responsive"=> true,
+            "maintainAspectRatio" => false,
+            "scales" => [
+                "xAxes"=> [[
+                    "type"=> 'time',
+                    "time"=> [
+                        "unit"=> 'month'
                     ]
-                ];
-                $attributes = ['id' => 'example', 'width' => 200, 'height' => 200];
+                ]],
+                "yAxes" =>  [[
+                    "ticks"=> [
+                        'suggestedMin'=> 0,
+                        'suggestedMax'=> 30,
+                        "stepSize" => 5
+                    ]
+                ]]
+            ]
+        ];
+        $attributes = ['width' => "100%", 'height' => "300px"];
+        return Chart::Build("line",$data,$options,$attributes);
+    }
+    public static function getDonutBanksChart(){
+        $aIssuers = self::ISSUERS;
+        $db = new Database();
+        $Labels =[];
+        $Data =[];
+        $Colors =[];
+        foreach ($aIssuers as $aIssuer ){
+            $aData = $db -> fetchRow("
+                SELECT COUNT(Payment_Id) as Count
+                FROM tblPayments 
+                WHERE Payment_Issuer = :Issuer",
+                ["Issuer" => $aIssuer["id"]]);
+            $Labels[] = $aIssuer["name"];
+            $Data[] = $aData["Count"];
+            $Colors[] = $aIssuer["color"];
+        }
 
-                $aChartsBalks[] = [
-                    "year" => $aQuarter["Year"],
-                    "quarter"=> $aQuarter["Quarter"],
-                    "chart" => Chart::Build("bar",$data,$options,$attributes)
-                ];
-
-            }
-            return $aChartsBalks;
-        };
-        return $aChartsBalks();
+        $data = [
+            "labels"=> $Labels,
+            'datasets' => [[
+                "backgroundColor" => $Colors,
+                "data" => $Data
+            ]]
+        ];
+        $options = [
+            "responsive"=> true,
+            "maintainAspectRatio" => false,
+            "title" => [
+                "display" => true,
+                "text" => "Banken"
+            ]
+        ];
+        $attributes = ['width' => "100%", 'height' => "300px"];
+        return Chart::Build("pie",$data,$options,$attributes);
+    }
+    public static function getAveragePaymentTimeChart(){
+        $db = new Database();
+        $aData = $db->fetchAll("SELECT COUNT(Payment_Id) AS y, date_format(FROM_UNIXTIME(Payment_Timestamp), '%H:00') AS x FROM tblPayments GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%H')");
+        $data = [
+            "labels"=> ["00:00", "01:00", "02:00", "03:00","04:00", "05:00", "06:00", "07:00", "08:00", "09:00","10:00", "11:00", "12:00", "13:00","14:00", "15:00", "16:00", "17:00", "18:00", "19:00","20:00", "21:00", "22:00", "23:00"],
+            'datasets' => [[
+                'label' => "test",
+                'data' => $aData
+            ]]
+        ];
+        $options = [
+            "responsive"=> true,
+            "maintainAspectRatio" => false,
+            "scales" => [
+                "yAxes" =>  [[
+                    "ticks"=> [
+                        'suggestedMin'=> 0,
+                        'suggestedMax'=> 30,
+                        "stepSize" => 5
+                    ]
+                ]]
+            ]
+        ];
+        $attributes = ['width' => "100%", 'height' => "300px"];
+        return Chart::Build("line",$data,$options,$attributes);
     }
 
 
@@ -186,7 +370,7 @@ class Payment extends Modal {
     }
 
     public static function getIdealIssuers(){
-        return json_decode(json_encode(self::getMollie()->methods->get(\Mollie\Api\Types\PaymentMethod::IDEAL, ["include" => "issuers"])->issuers), true);
+        return self::ISSUERS;
     }
 
     public static function CreatPaymentId(){

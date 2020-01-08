@@ -34,32 +34,38 @@
         color: red;
     }
 </style>
-<div class="card card-primary card-outline card-tabs">
-    <div class="card-header p-0 pt-1 border-bottom-0">
-        <ul class="nav nav-tabs" id="custom-tabs-two-tab" role="tablist">
-            {foreach from=$aCharts item=chart}
-                <li class="nav-item">
-                    <a class="nav-link" data-toggle="pill" href="#payment-{$chart.year}-{$chart.quarter}" role="tab" aria-controls="custom-tabs-two-home" aria-selected="false">{$chart.year} - {$chart.quarter} kwartaal</a>
-                </li>
-            {/foreach}
-
+<div class="card card-primary card-tabs">
+    <div class="card-header p-0 pt-1">
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="pill" href="#payment-chart-line" role="tab" aria-selected="false">Aantal betalingen</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="pill" href="#payment-banks" role="tab" aria-selected="false">Gebruikten banken</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="pill" href="#payment-averga-time" role="tab" aria-selected="false">Betaal tijden op een dag</a>
+            </li>
         </ul>
     </div>
     <div class="card-body">
-        <div class="tab-content" id="custom-tabs-two-tabContent">
-            {foreach from=$aCharts item=chart}
-                <div class="tab-pane fade" id="payment-{$chart.year}-{$chart.quarter}" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
-                    {$chart.chart}
-                </div>
-            {/foreach}
-
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="payment-chart-line" role="tabpanel">
+                {$sLineChart}
+            </div>
+            <div class="tab-pane fade" id="payment-banks" role="tabpanel">
+                {$sBanksChart}
+            </div>
+            <div class="tab-pane fade" id="payment-averga-time" role="tabpanel">
+                {$sAveragePaymentTime}
+            </div>
         </div>
     </div>
     <!-- /.card -->
 </div>
 <div class="card">
     <div class="card-header">
-        <h2 class="card-title">Allen betalingen</h2>
+        <h2 class="card-title">Overzicht</h2>
     </div>
     <div class="card-body table-responsive">
         {assign var="iPaymentsAmount" value="0"}

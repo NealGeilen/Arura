@@ -176,8 +176,12 @@ Templates
     margin: unset!important;
 }
 .form-control.error{
-    border-color: red;
-}
+     border-color: red;
+ }
 .form-group label.error{
     color: red;
+}
+canvas{
+    min-width: 100%!important;
+    min-height: 400px!important;
 }
