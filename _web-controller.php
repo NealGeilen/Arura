@@ -305,6 +305,8 @@ try{
     $oCurrentPage->showPage();
 
 } catch (Exception $e){
+    dd($e);
+    exit;
     switch ($e->getCode()){
         case 403:
             header("Location: /" . __ARURA__DIR_NAME__);

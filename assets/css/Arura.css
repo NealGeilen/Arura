@@ -181,7 +181,7 @@ Templates
 .form-group label.error{
     color: red;
 }
-canvas{
-    min-width: 100%!important;
-    min-height: 400px!important;
+canvas.chartjs-render-monitor{
+    width: 100% !important;
+    height: 300px!important;
 }

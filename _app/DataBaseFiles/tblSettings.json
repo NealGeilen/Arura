@@ -147,6 +147,12 @@
       "Setting_Plg": "plg.shop"
     },
     {
+      "Setting_Name": "Mollie_Access_Token",
+      "Setting_Required": "0",
+      "Setting_Type": "text",
+      "Setting_Plg": "plg.shop"
+    },
+    {
       "Setting_Name": "BtwPer",
       "Setting_Required": "0",
       "Setting_Type": "number",

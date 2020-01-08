@@ -284,16 +284,22 @@ class Payment extends Modal {
                 "text" => "Banken"
             ]
         ];
-        $attributes = ['width' => "100%", 'height' => "300px"];
+        $attributes = ['width' => "100%", 'height' => "300"];
         return Chart::Build("pie",$data,$options,$attributes);
     }
     public static function getAveragePaymentTimeChart(){
         $db = new Database();
-        $aData = $db->fetchAll("SELECT COUNT(Payment_Id) AS y, date_format(FROM_UNIXTIME(Payment_Timestamp), '%H:00') AS x FROM tblPayments GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%H')");
+        $aTimes = ["00:00", "01:00", "02:00", "03:00","04:00", "05:00", "06:00", "07:00", "08:00", "09:00","10:00", "11:00", "12:00", "13:00","14:00", "15:00", "16:00", "17:00", "18:00", "19:00","20:00", "21:00", "22:00", "23:00"];
+        $aData = array_fill(0, count($aTimes), []);
+
+        foreach ($db->fetchAll("SELECT COUNT(Payment_Id) AS y, date_format(FROM_UNIXTIME(Payment_Timestamp), '%H:00') AS x FROM tblPayments GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%H')") as $data){
+            $aData[(int)array_search($data["x"], $aTimes)] = $data;
+        }
         $data = [
-            "labels"=> ["00:00", "01:00", "02:00", "03:00","04:00", "05:00", "06:00", "07:00", "08:00", "09:00","10:00", "11:00", "12:00", "13:00","14:00", "15:00", "16:00", "17:00", "18:00", "19:00","20:00", "21:00", "22:00", "23:00"],
+            "labels"=> $aTimes,
             'datasets' => [[
-                'label' => "test",
+                "borderColor"=> "#007bff",
+                'label' => "Betalingen per uur",
                 'data' => $aData
             ]]
         ];
@@ -318,7 +324,7 @@ class Payment extends Modal {
     public static function getMollie(): MollieApiClient{
         if(!empty(Application::get("plg.shop", "Mollie_Api")))
         if (is_null(self::$Mollie)){
-            $oMollie =new MollieApiClient();
+            $oMollie = new MollieApiClient();
             $oMollie->setApiKey(Application::get("plg.shop", "Mollie_Api"));
             self::$Mollie=$oMollie;
         }
