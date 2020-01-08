@@ -322,13 +322,15 @@ class Payment extends Modal {
 
 
     public static function getMollie(): MollieApiClient{
-        if(!empty(Application::get("plg.shop", "Mollie_Api")))
-        if (is_null(self::$Mollie)){
-            $oMollie = new MollieApiClient();
-            $oMollie->setApiKey(Application::get("plg.shop", "Mollie_Api"));
-            self::$Mollie=$oMollie;
+        if(!empty(Application::get("plg.shop", "Mollie_Api"))){
+            if (is_null(self::$Mollie)){
+                $oMollie = new MollieApiClient();
+                $oMollie->setApiKey(Application::get("plg.shop", "Mollie_Api"));
+                $oMollie->setAccessToken(Application::get("plg.shop", "Mollie_Access_Token"));
+                self::$Mollie=$oMollie;
+            }
+            return self::$Mollie;
         }
-        return self::$Mollie;
     }
 
     public function __construct($sId)
