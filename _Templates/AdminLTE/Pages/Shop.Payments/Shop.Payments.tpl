@@ -36,6 +36,18 @@
 </style>
 <div class="row">
     <div class="col-md-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>€ {$sPaymentValue|number_format:2:",":"."}</h3>
+
+                <p>Saldo op dit moment</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-euro-sign"></i>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 col-6">
         <div class="small-box bg-primary">
             <div class="inner">
                 {if $sPaymentDate !== Null}
@@ -51,18 +63,6 @@
             </div>
         </div>
     </div>
-    <div class="col-md-3 col-6">
-        <div class="small-box bg-success">
-            <div class="inner">
-                <h3>€ {$sPaymentValue|number_format:2:",":"."}</h3>
-
-                <p>Saldo op dit moment</p>
-            </div>
-            <div class="icon">
-                <i class="fas fa-euro-sign"></i>
-            </div>
-        </div>
-    </div>
     <div class="col-md-6 col-12">
         <div class="card card-primary card-tabs">
             <div class="card-header p-0 pt-1">
@@ -74,7 +74,7 @@
                         <a class="nav-link" data-toggle="pill" href="#payment-banks" role="tab" aria-selected="false">Gebruikten banken</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="pill" href="#payment-averga-time" role="tab" aria-selected="false">Betaal tijden op een dag</a>
+                        <a class="nav-link" data-toggle="pill" href="#payment-averga-time" role="tab" aria-selected="false">Betaal tijden</a>
                     </li>
                 </ul>
             </div>

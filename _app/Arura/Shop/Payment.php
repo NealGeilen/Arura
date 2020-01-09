@@ -205,18 +205,14 @@ class Payment extends Modal {
         function getData($sStatus = "paid"){
             $db = new Database();
             $aData = $db -> fetchAll("
-                SELECT COUNT(Payment_Id) as Count,
-                      date_format(FROM_UNIXTIME(Payment_Timestamp), '%Y-%m') as Date 
+                SELECT COUNT(Payment_Id) as y,
+                       date_format(FROM_UNIXTIME(Payment_Timestamp), '%m %Y') as t
                 FROM tblPayments 
                 WHERE Payment_Status = :status 
-                GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%m') ",[
+                GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%m %Y') ",[
                 "status" => $sStatus
             ]);
-            $list =[];
-            foreach ($aData as $aRecord){
-                $list[] = ["x"=> ($aRecord["Date"]), "y" => $aRecord["Count"]];
-            }
-            return $list;
+            return $aData;
         }
 
         $data = [
@@ -227,7 +223,8 @@ class Payment extends Modal {
                 'data' => getData($sName),
                 "label" => $aData["name"],
                 "borderColor" => $aData["bgColor"],
-                "backgroundColor" => "rgba(0,0,0,0)"
+                "backgroundColor" => "rgba(0,0,0,0)",
+                "fill" => false
             ];
         }
         $options = [
@@ -237,7 +234,15 @@ class Payment extends Modal {
                 "xAxes"=> [[
                     "type"=> 'time',
                     "time"=> [
-                        "unit"=> 'month'
+                        "format" => "MM YYYY",
+                        "min" => "01-".date("Y", strtotime(Application::get("website", "Launchdate"))),
+                        "max" => date("m-Y", strtotime("+1 month")),
+                        "unit"=> 'month',
+                        "stepSize" => 1,
+                        "round" => "month",
+                        "displayFormats" => [
+                            "month" => "MMM YYYY"
+                        ]
                     ]
                 ]],
                 "yAxes" =>  [[
@@ -319,7 +324,6 @@ class Payment extends Modal {
         $attributes = ['width' => "100%", 'height' => "300px"];
         return Chart::Build("line",$data,$options,$attributes);
     }
-
 
     public static function getMollie(): MollieApiClient{
         if(!empty(Application::get("plg.shop", "Mollie_Api"))){
