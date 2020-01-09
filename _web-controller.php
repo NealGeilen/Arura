@@ -153,7 +153,7 @@ $aNavBarPages =
                                     \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                                     ),
                                 "Title" => "Inschrijvingen",
-                                "FileName" => null,
+                                "FileName" => "Shop.Tickets",
                                 "Icon" => "fas fa-ticket-alt",
                                 "isChild" => true,
                                 "MasterPage" => "AdminLTE"
