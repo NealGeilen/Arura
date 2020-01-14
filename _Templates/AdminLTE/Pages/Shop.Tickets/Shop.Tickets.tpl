@@ -1,31 +1,16 @@
-<div class="card">
-    <div class="card-header">
-        <h2 class="card-title">Bestaande evenementen</h2>
-    </div>
-    <div class="card-body table-responsive">
-        <table class="table Arura-Table">
-            <thead>
-            <tr>
-                <th>Naam</th>
-                <th>Slug</th>
-                <th>Tijd</th>
-                <th>Aantal inschrijvingen</th>
-                <th>Meer</th>
-            </tr>
-            </thead>
-            <tbody>
-            {foreach from=$aEvents key=$iKey item=aEvent}
-                <tr>
-                    <td>{$aEvent.Event_Name}</td>
-                    <td>{$aEvent.Event_Slug}</td>
-                    <td>{$aEvent.Event_Start_Timestamp|date_format:"%H:%M %d-%m-%y"} t/m {$aEvent.Event_End_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
-                    <td></td>
-                    <td class="btn-group btn-group-sm">
-                        <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/tickets?e={$aEvent.Event_Id}"><i class="fas fa-pen"></i></a>
-                    </td>
-                </tr>
-            {/foreach}
-            </tbody>
-        </table>
-    </div>
-</div>
+<script>
+    aRegistrations = {$aRegistrations};
+</script>
+
+
+<table class="table display registrations-table">
+    <thead>
+    <tr>
+        <th></th>
+        <th>Voornaam</th>
+        <th>Achternaam</th>
+        <th>E-mailadres</th>
+        <th>Telefoonnummer</th>
+    </tr>
+    </thead>
+</table>

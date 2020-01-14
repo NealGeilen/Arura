@@ -219,6 +219,14 @@ class Event Extends Page{
         return (count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
     }
 
+    public function getRegistration(){
+        $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
+        foreach ($aRegistrations as $i => $registration){
+            $aRegistrations[$i]["Tickets"] = $this->db->fetchAll("SELECT * FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $registration["Registration_Id"]]);
+        }
+        return $aRegistrations;
+    }
+
     public static function Create($aData){
         $db = new Database();
         $db -> createRecord("tblEvents",$aData);
