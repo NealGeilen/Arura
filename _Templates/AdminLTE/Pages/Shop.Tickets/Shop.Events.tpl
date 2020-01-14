@@ -19,9 +19,9 @@
                     <td>{$aEvent.Event_Name}</td>
                     <td>{$aEvent.Event_Slug}</td>
                     <td>{$aEvent.Event_Start_Timestamp|date_format:"%H:%M %d-%m-%y"} t/m {$aEvent.Event_End_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
-                    <td></td>
+                    <td>{$aEvent.Amount}</td>
                     <td class="btn-group btn-group-sm">
-                        <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/tickets?t=e&e={$aEvent.Event_Id}"><i class="fas fa-pen"></i></a>
+                        <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/tickets?t=e&e={$aEvent.Event_Id}"><i class="fas fa-info"></i></a>
                     </td>
                 </tr>
             {/foreach}

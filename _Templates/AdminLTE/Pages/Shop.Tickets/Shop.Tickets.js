@@ -2,10 +2,11 @@ Tickets = {
   Registration : {
       DataTable : function (oTable) {
           var table = oTable.DataTable( {
+              responsive: true,
               "data": aRegistrations,
               "columns": [
                   {
-                      "className":      'details-control fas fa-plus',
+                      "className":      'details-control',
                       "orderable":      false,
                       "data":           null,
                       "defaultContent": ''
@@ -15,25 +16,30 @@ Tickets = {
                   { "data": "Registration_Email" },
                   { "data": "Registration_Tel" }
               ],
-              "order": [[1, 'asc']]
+              "order": [[1, 'asc']],
+              "language": {
+                  "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+              }
           } );
 
           function format(dd){
-              console.log(dd);
-              return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-                  '<tr>'+
-                  '<td>Full name:</td>'+
-                  '<td></td>'+
-                  '</tr>'+
-                  '<tr>'+
-                  '<td>Extension number:</td>'+
-                  '<td></td>'+
-                  '</tr>'+
-                  '<tr>'+
-                  '<td>Extra info:</td>'+
-                  '<td>And any further details here (images etc)...</td>'+
-                  '</tr>'+
-                  '</table>';
+              console.log(dd.Tickets.length);
+              if (dd.Tickets.length){
+                  oTemplate = $($(".template-ticket").html());
+                  $.each(dd.Tickets, function (i, aTicket) {
+                      console.log(aTicket);
+                      oRow = $("<tr>");
+                      oRow.append("<td>"+aTicket.OrderedTicket_Hash+"</td>");
+                      oRow.append("<td>"+aTicket.Ticket_Name+"</td>");
+                      oRow.append("<td>"+aTicket.Ticket_Description+"</td>");
+                      oRow.append("<td>"+aTicket.OrderedTicket_Price+"</td>");
+                      oTemplate.find("tbody").append(oRow);
+                  });
+                  return oTemplate;
+              } else {
+                  return  "<h6 class='text-center'>Registratie heeft geen tickets besteld</h6>"
+              }
+
           }
 
           // Add event listener for opening and closing details

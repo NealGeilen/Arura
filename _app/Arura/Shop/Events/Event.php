@@ -220,17 +220,21 @@ class Event Extends Page{
     }
 
     public function getRegistration(){
-        $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
-        foreach ($aRegistrations as $i => $registration){
-            $aRegistrations[$i]["Tickets"] = $this->db->fetchAll("SELECT * FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $registration["Registration_Id"]]);
+        if ($this->hasEventTickets()){
+            $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
+            foreach ($aRegistrations as $i => $registration){
+                $aRegistrations[$i]["Tickets"] = $this->db->fetchAll("SELECT * FROM tblEventOrderedTickets JOIN tblEventTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $registration["Registration_Id"]]);
+            }
+        } else {
+            $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
         }
         return $aRegistrations;
     }
 
     public static function Create($aData){
         $db = new Database();
-        $db -> createRecord("tblEvents",$aData);
-        return new self($aData["Event_Hash"]);
+        $i = $db -> createRecord("tblEvents",$aData);
+        return new self($i);
     }
 
     public function Remove(){

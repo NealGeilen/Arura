@@ -1,0 +1,16 @@
+.details-control:before{
+    font-family: "Font Awesome 5 Free";
+    content: "\f067";
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
+    font-weight: 900
+}
+tr.shown .details-control:before{
+    content: "\f068"!important;
+}
+th.details-control:before{
+    content: ""!important;
+}

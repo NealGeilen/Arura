@@ -5,6 +5,7 @@ $db = new \Arura\Database();
 if (isset($_GET["c"])){
 
     if (isset($_POST["Event_Name"])){
+        unset($_POST["files"]);
         $_POST["Event_Start_Timestamp"] = strtotime($_POST["Event_Start_Timestamp"]);
         $_POST["Event_End_Timestamp"] = strtotime($_POST["Event_End_Timestamp"]);
         $_POST["Event_IsActive"] = 0;
