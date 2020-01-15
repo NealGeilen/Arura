@@ -325,12 +325,14 @@ class Payment extends Modal {
         return Chart::Build("line",$data,$options,$attributes);
     }
 
-    public static function getMollie(): MollieApiClient{
+    public static function getMollie($setAccessToken = false): MollieApiClient{
         if(!empty(Application::get("plg.shop", "Mollie_Api"))){
             if (is_null(self::$Mollie)){
                 $oMollie = new MollieApiClient();
                 $oMollie->setApiKey(Application::get("plg.shop", "Mollie_Api"));
-                $oMollie->setAccessToken(Application::get("plg.shop", "Mollie_Access_Token"));
+                if ($setAccessToken){
+                    $oMollie->setAccessToken(Application::get("plg.shop", "Mollie_Access_Token"));
+                }
                 self::$Mollie=$oMollie;
             }
             return self::$Mollie;

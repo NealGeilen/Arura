@@ -167,6 +167,10 @@ class Event Extends Page{
                                 self::$smarty->assign("sStatus", $P->getPayment()->status);
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
                                 self::$MasterPage = "Events/done.tpl";
+                                if ($P->getStatus() === "paid"){
+                                    $R = \Arura\Shop\Events\Registration::getRegistrationFromPayment($P);
+                                    $R ->sendEventDetails();
+                                }
                                 $oPage->showPage();
                             }
                             break;

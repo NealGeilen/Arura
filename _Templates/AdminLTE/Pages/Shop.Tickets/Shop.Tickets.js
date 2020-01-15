@@ -63,5 +63,7 @@ Tickets = {
 };
 
 $(document).ready(function () {
-    Tickets.Registration.DataTable($(".registrations-table"))
+    if (typeof aRegistrations !== "undefined"){
+        Tickets.Registration.DataTable($(".registrations-table"))
+    }
 });

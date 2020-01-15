@@ -1,7 +1,7 @@
 <?php
 
 require_once __DIR__ . "/_app/autoload.php";
-$aExceptionPages = ["/login", "/login/password"];
+$aExceptionPages = ["/login", "/login/password", "/ticket"];
 if (!\Arura\User\User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages)){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
@@ -147,6 +147,17 @@ $aNavBarPages =
                         "Icon" => "far fa-calendar-alt",
                         "MasterPage" => "AdminLTE",
                         "Children" => [
+                            '/winkel/evenementen/beheer' => [
+                                "Right" =>
+                                    (
+                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    ),
+                                "Title" => "Beheer",
+                                "FileName" => "Shop.Events",
+                                "Icon" => "fas fa-calendar-day",
+                                "isChild" => true,
+                                "MasterPage" => "AdminLTE"
+                            ],
                             '/winkel/evenementen/tickets' => [
                                 "Right" =>
                                     (
@@ -157,18 +168,7 @@ $aNavBarPages =
                                 "Icon" => "fas fa-ticket-alt",
                                 "isChild" => true,
                                 "MasterPage" => "AdminLTE"
-                            ],
-                            '/winkel/evenementen/beheer' => [
-                                "Right" =>
-                                    (
-                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
-                                    ),
-                                "Title" => "Evenementen beheer",
-                                "FileName" => "Shop.Events",
-                                "Icon" => "fas fa-calendar-day",
-                                "isChild" => true,
-                                "MasterPage" => "AdminLTE"
-                            ],
+                            ]
                         ]
                     ]
                 ]
@@ -236,6 +236,13 @@ $aNavBarPages =
             "Right" => \Arura\User\User::isLogged(),
             "Icon" => null
         ],
+        "/ticket" => [
+            "Title" => "Home",
+            "FileName" => "Ticket",
+            "MasterPage" => "Clean",
+            "Right" => true,
+            "Icon" => null
+        ],
         "/login" => [
             "Title" => "Home",
             "FileName" => "User.Login",
@@ -290,7 +297,13 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
                     $P->setMasterPath(__ARURA_TEMPLATES__   . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR);
                     $P->setFileLocation(__ARURA_TEMPLATES__  . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aGrandProperties['FileName']);
                     $Host->addPage($P);
-                    $aNavBarPages[$sUrl]["Open"]= substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl();
+                    if (isset($aNavBarPages[$sUrl]["Open"])){
+                        if (!$aNavBarPages[$sUrl]["Open"]){
+                            $aNavBarPages[$sUrl]["Open"]= substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl();
+                        }
+                    } else {
+                        $aNavBarPages[$sUrl]["Open"]= substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl();
+                    }
                 }
             }
 
