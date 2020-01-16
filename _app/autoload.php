@@ -2,7 +2,8 @@
 define("__ARURA__DIR_NAME__", "dashboard");
 define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
 define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
-define('__APP_ROOT__',          realpath(__WEB__ROOT__ . '/../../'));
+define('__APP_ROOT__',          realpath(getcwd() . '/../'));
+
 
 define('__ARURA__ROOT__', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__);
 
@@ -29,3 +30,6 @@ if ((int)\Arura\Settings\Application::get("arura", "Debug")){
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 }
+dd(__APP_ROOT__);
+dd(getcwd());
+exit;
