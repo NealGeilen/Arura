@@ -31,14 +31,19 @@ class Page extends Modal implements PageEnum{
         return $this->PageContend;
     }
 
+    public static function getSmarty() : \Smarty{
+        return self::$smarty;
+    }
+
     public function forceHTTPS(){
-        //If the HTTPS is not found to be "on"
-        if(!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] != "on")
-        {
-            //Tell the browser to redirect to the HTTPS URL.
-            header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"], true, 301);
-            //Prevent the rest of the script from executing.
-            exit;
+        if (Application::get("website", "HTTPS")){
+            if(!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] != "on")
+            {
+                //Tell the browser to redirect to the HTTPS URL.
+                header("Location: https://" . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"], true, 301);
+                //Prevent the rest of the script from executing.
+                exit;
+            }
         }
 
     }
@@ -54,6 +59,7 @@ class Page extends Modal implements PageEnum{
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', Application::getAll()['website']);
+
         foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
             if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
                 $sName = str_replace('.html', '', $item);
@@ -79,6 +85,7 @@ class Page extends Modal implements PageEnum{
                 exit;
             }
         } else {
+
             $oPage = new self();
             $oPage::$MasterPage = "Launchpage.html";
             $oPage->setTitle("Home");

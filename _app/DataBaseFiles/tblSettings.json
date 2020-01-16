@@ -163,6 +163,12 @@
       "Setting_Required": "0",
       "Setting_Type": "checkbox",
       "Setting_Plg": "arura"
+    },
+    {
+      "Setting_Name": "HTTPS",
+      "Setting_Required": "0",
+      "Setting_Type": "checkbox",
+      "Setting_Plg": "website"
     }
   ]
 }

@@ -96,7 +96,7 @@ class Cms extends Page implements PageEnum {
                         continue;
                     }
                     $aAddon = $this->getAddonData((int)$aContentBlock['Content_Addon_Id']);
-                    if ((int)$aAddon['Addon_Custom']){
+                    if (!empty($aAddon['Addon_Custom'])){
                         $_GET['PluginData'] = ['Addon' => $aAddon,'Content' => $aContentBlock['Content_Value'], 'Smarty' => self::$smarty];
                         self::$smarty->assign('aContentBlock', $aContentBlock);
                         $aContentBlock['Template'] = include (self::PluginPathCustom . $aAddon['Addon_Name'] . '/'. $aAddon['Addon_FileName']);
