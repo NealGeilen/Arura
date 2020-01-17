@@ -53,7 +53,6 @@ Pages = {
     },
     createPage: function () {
         oTemplate = $('.template-create-page');
-        oTemplate.validator();
         Modals.Custom({
             Buttons: [],
             Title:'Pagina aanmaken',

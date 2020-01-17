@@ -66,22 +66,6 @@ $("select[value]").each(function() {
     $(this).val(this.getAttribute("value"));
 });
 
-$("form.form-sender").validate({
-    submitHandler: function (oForm) {
-        $.ajax({
-            url: $(oForm).attr('action'),
-            type: $(oForm).attr('method'),
-            dataType: 'json',
-            data: (serializeArray($(oForm))),
-            success: function () {
-                addSuccessMessage('Opgelsagen');
-            },
-            error: function () {
-                addErrorMessage('Het opslaan is niet juist gegaan');
-            }
-        });
-    }
-});
 $(".table.Arura-Table").DataTable({
     "language": {
         "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
@@ -131,13 +115,14 @@ $("textarea.richtext").ready(function () {
 
 $.fn.FormAjax = function( options = {} ) {
     return this.each(function() {
-        $(this).validate({
-            submitHandler: function (oForm) {
+        oForm = $(this);
+        oForm.validate({
+            submitHandler: function () {
                 var settings = $.extend({
-                    type: $(this).attr('method'),
+                    type: oForm.attr('method'),
                     dataType: 'json',
-                    data: serializeArray($(this)),
-                    url : $(this).attr('action'),
+                    data: serializeArray(oForm),
+                    url : oForm.attr('action'),
                     success: function(){
                         addSuccessMessage('Opgeslagen');
                     },
@@ -198,4 +183,5 @@ function startPageLoad() {
 function endPageLoad() {
     $('.loader-container').remove()
 }
+$("form.form-sender").FormAjax();
 
