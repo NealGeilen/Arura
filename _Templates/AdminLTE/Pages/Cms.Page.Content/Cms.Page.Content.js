@@ -613,6 +613,22 @@ var Sidebar = {
 
                 Sidebar.Block.setBlockData('Content_Raster', Raster);
             });
+            oInput = $("[field=Content_Css_Background_Img]");
+            oInput.on("click",function () {
+                Filemanger.Selector("img", function (node) {
+                    if (node !== []){
+                        aFile = node[0];
+                        oInput.val("/files/" + aFile.original.dir);
+                        Sidebar.Block.setBlockData(oInput.attr('field'), oInput.val());
+                    }
+                });
+            });
+            $('.block-settings-field').parent().find("button").on("click", function () {
+                oButton = $(this);
+                oInput = oButton.parent().parent().find("input");
+                Sidebar.Block.setBlockData(oInput.attr('field'), null);
+                oInput.val(null);
+            });
             $('.block-settings-field').on('input', function () {
                 Sidebar.Block.setBlockData($(this).attr('field'), $(this).val());
             });
@@ -707,8 +723,9 @@ $(document).ready(function () {
            && $(e.target).parents('.control-sidebar').length < 1
            && !$(e.target).hasClass('btn')
            && $(e.target).parent('.btn').length < 1
-           && $(e.target).parents(".modal-dialog").length === 0
-           && $(e.target).parents(".FileManger-Three").length === 0
+           && $(e.target).parents(".modal-dialog").length < 1
+           && $(e.target).parents(".FileManger-Three").length < 1
+           && !$(e.target).hasClass("jstree-icon jstree-ocl")
        ){
            Builder.Block.State.Deactivate();
        }

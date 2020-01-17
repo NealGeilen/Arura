@@ -35,13 +35,23 @@
                     <td class="type"></td>
                 </tr>
             </table>
-<!--            <div class="form-group">-->
-<!--                <label>Achterground afbeelding</label>-->
-<!--                <input type="text" class="form-control block-settings-field file-selector" id="content-background-img" field="Content_Css_Background_Img">-->
-<!--            </div>-->
-            <div class="form-group">
-                <label>Achterground kleur</label>
+            <label>Achterground afbeelding</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control block-settings-field" id="content-background-img" field="Content_Css_Background_Img">
+                <div class="input-group-append">
+                    <button class="btn btn-default" type="button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <label>Achterground kleur</label>
+            <div class="input-group mb-3">
                 <input type="color" class="form-control block-settings-field" id="content-background-color" field="Content_Css_Background_Color">
+                <div class="input-group-append">
+                    <button class="btn btn-default" type="button">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
             <div class="block-settings-items-control">
                 <div class="form-group">
