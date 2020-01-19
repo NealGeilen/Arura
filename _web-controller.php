@@ -158,6 +158,17 @@ $aNavBarPages =
                                 "isChild" => true,
                                 "MasterPage" => "AdminLTE"
                             ],
+                            '/winkel/evenementen/valideren' => [
+                                "Right" =>
+                                    (
+                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    ),
+                                "Title" => "Valideren",
+                                "FileName" => "Events.Validation",
+                                "Icon" => "fas fa-calendar-day",
+                                "isChild" => true,
+                                "MasterPage" => "AdminLTE"
+                            ],
                             '/winkel/evenementen/tickets' => [
                                 "Right" =>
                                     (
