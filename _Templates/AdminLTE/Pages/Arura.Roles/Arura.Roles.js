@@ -50,10 +50,12 @@ var Roles = {
                 tr.find('.btn-role-menu').hide();
                 tr.find('.btn-role-menu-close').show();
                 $.each(aData.Rights, function (i, aRight) {
-                    t = $($('.template-role-rights-details').html());
-                    t.find('.title').text(aRight.Right_Name);
-                    t.find('.btn').data('right', aRight);
-                    oTemplate.find('.rights').append(t);
+                    if (typeof aRight !== "undefined"){
+                        t = $($('.template-role-rights-details').html());
+                        t.find('.title').text(aRight.Right_Name);
+                        t.find('.btn').data('right', aRight);
+                        oTemplate.find('.rights').append(t);
+                    }
                 });
 
                 oTemplate.find('.btn-right-delete').on('click', function () {
@@ -108,6 +110,9 @@ var Roles = {
                                             Role_Id: aData.Role_Id
                                         }),
                                         success: function () {
+                                            if (aData.Rights !== []){
+                                                aData.Rights = [];
+                                            }
                                             aData.Rights[iRightId] = response.data[iRightId];
                                             row.data(aData).draw();
                                             row.child.hide();
@@ -133,7 +138,6 @@ var Roles = {
                 tr.find('.btn-role-menu').hide();
                 tr.find('.btn-role-menu-close').show();
                 aData = row.data();
-                oTemplate.validator();
                 oTemplate.FormAjax({
                     success: function (response) {
                         data = $.extend(aData, response.data);
@@ -183,7 +187,6 @@ var Roles = {
             oModal = $('.modal-role-create');
             oForm = oModal.find('form');
             oModal.modal("show");
-            oForm.validator();
             Table = this.oTable;
             oForm.FormAjax({
                 success: function (response) {

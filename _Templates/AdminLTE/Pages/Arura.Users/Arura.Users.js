@@ -54,10 +54,12 @@ var Users = {
                 tr.find('.btn-user-menu').hide();
                 tr.find('.btn-user-menu-close').show();
                 $.each(aData.Roles , function (i, aRole) {
-                    t = $($('.template-user-role-details').html());
-                    t.find('.title').text(aRole.Role_Name);
-                    t.find('.btn').data('role', aRole);
-                    oTemplate.find('.roles').append(t);
+                    if (typeof aRole !== "undefined"){
+                        t = $($('.template-user-role-details').html());
+                        t.find('.title').text(aRole.Role_Name);
+                        t.find('.btn').data('role', aRole);
+                        oTemplate.find('.roles').append(t);
+                    }
                 });
 
                 oTemplate.find('.btn-role-delete').on('click', function () {
@@ -137,7 +139,6 @@ var Users = {
                 tr.find('.btn-user-menu').hide();
                 tr.find('.btn-user-menu-close').show();
                 aData = row.data();
-                oTemplate.validator();
                 oTemplate.FormAjax({
                     success: function (response) {
                         data = $.extend(aData, response.data);
@@ -194,7 +195,6 @@ var Users = {
             oModal = $('.modal-user-create');
             oForm = oModal.find('form');
             oModal.modal("show");
-            oForm.validator();
             Table = this.oTable;
 
             oForm.FormAjax({

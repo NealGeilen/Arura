@@ -23,6 +23,9 @@ function addErrorMessage(sMessage) {
     $.notify({message:sMessage},oSettings);
 }
 $("select option[value="+$('select').attr('value')+"]").attr('selected', 'selected');
+Array.prototype.insert = function ( index, item ) {
+    this.splice( index, 0, item );
+};
 
 function LogOutUser(){
     $.ajax({
