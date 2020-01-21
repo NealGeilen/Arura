@@ -158,17 +158,6 @@ $aNavBarPages =
                                 "isChild" => true,
                                 "MasterPage" => "AdminLTE"
                             ],
-                            '/winkel/evenementen/valideren' => [
-                                "Right" =>
-                                    (
-                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
-                                    ),
-                                "Title" => "Valideren",
-                                "FileName" => "Events.Validation",
-                                "Icon" => "fas fa-calendar-day",
-                                "isChild" => true,
-                                "MasterPage" => "AdminLTE"
-                            ],
                             '/winkel/evenementen/tickets' => [
                                 "Right" =>
                                     (
@@ -179,7 +168,18 @@ $aNavBarPages =
                                 "Icon" => "fas fa-ticket-alt",
                                 "isChild" => true,
                                 "MasterPage" => "AdminLTE"
-                            ]
+                            ],
+                            '/winkel/evenementen/valideren' => [
+                                "Right" =>
+                                    (
+                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
+                                    ),
+                                "Title" => "Valideren",
+                                "FileName" => "Events.Validation",
+                                "Icon" => "fas fa-qrcode",
+                                "isChild" => true,
+                                "MasterPage" => "AdminLTE"
+                            ],
                         ]
                     ]
                 ]

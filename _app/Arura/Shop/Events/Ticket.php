@@ -50,6 +50,30 @@ class Ticket extends Modal {
         }
     }
 
+    public function Validate(){
+        if ($this->getLastValidedTimestamp()->getTimestamp() >= strtotime('-1 day')){
+            throw new \Exception("Ticket has already been validate", 409);
+        } else {
+            $this->db->updateRecord("tblEventOrderedTickets", [
+                "OrderedTicket_LastValided_Timestamp" => time(),
+                "OrderedTicket_Hash" => $this->getHash()
+            ],
+                "OrderedTicket_Hash");
+        }
+        return [
+            "Ticket" => $this->getTicketData(),
+            "Event" => $this->getEvent()->__ToArray()
+        ];
+
+    }
+
+    public function getTicketData(){
+        return $this->db->fetchRow("SELECT * FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Hash = :Hash",
+            [
+               "Hash" => $this->getHash()
+            ]);
+    }
+
     public function __ToArray(){
         return [
             "OrderedTicket_Hash" => $this->getHash(),
@@ -152,6 +176,7 @@ class Ticket extends Modal {
      */
     public function getLastValidedTimestamp() : \DateTime
     {
+        $this->load();
         return $this->LastValidedTimestamp;
     }
     /**

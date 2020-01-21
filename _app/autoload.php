@@ -2,7 +2,7 @@
 define("__ARURA__DIR_NAME__", "dashboard");
 define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
 define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
-define('__APP_ROOT__',          realpath(__WEB__ROOT__ . '/../'));
+require_once __WEB__ROOT__ . "/_config.php";
 
 
 define('__ARURA__ROOT__', $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__);
@@ -19,7 +19,7 @@ define('__RESOURCES__',         __WEB__ROOT__   . DIRECTORY_SEPARATOR . "_app" .
 define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/Resources/DataFiles'  . DIRECTORY_SEPARATOR);
 
 
-require_once __WEB__ROOT__ . "/_config.php";
+
 require_once __APP__    . "Rights.php";
 require_once __APP__ . "Functions.php";
 require_once __VENDOR__ . "autoload.php";

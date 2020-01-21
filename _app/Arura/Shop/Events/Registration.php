@@ -132,7 +132,6 @@ class Registration extends Modal {
         $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
         $oPDF->assign("btwPer", Application::get("plg.shop", "BtwPer"));
         $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), \Mpdf\HTMLParserMode::HEADER_CSS);
-        //TODO Add Factuur;
         $oPDF->assign("aTickets", $this->getPayment()->getMetadata());
         $oPDF->assign("aPayment", $this->getPayment()->__ToArray());
         $oPDF->SetHTMLFooter(self::TemplateDir. "footer.html");

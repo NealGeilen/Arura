@@ -15,19 +15,7 @@ $request->sandbox(function ($aData) use ($response){
             $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
             $db->updateRecord("tblEvents", $aData, "Event_Id");
             break;
-        case "verify-ticket":
-            $aResponse = [];
-            $oTicket = new \Arura\Shop\Events\Ticket($aData["Hash"]);
-            $aResponse["Ticket"] = $oTicket->__ToArray();
-            $aResponse["Event"] = $oTicket->getEvent()->__ToArray();
-            $response->exitSuccess($aResponse);
-            break;
     }
-
-
-    $response->exitSuccess($aData);
-
-
 });
 
 $response->exitScript();

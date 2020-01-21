@@ -91,7 +91,7 @@ class Crud extends Database {
             $this->sHtml .= "<th>" . $Column['name'] . "</th>";
         }
         $this->sHtml .= "<th>";
-        if (isset($_GET["action"]) && $_GET["action"] !== "create" && $_GET["action"] !== "edit"){
+        if (!isset($_GET["action"]) || ($_GET["action"] !== "create" && $_GET["action"] !== "edit")){
             $this->sHtml .= "<a class='btn btn-primary btn-sm' href='".$this->getUrl(["action" => "create"])."'><i class=\"fas fa-plus\"></i></a>";
         }
         $this->sHtml .= "</th></tr></thead><tbody>";

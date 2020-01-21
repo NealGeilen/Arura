@@ -79,6 +79,10 @@
     {
       "Right_Id": "24",
       "Right_Name": "SHOP_CATEGORIES"
+    },
+    {
+      "Right_Id": "25",
+      "Right_Name": "SHOP_EVENT_VALIDATION"
     }
   ]
 }

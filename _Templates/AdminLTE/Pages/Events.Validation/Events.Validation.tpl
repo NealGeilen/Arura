@@ -28,15 +28,20 @@
                 <h3 class="card-title">
                     Gescande tickets
                 </h3>
-                <div class="card-tools">
-                    <div class="btn-group btn-group-sm">
-                        <button class="btn btn-primary">
-                            Start
-                        </button>
-                    </div>
-                </div>
             </div>
-            <div class="card-body">
+            <div class="card-body table-responsive">
+                <table class="table table-striped ticket-table">
+                    <thead>
+                        <tr>
+                            <th>Nummer</th>
+                            <th>Beschrijving</th>
+                            <th>Event</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

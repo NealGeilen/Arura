@@ -1,29 +1,45 @@
 var Scanner = {
-    StartCamera : function () {
-        let scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
-        scanner.addListener('scan', function (content) {
-            Scanner.VerifyTicket(content);
-            $("#scan-message").text("QR Code gescand");
-        });
+    camera: null,
+    scanner: null,
+    SelectCameras: function(){
         Instascan.Camera.getCameras().then(function (cameras) {
-            startPageLoad();
+            // startPageLoad();
             console.log(cameras);
             if (cameras.length > 0) {
-                endPageLoad();
-                scanner.start(cameras[0]);
+                oMessage = $("<div><p>Selecteer een camera</p><select class='form-control'></select></div>");
+
+                $.each(cameras, function (i, camera) {
+                    console.log(i,camera);
+                    oMessage.find("select").append("<option value='"+i+"'>"+camera.name+"</option>");
+                });
+                Modals.Custom({
+                    Title: "Camera",
+                    Message: oMessage,
+                    onConfirm: function (oModal) {
+                        Scanner.camera = cameras[parseInt(oModal.find("select").val())];
+                        Scanner.scanner.start(Scanner.camera);
+                    }
+                });
+
             } else {
                 endPageLoad();
                 addErrorMessage("Geen camera gevonden.");
-                console.error('No cameras found.');
             }
         }).catch(function (e) {
             console.error(e);
         });
     },
+    StartCamera : function () {
+        this.scanner = new Instascan.Scanner({ video: document.getElementById('preview') });
+        this.scanner.addListener('scan', function (content) {
+            Scanner.VerifyTicket(content);
+        });
+        this.SelectCameras();
+    },
     VerifyTicket: function (sHash) {
         startPageLoad();
         $.ajax({
-            url: ARURA_API_DIR + '/shop/event.php?type=verify-ticket',
+            url: ARURA_API_DIR + '/shop/event-validate.php?type=verify-ticket',
             type: 'post',
             dataType: 'json',
             data: {
@@ -31,20 +47,37 @@ var Scanner = {
             },
             statusCode: {
                 404: function() {
-                    Modals.Error({
+                    Modals.Warning({
                         Title : "Niet juist",
                         Message: "Ticket is niet legitiem"
+                    })
+                },
+                500: function () {
+                    Modals.Error({
+                        Title: "Mislukt",
+                        Message: "Er is een fout opgetreden"
+                    })
+                },
+                409: function () {
+                    Modals.Warning({
+                        Title: "Al gescand",
+                        Message: "Dit ticket is al eerder gescand in de afgelopen 24 uur. Echter dit ticket is wel legitiem"
                     })
                 }
             },
             success:function(response){
-                console.log(response);
+                addSuccessMessage("Ticket is juist");
+                Scanner.AddTicketToTable(response.data);
                 endPageLoad();
             },
             error: function () {
                 endPageLoad();
             }
         });
+    },
+    AddTicketToTable: function (aData) {
+        console.log(aData);
+        $(".ticket-table").find("tbody").append("<tr><td>"+aData.Ticket.OrderedTicket_Hash+"</td><td>"+aData.Ticket.Ticket_Description+"</td><td>"+aData.Event.Event_Name+"</td></tr>")
     }
 };
 
