@@ -197,6 +197,18 @@ class Event Extends Page{
         }
     }
 
+    public function delete(){
+        $this->db->query("DELETE FROM tblEvents WHERE Event_Id = ? ", [$this->getId()]);
+        if ($this->db->isQuerySuccessful()){
+            $this->db->query("DELETE FROM tblEventTickets WHERE Ticket_Event_Id = ?", [$this->getId()]);
+            if ($this->db->isQuerySuccessful()){
+                $this->db->query("DELETE tblEventOrderedTickets, tblEventRegistration FROM tblEventOrderedTickets JOIN tblEventRegistration ON OrderedTicket_Registration_Id = Registration_Id WHERE Registration_Event_Id = ?", [$this->getId()]);
+                return $this->db->isQuerySuccessful();
+            }
+        }
+        return false;
+    }
+
     public function __ToArray() : array
     {
         return [
