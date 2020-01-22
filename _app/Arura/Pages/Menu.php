@@ -1,9 +1,9 @@
 <?php
 
-namespace Arura\View;
+namespace Arura\Pages;
 
 
-class  Menu{
+class Menu{
 
     protected static $sFilePath = __WEB_TEMPLATES__ . 'menu.json';
 

@@ -1,17 +1,12 @@
 <?php
-namespace Arura\View\Addons;
-use Arura\View\Pages\Page;
+namespace Arura\Pages\CMS;
 
 class Handler{
 
-    protected $aPlgData;
-
     protected $Template = null;
 
-//    public static $PlgDir;
 
     public function __construct(){
-//        self::$PlgDir = "/_Plugins/" .$_GET['PluginData']['Addon']['Addon_Name'] . '/';
     }
 
     public function addCssFile($sFile){

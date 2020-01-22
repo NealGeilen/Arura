@@ -1,14 +1,14 @@
 <?php
 namespace Arura\Shop\Events;
 
+use Arura\Pages\Page;
 use Arura\Shop\Payment;
-use Arura\View\Pages\Page;
 use Arura\Database;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
 use Arura\User\User;
 
-class Event Extends Page{
+class Event Extends Page {
 
     //Properties
     private $id;
@@ -30,7 +30,9 @@ class Event Extends Page{
     {
         $this->setId($iId);
         parent::__construct($iId);
-
+        if (count($this->db->fetchAll("SELECT Event_Id FROM tblEvents WHERE Event_Id = ?", [$this->getId()])) < 0){
+            throw new \Exception("Event not found", 404);
+        }
     }
 
     public static function getAllEvents() : array

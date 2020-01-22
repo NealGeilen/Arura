@@ -1,9 +1,7 @@
 <?php
-namespace Arura\View\Pages;
+namespace Arura\Pages;
 
 use Arura\Modal;
-use Arura\View\Menu;
-use Arura\Database;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
 
@@ -55,7 +53,7 @@ class Page extends Modal implements PageEnum{
 
         $smarty->assign('content', $this->getPageContent());
         $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
-        $smarty->assign('aMainNav', Menu::getMenuStructure());
+        $smarty->assign('aMainNav', \Arura\Pages\Menu::getMenuStructure());
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', Application::getAll()['website']);

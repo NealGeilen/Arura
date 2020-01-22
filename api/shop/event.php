@@ -7,15 +7,19 @@ $request->TriggerEvent();
 $request->setRequestMethod('POST');
 $request->setRight(Rights::SHOP_EVENTS_MANAGEMENT);
 $response->isDebug(true);
-$request->sandbox(function ($aData) use ($response){
-    $db = new \Arura\Database();
-    switch ($_GET["type"]){
-        case "save-event":
-            $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
-            $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
-            $db->updateRecord("tblEvents", $aData, "Event_Id");
-            break;
-    }
+$request->sandbox(function ($aData) use ($response,$request){
+    $request->addType("save-event", function ($aData){
+        $db = new \Arura\Database();
+        $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
+        $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
+        $db->updateRecord("tblEvents", $aData, "Event_Id");
+    });
+    $request->addType("delete-event", function ($aData){
+        $oEvent = new Arura\Shop\Events\Event($aData["Event_Id"]);
+        if (!$oEvent->delete()){
+            throw new Error();
+        }
+    });
 });
 
 $response->exitScript();

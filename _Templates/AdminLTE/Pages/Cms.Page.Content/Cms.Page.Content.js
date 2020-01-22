@@ -256,6 +256,7 @@ var Builder = {
                 Builder.Xhr({
                     data: ({
                         type: 'Save-Page-Content',
+                        Page_Id: _Page_Id,
                         Data: aData
                     }),
                     success: function (data) {
@@ -288,11 +289,11 @@ var Builder = {
         Build : function(aGroup){
             oTemplate = $($('.template-page-group').html());
             oTemplate.attr('group-id', aGroup.Group_Id);
-            if ('Blocks' in aGroup){
-                $.each(aGroup.Blocks,function (ikey,aBlock) {
+            if ('Content_Blocks' in aGroup){
+                $.each(aGroup.Content_Blocks,function (ikey,aBlock) {
                    oTemplate.find(sSelectors.Group_Content).append(Builder.Block.Build(aBlock));
                 });
-                delete  aGroup.Blocks;
+                delete  aGroup.Content_Blocks;
             }
             this.setArray(oTemplate, aGroup);
             this.Events(oTemplate);

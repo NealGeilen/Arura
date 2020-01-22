@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Arura\View\Pages;
+namespace Arura\Pages;
 
 
 interface PageEnum
