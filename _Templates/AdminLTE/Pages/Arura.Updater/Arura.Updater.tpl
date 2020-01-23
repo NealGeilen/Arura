@@ -39,6 +39,7 @@
             <div class="card-body">
                 <form action="{$smarty.server.REQUEST_URI}" method="post">
                     <input class="btn btn-info" name="gitpull" value="Updaten" type="submit" onclick="startPageLoad()">
+                    <input class="btn btn-primary" name="reload" value="Reload Database Structure" type="submit" onclick="startPageLoad()">
                     <input class="btn btn-danger" name="gitreset" value="Reset Repo" type="submit" onclick="startPageLoad()">
                 </form>
             </div>

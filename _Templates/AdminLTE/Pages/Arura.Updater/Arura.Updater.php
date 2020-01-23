@@ -11,7 +11,10 @@ if (isset($_POST["gitpull"])){
     $Data->Reload();
     $repo = new \Arura\Git(__ARURA__ROOT__);
 }
-
+if (isset($_POST["reload"])){
+    $Data = new \Arura\DataBaseSync(__APP__ . "DataBaseFiles");
+    $Data->Reload();
+}
 if (isset($_POST["gitreset"])){
     $repo->Reset(true);
     $repo = new \Arura\Git(__ARURA__ROOT__);
