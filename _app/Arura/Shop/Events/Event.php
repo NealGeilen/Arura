@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Shop\Events;
 
+use Arura\Exceptions\Error;
 use Arura\Pages\Page;
 use Arura\Shop\Payment;
 use Arura\Database;
@@ -199,14 +200,22 @@ class Event Extends Page {
         }
     }
 
+    /**
+     * @return bool
+     * @throws Error
+     */
     public function delete(){
-        $this->db->query("DELETE FROM tblEvents WHERE Event_Id = ? ", [$this->getId()]);
-        if ($this->db->isQuerySuccessful()){
-            $this->db->query("DELETE FROM tblEventTickets WHERE Ticket_Event_Id = ?", [$this->getId()]);
+        if (!($this->hasEventRegistrations() && $this->getIsActive())){
+            $this->db->query("DELETE FROM tblEvents WHERE Event_Id = ? ", [$this->getId()]);
             if ($this->db->isQuerySuccessful()){
-                $this->db->query("DELETE tblEventOrderedTickets, tblEventRegistration FROM tblEventOrderedTickets JOIN tblEventRegistration ON OrderedTicket_Registration_Id = Registration_Id WHERE Registration_Event_Id = ?", [$this->getId()]);
-                return $this->db->isQuerySuccessful();
+                $this->db->query("DELETE FROM tblEventTickets WHERE Ticket_Event_Id = ?", [$this->getId()]);
+                if ($this->db->isQuerySuccessful()){
+                    $this->db->query("DELETE tblEventOrderedTickets, tblEventRegistration FROM tblEventOrderedTickets JOIN tblEventRegistration ON OrderedTicket_Registration_Id = Registration_Id WHERE Registration_Event_Id = ?", [$this->getId()]);
+                    return $this->db->isQuerySuccessful();
+                }
             }
+        } else {
+            throw new Error("Delete not possible. There are tickets sold and event is Active");
         }
         return false;
     }
