@@ -84,7 +84,7 @@ class Database{
         $stmt = self::$connection->prepare($statment);
         $this -> queryState = $stmt->execute($parameters);
         if (!$this ->queryState){
-            $sError = ((string)$stmt->errorInfo()) . " " . $statment;
+            $sError = (json_encode($stmt->errorInfo())) . " " . $statment;
             throw new Error($sError);
         }
         return $stmt;

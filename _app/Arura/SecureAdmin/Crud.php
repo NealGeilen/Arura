@@ -13,6 +13,9 @@ class Crud extends Database {
         $this->aDataFile = $aData;
         $this->oAdmin = $oAdmin;
         parent::__construct($sKey, $this->aDataFile["primarykey"]);
+        foreach ($this->fetchAll('SHOW columns FROM '. $oAdmin->getDbName()) as $column){
+            $this -> aColumnInfo[$column["Field"]] = $column;
+        }
     }
     private function isActionAllowed($iRight){
         return $this->oAdmin->hasUserRight(User::activeUser(), $iRight);
@@ -86,7 +89,7 @@ class Crud extends Database {
         }
         $this->sHtml .= "<th>";
         if ($this->isActionAllowed(SecureAdmin::CREATE)){
-            if ($_GET["action"] !== "create" && $_GET["action"] !== "edit"){
+            if (!isset($_GET["action"]) || ($_GET["action"] !== "create" && $_GET["action"] !== "edit")){
                 $this->sHtml .= "<a class='btn btn-primary btn-sm' href='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=create'><i class=\"fas fa-plus\"></i></a>";
             }
         }

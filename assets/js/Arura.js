@@ -22,7 +22,6 @@ function addErrorMessage(sMessage) {
     };
     $.notify({message:sMessage},oSettings);
 }
-$("select option[value="+$('select').attr('value')+"]").attr('selected', 'selected');
 Array.prototype.insert = function ( index, item ) {
     this.splice( index, 0, item );
 };
@@ -66,9 +65,11 @@ function serializeArray(oForm) {
     return aList;
 }
 $("select[value]").each(function() {
-    $(this).val(this.getAttribute("value"));
+    if ($(this).attr("value") !== ""){
+        $(this).val($(this).attr("value"));
+    }
 });
-
+$("select.form-control option:first").attr('selected','selected');
 $(".table.Arura-Table").DataTable({
     "language": {
         "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"

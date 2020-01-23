@@ -5,7 +5,7 @@ $request = new \Arura\Client\RequestHandler();
 $response->isDebug(true);
 $request->TriggerEvent();
 $request->setRequestMethod('POST');
-$request->setRight(Rights::SECURE_ADMINISTRATION_CREATE);
+$request->setRight(Rights::SECURE_ADMINISTRATION);
 $request->sandbox(function ($aData) use ($response, $request){
     $request->addType("add-user", function ($aData){
         $oTable = new Arura\SecureAdmin\SecureAdmin($aData["Table_Id"]);
@@ -32,11 +32,6 @@ $request->sandbox(function ($aData) use ($response, $request){
             $db -> updateRecord("tblSecureAdministration", $aData, "Table_Id");
         }
     });
-    foreach ($_FILES as $file){
-        if ($file["type"] === "application/json"){
-            $oSecure = \Arura\SecureAdmin\SecureAdmin::Create(json_array_decode(file_get_contents($file["tmp_name"])), \Arura\User\User::activeUser());
-        }
-    }
 });
 
 $response->exitScript();

@@ -11,6 +11,8 @@
     "/dashboard/assets/vendor/summernote/lang/summernote-nl-NL.js",
     "/dashboard/assets/vendor/datatables/jquery.dataTables.js",
     "/dashboard/assets/vendor/datatables-bs4/js/dataTables.bootstrap4.js",
+    "/dashboard/assets/vendor/datatables-fixedheader/js/fixedHeader.bootstrap4.js",
+    "/dashboard/assets/vendor/datatables-responsive/js/responsive.bootstrap4.min.js",
     "/dashboard/assets/vendor/dropzone/dropzone.js",
     "/dashboard/assets/vendor/Chart/Chart.bundle.js",
     "/dashboard/assets/vendor/Chart/driver.js",
@@ -31,6 +33,7 @@
     "/dashboard/assets/vendor/dropzone/css/basic.css",
     "/dashboard/assets/vendor/jstree/themes/default/style.css",
     "/dashboard/assets/vendor/datatables-bs4/css/dataTables.bootstrap4.css",
+    "/dashboard/assets/vendor/datatables-responsive/css/responsive.bootstrap4.css",
     "/dashboard/assets/css/Arura.css"
   ]
 }
