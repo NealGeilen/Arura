@@ -43,6 +43,11 @@ class Registration extends Modal {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
             throw new Error("Email not valid");
         }
+        if (!$oEvent->hasEventTickets()){
+            if ($oEvent->getCapacity() < $oEvent->getRegisteredAmount()){
+                throw new Error("Max of capacity is reached");
+            }
+        }
         $i = $db->createRecord("tblEventRegistration",[
             "Registration_Event_Id" => $oEvent->getId(),
             "Registration_Timestamp" => time(),

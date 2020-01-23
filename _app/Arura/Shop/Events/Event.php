@@ -250,7 +250,13 @@ class Event Extends Page {
         if ($this->hasEventTickets()){
             $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
             foreach ($aRegistrations as $i => $registration){
-                $aRegistrations[$i]["Tickets"] = $this->db->fetchAll("SELECT * FROM tblEventOrderedTickets JOIN tblEventTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $registration["Registration_Id"]]);
+                $aTickets = $this->db->fetchAll("SELECT * FROM tblEventOrderedTickets JOIN tblEventTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $registration["Registration_Id"]]);
+                if (!empty($aTickets)){
+                    $aRegistrations[$i]["Tickets"] = $aTickets;
+                } else {
+                    unset($aRegistrations[$i]);
+                }
+
             }
         } else {
             $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
@@ -264,8 +270,8 @@ class Event Extends Page {
         return new self($i);
     }
 
-    public function Remove(){
-        $this->db->query("DELETE FROM tblEvents WHERE Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
+    public function getRegisteredAmount(){
+        return $this->db->fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
     }
 
     /**
