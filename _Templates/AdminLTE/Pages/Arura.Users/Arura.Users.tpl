@@ -1,7 +1,9 @@
 <section class="card">
     <header class="card-header">
         <div class="card-tools">
-            <a href="javascript:Users.Users.Create()" class="far fa-plus-square btn btn-tool"></a>
+            <button class="btn btn-primary btn-sm" onclick="Users.Users.Create()">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
         <h2 class="card-title">Gebruikers</h2>
     </header>

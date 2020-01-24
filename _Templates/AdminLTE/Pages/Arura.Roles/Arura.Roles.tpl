@@ -1,7 +1,9 @@
 <section class="card">
     <header class="card-header">
         <div class="card-tools">
-            <a href="javascript:Roles.Roles.Create()" class="far fa-plus-square"></a>
+            <button class="btn btn-primary btn-sm" onclick="Roles.Roles.Create()">
+                <i class="fas fa-plus"></i>
+            </button>
         </div>
         <h2 class="card-title">Rollen</h2>
     </header>
@@ -29,9 +31,6 @@
 
 <section class="card">
     <header class="card-header">
-        <div class="card-tools">
-            <a href="#" class="fa fa-caret-down"></a>
-        </div>
         <h2 class="card-title">Rechten</h2>
     </header>
     <div class="card-body table-responsive" style="display: block;">
