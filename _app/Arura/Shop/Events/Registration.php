@@ -139,16 +139,16 @@ class Registration extends Modal {
         $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), \Mpdf\HTMLParserMode::HEADER_CSS);
         $oPDF->assign("aTickets", $this->getPayment()->getMetadata());
         $oPDF->assign("aPayment", $this->getPayment()->__ToArray());
-        $oPDF->SetHTMLFooter(self::TemplateDir. "footer.html");
-        $oPDF->setTemplate(self::TemplateDir . "factuur.html");
+        $oPDF->SetHTMLFooter(self::TemplateDir. "footer.tpl");
+        $oPDF->setTemplate(self::TemplateDir . "factuur.tpl");
 
         foreach ($aTickets as $sHash =>$aData){
             $oPDF->AddPage();
             $oPDF->assign("Qr", QR::Create($sHash));
             $oPDF->assign("sHash", $sHash);
             $oPDF->assign("aTicket", $aData);
-            $oPDF->SetHTMLFooter(self::TemplateDir. "footer.html");
-            $oPDF->setTemplate(self::TemplateDir. "main.html");
+            $oPDF->SetHTMLFooter(self::TemplateDir. "footer.tpl");
+            $oPDF->setTemplate(self::TemplateDir. "main.tpl");
         }
         $oPDF->Output(__APP_ROOT__ . "/Tickets/" . $sHash. ".pdf", "F");
         return  __APP_ROOT__ . "/Tickets/" . $sHash. ".pdf";
