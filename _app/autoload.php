@@ -18,7 +18,7 @@ define('__FILES__',             __WEB__ROOT__   . DIRECTORY_SEPARATOR. 'files'  
 define('__RESOURCES__',         __WEB__ROOT__   . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR     . 'Resources'  . DIRECTORY_SEPARATOR);
 define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/Resources/DataFiles'  . DIRECTORY_SEPARATOR);
 
-
+$GLOBALS["Querys"] = [];
 
 require_once __APP__    . "Rights.php";
 require_once __APP__ . "Functions.php";

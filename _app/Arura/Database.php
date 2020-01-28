@@ -57,6 +57,13 @@ class Database{
 
 
     }
+
+    /**
+     * @param $statment
+     * @param array $parameters
+     * @return mixed
+     * @throws Error
+     */
     public static function ExecQuery($statment, array $parameters = []){
         $db = new self();
         return $db -> query($statment, $parameters);
@@ -65,11 +72,13 @@ class Database{
     /**
      * Connect to database
      */
-    protected function connect(){
+    protected function connect() :\PDO
+    {
         if (!isset(self::$connection)){
             $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->database;
             self::$connection = new \PDO($dsn, $this->username,$this->password);
         }
+        return  self::$connection;
     }
 
     /**
@@ -80,9 +89,9 @@ class Database{
      */
     public function query($statment, array $parameters = []){
         $this->queryState = false;
-        $this->connect();
-        $stmt = self::$connection->prepare($statment);
+        $stmt = $this->connect()->prepare($statment);
         $this -> queryState = $stmt->execute($parameters);
+        $GLOBALS["Querys"][] = ["query"=>$statment,"source"=>debug_backtrace()];
         if (!$this ->queryState){
             $sError = (json_encode($stmt->errorInfo())) . " " . $statment;
             throw new Error($sError);
