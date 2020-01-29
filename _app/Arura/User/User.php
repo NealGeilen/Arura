@@ -97,7 +97,7 @@ class User
 
     /**
      * Return the active user with is currently logged in.
-     * @return User|null
+     * @return User
      */
     public static function activeUser(){
         if (is_null(self::$activeUser) && self::isLogged()){
@@ -107,18 +107,36 @@ class User
     }
 
 
+    /**
+     * @return bool
+     * @throws \Arura\Exceptions\Error
+     */
     public function removeUser(){
         $this -> db->query('DELETE FROM ' . self::$tblUser . ' WHERE User_Id = ?', [$this -> getId()]);
         return $this -> db -> isQuerySuccessful();
     }
 
-    public static function createUser($username,$firstname,$lastname,$email,$password){
+    /**
+     * @param $username
+     * @param $firstname
+     * @param $lastname
+     * @param $email
+     * @param $password
+     * @return User
+     * @throws \Arura\Exceptions\Error
+     */
+    public static function createUser($username, $firstname, $lastname, $email, $password){
         $db = new Database();
         $db -> query('INSERT INTO ' . self::$tblUser . ' SET User_Email = :User_Email, User_Username = :User_Username, User_Firstname = :User_Firstname, User_Lastname = :User_Lastname, User_Password = :User_Password',
             ["User_Email" => $email, "User_Username" => $username, "User_Firstname" => $firstname, "User_Lastname" => $lastname, "User_Password" => $password]);
         return new self($db->getLastInsertId());
 
     }
+
+    /**
+     * @param $sEmail
+     * @return User|bool
+     */
     public static function getUserOnEmail($sEmail){
         $db = new Database();
         $aUser = $db->fetchRow("SELECT User_Id FROM tblUsers WHERE User_Email = :Email", ["Email"=>$sEmail]);
@@ -128,6 +146,10 @@ class User
         return false;
     }
 
+    /**
+     * @return bool
+     * @throws \Arura\Exceptions\Error
+     */
     public function TriggerEvent(){
         $this->db->query('UPDATE tblSessions SET Session_Last_Active = ? WHERE Session_Id = ? ',
             [
@@ -137,6 +159,10 @@ class User
         return $this->db-> isQuerySuccessful();
     }
 
+    /**
+     * @param $sEmail
+     * @return bool
+     */
     public static function isEmailActive($sEmail){
         $db = new Database();
         $aUser = $db->fetchAll("SELECT User_Id FROM tblUsers WHERE User_Email = :Email", ["Email"=>$sEmail]);
@@ -290,6 +316,9 @@ class User
         return $a;
     }
 
+    /**
+     * @return int|mixed
+     */
     public static function addLoginAttempt(){
         Sessions::Start();
         if (!isset($_SESSION["LoginAttempts"])){
@@ -300,6 +329,9 @@ class User
         return $_SESSION["LoginAttempts"];
     }
 
+    /**
+     * @return bool
+     */
     public static function canUserLogin(){
         Sessions::Start();
         if (isset($_SESSION["LoginAttempts"])){
@@ -324,62 +356,95 @@ class User
         return $this->id;
     }
 
+    /**
+     * @param $Id
+     */
     protected function setId($Id)
     {
 
         $this->id = $Id;
     }
 
+    /**
+     * @return mixed
+     */
     public function getUsername()
     {
         $this ->load();
         return $this->username;
     }
 
+    /**
+     * @param $username
+     */
     public function setUsername($username)
     {
         $this->username = $username;
     }
 
+    /**
+     * @return mixed
+     */
     public function getFirstname()
     {
         $this ->load();
         return $this->firstname;
     }
 
+    /**
+     * @param $firstname
+     */
     public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
     }
 
+    /**
+     * @return mixed
+     */
     public function getLastname()
     {
         $this ->load();
         return $this->lastname;
     }
 
+    /**
+     * @param $lastname
+     */
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
     }
 
+    /**
+     * @return mixed
+     */
     public function getEmail()
     {
         $this ->load();
         return $this->email;
     }
 
+    /**
+     * @param $email
+     */
     public function setEmail($email)
     {
         $this->email = $email;
     }
 
+    /**
+     * @return mixed
+     */
     public function getPassword()
     {
         $this ->load();
         return $this->password;
     }
 
+    /**
+     * @param $password
+     */
     public function setPassword($password)
     {
         $this->password = $password;
