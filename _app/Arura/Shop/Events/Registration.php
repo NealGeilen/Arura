@@ -13,7 +13,7 @@ use Arura\Database;
 
 class Registration extends Modal {
 
-    protected $id;
+    protected $id = 0;
     protected $event;
     protected $signUpTime;
     protected $firstname;
@@ -23,21 +23,43 @@ class Registration extends Modal {
     protected $amount;
     protected $payment;
 
+    /**
+     *
+     */
     const TemplateDir = __RESOURCES__ . "Tickets/";
 
+    /**
+     * Registration constructor.
+     * @param $id
+     */
     public function __construct($id)
     {
         $this->id = $id;
         parent::__construct();
     }
 
+    /**
+     * @param Payment $oPayment
+     * @return Registration
+     */
     public static function getRegistrationFromPayment(Payment $oPayment){
         $db = new Database();
         $aRegi = $db->fetchRow("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Payment_Id = :Payment_Id", ["Payment_Id" => $oPayment->getId()]);
         return new self($aRegi["Registration_Id"]);
     }
 
-    public static function NewRegistration(Event $oEvent, $firstname,$lastname,$email,$tel, $Amount= null, $PaymentId = null){
+    /**
+     * @param Event $oEvent
+     * @param $firstname
+     * @param $lastname
+     * @param $email
+     * @param $tel
+     * @param null $Amount
+     * @param null $PaymentId
+     * @return Registration
+     * @throws Error
+     */
+    public static function NewRegistration(Event $oEvent, $firstname, $lastname, $email, $tel, $Amount= null, $PaymentId = null){
         $db = new Database();
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
             throw new Error("Email not valid");
@@ -63,6 +85,9 @@ class Registration extends Modal {
         return new self($i);
     }
 
+    /**
+     * @return array
+     */
     public function __ToArray() : array
     {
         return [
@@ -175,10 +200,16 @@ class Registration extends Modal {
         return  __APP_ROOT__ . "/Tickets/" . $sHash. ".pdf";
     }
 
+    /**
+     * @return bool
+     */
     public function needsRegistrationTickets(){
         return $this->getEvent()->hasEventTickets();
     }
 
+    /**
+     * @return array
+     */
     public function getTickets(){
         $aData = $this->db->fetchAll("SELECT OrderedTicket_Hash, Ticket_Id, Ticket_Name, Ticket_Price, Ticket_Capacity, Ticket_Description, Ticket_Event_Id FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $this->getId()]);
         $aList= [];

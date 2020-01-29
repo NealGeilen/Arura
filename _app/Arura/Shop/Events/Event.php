@@ -27,6 +27,11 @@ class Event Extends Page {
 
     public static $MasterPage = "Events/event.tpl";
 
+    /**
+     * Event constructor.
+     * @param $iId
+     * @throws \Exception
+     */
     public function __construct($iId)
     {
         $this->setId($iId);
@@ -36,6 +41,9 @@ class Event Extends Page {
         }
     }
 
+    /**
+     * @return array
+     */
     public static function getAllEvents() : array
     {
         $db = new Database();
@@ -68,9 +76,12 @@ class Event Extends Page {
         }
     }
 
+    /**
+     * @throws \SmartyException
+     */
     public function showPage()
     {
-        $smarty = self::$smarty;
+        $smarty = self::getSmarty();
         $smarty->assign("aEvent", $this->__ToArray());
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . self::$MasterPage));
@@ -78,6 +89,11 @@ class Event Extends Page {
     }
 
 
+    /**
+     * @param $sUrl
+     * @return Event|bool
+     * @throws \Exception
+     */
     public static function fromUrl($sUrl){
         $db = new Database();
         $i = $db ->fetchRow('SELECT Event_Id FROM tblEvents WHERE Event_Slug = ?',
@@ -87,12 +103,20 @@ class Event Extends Page {
         return (empty($i)) ? false : new self((int)$i['Event_Id']);
     }
 
+    /**
+     * @param $url
+     * @return bool
+     * @throws \Exception
+     */
     public static function urlExists($url)
     {
         $instance = self::fromUrl($url);
         return $instance !== false;
     }
 
+    /**
+     * @return array
+     */
     private function collectTicketsPOST(){
         $aTickets = [];
         $iTotalAmount = 0;
@@ -115,20 +139,26 @@ class Event Extends Page {
         ];
     }
 
+    /**
+     * @throws \SmartyException
+     */
     public function checkout(){
         if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"])){
             $aCollection = $this->collectTicketsPOST();
             if (!empty($aCollection["Tickets"])){
                 $this->setTitle("Checkout | ". $this->getName());
-                self::$smarty->assign("iTotalAmount", $aCollection["Amount"]);
-                self::$smarty->assign("aTickets", $aCollection["Tickets"]);
-                self::$smarty->assign("aIssuers", Payment::getIdealIssuers());
+                self::getSmarty()->assign("iTotalAmount", $aCollection["Amount"]);
+                self::getSmarty()->assign("aTickets", $aCollection["Tickets"]);
+                self::getSmarty()->assign("aIssuers", Payment::getIdealIssuers());
                 self::$MasterPage = "Events/checkout.tpl";
                 $this->showPage();
             }
         }
     }
 
+    /**
+     * @throws Error
+     */
     public function payment(){
         if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"]) && isset($_POST["firstname"])){
             $aCollection = $this->collectTicketsPOST();
@@ -148,6 +178,11 @@ class Event Extends Page {
         }
     }
 
+    /**
+     * @param $sSlug
+     * @param null $iRight
+     * @param callable|null $function
+     */
     public static function displayView($sSlug, $iRight = null,callable $function = null){
         parent::displayView($sSlug, \Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
             if (self::urlExists($sUrl)){
@@ -167,7 +202,7 @@ class Event Extends Page {
                         case "done":
                             if ($oPage->getIsActive() && isset($_GET["i"])){
                                 $P = new Payment($_GET["i"]);
-                                self::$smarty->assign("sStatus", $P->getStatus());
+                                self::getSmarty()->assign("sStatus", $P->getStatus());
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
                                 self::$MasterPage = "Events/done.tpl";
                                 if ($P->getStatus() === "paid"){
@@ -179,14 +214,13 @@ class Event Extends Page {
                             break;
                         default:
                             $db = new Database();
-                            $smarty = self::$smarty;
                             $aTickets = $db->fetchAll("SELECT Ticket_Id,Ticket_Capacity,Ticket_Description, Ticket_Name,Ticket_Price FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]);
                             $aList = [];
                             foreach ($aTickets as $aTicket){
                                 $aTicket["Count"] = $db->fetchRow("SELECT COUNT(OrderedTicket_Ticket_Id) AS Count FROM tblEventTickets JOIN tblEventOrderedTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE Ticket_Id = :Id", ["Id"=>$aTicket["Ticket_Id"]])["Count"];
                                 $aList[] = $aTicket;
                             }
-                            $smarty->assign("aTickets", $aList);
+                            self::getSmarty()->assign("aTickets", $aList);
                             $oPage->setTitle($oPage->getName());
                             $oPage->showPage();
                             break;
@@ -196,6 +230,9 @@ class Event Extends Page {
         });
     }
 
+    /**
+     * @return bool
+     */
     public function save() : bool
     {
         if ($this->isLoaded){
@@ -226,6 +263,9 @@ class Event Extends Page {
         return false;
     }
 
+    /**
+     * @return array
+     */
     public function __ToArray() : array
     {
         return [
@@ -244,14 +284,23 @@ class Event Extends Page {
         ];
     }
 
+    /**
+     * @return bool
+     */
     public function hasEventTickets(){
         return (count($this->db->fetchAll("SELECT Ticket_Id FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
     }
 
+    /**
+     * @return bool
+     */
     public function hasEventRegistrations(){
         return (count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
     }
 
+    /**
+     * @return mixed
+     */
     public function getRegistration(){
         if ($this->hasEventTickets()){
             $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
@@ -270,12 +319,20 @@ class Event Extends Page {
         return $aRegistrations;
     }
 
-    public static function Create($aData){
+    /**
+     * @param $aData
+     * @return Event
+     * @throws \Exception
+     */
+    public static function Create($aData = []){
         $db = new Database();
         $i = $db -> createRecord("tblEvents",$aData);
         return new self($i);
     }
 
+    /**
+     * @return array
+     */
     public function getRegisteredAmount(){
         return $this->db->fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
     }

@@ -20,8 +20,16 @@ class Ticket extends Modal {
 
     protected static $smarty;
 
+    /**
+     *
+     */
     const TemplateDir = __RESOURCES__ . "Tickets/";
 
+    /**
+     * Ticket constructor.
+     * @param $hash
+     * @throws Error
+     */
     public function __construct($hash)
     {
         if (!self::isTicketValid($hash)){
@@ -31,11 +39,19 @@ class Ticket extends Modal {
         $this->hash = $hash;
     }
 
+    /**
+     * @param $sHash
+     * @return bool
+     */
     public static function isTicketValid($sHash){
         $db = new Database();
         return count($db->fetchAll("SELECT OrderedTicket_Hash FROM tblEventOrderedTickets WHERE OrderedTicket_Hash = ?", [$sHash])) > 0;
     }
 
+    /**
+     * @param bool $force
+     * @throws \Exception
+     */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             //load user properties from database
@@ -50,6 +66,10 @@ class Ticket extends Modal {
         }
     }
 
+    /**
+     * @return array
+     * @throws \Exception
+     */
     public function Validate(){
         if ($this->getLastValidedTimestamp()->getTimestamp() >= strtotime('-1 day')){
             throw new \Exception("Ticket has already been validate", 409);
@@ -67,6 +87,9 @@ class Ticket extends Modal {
 
     }
 
+    /**
+     * @return mixed
+     */
     public function getTicketData(){
         return $this->db->fetchRow("SELECT * FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Hash = :Hash",
             [
@@ -74,6 +97,9 @@ class Ticket extends Modal {
             ]);
     }
 
+    /**
+     * @return array
+     */
     public function __ToArray(){
         return [
             "OrderedTicket_Hash" => $this->getHash(),
@@ -84,7 +110,14 @@ class Ticket extends Modal {
         ];
     }
 
-    public static function Create(Registration $oRegistration,$iTicketId = 0, $fPrice = 0.0){
+    /**
+     * @param Registration $oRegistration
+     * @param int $iTicketId
+     * @param float $fPrice
+     * @return Ticket|bool
+     * @throws Error
+     */
+    public static function Create(Registration $oRegistration, $iTicketId = 0, $fPrice = 0.0){
         $db = new Database();
         $sHash = getHash("tblEventOrderedTickets", "OrderedTicket_Hash");
         $db->createRecord("tblEventOrderedTickets", [
@@ -99,6 +132,10 @@ class Ticket extends Modal {
         return $db->isQuerySuccessful();
     }
 
+    /**
+     * @return Event
+     * @throws \Exception
+     */
     public function getEvent() : Event{
         $aEvent = $this->db->fetchRow("SELECT Registration_Event_Id FROM tblEventOrderedTickets JOIN tblEventRegistration ON Registration_Id = OrderedTicket_Registration_Id");
         return new Event($aEvent["Registration_Event_Id"]);

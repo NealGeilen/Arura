@@ -201,6 +201,9 @@ class Payment extends Modal {
     protected $card;
     protected $status;
 
+    /**
+     * @return string
+     */
     public static function getLineChart(){
         function getData($sStatus = "paid"){
             $db = new Database();
@@ -257,6 +260,10 @@ class Payment extends Modal {
         $attributes = ['width' => "100%", 'height' => "300px"];
         return Chart::Build("line",$data,$options,$attributes);
     }
+
+    /**
+     * @return string
+     */
     public static function getDonutBanksChart(){
         $aIssuers = self::ISSUERS;
         $db = new Database();
@@ -292,6 +299,10 @@ class Payment extends Modal {
         $attributes = ['width' => "100%", 'height' => "300"];
         return Chart::Build("pie",$data,$options,$attributes);
     }
+
+    /**
+     * @return string
+     */
     public static function getAveragePaymentTimeChart(){
         $db = new Database();
         $aTimes = ["00:00", "01:00", "02:00", "03:00","04:00", "05:00", "06:00", "07:00", "08:00", "09:00","10:00", "11:00", "12:00", "13:00","14:00", "15:00", "16:00", "17:00", "18:00", "19:00","20:00", "21:00", "22:00", "23:00"];
@@ -325,6 +336,12 @@ class Payment extends Modal {
         return Chart::Build("line",$data,$options,$attributes);
     }
 
+    /**
+     * @param bool $setAccessToken
+     * @return MollieApiClient
+     * @throws \Mollie\Api\Exceptions\ApiException
+     * @throws \Mollie\Api\Exceptions\IncompatiblePlatform
+     */
     public static function getMollie($setAccessToken = false): MollieApiClient{
         if(!empty(Application::get("plg.shop", "Mollie_Api"))){
             if (is_null(self::$Mollie)){
@@ -339,6 +356,11 @@ class Payment extends Modal {
         }
     }
 
+    /**
+     * Payment constructor.
+     * @param $sId
+     * @throws \Exception
+     */
     public function __construct($sId)
     {
         parent::__construct();
@@ -370,6 +392,9 @@ class Payment extends Modal {
         }
     }
 
+    /**
+     * @return array
+     */
     public function __ToArray(){
         return [
             "Payment_Id" => $this->getId(),
@@ -383,15 +408,32 @@ class Payment extends Modal {
         ];
     }
 
+    /**
+     * @return array
+     */
     public static function getIdealIssuers(){
         return self::ISSUERS;
     }
 
+    /**
+     * @return string
+     */
     public static function CreatPaymentId(){
         return getHash("tblPayments", "Payment_Id", 20);
     }
 
-    public static function CreatePayment($Payment_Id, $fAmount, $PaymentType, $description ,$sIssuer = null, $metadata = []) : self{
+    /**
+     * @param $Payment_Id
+     * @param $fAmount
+     * @param $PaymentType
+     * @param $description
+     * @param null $sIssuer
+     * @param array $metadata
+     * @return static
+     * @throws \Mollie\Api\Exceptions\ApiException
+     * @throws \Mollie\Api\Exceptions\IncompatiblePlatform
+     */
+    public static function CreatePayment($Payment_Id, $fAmount, $PaymentType, $description , $sIssuer = null, $metadata = []) : self{
         $oMollie = self::getMollie();
         $db = new \Arura\Database();
         self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php?id=" . $Payment_Id ;
@@ -424,6 +466,9 @@ class Payment extends Modal {
         return $self;
     }
 
+    /**
+     * @return bool
+     */
     public function redirectToMollie(){
         if ($this->getPayment()){
             header("Location: " . $this->getPayment()->getCheckoutUrl(), true, 303);
@@ -432,13 +477,24 @@ class Payment extends Modal {
         return false;
     }
 
+    /**
+     * @return bool
+     */
     public function isPaymentFromProducts(){
         return false;
     }
+
+    /**
+     * @return bool
+     */
     public function isPaymentFromEvents(){
         return count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Payment_Id = :Payment_Id", ["Payment_Id" => $this->getId()])) > 0;
     }
 
+    /**
+     * @param int $iHours
+     * @return mixed
+     */
     public static function getPaymentsFromLast($iHours = 0){
         $db = new Database();
         return $db->fetchAll("SELECT * FROM tblPayments WHERE Payment_Timestamp > UNIX_TIMESTAMP(NOW() - INTERVAL ".$iHours." HOUR)");
@@ -446,6 +502,7 @@ class Payment extends Modal {
 
     /**
      * @return null
+     * @throws \Mollie\Api\Exceptions\ApiException
      */
     public function getPayment() : \Mollie\Api\Resources\Payment
     {
@@ -461,6 +518,10 @@ class Payment extends Modal {
         $this->payment = $payment;
     }
 
+    /**
+     *
+     * @throws \Mollie\Api\Exceptions\ApiException
+     */
     public function updatePayment(){
         $this->db->updateRecord("tblPayments",[
             "Payment_Id" => $this->getId(),
