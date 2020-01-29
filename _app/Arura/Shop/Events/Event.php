@@ -167,7 +167,7 @@ class Event Extends Page {
                         case "done":
                             if ($oPage->getIsActive() && isset($_GET["i"])){
                                 $P = new Payment($_GET["i"]);
-                                self::$smarty->assign("sStatus", $P->getPayment()->status);
+                                self::$smarty->assign("sStatus", $P->getStatus());
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
                                 self::$MasterPage = "Events/done.tpl";
                                 if ($P->getStatus() === "paid"){

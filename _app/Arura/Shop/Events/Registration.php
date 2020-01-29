@@ -10,7 +10,6 @@ use Arura\QR;
 use Arura\Settings\Application;
 use Arura\Shop\Payment;
 use Arura\Database;
-use Mpdf\Output\Destination;
 
 class Registration extends Modal {
 
@@ -79,6 +78,10 @@ class Registration extends Modal {
         ];
     }
 
+    /**
+     * @param bool $force
+     * @throws \Exception
+     */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             $aRegistration = $this -> db -> fetchRow("SELECT * FROM tblEventRegistration WHERE Registration_Id = ? ", [$this -> getId()]);
@@ -95,13 +98,19 @@ class Registration extends Modal {
         }
     }
 
+    /**
+     * @param int $iTicketId
+     * @param float $fPrice
+     * @return bool|string
+     */
     protected function addTicket($iTicketId = 0, $fPrice = 0.0){
         $sHash = getHash("tblEventOrderedTickets", "OrderedTicket_Hash");
         $this->db->createRecord("tblEventOrderedTickets", [
             "OrderedTicket_Hash" => $sHash,
             "OrderedTicket_Ticket_Id" => $iTicketId,
             "OrderedTicket_Registration_Id" => $this->getId(),
-            "OrderedTicket_Price" => $fPrice
+            "OrderedTicket_Price" => $fPrice,
+            "OrderedTicket_LastValided_Timestamp" => 0
         ]);
         if ($this->db->isQuerySuccessful()){
             return $sHash;
@@ -109,10 +118,16 @@ class Registration extends Modal {
         return $this->db->isQuerySuccessful();
     }
 
+    /**
+     * @return bool
+     */
     protected function areTicketsMade(){
         return (count($this->db->fetchAll("SELECT OrderedTicket_Hash FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id"=> $this->getId()])) > 0);
     }
 
+    /**
+     * @return array|bool
+     */
     protected function createTickets(){
         $aTickets = [];
         if (!empty($this->getPayment()->getId())){
@@ -131,6 +146,12 @@ class Registration extends Modal {
         return false;
     }
 
+    /**
+     * @param $aTickets
+     * @return string
+     * @throws Error
+     * @throws \Mpdf\MpdfException
+     */
     protected function GeneratePDFs($aTickets){
         $oPDF = new PDF();
         $oPDF->assign("aWebsite", Application::getAll()["website"]);
@@ -169,6 +190,11 @@ class Registration extends Modal {
         return $aList;
     }
 
+    /**
+     * @throws Error
+     * @throws \Mpdf\MpdfException
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public function sendEventDetails(){
         $oMailer = new Mailer();
         Mailer::getSmarty()->assign("aRegistration", $this->__ToArray());
