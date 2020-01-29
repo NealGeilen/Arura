@@ -5,14 +5,29 @@ class Database extends \Arura\Database {
     protected $sKey;
     protected $sPrimaryKey;
 
-    public function __construct($sKey, $sPrimaryKey,$host = null, $username = null, $password = null, $database = null)
+    /**
+     * Database constructor.
+     * @param string $sKey
+     * @param string $sPrimaryKey
+     * @param null $host
+     * @param null $username
+     * @param null $password
+     * @param null $database
+     */
+    public function __construct($sKey = "", $sPrimaryKey = "", $host = null, $username = null, $password = null, $database = null)
     {
         $this->sKey = $sKey;
         $this->sPrimaryKey = $sPrimaryKey;
         parent::__construct($host, $username, $password, $database);
     }
 
-    public function createRecord($sTable, $aData)
+    /**
+     * @param string $sTable
+     * @param array $aData
+     * @return int
+     * @throws \Arura\Exceptions\Error
+     */
+    public function createRecord($sTable = "", $aData = [])
     {
         $record = [];
         foreach ($aData as $sField => $sValue){
@@ -25,7 +40,14 @@ class Database extends \Arura\Database {
         return parent::createRecord($sTable, $record);
     }
 
-    public function updateRecord($sTable, $aData, $sPrimaryKey)
+    /**
+     * @param string $sTable
+     * @param array $aData
+     * @param string $sPrimaryKey
+     * @return \PDOStatement
+     * @throws \Arura\Exceptions\Error
+     */
+    public function updateRecord($sTable = "", $aData = [], $sPrimaryKey = "")
     {
         $record = [];
         foreach ($aData as $sField => $sValue){
@@ -38,6 +60,12 @@ class Database extends \Arura\Database {
         return parent::updateRecord($sTable, $record, $sPrimaryKey);
     }
 
+    /**
+     * @param $sTable
+     * @param $sPrimaryId
+     * @return array
+     * @throws \Arura\Exceptions\Error
+     */
     public function SelectAll($sTable, $sPrimaryId) : array
     {
         $aData = parent::fetchAll("SELECT * FROM " . $sTable);
@@ -56,6 +84,13 @@ class Database extends \Arura\Database {
         return $aList;
     }
 
+    /**
+     * @param $sTable
+     * @param $sValue
+     * @param $sPrimaryKey
+     * @return array
+     * @throws \Arura\Exceptions\Error
+     */
     public function SelectRow($sTable, $sValue, $sPrimaryKey)
     {
         $aRecord = parent::fetchRow("SELECT * FROM " . $sTable. " WHERE " . $sPrimaryKey . " = :" . $sPrimaryKey, [$sPrimaryKey => $sValue]);
@@ -71,7 +106,11 @@ class Database extends \Arura\Database {
         return $aList;
     }
 
-    protected function decrypt($sData){
+    /**
+     * @param string $sData
+     * @return false|string
+     */
+    protected function decrypt($sData = ""){
         $c = base64_decode($sData);
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = substr($c, 0, $ivlen);
@@ -87,7 +126,11 @@ class Database extends \Arura\Database {
         }
     }
 
-    protected function encrypt($sData){
+    /**
+     * @param string $sData
+     * @return string
+     */
+    protected function encrypt($sData = ""){
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = openssl_random_pseudo_bytes($ivlen);
         $ciphertext_raw = openssl_encrypt($sData, $cipher, $this->sKey, $options=OPENSSL_RAW_DATA, $iv);
