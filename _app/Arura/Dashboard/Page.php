@@ -21,6 +21,11 @@ class Page{
 
     protected static $sSideBar = null;
 
+    /**
+     * @return mixed
+     * @throws \Arura\Exceptions\Error
+     * @throws \Exception
+     */
     public function showPage(){
         if (!is_null($this->getRight())){
             if (!$this->getRight()){
@@ -92,7 +97,11 @@ class Page{
         self::$oSmarty = $oSmarty;
     }
 
-    public static function getHtml($sLocation){
+    /**
+     * @param string $sLocation
+     * @return mixed
+     */
+    public static function getHtml($sLocation = ""){
         if (is_file($sLocation)){
             return self::getSmarty()->fetch($sLocation);
         } else {
@@ -202,13 +211,24 @@ class Page{
         self::$aResourceFiles = array_merge(self::$aResourceFiles,$aResourceFiles);
     }
 
+    /**
+     * @param $sCategory
+     * @param $sFileLocation
+     */
     public static function addResourceFile($sCategory, $sFileLocation){
         self::$aResourceFiles[$sCategory][] = $sFileLocation;
     }
 
+    /**
+     * @param $sScript
+     */
     public static function addSourceScriptCss($sScript){
         self::$aResourceFiles["CssPage"] .= $sScript;
     }
+
+    /**
+     * @param $sScript
+     */
     public static function addSourceScriptJs($sScript){
         self::$aResourceFiles["JsPage"] .= $sScript;
     }

@@ -9,6 +9,9 @@ class Application{
     protected static $aSettingData = [];
 
 
+    /**
+     * @throws \Arura\Exceptions\Error
+     */
     protected static function load(){
         if (empty(self::$aSettingData)){
             $db = new Database();
@@ -20,11 +23,21 @@ class Application{
         }
     }
 
-    public static function get($sPlg, $sName){
+    /**
+     * @param string $sPlg
+     * @param string $sName
+     * @return mixed
+     * @throws \Arura\Exceptions\Error
+     */
+    public static function get($sPlg = "", $sName = ""){
         self::load();
         return self::$aSettingData[$sPlg][$sName];
     }
 
+    /**
+     * @return array
+     * @throws \Arura\Exceptions\Error
+     */
     public static function getAll(){
         self::load();
         return self::$aSettingData;

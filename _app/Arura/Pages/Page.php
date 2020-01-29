@@ -7,32 +7,69 @@ use Arura\Settings\Application;
 
 class Page extends Modal implements PageEnum{
 
+    /**
+     * @var
+     */
     Public static $smarty;
+    /**
+     * @var
+     */
     public static $pageJsCssFiles;
 
+    /**
+     *
+     */
     const TemplatePath =            __ROOT__ . '/Templates/';
+    /**
+     * @var string
+     */
     public static $MasterPage = "index.html";
 
 
     //Page variables
+    /**
+     * @var
+     */
     protected $Url;
+    /**
+     * @var
+     */
     protected $Title;
+    /**
+     * @var
+     */
     protected $Description;
 
+    /**
+     * @var null
+     */
     protected $PageContend = null;
 
+    /**
+     * Page constructor.
+     * @param int $id
+     */
     public function __construct($id = 0){
         parent::__construct();
     }
 
+    /**
+     * @return |null
+     */
     public function getPageContent(){
         return $this->PageContend;
     }
 
+    /**
+     * @return \Smarty
+     */
     public static function getSmarty() : \Smarty{
         return self::$smarty;
     }
 
+    /**
+     * @throws \Arura\Exceptions\Error
+     */
     public function forceHTTPS(){
         if (Application::get("website", "HTTPS")){
             if(!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] != "on")
@@ -46,9 +83,13 @@ class Page extends Modal implements PageEnum{
 
     }
 
+    /**
+     * @throws \Arura\Exceptions\Error
+     * @throws \SmartyException
+     */
     public function showPage(){
         $this->forceHTTPS();
-        $smarty = self::$smarty;
+        $smarty = self::getSmarty();
         self::$pageJsCssFiles = json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
 
         $smarty->assign('content', $this->getPageContent());
@@ -70,7 +111,14 @@ class Page extends Modal implements PageEnum{
         exit;
     }
 
-    public static function displayView($sSlug, $iRight = \Rights::CMS_PAGES ,callable $function = null){
+    /**
+     * @param string $sSlug
+     * @param int $iRight
+     * @param callable|null $function
+     * @throws \Arura\Exceptions\Error
+     * @throws \SmartyException
+     */
+    public static function displayView($sSlug = "", $iRight = \Rights::CMS_PAGES , callable $function = null){
         $_SERVER["REDIRECT_URL"] = $sSlug;
         if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation($iRight)){
             if (!Application::get("website", "maintenance") || Restrict::Validation($iRight)){
@@ -94,7 +142,7 @@ class Page extends Modal implements PageEnum{
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");
-        $oPage->setPageContend(self::$smarty->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
+        $oPage->setPageContend(self::getSmarty()->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
         $oPage->showPage();
     }
 

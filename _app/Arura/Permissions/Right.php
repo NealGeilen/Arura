@@ -26,12 +26,20 @@ class Right
 
     protected static $tblRights = "tblRights";
 
-    public function __construct($iRightId)
+    /**
+     * Right constructor.
+     * @param int $iRightId
+     */
+    public function __construct($iRightId = 0)
     {
         $this->setId($iRightId);
         $this->db = new Database();
     }
 
+    /**
+     * @param bool $force
+     * @throws \Arura\Exceptions\Error
+     */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             $aRight = $this -> db -> fetchRow("SELECT * FROM ".self::$tblRights." WHERE Right_Id = ? ", [$this -> getId()]);
@@ -40,6 +48,10 @@ class Right
         }
     }
 
+    /**
+     * @return array
+     * @throws \Arura\Exceptions\Error
+     */
     public static function getAllRights(){
         $db = new Database();
         $aRightIds = $db -> fetchAllColumn('SELECT Right_Id FROM ' . self::$tblRights);
@@ -51,22 +63,35 @@ class Right
     }
 
 
+    /**
+     * @return mixed
+     */
     public function getId()
     {
         return $this->id;
     }
 
+    /**
+     * @param $id
+     */
     public function setId($id)
     {
         $this->id = (int)$id;
     }
 
+    /**
+     * @return mixed
+     * @throws \Arura\Exceptions\Error
+     */
     public function getName()
     {
         $this->load();
         return $this->name;
     }
 
+    /**
+     * @param $name
+     */
     public function setName($name)
     {
         $this->name = (string)$name;

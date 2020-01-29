@@ -9,6 +9,13 @@ class Crud extends Database {
     protected $aColumnInfo;
     protected $oAdmin;
 
+    /**
+     * Crud constructor.
+     * @param $aData
+     * @param $sKey
+     * @param SecureAdmin $oAdmin
+     * @throws \Arura\Exceptions\Error
+     */
     public function __construct($aData, $sKey, SecureAdmin $oAdmin){
         $this->aDataFile = $aData;
         $this->oAdmin = $oAdmin;
@@ -17,9 +24,18 @@ class Crud extends Database {
             $this -> aColumnInfo[$column["Field"]] = $column;
         }
     }
+
+    /**
+     * @param $iRight
+     * @return bool
+     */
     private function isActionAllowed($iRight){
         return $this->oAdmin->hasUserRight(User::activeUser(), $iRight);
     }
+
+    /**
+     *
+     */
     private function Actions(){
         try{
             switch ($_GET['action']){
@@ -70,6 +86,7 @@ class Crud extends Database {
 
     /**
      * @return string
+     * @throws \Arura\Exceptions\Error
      */
     public function getHTMLTable()
     {
@@ -80,6 +97,9 @@ class Crud extends Database {
         return $this->sHtml;
     }
 
+    /**
+     * @throws \Arura\Exceptions\Error
+     */
     private function buildTable(){
         $aData = $this->SelectAll($this->oAdmin->getDbName(), $this->aDataFile["primarykey"]);
         $this->sHtml .= "<table class='table Arura-Table'>";
@@ -114,6 +134,10 @@ class Crud extends Database {
         $this->sHtml  .= "</tbody></table>";
     }
 
+    /**
+     * @param null $iRowId
+     * @return string
+     */
     protected function getActionButtons($iRowId = null){
         $s = "<div class='btn-group btn-group-sm'>";
         if ($this->isActionAllowed(SecureAdmin::DELETE)){
@@ -126,7 +150,12 @@ class Crud extends Database {
         return $s;
     }
 
-    protected  function buildInputField($aData = [],$sAction = null){
+    /**
+     * @param array $aData
+     * @param null $sAction
+     * @return string
+     */
+    protected  function buildInputField($aData = [], $sAction = null){
         $sHtml = "<h2>".(($sAction==="save") ? "Toevoegen" : "Bewerken")."</h2>";
         $sHtml .= "<form method='post' action='".$_SERVER["REDIRECT_URL"]."?t=".$this->oAdmin->getId()."&action=".$sAction."' class='form-row bg-secondary p-1 border-4 border-dark rounded'>";
         foreach ($this->aDataFile["columns"] as $tag => $column){
@@ -166,6 +195,9 @@ class Crud extends Database {
         return $sHtml;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->getHTMLTable();

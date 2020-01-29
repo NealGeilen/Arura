@@ -26,7 +26,15 @@ class Chart extends ChartJS {
                     10=>"November",
                     11=>"December"]
             ];
-    public static function Build($sType, $data = [], $options = [], $attributes = []){
+
+    /**
+     * @param string $sType
+     * @param array $data
+     * @param array $options
+     * @param array $attributes
+     * @return string
+     */
+    public static function Build($sType = "", $data = [], $options = [], $attributes = []){
         return (string)new self($sType,$data,$options,$attributes);
     }
 }

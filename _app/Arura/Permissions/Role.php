@@ -19,8 +19,17 @@ class Role
      * Database tables
      */
     protected static $tblUserRoles = "tblUserRoles";
+    /**
+     * @var string
+     */
     protected static $tblRoles = "tblRoles";
+    /**
+     * @var string
+     */
     protected static $tblRoleRights = "tblRoleRights";
+    /**
+     * @var string
+     */
     protected static $tblRights = "tblRights";
 
 
@@ -28,10 +37,20 @@ class Role
      * Parameters
      */
     protected $id;
+    /**
+     * @var
+     */
     protected $name;
+    /**
+     * @var array
+     */
     protected $rights = [];
 
-    public function __construct($iRoleId)
+    /**
+     * Role constructor.
+     * @param int $iRoleId
+     */
+    public function __construct($iRoleId = 0)
     {
         $this->setId((int)$iRoleId);
         $this->db = new Database();
@@ -62,7 +81,7 @@ class Role
      * @return bool
      */
 
-    public function assignToRight($iRightId){
+    public function assignToRight($iRightId = 0){
         $aData =  $this->db->fetchRow('SELECT * FROM '.self::$tblRoleRights.' WHERE RoleRight_Right_Id = :Right_Id AND RoleRight_Role_Id = :Role_Id ',['Right_Id' => $iRightId, 'Role_Id' => (int)$this -> getId()]);
         if (empty($aData)){
 
@@ -79,7 +98,7 @@ class Role
      * @param $iRightId
      * @return bool
      */
-    public function removeFromRight($iRightId){
+    public function removeFromRight($iRightId = 0){
         $this->db->query('DELETE FROM '.self::$tblRoleRights.' WHERE RoleRight_Role_Id = :Role_Id AND RoleRight_Right_Id = :Right_Id ',['Role_Id' => $this ->getId(), 'Right_Id' => (int)$iRightId]);
         return $this->db ->isQuerySuccessful();
     }
@@ -147,7 +166,12 @@ class Role
 
     }
 
-    public static function createRole($sRoleName){
+    /**
+     * @param string $sRoleName
+     * @return Role
+     * @throws \Arura\Exceptions\Error
+     */
+    public static function createRole($sRoleName = ""){
         $db = new Database();
         $db -> query('INSERT INTO ' . self::$tblRoles . ' SET Role_Name = :Role_Name',
             ["Role_Name" => $sRoleName]);
@@ -155,6 +179,9 @@ class Role
 
     }
 
+    /**
+     * @return array
+     */
     public function __toArray(){
         $this->load(true);
         $a = [
@@ -177,27 +204,43 @@ class Role
         return $this->id;
     }
 
+    /**
+     * @param $id
+     */
     public function setId($id)
     {
         $this->id = (int)$id;
     }
 
+    /**
+     * @return mixed
+     */
     public function getName()
     {
         $this->load();
         return $this->name;
     }
 
+    /**
+     * @param $name
+     */
     public function setName($name)
     {
         $this->name = (string)$name;
     }
 
+    /**
+     * @return array
+     */
     public function getRights()
     {
         return $this->rights;
     }
 
+    /**
+     * @param Right $oRight
+     * @return bool
+     */
     public function hasRight(Right $oRight){
         $this->load();
         return isset($this -> rights[$oRight->getId()]);

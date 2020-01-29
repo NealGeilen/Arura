@@ -5,14 +5,24 @@ use Arura\User\User;
 
 class Restrict{
 
-    public static function Validation($iRight){
+    /**
+     * @param int $iRight
+     * @return bool
+     */
+    public static function Validation($iRight = 0){
         if (User::isLogged()){
             return self::hasUserRight(User::activeUser(), $iRight);
         }
         return false;
 
     }
-    public static function hasUserRight(User $oUser, $iRight){
+
+    /**
+     * @param User $oUser
+     * @param int $iRight
+     * @return bool
+     */
+    public static function hasUserRight(User $oUser, $iRight = 0){
         return  $oUser->hasRight(new Right($iRight));
     }
 }

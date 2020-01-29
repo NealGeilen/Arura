@@ -23,11 +23,17 @@ class RequestHandler{
     protected $aTypes = [];
 
 
+    /**
+     * RequestHandler constructor.
+     */
     public function __construct()
     {
         set_error_handler("error_reporter");
     }
 
+    /**
+     * @param mixed ...$fields
+     */
     public function requiredFields(...$fields)
     {
         foreach ($fields as $field) {
@@ -37,7 +43,10 @@ class RequestHandler{
         }
     }
 
-    public function setRight($iRight){
+    /**
+     * @param int $iRight
+     */
+    public function setRight($iRight = 0){
         $this -> Right = (int)$iRight;
     }
 
@@ -52,6 +61,9 @@ class RequestHandler{
             ]);
     }
 
+    /**
+     *
+     */
     protected function validateRequest(){
         if (!is_null($this -> Right)){
             if (!User::isLogged()){
@@ -63,8 +75,10 @@ class RequestHandler{
     }
 
 
-
-    public function validateFields(callable $callback){
+    /**
+     * @param callable|null $callback
+     */
+    public function validateFields(callable $callback = null){
         foreach ($this->aData as $sField => $sValue){
             if (!$callback($sField,$sValue)){
                 ResponseHandler::setErrorData(new BadRequest());
@@ -72,11 +86,17 @@ class RequestHandler{
         }
     }
 
-    public function setRequestMethod($sMethod){
+    /**
+     * @param string $sMethod
+     */
+    public function setRequestMethod($sMethod = ""){
         $this -> RequestMethod = strtoupper((string)$sMethod);
         $this->CollectData();
     }
 
+    /**
+     *
+     */
     private function CollectData(){
         if ($_SERVER['REQUEST_METHOD'] !==  $this->RequestMethod){
             ResponseHandler::setErrorData(new MethodNotAllowed());
@@ -93,7 +113,10 @@ class RequestHandler{
         }
     }
 
-    public function sandbox(callable $callback){
+    /**
+     * @param callable|null $callback
+     */
+    public function sandbox(callable $callback = null){
         $this->validateRequest();
         if (!ResponseHandler::hasError()){
             try{
@@ -113,7 +136,11 @@ class RequestHandler{
         }
     }
 
-    public function addType($sType, callable $function){
+    /**
+     * @param string $sType
+     * @param callable|null $function
+     */
+    public function addType($sType = "", callable $function = null){
         $this->aTypes[$sType] = $function;
     }
 }

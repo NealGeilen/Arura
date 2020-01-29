@@ -9,8 +9,17 @@ use PHPMailer\PHPMailer\PHPMailer;
 
 class Mailer extends PHPMailer{
 
+    /**
+     * @var null
+     */
     protected static $smarty = null;
 
+    /**
+     * Mailer constructor.
+     * @param bool $setDefaults
+     * @throws Error
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public function __construct($setDefaults = true)
     {
         parent::__construct(true);
@@ -30,7 +39,13 @@ class Mailer extends PHPMailer{
         }
     }
 
-    public function setBody($sFile, $includeAltBody = true){
+    /**
+     * @param string $sFile
+     * @param bool $includeAltBody
+     * @throws Error
+     * @throws \SmartyException
+     */
+    public function setBody($sFile = "", $includeAltBody = true){
         if (is_file($sFile)){
             self::getSmarty()->assign("aWebsite", Application::getAll()["website"]);
             self::getSmarty()->assign("sContent", self::getSmarty()->fetch($sFile));
@@ -48,6 +63,11 @@ class Mailer extends PHPMailer{
         }
     }
 
+    /**
+     * @return bool
+     * @throws Error
+     * @throws \PHPMailer\PHPMailer\Exception
+     */
     public function send(){
         if (!parent::send()){
             throw new Error();
@@ -56,6 +76,9 @@ class Mailer extends PHPMailer{
         return true;
     }
 
+    /**
+     * @return \Smarty
+     */
     public static function getSmarty() : \Smarty{
         if (is_null(self::$smarty)){
             self::$smarty = new \Smarty();

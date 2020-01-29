@@ -7,7 +7,11 @@ use Spatie\ImageOptimizer\OptimizerChainFactory;
 class FileManger{
 
 
-    public function uploadFiles($sDir){
+    /**
+     * @param string $sDir
+     * @throws \Exception
+     */
+    public function uploadFiles($sDir = ""){
         foreach ($_FILES as $file){
             $sPath = __FILES__ . $sDir . $file['name'];
             if (!is_file($sPath) && !is_dir($sPath)){
@@ -24,6 +28,11 @@ class FileManger{
     }
 
 
+    /**
+     * @param null $sDir
+     * @param null $sType
+     * @return array
+     */
     public function loadDir($sDir = null, $sType =null){
         $sDirLockUp = (is_null($sDir) ? __FILES__ : __FILES__ . $sDir);
 
@@ -71,6 +80,10 @@ class FileManger{
         return $aOutcome;
     }
 
+    /**
+     * @param string $sFileType
+     * @return string
+     */
     public static function getIcon($sFileType = ''){
         $sType = '';
         switch ($sFileType){
@@ -87,7 +100,11 @@ class FileManger{
         return $sType;
     }
 
-    public static function getFileType($sFilePath){
+    /**
+     * @param string $sFilePath
+     * @return bool|string
+     */
+    public static function getFileType($sFilePath = ""){
         if (is_file($sFilePath)){
             $sType = '';
             switch (strtolower(pathinfo($sFilePath, PATHINFO_EXTENSION))){
@@ -108,7 +125,13 @@ class FileManger{
     }
 
 
-    public function createDir($sDir,$sName){
+    /**
+     * @param string $sDir
+     * @param string $sName
+     * @return bool
+     * @throws \Exception
+     */
+    public function createDir($sDir = "", $sName = ""){
         $sNewDir = __FILES__ . $sDir . $sName;
         if (!is_dir($sNewDir) && !is_file($sNewDir) && is_dir(__FILES__ . $sDir)){
             if (!mkdir($sNewDir)){
@@ -120,7 +143,12 @@ class FileManger{
         return true;
     }
 
-    public function deleteItem($sPath){
+    /**
+     * @param string $sPath
+     * @return bool
+     * @throws \Exception
+     */
+    public function deleteItem($sPath = ""){
         if (is_file($sPath)){
             unlink($sPath);
         } else if (is_dir($sPath)){
@@ -136,7 +164,13 @@ class FileManger{
         return true;
     }
 
-    public function renameItem($sPath,$sNewName){
+    /**
+     * @param string $sPath
+     * @param string $sNewName
+     * @return array
+     * @throws \Exception
+     */
+    public function renameItem($sPath = "", $sNewName = ""){
         $sRootPath = __FILES__ . $sPath;
         $sNewRootPath = dirname($sRootPath) .'/'. $sNewName;
         if (is_dir($sRootPath) || is_file($sRootPath)){
@@ -159,7 +193,13 @@ class FileManger{
         throw new \Exception('item does not exists', 404);
     }
 
-    public function moveItem($sPathItem, $sNewDesignation){
+    /**
+     * @param string $sPathItem
+     * @param string $sNewDesignation
+     * @return string
+     * @throws NotAcceptable
+     */
+    public function moveItem($sPathItem = "", $sNewDesignation = ""){
     $sRootPathItem = __FILES__ . $sPathItem;
     $sNewRootPath = __FILES__ . $sNewDesignation;
     if (is_dir($sNewRootPath)){
