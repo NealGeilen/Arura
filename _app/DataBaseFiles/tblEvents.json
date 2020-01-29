@@ -83,6 +83,13 @@
       "Key": "",
       "Default": null,
       "Extra": ""
+    },
+    "Event_Registration_End_Timestamp": {
+      "Type": "Int(15)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
     }
   }
 }
