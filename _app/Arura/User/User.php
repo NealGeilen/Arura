@@ -306,8 +306,7 @@ class User
             "User_Id" => $this->getId(),
             "User_Lastname" => $this->getLastname(),
             "User_Username" => $this->getUsername(),
-            "User_Email" => $this->getEmail(),
-            "Roles" => $this->getRoles()
+            "User_Email" => $this->getEmail()
         ];
         $a['Roles'] = [];
         foreach ($this->getRoles() as $Role){

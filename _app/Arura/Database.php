@@ -59,18 +59,18 @@ class Database{
     }
 
     /**
-     * @param $statment
+     * @param string $statment
      * @param array $parameters
-     * @return mixed
+     * @return bool|\PDOStatement
      * @throws Error
      */
-    public static function ExecQuery($statment, array $parameters = []){
+    public static function ExecQuery($statment = "", array $parameters = []){
         $db = new self();
         return $db -> query($statment, $parameters);
     }
 
     /**
-     * Connect to database
+     * @return \PDO
      */
     protected function connect() :\PDO
     {
@@ -81,13 +81,14 @@ class Database{
         return  self::$connection;
     }
 
+
     /**
-     * PDO secure query
-     * @param {String} $statment
-     * @param {Array} $parameters
-     * @return mixed
+     * @param string $statment
+     * @param array $parameters
+     * @return \PDOStatement
+     * @throws Error
      */
-    public function query($statment, array $parameters = []){
+    public function query($statment = "", array $parameters = []){
         $this->queryState = false;
         $stmt = $this->connect()->prepare($statment);
         $this -> queryState = $stmt->execute($parameters);
@@ -100,62 +101,89 @@ class Database{
     }
 
     /**
-     * Query function and return multiple rows assoc
-     * @param {String} $statment
-     * @param {Array} $parameters
-     * @return {Array}
+     * @param string $statment
+     * @param array $parameters
+     * @return array
+     * @throws Error
      */
-    public function fetchAll($statment, array $parameters = []){
+    public function fetchAll($statment = "", array $parameters = []){
         return $this->query($statment,$parameters)->fetchAll(\PDO::FETCH_ASSOC);
     }
 
+
     /**
-     * Query function and return multiple rows assoc
-     * @param {String} $statment
-     * @param {Array} $parameters
-     * @return {Array}
+     * @param string $statment
+     * @param array $parameters
+     * @return array
+     * @throws Error
      */
-    public function fetchAllColumn($statment, array $parameters = []){
+    public function fetchAllColumn($statment = "", array $parameters = []){
         return $this->query($statment,$parameters)->fetchAll(\PDO::FETCH_COLUMN);
     }
 
     /**
-     * Query function and return singel row assoc
-     * @param {String} $statment
-     * @param {Array} $parameters
-     * @return {Array}
+     * @param string $statment
+     * @param array $parameters
+     * @return mixed
+     * @throws Error
      */
-    public function fetchRow($statment, array $parameters = []){
+    public function fetchRow($statment = "", array $parameters = []){
         return $this->query($statment,$parameters)->fetch(\PDO::FETCH_ASSOC);
     }
 
+    /**
+     * @return int
+     */
     function getLastInsertId(){
-        return (int)self::$connection -> lastInsertId();
+        return (int)$this->connect() -> lastInsertId();
     }
 
+    /**
+     * @return bool
+     */
     public function isQuerySuccessful(){
         return $this -> queryState;
     }
 
-    public function createRecord($sTable,$aData){
+    /**
+     * @param string $sTable
+     * @param array $aData
+     * @return int
+     * @throws Error
+     */
+    public function createRecord($sTable = "", $aData = []){
         $sQuery = 'INSERT INTO '.$sTable.' SET ';
         $this->buildSetString($sQuery,$aData);
         return $this -> getLastInsertId();
     }
 
-    public function updateRecord($sTable, $aData, $sPrimaryKey){
+    /**
+     * @param string $sTable
+     * @param array $aData
+     * @param string $sPrimaryKey
+     * @return \PDOStatement
+     * @throws Error
+     */
+    public function updateRecord($sTable = "", $aData = [], $sPrimaryKey = ""){
         $sQuery = 'UPDATE '.$sTable.' SET ';
         return $this->buildSetString($sQuery,$aData,$sPrimaryKey);
     }
 
-    private function buildSetString($sQuery, $aData = [], $sPrimaryKey = null){
+    /**
+     * @param string $sQuery
+     * @param array $aData
+     * @param string $sPrimaryKey
+     * @return \PDOStatement
+     * @throws Error
+     */
+    private function buildSetString($sQuery = "", $aData = [], $sPrimaryKey = ""){
         foreach ($aData as $sKey => $sValue){
             if ($sKey !== $sPrimaryKey){
                 $sQuery .= $sKey . ' = :' . $sKey. ', ';
             }
         }
         $sQuery = trim($sQuery,", ");
-        if (!is_null($sPrimaryKey)){
+        if (!empty($sPrimaryKey)){
             $sQuery .= ' WHERE ' .$sPrimaryKey . ' = :' .$sPrimaryKey;
         }
         return $this->query($sQuery,$aData);
