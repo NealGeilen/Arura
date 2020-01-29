@@ -43,15 +43,18 @@ class Event Extends Page {
 
     /**
      * @return array
+     * @throws Error
      */
     public static function getAllEvents() : array
     {
         $db = new Database();
         return $db -> fetchAll("SELECT * FROM tblEvents WHERE Event_IsVisible = 1 AND Event_Start_Timestamp > UNIX_TIMESTAMP()");
     }
+
     /**
      * Set values on properties
      * @param bool $force
+     * @throws Error
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
@@ -78,6 +81,7 @@ class Event Extends Page {
 
     /**
      * @throws \SmartyException
+     * @throws Error
      */
     public function showPage()
     {
@@ -179,11 +183,13 @@ class Event Extends Page {
     }
 
     /**
-     * @param $sSlug
+     * @param string $sSlug
      * @param null $iRight
      * @param callable|null $function
+     * @throws Error
+     * @throws \SmartyException
      */
-    public static function displayView($sSlug, $iRight = null,callable $function = null){
+    public static function displayView($sSlug = "", $iRight = null,callable $function = null){
         parent::displayView($sSlug, \Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
@@ -232,6 +238,7 @@ class Event Extends Page {
 
     /**
      * @return bool
+     * @throws Error
      */
     public function save() : bool
     {
@@ -286,6 +293,7 @@ class Event Extends Page {
 
     /**
      * @return bool
+     * @throws Error
      */
     public function hasEventTickets(){
         return (count($this->db->fetchAll("SELECT Ticket_Id FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
@@ -293,6 +301,7 @@ class Event Extends Page {
 
     /**
      * @return bool
+     * @throws Error
      */
     public function hasEventRegistrations(){
         return (count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
@@ -300,6 +309,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getRegistration(){
         if ($this->hasEventTickets()){
@@ -332,6 +342,7 @@ class Event Extends Page {
 
     /**
      * @return array
+     * @throws Error
      */
     public function getRegisteredAmount(){
         return $this->db->fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
@@ -339,6 +350,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getDescription()
     {
@@ -356,6 +368,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getStart() : \DateTime
     {
@@ -373,6 +386,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getEnd()
     {
@@ -390,6 +404,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getName()
     {
@@ -407,6 +422,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getLocation()
     {
