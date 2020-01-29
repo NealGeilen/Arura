@@ -8,6 +8,12 @@ use Arura\Database;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
 use Arura\User\User;
+use DateTime;
+use Exception;
+use Mollie\Api\Exceptions\ApiException;
+use Mollie\Api\Exceptions\IncompatiblePlatform;
+use Rights;
+use SmartyException;
 
 class Event Extends Page {
 
@@ -24,20 +30,21 @@ class Event Extends Page {
     private $bIsActive;
     private $bIsVisible;
     private $iCapacity;
+    private $dEndRegistration;
 
     public static $MasterPage = "Events/event.tpl";
 
     /**
      * Event constructor.
      * @param $iId
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($iId)
     {
         $this->setId($iId);
         parent::__construct($iId);
         if (count($this->db->fetchAll("SELECT Event_Id FROM tblEvents WHERE Event_Id = ?", [$this->getId()])) < 0){
-            throw new \Exception("Event not found", 404);
+            throw new Exception("Event not found", 404);
         }
     }
 
@@ -65,12 +72,15 @@ class Event Extends Page {
             $this->setLocation($aEvent["Event_Location"]);
             $this->setImg($aEvent["Event_Banner"]);
             $this->setOrganizer(new User($aEvent["Event_Organizer_User_Id"]));
-            $StartDate = new \DateTime();
+            $StartDate = new DateTime();
             $StartDate->setTimestamp($aEvent["Event_Start_Timestamp"]);
             $this->setStart($StartDate);
-            $EndDate = new \DateTime();
+            $EndDate = new DateTime();
             $EndDate->setTimestamp($aEvent["Event_End_Timestamp"]);
             $this->setEnd($EndDate);
+            $EndDateR = new DateTime();
+            $EndDateR->setTimestamp($aEvent["Event_Registration_End_Timestamp"]);
+            $this->setEndRegistration($EndDateR);
             $this->setDescription($aEvent["Event_Description"]);
             $this->setCapacity((int)$aEvent["Event_Capacity"]);
             $this->setIsActive((boolean)$aEvent["Event_IsActive"]);
@@ -80,7 +90,7 @@ class Event Extends Page {
     }
 
     /**
-     * @throws \SmartyException
+     * @throws SmartyException
      * @throws Error
      */
     public function showPage()
@@ -96,7 +106,7 @@ class Event Extends Page {
     /**
      * @param $sUrl
      * @return Event|bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function fromUrl($sUrl){
         $db = new Database();
@@ -110,7 +120,7 @@ class Event Extends Page {
     /**
      * @param $url
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public static function urlExists($url)
     {
@@ -120,6 +130,7 @@ class Event Extends Page {
 
     /**
      * @return array
+     * @throws Error
      */
     private function collectTicketsPOST(){
         $aTickets = [];
@@ -144,7 +155,8 @@ class Event Extends Page {
     }
 
     /**
-     * @throws \SmartyException
+     * @throws SmartyException
+     * @throws Error
      */
     public function checkout(){
         if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"])){
@@ -162,6 +174,8 @@ class Event Extends Page {
 
     /**
      * @throws Error
+     * @throws ApiException
+     * @throws IncompatiblePlatform
      */
     public function payment(){
         if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"]) && isset($_POST["firstname"])){
@@ -176,7 +190,7 @@ class Event Extends Page {
                     "Betaling tickets voor " . $this->getName(),
                     $_POST["issuer"],
                     ["Tickets" => $aCollection["Tickets"]]);
-                $R = Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"], null, $Payment_ID);
+                Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"], null, $Payment_ID);
                 $P->redirectToMollie();
             }
         }
@@ -187,13 +201,13 @@ class Event Extends Page {
      * @param null $iRight
      * @param callable|null $function
      * @throws Error
-     * @throws \SmartyException
+     * @throws SmartyException
      */
     public static function displayView($sSlug = "", $iRight = null,callable $function = null){
-        parent::displayView($sSlug, \Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
+        parent::displayView($sSlug, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
-                if (($oPage->getIsVisible() || Restrict::Validation(\Rights::SHOP_EVENTS_MANAGEMENT)) && $oPage->getStart()->getTimestamp() > time()){
+                if (($oPage->getIsVisible() || Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)) && $oPage->getStart()->getTimestamp() > time()){
                     switch ($_GET["type"]){
                         case "checkout":
                             if ($oPage->getIsActive()){
@@ -212,7 +226,7 @@ class Event Extends Page {
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
                                 self::$MasterPage = "Events/done.tpl";
                                 if ($P->getStatus() === "paid"){
-                                    $R = \Arura\Shop\Events\Registration::getRegistrationFromPayment($P);
+                                    $R = Registration::getRegistrationFromPayment($P);
                                     $R ->sendEventDetails();
                                 }
                                 $oPage->showPage();
@@ -272,6 +286,7 @@ class Event Extends Page {
 
     /**
      * @return array
+     * @throws Error
      */
     public function __ToArray() : array
     {
@@ -287,7 +302,8 @@ class Event Extends Page {
             "Event_IsActive" => (int)$this->getIsActive(),
             "Event_IsVisible" => (int)$this->getIsVisible(),
             "Event_Capacity" => $this->getCapacity(),
-            "Event_Slug" => $this->getSlug()
+            "Event_Slug" => $this->getSlug(),
+            "Event_Registration_End_Timestamp" => $this->getEndRegistration()->getTimestamp()
         ];
     }
 
@@ -332,7 +348,7 @@ class Event Extends Page {
     /**
      * @param $aData
      * @return Event
-     * @throws \Exception
+     * @throws Exception
      */
     public static function Create($aData = []){
         $db = new Database();
@@ -370,7 +386,7 @@ class Event Extends Page {
      * @return mixed
      * @throws Error
      */
-    public function getStart() : \DateTime
+    public function getStart() : DateTime
     {
         $this->load();
         return $this->dStart;
@@ -379,7 +395,7 @@ class Event Extends Page {
     /**
      * @param mixed $dStart
      */
-    public function setStart(\DateTime $dStart)
+    public function setStart(DateTime $dStart)
     {
         $this->dStart = $dStart;
     }
@@ -397,7 +413,7 @@ class Event Extends Page {
     /**
      * @param mixed $dEnd
      */
-    public function setEnd(\DateTime $dEnd)
+    public function setEnd(DateTime $dEnd)
     {
         $this->dEnd = $dEnd;
     }
@@ -440,6 +456,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getImg()
     {
@@ -457,6 +474,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getOrganizer() : User
     {
@@ -474,6 +492,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getIsActive() : bool
     {
@@ -491,6 +510,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getIsVisible() : bool
     {
@@ -508,6 +528,7 @@ class Event Extends Page {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getCapacity()
     {
@@ -554,5 +575,23 @@ class Event Extends Page {
     public function setSlug($sSlug)
     {
         $this->sSlug = $sSlug;
+    }
+
+    /**
+     * @return mixed
+     * @throws Error
+     */
+    public function getEndRegistration() : DateTime
+    {
+        $this->load();
+        return $this->dEndRegistration;
+    }
+
+    /**
+     * @param mixed $dEndRegistration
+     */
+    public function setEndRegistration(DateTime $dEndRegistration): void
+    {
+        $this->dEndRegistration = $dEndRegistration;
     }
 }

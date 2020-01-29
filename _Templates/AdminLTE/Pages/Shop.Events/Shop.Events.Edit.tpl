@@ -53,12 +53,17 @@
                     {/foreach}
                 </select>
             </div>
+
             {if !$bTickets}
             <div class="form-group col-md-4 col-6">
                 <label>Capaciteit</label>
                 <input type="number" class="form-control" name="Event_Capacity" value="{$aEvent.Event_Capacity}" min="0" required>
             </div>
             {/if}
+            <div class="form-group col-md-4 col-6">
+                <label>Eind datum voor registartie</label>
+                <input type="datetime-local" class="form-control" name="Event_Registration_End_Timestamp" value="{$aEvent.Event_Registration_End_Timestamp}" required>
+            </div>
             <div class="col-12">
                 <hr/>
                 <h6>Zichtbaarheid</h6>

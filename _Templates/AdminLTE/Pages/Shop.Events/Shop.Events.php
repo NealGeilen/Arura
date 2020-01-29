@@ -8,6 +8,7 @@ if (isset($_GET["c"])){
         unset($_POST["files"]);
         $_POST["Event_Start_Timestamp"] = strtotime($_POST["Event_Start_Timestamp"]);
         $_POST["Event_End_Timestamp"] = strtotime($_POST["Event_End_Timestamp"]);
+        $_POST["Event_Registration_End_Timestamp"] = strtotime($_POST["Event_Registration_End_Timestamp"]);
         $_POST["Event_IsActive"] = 0;
         $_POST["Event_IsVisible"] = 0;
         $e = \Arura\Shop\Events\Event::Create($_POST);

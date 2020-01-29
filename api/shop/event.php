@@ -12,6 +12,7 @@ $request->sandbox(function ($aData) use ($response,$request){
         $db = new \Arura\Database();
         $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
         $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
+        $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
         $db->updateRecord("tblEvents", $aData, "Event_Id");
     });
     $request->addType("delete-event", function ($aData){
