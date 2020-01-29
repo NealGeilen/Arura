@@ -41,6 +41,9 @@ class RequestHandler{
         $this -> Right = (int)$iRight;
     }
 
+    /**
+     * @throws \Arura\Exceptions\Error
+     */
     public function TriggerEvent(){
         Database::ExecQuery('UPDATE tblSessions SET Session_Last_Active = ? WHERE Session_Id = ? ',
             [

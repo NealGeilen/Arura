@@ -118,29 +118,26 @@ $("textarea.richtext").ready(function () {
 });
 
 $.fn.FormAjax = function( options = {} ) {
-    return this.each(function() {
-        oForm = $(this);
-        oForm.validate({
-            submitHandler: function () {
-                var settings = $.extend({
-                    type: oForm.attr('method'),
-                    dataType: 'json',
-                    data: serializeArray(oForm),
-                    url : oForm.attr('action'),
-                    success: function(){
-                        addSuccessMessage('Opgeslagen');
-                    },
-                    error: function () {
-                        addErrorMessage('Het opslaan is niet juist gegaan');
-                    }
-                }, options);
+    $(this).validate({
+        submitHandler: function (oForm) {
+            var settings = $.extend({
+                type: $(oForm).attr('method'),
+                dataType: 'json',
+                data: serializeArray($(oForm)),
+                url : $(oForm).attr('action'),
+                success: function(){
+                    addSuccessMessage('Opgeslagen');
+                },
+                error: function () {
+                    addErrorMessage('Het opslaan is niet juist gegaan');
+                }
+            }, options);
 
-                $.ajax(settings);
-            }
-        });
+            $.ajax(settings);
+        }
     });
-
 };
+$("form.form-sender").FormAjax();
 function validateUser(){
     $.ajax({
         type: 'post',
@@ -187,5 +184,4 @@ function startPageLoad() {
 function endPageLoad() {
     $('.loader-container').remove()
 }
-$("form.form-sender").FormAjax();
 
