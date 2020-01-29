@@ -56,7 +56,7 @@
                 <label>Capaciteit</label>
                 <input type="number" class="form-control" name="Event_Capacity" value="" min="0" required>
             </div>
-            <div class="form-group col-md-6 col-6">
+            <div class="form-group col-md-4 col-6">
                 <label>Eind datum voor registartie</label>
                 <input type="datetime-local" class="form-control" name="Event_Registration_End_Timestamp" value="" required>
             </div>
