@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-{$body_head}
+{include "$TEMPLATEDIR/Sections/body_head.tpl"}
 <body class="hold-transition sidebar-mini-md layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
 <div class="wrapper">
 
   <!-- Navbar -->
-  {$navbar}
+  {include "$TEMPLATEDIR/Sections/navbar.tpl"}
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  {$sidebar}
+  {include "$TEMPLATEDIR/Sections/sidebar.tpl"}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -27,6 +27,8 @@
 
     <!-- Main content -->
     <section class="content">
+      {block body}
+      {/block}
       {$sContent}
     </section>
 
@@ -45,6 +47,8 @@
   {if $sPageSideBar != NULL}
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
+    {block Sidebar}
+    {/block}
     {$sPageSideBar}
   </aside>
   <!-- /.control-sidebar -->
@@ -52,6 +56,6 @@
 </div>
 <!-- ./wrapper -->
 
-{$body_end}
+{include "$TEMPLATEDIR/Sections/body_end.tpl"}
 </body>
 </html>
