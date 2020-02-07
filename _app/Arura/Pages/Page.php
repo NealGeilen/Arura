@@ -23,7 +23,7 @@ class Page extends Modal implements PageEnum{
     /**
      * @var string
      */
-    public static $MasterPage = "index.html";
+    public static $MasterPage = "index.tpl";
 
 
     //Page variables
@@ -98,13 +98,14 @@ class Page extends Modal implements PageEnum{
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', Application::getAll()['website']);
+        $smarty->assign('TEMPLATEDIR', __WEB_TEMPLATES__);
 
-        foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
-            if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
-                $sName = str_replace('.html', '', $item);
-                $smarty->assign($sName, $smarty->fetch(self::TemplatePath .'Sections'.DIRECTORY_SEPARATOR. $item));
-            }
-        }
+//        foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
+//            if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
+//                $sName = str_replace('.html', '', $item);
+//                $smarty->assign($sName, $smarty->fetch(self::TemplatePath .'Sections'.DIRECTORY_SEPARATOR. $item));
+//            }
+//        }
 
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
@@ -133,7 +134,7 @@ class Page extends Modal implements PageEnum{
         } else {
 
             $oPage = new self();
-            $oPage::$MasterPage = "Launchpage.html";
+            $oPage::$MasterPage = "Launchpage.tpl";
             $oPage->setTitle("Home");
             $oPage->showPage();
             exit;
