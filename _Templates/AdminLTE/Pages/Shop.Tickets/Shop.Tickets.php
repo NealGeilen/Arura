@@ -1,9 +1,13 @@
 <?php
 use Arura\Dashboard\Page;
-$oSmarty =  Page::getSmarty();
-$db = new \Arura\Database();
+use Arura\Dashboard\Tabs;
+use Arura\Database;
+use Arura\Shop\Events\Event;
 
-$tab = new \Arura\Dashboard\Tabs();
+$oSmarty =  Page::getSmarty();
+$db = new Database();
+
+$tab = new Tabs();
 if (isset($_GET["e"]) && !empty($_GET["e"])){
     $oEvent = new Arura\Shop\Events\Event((int)$_GET["e"]);
     Page::getSmarty()->assign("aEvent", $oEvent->__ToArray());
@@ -20,7 +24,7 @@ if (isset($_GET["e"]) && !empty($_GET["e"])){
 $aEventIds = $db->fetchAllColumn("SELECT Event_Id FROM tblEvents");
 $aEvents = [];
 foreach ($aEventIds as $iEventId){
-    $oEvent = new \Arura\Shop\Events\Event($iEventId);
+    $oEvent = new Event($iEventId);
     $aEvent = $oEvent->__ToArray();
     if ($oEvent->hasEventTickets()){
         $aEvent["Amount"] = (int)$db->fetchRow("SELECT COUNT(OrderedTicket_Hash) AS Amount FROM tblEventOrderedTickets JOIN tblEventRegistration ON Registration_Id = OrderedTicket_Registration_Id WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $oEvent->getId()])["Amount"];
