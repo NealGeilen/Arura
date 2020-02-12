@@ -1,9 +1,7 @@
 <?php
 namespace Arura\Dashboard;
 
-use Arura\Exceptions\Error;
 use Arura\Settings\Application;
-use Exception;
 
 class Page{
 
@@ -25,13 +23,13 @@ class Page{
 
     /**
      * @return mixed
-     * @throws Error
-     * @throws Exception
+     * @throws \Arura\Exceptions\Error
+     * @throws \Exception
      */
     public function showPage(){
         if (!is_null($this->getRight())){
             if (!$this->getRight()){
-                throw new Exception('No Access', 403);
+                throw new \Exception('No Access', 403);
             }
         }
         self::getSmarty()->assign("aWebsite" ,Application::getAll()["website"]);
@@ -65,8 +63,17 @@ class Page{
                 }
             }
             self::getSmarty()->assign("sPageSideBar", self::getSideBar());
+
+
             self::getSmarty()->assign('aResourceFiles', self::getResourceFiles());
-            self::getSmarty()->assign('TEMPLATEDIR', $this->getMasterPath());
+
+//          Loading page sections
+            foreach (scandir($this->getMasterPath() . 'Sections'.DIRECTORY_SEPARATOR) as $item){
+                if (pathinfo($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item, PATHINFO_EXTENSION) === 'tpl'){
+                    $sName = str_replace('.tpl', '', $item);
+                    self::getSmarty()->assign($sName, self::getSmarty()->fetch($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item));
+                }
+            }
 
 
 //          Show Master Page
