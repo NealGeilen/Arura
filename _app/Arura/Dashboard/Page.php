@@ -243,7 +243,7 @@ class Page{
     }
 
     /**
-     * @param string $sSideBar
+     * @param null $sHtmlFile
      */
     public static function setSideBar($sHtmlFile = null)
     {

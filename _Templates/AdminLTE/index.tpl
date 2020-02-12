@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 {include "$TEMPLATEDIR/Sections/body_head.tpl"}
-<body class="hold-transition sidebar-mini-md layout-fixed">
+<body class="hold-transition sidebar-mini-md layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -44,8 +44,14 @@
   {include "$TEMPLATEDIR/Sections/body_modals.tpl"}
 
 
-  {block sidebar}
-  {/block}
+  {if $sPageSideBar != NULL}
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      {$sPageSideBar}
+    </aside>
+    <!-- /.control-sidebar -->
+  {/if}
+
 </div>
 <!-- ./wrapper -->
 
