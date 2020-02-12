@@ -10,4 +10,3 @@ foreach ($aSettings as $i =>$setting){
     $aList[$setting["Setting_Plg"]][] = $setting;
 }
 Page::getSmarty() -> assign('aSettings',$aList);
-return Page::getHtml(__DIR__);

@@ -1,11 +1,11 @@
 <?php
 namespace Arura\Shop\Events;
 
+use Arura\Crud;
 use Arura\Exceptions\Error;
 use Arura\Pages\Page;
 use Arura\Shop\Payment;
 use Arura\Database;
-use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
 use Arura\User\User;
 use DateTime;
@@ -100,6 +100,14 @@ class Event Extends Page {
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . self::$MasterPage));
         parent::showPage();
+    }
+
+    /**
+     * @return bool
+     * @throws Error
+     */
+    public function isOpen(){
+        return ($this->getIsActive() && $this->getIsVisible());
     }
 
 
@@ -207,20 +215,20 @@ class Event Extends Page {
         parent::displayView($sSlug, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
-                if (($oPage->getIsVisible() || Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)) && $oPage->getStart()->getTimestamp() > time()){
+                if ($oPage->isOpen() && $oPage->getStart()->getTimestamp() > time()){
                     switch ($_GET["type"]){
                         case "checkout":
-                            if ($oPage->getIsActive()){
+                            if ($oPage->isOpen()){
                                 $oPage->checkout();
                             }
                             break;
                         case "payment":
-                            if ($oPage->getIsActive()){
+                            if ($oPage->isOpen()){
                                 $oPage->payment();
                             }
                             break;
                         case "done":
-                            if ($oPage->getIsActive() && isset($_GET["i"])){
+                            if ($oPage->isOpen() && isset($_GET["i"])){
                                 $P = new Payment($_GET["i"]);
                                 self::getSmarty()->assign("sStatus", $P->getStatus());
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
@@ -307,6 +315,26 @@ class Event Extends Page {
         ];
     }
 
+
+    /**
+     * @return Crud\Crud
+     * @throws Error
+     */
+    public function getTicketGrud(){
+        $Crud = new Crud\Crud("tblEventTickets","Ticket_Id");
+        $Open = !$this->hasEventRegistrations();
+        $Crud->setCanDelete($Open);
+        $Crud->setCanEdit($Open);
+        $Crud->setCanInsert($Open);
+        $Crud->addParam("e", $this->getId());
+        $Crud->addDefaultValue("Ticket_Event_Id", $this->getId());
+        $Crud->addField(new Crud\Fields\Field("text", "Ticket_Name", "Naam"));
+        $Crud->addField(new Crud\Fields\Field("text", "Ticket_Description", "Omschrijving"));
+        $Crud->addField(new Crud\Fields\Field("number", "Ticket_Capacity", "Capacity"));
+        $Crud->addField(new Crud\Fields\Field("number", "Ticket_Price", "Prijs"));
+        return $Crud;
+
+    }
     /**
      * @return bool
      * @throws Error

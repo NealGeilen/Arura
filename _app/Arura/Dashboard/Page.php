@@ -4,6 +4,7 @@ namespace Arura\Dashboard;
 use Arura\Exceptions\Error;
 use Arura\Settings\Application;
 use Exception;
+use Smarty;
 
 class Page{
 
@@ -22,6 +23,8 @@ class Page{
     protected static $aResourceFiles = ["JsPage" =>"", "CssPage"=>""];
 
     protected static $sSideBar = null;
+
+    public static $ContentTpl;
 
     /**
      * @return mixed
@@ -48,9 +51,12 @@ class Page{
         if (empty($this->getMasterPath())){
             return $this -> getFileLocation();
         } else {
+            self::$ContentTpl = $this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.tpl';
+            if (is_file($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php')){
+                include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php');
+            }
             self::setResourceFiles(json_decode(file_get_contents($this->getMasterPath(). 'config.json'),true));
-            self::getSmarty()->assign('sContent', include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php'));
-            //          Load page res
+
             foreach (scandir($this->getFileLocation()) as $item){
                 $sPath = $this->getFileLocation() . DIRECTORY_SEPARATOR . $item;
                 switch (pathinfo($sPath, PATHINFO_EXTENSION)){
@@ -68,9 +74,8 @@ class Page{
             self::getSmarty()->assign('aResourceFiles', self::getResourceFiles());
             self::getSmarty()->assign('TEMPLATEDIR', $this->getMasterPath());
 
-
 //          Show Master Page
-            self::getSmarty()->display(($this->getMasterPath() . 'index.tpl'));
+            return self::getSmarty()->display(self::$ContentTpl);
         }
     }
 
@@ -83,9 +88,9 @@ class Page{
     }
 
     /**
-     * @param mixed $oSmarty
+     * @param Smarty $oSmarty
      */
-    public static function setSmarty(\Smarty $oSmarty)
+    public static function setSmarty(Smarty $oSmarty)
     {
         self::$oSmarty = $oSmarty;
     }
@@ -96,7 +101,8 @@ class Page{
      */
     public static function getHtml($sLocation = ""){
         if (is_file($sLocation)){
-            return self::getSmarty()->fetch($sLocation);
+            self::$ContentTpl = $sLocation;
+            return true;
         } else {
             return self::getSmarty()->fetch($sLocation . '/' . basename($sLocation) . '.tpl');
         }
@@ -109,7 +115,7 @@ class Page{
      * Setters and Getter
      */
     /**
-     * @return mixed
+     * @return string
      */
     public function getUrl()
     {
@@ -117,7 +123,7 @@ class Page{
     }
 
     /**
-     * @param mixed $sUrl
+     * @param string $sUrl
      */
     public function setUrl($sUrl)
     {
@@ -125,7 +131,7 @@ class Page{
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMasterPath()
     {

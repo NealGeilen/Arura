@@ -11,5 +11,3 @@ $aPage = $db -> fetchRow('SELECT * FROM tblCmsPages WHERE Page_Id = ? ',
     ]);
 
 $smarty -> assign('aCmsPage', $aPage);
-
-return Page::getHtml(__DIR__);

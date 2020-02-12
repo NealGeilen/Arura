@@ -2,7 +2,7 @@ Tickets = {
   Registration : {
       DataTable : function (oTable) {
           var table = oTable.DataTable( {
-              responsive: true,
+              // responsive: true,
               "data": aRegistrations,
               "columns": [
                   {
@@ -64,6 +64,7 @@ Tickets = {
 
 $(document).ready(function () {
     if (typeof aRegistrations !== "undefined"){
+        console.log(aRegistrations);
         Tickets.Registration.DataTable($(".registrations-table"))
     }
 });

@@ -3,15 +3,19 @@ namespace Arura\Shop;
 
 use Arura\Chart;
 use Arura\Database;
+use Arura\Exceptions\Error;
 use Arura\Modal;
+use Mollie\Api\Exceptions\ApiException;
+use Mollie\Api\Exceptions\IncompatiblePlatform;
 use Mollie\Api\MollieApiClient;
 use Arura\Settings\Application;
+use Mollie\Api\Types\PaymentMethod;
 
 
 class Payment extends Modal {
 
-    const METHOD_IDEAL = \Mollie\Api\Types\PaymentMethod::IDEAL;
-    const METHOD_PAYPAL = \Mollie\Api\Types\PaymentMethod::PAYPAL;
+    const METHOD_IDEAL = PaymentMethod::IDEAL;
+    const METHOD_PAYPAL = PaymentMethod::PAYPAL;
     const PAYMENT_TYPES = [
         "open" =>
             [
@@ -203,6 +207,7 @@ class Payment extends Modal {
 
     /**
      * @return string
+     * @throws Error
      */
     public static function getLineChart(){
         function getData($sStatus = "paid"){
@@ -263,6 +268,7 @@ class Payment extends Modal {
 
     /**
      * @return string
+     * @throws Error
      */
     public static function getDonutBanksChart(){
         $aIssuers = self::ISSUERS;
@@ -302,6 +308,7 @@ class Payment extends Modal {
 
     /**
      * @return string
+     * @throws Error
      */
     public static function getAveragePaymentTimeChart(){
         $db = new Database();
@@ -339,8 +346,9 @@ class Payment extends Modal {
     /**
      * @param bool $setAccessToken
      * @return MollieApiClient
-     * @throws \Mollie\Api\Exceptions\ApiException
-     * @throws \Mollie\Api\Exceptions\IncompatiblePlatform
+     * @throws ApiException
+     * @throws IncompatiblePlatform
+     * @throws Error
      */
     public static function getMollie($setAccessToken = false): MollieApiClient{
         if(!empty(Application::get("plg.shop", "Mollie_Api"))){
@@ -375,7 +383,8 @@ class Payment extends Modal {
     /**
      * Set values on properties
      * @param bool $force
-     * @throws \Mollie\Api\Exceptions\ApiException
+     * @throws ApiException
+     * @throws Error
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
@@ -394,6 +403,7 @@ class Payment extends Modal {
 
     /**
      * @return array
+     * @throws ApiException
      */
     public function __ToArray(){
         return [
@@ -430,12 +440,13 @@ class Payment extends Modal {
      * @param null $sIssuer
      * @param array $metadata
      * @return static
-     * @throws \Mollie\Api\Exceptions\ApiException
-     * @throws \Mollie\Api\Exceptions\IncompatiblePlatform
+     * @throws ApiException
+     * @throws IncompatiblePlatform
+     * @throws Error
      */
     public static function CreatePayment($Payment_Id, $fAmount, $PaymentType, $description , $sIssuer = null, $metadata = []) : self{
         $oMollie = self::getMollie();
-        $db = new \Arura\Database();
+        $db = new Database();
         self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php?id=" . $Payment_Id ;
         $payment = $oMollie->payments->create([
             "amount" => [
@@ -468,6 +479,7 @@ class Payment extends Modal {
 
     /**
      * @return bool
+     * @throws ApiException
      */
     public function redirectToMollie(){
         if ($this->getPayment()){
@@ -486,6 +498,7 @@ class Payment extends Modal {
 
     /**
      * @return bool
+     * @throws Error
      */
     public function isPaymentFromEvents(){
         return count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Payment_Id = :Payment_Id", ["Payment_Id" => $this->getId()])) > 0;
@@ -494,6 +507,7 @@ class Payment extends Modal {
     /**
      * @param int $iHours
      * @return mixed
+     * @throws Error
      */
     public static function getPaymentsFromLast($iHours = 0){
         $db = new Database();
@@ -501,8 +515,9 @@ class Payment extends Modal {
     }
 
     /**
-     * @return null
-     * @throws \Mollie\Api\Exceptions\ApiException
+     * @return \Mollie\Api\Resources\Payment
+     * @throws ApiException
+     * @throws Error
      */
     public function getPayment() : \Mollie\Api\Resources\Payment
     {
@@ -511,7 +526,7 @@ class Payment extends Modal {
     }
 
     /**
-     * @param null $payment
+     * @param \Mollie\Api\Resources\Payment $payment
      */
     public function setPayment(\Mollie\Api\Resources\Payment $payment)
     {
@@ -520,7 +535,8 @@ class Payment extends Modal {
 
     /**
      *
-     * @throws \Mollie\Api\Exceptions\ApiException
+     * @throws ApiException
+     * @throws Error
      */
     public function updatePayment(){
         $this->db->updateRecord("tblPayments",[
@@ -533,6 +549,8 @@ class Payment extends Modal {
 
     /**
      * @return float
+     * @throws ApiException
+     * @throws Error
      */
     public function getAmount()
     {
@@ -550,6 +568,8 @@ class Payment extends Modal {
 
     /**
      * @return mixed
+     * @throws ApiException
+     * @throws Error
      */
     public function getDescription()
     {

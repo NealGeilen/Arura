@@ -28,9 +28,7 @@ if (isset($_GET["c"])){
     $oSmarty->assign("bTickets", $oEvent->hasEventTickets());
     $bTicketsSold = $oEvent->hasEventRegistrations();
     $oSmarty->assign("bHasEventTicketsSold", $bTicketsSold);
-    if (!$bTicketsSold && !$oEvent->getIsActive()){
-        $oSmarty->assign("sTicketsCrud", (string)Crud::drop(__DATAFILES__ . "Events.TicketTypes.json", ["e" => $_GET["e"]], ["Ticket_Event_Id" => $_GET["e"]], "tickets"));
-    }
+    $oSmarty->assign("sTicketsCrud", $oEvent->getTicketGrud());
     return Page::getHtml(__DIR__ . "/Shop.Events.Edit.tpl");
 }
 $oSmarty->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));

@@ -9,10 +9,10 @@ if (isset($_GET["e"]) && !empty($_GET["e"])){
     Page::getSmarty()->assign("aEvent", $oEvent->__ToArray());
     if($oEvent->hasEventTickets()){
         Page::getSmarty()->assign("aRegistrations", json_encode($oEvent->getRegistration()));
-        return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Shop.Tickets.tpl");
+        Page::$ContentTpl = __DIR__ . DIRECTORY_SEPARATOR . "Shop.Tickets.tpl";
     } else {
         Page::getSmarty()->assign("aRegistrations", $oEvent->getRegistration());
-        return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Shop.Registrations.tpl");
+        Page::$ContentTpl = __DIR__ . DIRECTORY_SEPARATOR . "Shop.Registrations.tpl";
     }
 
 }
@@ -31,4 +31,3 @@ foreach ($aEventIds as $iEventId){
 }
 
 $oSmarty->assign("aEvents", $aEvents);
-return Page::getHtml(__DIR__ . DIRECTORY_SEPARATOR . "Shop.Events.tpl");

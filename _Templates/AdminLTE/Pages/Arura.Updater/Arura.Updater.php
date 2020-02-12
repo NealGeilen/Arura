@@ -23,4 +23,3 @@ if (isset($_POST["gitreset"])){
 
 $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
 $smarty->assign("Status", $repo->getStatus());
-return \Arura\Dashboard\Page::getHtml(__DIR__);

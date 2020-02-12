@@ -62,7 +62,7 @@
             {/if}
             <div class="form-group col-md-4 col-6">
                 <label>Eind datum voor registartie</label>
-                <input type="datetime-local" class="form-control" name="Event_Registration_End_Timestamp" value="{$aEvent.Event_Registration_End_Timestamp}" required>
+                <input type="datetime-local" class="form-control" name="Event_Registration_End_Timestamp" value="{$aEvent.Event_Registration_End_Timestamp|date_format:"%Y-%m-%dT%H:%M"}" required>
             </div>
             <div class="col-12">
                 <hr/>
@@ -97,51 +97,20 @@
                 </div>
             </div>
             <div class="card-body table-responsive">
-                {if !isset($sTicketsCrud)}
-                <div class="alert alert-info">
-                    Tickets kunnen niet gewijzigd worden wanneer er inschrijvingen binnen zijn of inschrijving mogelijk is.
-                </div>
-                {else}
                 {$sTicketsCrud}
-                {/if}
-
             </div>
         </div>
     </div>
-<!--    <div class="col-6">-->
-<!--        <div class="card">-->
-<!--            <div class="card-header">-->
-<!--                <h2 class="card-title">Categoriën</h2>-->
-<!--            </div>-->
-<!--            <div class="card-body table-responsive">-->
-<!--                <table class="table">-->
-<!--                    <thead>-->
-<!--                        <tr>-->
-<!--                            <th>Catgeroie</th>-->
-<!--                            <th>-->
-<!--                                <div class="btn-group btn-group-sm">-->
-<!--                                    <button class="btn btn-primary"><i class="fas fa-plus"></i></button>-->
-<!--                                </div>-->
-<!--                            </th>-->
-<!--                        </tr>-->
-<!--                    </thead>-->
-<!--                    <tbody>-->
-
-<!--                    </tbody>-->
-<!--                </table>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
     <div class="col-6">
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">Evenement verwijderen</h2>
             </div>
             <div class="card-body">
-                {if !isset($sTicketsCrud)}
-                <div class="alert alert-info">
-                    Een evenement kan niet verwijdert worden wanneer er inschrijvingen zijn of inschrijven mogelijk is.
-                </div>
+                {if $bHasEventTicketsSold}
+                    <div class="alert alert-info">
+                        Een evenement kan niet verwijdert worden wanneer er inschrijvingen zijn.
+                    </div>
                 {else}
                     <form id="delete-event" action="/{$aArura.dir}/api/shop/event.php?type=delete-event" method="post">
                         <input type="hidden" name="Event_Id" value="{$aEvent.Event_Id}" required>

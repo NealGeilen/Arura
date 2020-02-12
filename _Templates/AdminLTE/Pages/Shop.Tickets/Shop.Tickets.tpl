@@ -8,7 +8,7 @@
         <h3 class="card-title">Aanmeldingen voor {$aEvent.Event_Name}</h3>
     </div>
     <div class="card-body table-responsive">
-        <table class="table display registrations-table table-striped">
+        <table class="table registrations-table">
             <thead>
             <tr>
                 <th></th>

@@ -289,8 +289,10 @@ var Builder = {
         Build : function(aGroup){
             oTemplate = $($('.template-page-group').html());
             oTemplate.attr('group-id', aGroup.Group_Id);
+
             if ('Content_Blocks' in aGroup){
                 $.each(aGroup.Content_Blocks,function (ikey,aBlock) {
+
                    oTemplate.find(sSelectors.Group_Content).append(Builder.Block.Build(aBlock));
                 });
                 delete  aGroup.Content_Blocks;
@@ -707,7 +709,6 @@ var SummerNote ={
     }
 
 };
-
 
 $(document).ready(function () {
    Builder.Structure.set();

@@ -44,6 +44,7 @@ class Crud{
     /**
      * Get HTML Crud
      * @return string
+     * @throws \Arura\Exceptions\Error
      */
     public function __toString()
     {
@@ -125,6 +126,9 @@ class Crud{
         return $this->aParams;
     }
 
+    /**
+     * @throws \Arura\Exceptions\Error
+     */
     protected function CollectColumnData(){
         foreach ($this->db->fetchAll("SHOW columns FROM {$this->sTable}") as $column){
             $this -> aColumnData[$column["Field"]] = $column;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 {include "$TEMPLATEDIR/Sections/body_head.tpl"}
-<body class="hold-transition sidebar-mini-md layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
+<body class="hold-transition sidebar-mini-md layout-fixed">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -27,9 +27,8 @@
 
     <!-- Main content -->
     <section class="content">
-      {block body}
+      {block content}
       {/block}
-      {$sContent}
     </section>
 
     <!-- /.content -->
@@ -41,18 +40,12 @@
     WEB_URL = "{$aWebsite.url}";
     MOBILE_USER = "{$bMobileUser}";
   </script>
-  {$footer}
-  {$body_modals}
+  {include "$TEMPLATEDIR/Sections/footer.tpl"}
+  {include "$TEMPLATEDIR/Sections/body_modals.tpl"}
 
-  {if $sPageSideBar != NULL}
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    {block Sidebar}
-    {/block}
-    {$sPageSideBar}
-  </aside>
-  <!-- /.control-sidebar -->
-  {/if}
+
+  {block sidebar}
+  {/block}
 </div>
 <!-- ./wrapper -->
 
