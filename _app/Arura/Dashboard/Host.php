@@ -76,7 +76,8 @@ class Host{
      * @return mixed
      * @throws \Exception
      */
-    public function getRequestPage(){
+    public function getRequestPage() : Page
+    {
         if (array_key_exists($this->getRequestedUrl(), self::$aPages)){
             return self::$aPages[$this->getRequestedUrl()];
         }

@@ -1,6 +1,8 @@
 <?php
+
+use Arura\User\Recovery;
 use Arura\User\User;
-if (!isset($_GET["i"]) || !\Arura\User\Recovery::isTokenValid($_GET["i"])){
+if (!isset($_GET["i"]) || !Recovery::isTokenValid($_GET["i"])){
     if(!User::isLogged()){
         header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
         exit;
@@ -8,4 +10,3 @@ if (!isset($_GET["i"]) || !\Arura\User\Recovery::isTokenValid($_GET["i"])){
         header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR . "home");
     }
 }
-return \Arura\Dashboard\Page::getHtml(__DIR__);

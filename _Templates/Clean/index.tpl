@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html>
-{include "$TEMPLATEDIR/Sections/body_start.tpl"}
+{include "$TEMPLATEDIR/Sections/body_head.tpl"}
 <body class="hold-transition login-page" style="background: url('{$aWebsite.banner}') center no-repeat">
 {block content}
 {/block}
-{$sContent}
 <script>
     ARURA_DIR = "{$aArura.dir}";
     ARURA_API_DIR = "/{$aArura.dir}/{$aArura.api}/";

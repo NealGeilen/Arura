@@ -1,17 +1,23 @@
 <?php
 
+use Arura\Dashboard\Host;
+use Arura\Dashboard\Page;
+use Arura\Permissions\Restrict;
+use Arura\Settings\Application;
+use Arura\User\User;
+
 require_once __DIR__ . "/_app/autoload.php";
 $aExceptionPages = ["/login", "/login/password", "/ticket"];
-if (!\Arura\User\User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages)){
+if (!User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages)){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
 }
 
 
-$Host = new \Arura\Dashboard\Host();
+$Host = new Host();
 $smarty = new Smarty();
 foreach (Rights::getConstants() as $sName => $iValue){
-    $aPermissions[$sName] = \Arura\Permissions\Restrict::Validation($iValue);
+    $aPermissions[$sName] = Restrict::Validation($iValue);
 }
 $aNavBarPages =
     [
@@ -19,14 +25,14 @@ $aNavBarPages =
             "Title" => "Home",
             "FileName" => "Home",
             "MasterPage" => "AdminLTE",
-            "Right" => \Arura\User\User::isLogged(),
+            "Right" => User::isLogged(),
             "Icon" => "fas fa-tachometer-alt"
         ],
         /**
          * CMS Beheer
          */
         "/content" => [
-            "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_MENU) || \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+            "Right" => Restrict::Validation(Rights::CMS_MENU) || Restrict::Validation(Rights::CMS_PAGES),
             "Title" => "Website content",
             "FileName" => null,
             "Icon" => "fas fa-globe-europe",
@@ -34,28 +40,28 @@ $aNavBarPages =
             "Children" =>
                 [
                     "/content/pagina" => [
-                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Right" => Restrict::Validation(Rights::CMS_PAGES),
                         "Title" => "Pagina's",
                         "FileName" => "Cms.Pages",
                         "Icon" => "fas fa-file",
                         "MasterPage" => "AdminLTE"
                     ],
                     "/content/menu" => [
-                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_MENU),
+                        "Right" => Restrict::Validation(Rights::CMS_MENU),
                         "Title" => "Menu",
                         "FileName" => "Cms.Menu",
                         "Icon" => "fas fa-bars",
                         "MasterPage" => "AdminLTE"
                     ],
                     "/content/pagina/content" => [
-                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES) && !isUserOnMobile(),
+                        "Right" => Restrict::Validation(Rights::CMS_PAGES) && !isUserOnMobile(),
                         "FileName" => "Cms.Page.Content",
                         "Title" => "Pagina content",
                         "Icon" => null,
                         "MasterPage" => "AdminLTE"
                     ],
                     "/content/pagina/instellingen" => [
-                        "Right" => \Arura\Permissions\Restrict::Validation(Rights::CMS_PAGES),
+                        "Right" => Restrict::Validation(Rights::CMS_PAGES),
                         "Title" => "Pagina instellingen",
                         "FileName" => "Cms.Page.Settings",
                         "Icon" => null,
@@ -69,9 +75,9 @@ $aNavBarPages =
             "MasterPage" => "AdminLTE",
             "isChild" => false,
             "Right" => (
-                \Arura\Permissions\Restrict::Validation(Rights::FILES_UPLOAD) &&
-                \Arura\Permissions\Restrict::Validation(Rights::FILES_READ) &&
-                \Arura\Permissions\Restrict::Validation(Rights::FILES_EDIT)
+                Restrict::Validation(Rights::FILES_UPLOAD) &&
+                Restrict::Validation(Rights::FILES_READ) &&
+                Restrict::Validation(Rights::FILES_EDIT)
             ),
             "Icon" => "fas fa-file",
             "Children" => null
@@ -79,7 +85,7 @@ $aNavBarPages =
         '/administration' => [
             "Right" =>
                 (
-                \Arura\Permissions\Restrict::Validation(Rights::SECURE_ADMINISTRATION)
+                Restrict::Validation(Rights::SECURE_ADMINISTRATION)
                 ),
             "Title" => "Beveiligde administratie",
             "FileName" => "Secure.Administration.Tables",
@@ -91,10 +97,10 @@ $aNavBarPages =
         '/winkel' => [
             "Right" =>
                 (
-                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS) ||
-                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT) ||
-                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||
-                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                    Restrict::Validation(Rights::SHOP_PAYMENTS) ||
+                    Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT) ||
+                    Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||
+                    Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                 ),
             "Title" => "Webshop",
             "FileName" => null,
@@ -106,7 +112,7 @@ $aNavBarPages =
                     '/winkel/betalingen' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_PAYMENTS)
+                            Restrict::Validation(Rights::SHOP_PAYMENTS)
                             ),
                         "Title" => "Betalingen",
                         "FileName" => "Shop.Payments",
@@ -117,7 +123,7 @@ $aNavBarPages =
                     '/winkel/categorieen' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_CATEGORIES)
+                            Restrict::Validation(Rights::SHOP_CATEGORIES)
                             ),
                         "Title" => "Categorieën",
                         "FileName" => null,
@@ -129,7 +135,7 @@ $aNavBarPages =
                     '/winkel/producten' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
+                            Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
                             ),
                         "Title" => "Producten",
                         "FileName" => null,
@@ -140,7 +146,7 @@ $aNavBarPages =
                     '/winkel/evenementen' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                            Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
                             ),
                         "Title" => "Evenementen",
                         "FileName" => "Shop.Events",
@@ -150,7 +156,7 @@ $aNavBarPages =
                             '/winkel/evenementen/beheer' => [
                                 "Right" =>
                                     (
-                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
                                     ),
                                 "Title" => "Beheer",
                                 "FileName" => "Shop.Events",
@@ -161,7 +167,7 @@ $aNavBarPages =
                             '/winkel/evenementen/tickets' => [
                                 "Right" =>
                                     (
-                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                                    Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                                     ),
                                 "Title" => "Inschrijvingen",
                                 "FileName" => "Shop.Tickets",
@@ -172,7 +178,7 @@ $aNavBarPages =
                             '/winkel/evenementen/valideren' => [
                                 "Right" =>
                                     (
-                                    \Arura\Permissions\Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
+                                    Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
                                     ),
                                 "Title" => "Valideren",
                                 "FileName" => "Events.Validation",
@@ -187,10 +193,10 @@ $aNavBarPages =
         '/arura' => [
             "Right" =>
                 (
-                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_USERS) ||
-                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_ROLLES) ||
-                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS) ||
-                    \Arura\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
+                    Restrict::Validation(Rights::ARURA_USERS) ||
+                    Restrict::Validation(Rights::ARURA_ROLLES) ||
+                    Restrict::Validation(Rights::ARURA_SETTINGS) ||
+                    Restrict::Validation(Rights::ARURA_UPDATER)
                 ),
             "Title" => "Arura",
             "FileName" => null,
@@ -201,7 +207,7 @@ $aNavBarPages =
                     '/arura/users' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_USERS)
+                            Restrict::Validation(Rights::ARURA_USERS)
                             ),
                         "Title" => "Gebruikers",
                         "FileName" => "Arura.Users",
@@ -211,7 +217,7 @@ $aNavBarPages =
                     '/arura/roles' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_ROLLES)
+                            Restrict::Validation(Rights::ARURA_ROLLES)
                             ),
                         "Title" => "Rollen",
                         "FileName" => "Arura.Roles",
@@ -221,7 +227,7 @@ $aNavBarPages =
                     '/arura/settings' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_SETTINGS)
+                            Restrict::Validation(Rights::ARURA_SETTINGS)
                             ),
                         "Title" => "Instellingen",
                         "FileName" => "Arura.Settings",
@@ -231,7 +237,7 @@ $aNavBarPages =
                     '/arura/updater' => [
                         "Right" =>
                             (
-                            \Arura\Permissions\Restrict::Validation(Rights::ARURA_UPDATER)
+                            Restrict::Validation(Rights::ARURA_UPDATER)
                             ),
                         "Title" => "Updaten",
                         "FileName" => "Arura.Updater",
@@ -244,7 +250,7 @@ $aNavBarPages =
             "Title" => "Profiel",
             "FileName" => "User.Profile",
             "MasterPage" => "AdminLTE",
-            "Right" => \Arura\User\User::isLogged(),
+            "Right" => User::isLogged(),
             "Icon" => null
         ],
         "/ticket" => [
@@ -258,30 +264,30 @@ $aNavBarPages =
             "Title" => "Home",
             "FileName" => "User.Login",
             "MasterPage" => "Clean",
-            "Right" => !\Arura\User\User::isLogged(),
+            "Right" => !User::isLogged(),
             "Icon" => null
         ],
         "/login/password" => [
             "Title" => "Nieuw wachtwoord",
             "FileName" => "User.Login.Password",
             "MasterPage" => "Clean",
-            "Right" => !\Arura\User\User::isLogged(),
+            "Right" => !User::isLogged(),
             "Icon" => null
         ]
 
     ];
-if (\Arura\User\User::isLogged()){
-    $oUser = \Arura\User\User::activeUser();
+if (User::isLogged()){
+    $oUser = User::activeUser();
     $oUser->TriggerEvent();
     $aUser  = $oUser->__toArray();
     $smarty->assign('aUser', $aUser);
     $smarty->assign('aPermissions', $aPermissions);
 }
 
-\Arura\Dashboard\Page::setSmarty($smarty);
+Page::setSmarty($smarty);
 foreach ($aNavBarPages as $sUrl => $aProperties){
     if (isset($aProperties["MasterPage"])){
-        $P = new \Arura\Dashboard\Page();
+        $P = new Page();
         $P->setUrl($sUrl);
         $P->setTitle($aProperties['Title']);
         $P->setRight($aProperties["Right"]);
@@ -291,7 +297,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
     }
     if (isset($aProperties["Children"])){
         foreach ($aProperties["Children"] as $ChildUrl => $aChildProperties){
-            $P = new \Arura\Dashboard\Page();
+            $P = new Page();
             $P->setUrl($ChildUrl);
             $P->setTitle($aChildProperties['Title']);
             $P->setRight($aChildProperties["Right"]);
@@ -301,7 +307,7 @@ foreach ($aNavBarPages as $sUrl => $aProperties){
 
             if (isset($aChildProperties["Children"])){
                 foreach ($aChildProperties["Children"] as $GrandUrl => $aGrandProperties){
-                    $P = new \Arura\Dashboard\Page();
+                    $P = new Page();
                     $P->setUrl($GrandUrl);
                     $P->setTitle($aGrandProperties['Title']);
                     $P->setRight($aGrandProperties["Right"]);
@@ -330,14 +336,12 @@ try{
 
 } catch (Exception $e){
     switch ($e->getCode()){
+        case 404:
         case 403:
             header("Location: /" . __ARURA__DIR_NAME__);
             break;
-        case 404:
-            header("Location: /" . __ARURA__DIR_NAME__);
-            break;
         default:
-            if ((int)\Arura\Settings\Application::get("arura", "Debug")){
+            if ((int)Application::get("arura", "Debug")){
                 var_dump($e);
                 exit;
             }

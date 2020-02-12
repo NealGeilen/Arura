@@ -73,7 +73,6 @@ class Page{
             self::getSmarty()->assign("sPageSideBar", self::getSideBar());
             self::getSmarty()->assign('aResourceFiles', self::getResourceFiles());
             self::getSmarty()->assign('TEMPLATEDIR', $this->getMasterPath());
-
 //          Show Master Page
             return self::getSmarty()->display(self::$ContentTpl);
         }
