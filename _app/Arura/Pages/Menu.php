@@ -5,6 +5,9 @@ namespace Arura\Pages;
 
 class Menu{
 
+    /**
+     * @var string
+     */
     protected static $sFilePath = __WEB_TEMPLATES__ . 'menu.json';
 
     /**

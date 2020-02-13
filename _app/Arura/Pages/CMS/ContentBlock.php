@@ -3,18 +3,27 @@ namespace Arura\Pages\CMS;
 
 
 use Arura\Database;
+use Arura\Exceptions\Error;
 use Arura\Modal;
 
 class ContentBlock extends Modal{
 
     protected $id;
 
+    /**
+     * ContentBlock constructor.
+     * @param $id
+     */
     public function __construct($id)
     {
         parent::__construct();
         $this->setId($id);
     }
 
+    /**
+     * @return mixed
+     * @throws Error
+     */
     public function get(){
         $aData =  $this->db->fetchRow('SELECT * FROM tblCmsContentBlocks WHERE Content_Id = ? ',
             [
@@ -26,6 +35,11 @@ class ContentBlock extends Modal{
         return $aData;
     }
 
+    /**
+     * @param int $iGroupId
+     * @return array
+     * @throws Error
+     */
     public static function getContentBlocksFromGroup($iGroupId){
         $db = new Database();
         $aData =  $db->fetchAll('SELECT * FROM tblCmsContentBlocks WHERE Content_Group_Id = ? ORDER BY Content_Position ASC',
@@ -43,6 +57,11 @@ class ContentBlock extends Modal{
     }
 
 
+    /**
+     * @param array $aBlock
+     * @return bool
+     * @throws Error
+     */
     public function set($aBlock){
         $aBlock['Content_Id'] = $this->getId();
         if (!isset($aBlock["Content_Value"])){
@@ -55,11 +74,19 @@ class ContentBlock extends Modal{
         return $this->db->isQuerySuccessful();
     }
 
+    /**
+     * @return ContentBlock
+     * @throws Error
+     */
     public static function Create(){
         $i = (new Database())->createRecord('tblCmsContentBlocks',['Content_Position'=>-1]);
         return new self($i);
     }
 
+    /**
+     * @return bool
+     * @throws Error
+     */
     public function delete(){
         $this->db->query('DELETE FROM tblCmsContentBlocks WHERE Content_Id = ?',
             [

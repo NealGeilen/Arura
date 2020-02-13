@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Permissions;
 use Arura\Database;
+use Arura\Exceptions\Error;
 
 class Right
 {
@@ -38,7 +39,7 @@ class Right
 
     /**
      * @param bool $force
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
@@ -50,7 +51,7 @@ class Right
 
     /**
      * @return array
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public static function getAllRights(){
         $db = new Database();
@@ -81,7 +82,7 @@ class Right
 
     /**
      * @return mixed
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function getName()
     {

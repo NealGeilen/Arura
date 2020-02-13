@@ -5,7 +5,10 @@ namespace Arura\Mailer;
 use Arura\Exceptions\Error;
 use Arura\Settings\Application;
 use Html2Text\Html2Text;
+use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
+use Smarty;
+use SmartyException;
 
 class Mailer extends PHPMailer{
 
@@ -18,7 +21,7 @@ class Mailer extends PHPMailer{
      * Mailer constructor.
      * @param bool $setDefaults
      * @throws Error
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws Exception
      */
     public function __construct($setDefaults = true)
     {
@@ -43,7 +46,7 @@ class Mailer extends PHPMailer{
      * @param string $sFile
      * @param bool $includeAltBody
      * @throws Error
-     * @throws \SmartyException
+     * @throws SmartyException
      */
     public function setBody($sFile = "", $includeAltBody = true){
         if (is_file($sFile)){
@@ -66,22 +69,21 @@ class Mailer extends PHPMailer{
     /**
      * @return bool
      * @throws Error
-     * @throws \PHPMailer\PHPMailer\Exception
+     * @throws Exception
      */
     public function send(){
         if (!parent::send()){
             throw new Error();
-            return false;
         }
         return true;
     }
 
     /**
-     * @return \Smarty
+     * @return Smarty
      */
-    public static function getSmarty() : \Smarty{
+    public static function getSmarty() : Smarty{
         if (is_null(self::$smarty)){
-            self::$smarty = new \Smarty();
+            self::$smarty = new Smarty();
         }
         return self::$smarty;
     }

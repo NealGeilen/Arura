@@ -1,6 +1,10 @@
 <?php
 namespace Arura;
 
+/**
+ * Class DataBaseSync
+ * @package Arura
+ */
 class DataBaseSync extends Modal {
 
     /**

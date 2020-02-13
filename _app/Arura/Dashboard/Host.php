@@ -2,6 +2,8 @@
 namespace Arura\Dashboard;
 
 
+use Exception;
+
 class Host{
 
     /**
@@ -74,14 +76,14 @@ class Host{
 
     /**
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function getRequestPage() : Page
     {
         if (array_key_exists($this->getRequestedUrl(), self::$aPages)){
             return self::$aPages[$this->getRequestedUrl()];
         }
-        throw new \Exception('Page Not Found',404);
+        throw new Exception('Page Not Found',404);
     }
 
 
@@ -94,7 +96,7 @@ class Host{
     }
 
     /**
-     * @param null $sRequestedUrl
+     * @param string $sRequestedUrl
      */
     public function setRequestedUrl($sRequestedUrl = "")
     {

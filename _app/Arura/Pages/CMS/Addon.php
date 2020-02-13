@@ -2,9 +2,15 @@
 namespace Arura\Pages\CMS;
 
 use Arura\Database;
+use Arura\Exceptions\Error;
 
 class Addon {
 
+    /**
+     * @param $iAddonId
+     * @return mixed
+     * @throws Error
+     */
     public static function getAddon($iAddonId){
         $db = new Database();
         return $db->fetchRow('SELECT * FROM tblCmsAddons WHERE Addon_Id = ? ',
@@ -13,6 +19,10 @@ class Addon {
             ]);
     }
 
+    /**
+     * @return array
+     * @throws Error
+     */
     public static function getAllAddons(){
         $db = new Database();
         $aAddons = $db->fetchAll('SELECT * FROM tblCmsAddons WHERE Addon_Active = 1');

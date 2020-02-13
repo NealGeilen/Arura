@@ -1,6 +1,8 @@
 <?php
 namespace Arura;
 
+use Exception;
+
 class Crud extends Database {
 
     protected $sHtml = "";
@@ -10,6 +12,14 @@ class Crud extends Database {
     protected $aDefaultValues;
     protected $sCssId;
 
+    /**
+     * Crud constructor.
+     * @param $sData
+     * @param array $aParas
+     * @param array $aDefaultValues
+     * @param null $sCssId
+     * @throws Exceptions\Error
+     */
     public function __construct($sData,$aParas = [], $aDefaultValues = [], $sCssId = null){
         $this->aDataFile = json_array_decode(file_get_contents($sData));
         $this->aParas = $aParas;
@@ -21,10 +31,17 @@ class Crud extends Database {
         parent::__construct();
     }
 
+    /**
+     * @param array $aParams
+     * @return string
+     */
     protected function getUrl($aParams = []){
         return $_SERVER["REDIRECT_URL"] ."?". http_build_query(array_merge($aParams, $this->aParas)) . "#" . $this->sCssId;
     }
 
+    /**
+     *
+     */
     private function Actions(){
         try{
             switch ($_GET['action']){
@@ -58,13 +75,14 @@ class Crud extends Database {
                     }
                     break;
             }
-        } catch (\Exception $e){
+        } catch (Exception $e){
             header('Location:' . $this->getUrl());
         }
     }
 
     /**
      * @return string
+     * @throws Exceptions\Error
      */
     public function getHTMLTable()
     {
@@ -75,6 +93,9 @@ class Crud extends Database {
         return $this->sHtml;
     }
 
+    /**
+     * @throws Exceptions\Error
+     */
     private function buildTable(){
         $sQuery = "SELECT * FROM ". $this->aDataFile["table"];
         if (!empty($this->aDefaultValues)){
@@ -115,6 +136,10 @@ class Crud extends Database {
         $this->sHtml  .= "</tbody></table>";
     }
 
+    /**
+     * @param null $iRowId
+     * @return string
+     */
     protected function getActionButtons($iRowId = null){
         $s = "<div class='btn-group btn-group-sm'>";
         $s .= "<button class='btn btn-danger btn-delete' href='".$this->getUrl(["action" => "delete", "_key" => $iRowId])."'><i class=\"fas fa-trash\"></i></button>";
@@ -123,6 +148,11 @@ class Crud extends Database {
         return $s;
     }
 
+    /**
+     * @param array $aData
+     * @param null $sAction
+     * @return string
+     */
     protected  function buildInputField($aData = [],$sAction = null){
         $sHtml = "<h2>".(($sAction==="save") ? "Toevoegen" : "Bewerken")."</h2>";
         $sHtml .= "<form method='post' action='".$this->getUrl(["action" => $sAction])."' class='form-row bg-secondary p-1 border-4 border-dark rounded m-2'>";
@@ -163,11 +193,23 @@ class Crud extends Database {
         return $sHtml;
     }
 
+    /**
+     * @return string
+     * @throws Exceptions\Error
+     */
     public function __toString()
     {
         return $this->getHTMLTable();
     }
 
+    /**
+     * @param string $sFile
+     * @param array $aParams
+     * @param array $aDefaultValues
+     * @param null $sCssId
+     * @return Crud
+     * @throws Exceptions\Error
+     */
     public static function drop($sFile,$aParams = [], $aDefaultValues = [], $sCssId = null){
         return new self($sFile, $aParams, $aDefaultValues, $sCssId);
     }

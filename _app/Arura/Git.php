@@ -2,13 +2,14 @@
 
 namespace Arura;
 
+use Cz\Git\GitException;
 use Cz\Git\GitRepository;
 
 class Git extends GitRepository {
 
     /**
      * @return NULL|string[]
-     * @throws \Cz\Git\GitException
+     * @throws GitException
      */
     public function getStatus(){
         return $this->extractFromCommand("git status", function($value) {
@@ -19,7 +20,7 @@ class Git extends GitRepository {
     /**
      * @param bool $force
      * @return NULL|string[]
-     * @throws \Cz\Git\GitException
+     * @throws GitException
      */
     public function Reset($force = false){
         $this->extractFromCommand("git clean " .(($force) ? "-f": null), function($value) {
