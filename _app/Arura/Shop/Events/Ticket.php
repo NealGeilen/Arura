@@ -5,10 +5,8 @@ namespace Arura\Shop\Events;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Modal;
-use Arura\PDF;
-use Arura\QR;
-use Arura\Settings\Application;
-use Mpdf\Output\Destination;
+use DateTime;
+use Exception;
 
 class Ticket extends Modal {
 
@@ -42,6 +40,7 @@ class Ticket extends Modal {
     /**
      * @param $sHash
      * @return bool
+     * @throws Error
      */
     public static function isTicketValid($sHash){
         $db = new Database();
@@ -50,7 +49,7 @@ class Ticket extends Modal {
 
     /**
      * @param bool $force
-     * @throws \Exception
+     * @throws Exception
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
@@ -60,7 +59,7 @@ class Ticket extends Modal {
             $this->setPrice($aTicket["OrderedTicket_Price"]);
             $this->setRegistration(new Registration($aTicket["OrderedTicket_Registration_Id"]));
             $this->setTicketId($aTicket["OrderedTicket_Ticket_Id"]);
-            $date = new \DateTime();
+            $date = new DateTime();
             $date -> setTimestamp($aTicket["OrderedTicket_LastValided_Timestamp"]);
             $this->setLastValidedTimestamp($date);
         }
@@ -68,11 +67,11 @@ class Ticket extends Modal {
 
     /**
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function Validate(){
         if ($this->getLastValidedTimestamp()->getTimestamp() >= strtotime('-1 day')){
-            throw new \Exception("Ticket has already been validate", 409);
+            throw new Exception("Ticket has already been validate", 409);
         } else {
             $this->db->updateRecord("tblEventOrderedTickets", [
                 "OrderedTicket_LastValided_Timestamp" => time(),
@@ -89,6 +88,7 @@ class Ticket extends Modal {
 
     /**
      * @return mixed
+     * @throws Error
      */
     public function getTicketData(){
         return $this->db->fetchRow("SELECT * FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Hash = :Hash",
@@ -99,6 +99,7 @@ class Ticket extends Modal {
 
     /**
      * @return array
+     * @throws Exception
      */
     public function __ToArray(){
         return [
@@ -134,7 +135,7 @@ class Ticket extends Modal {
 
     /**
      * @return Event
-     * @throws \Exception
+     * @throws Exception
      */
     public function getEvent() : Event{
         $aEvent = $this->db->fetchRow("SELECT Registration_Event_Id FROM tblEventOrderedTickets JOIN tblEventRegistration ON Registration_Id = OrderedTicket_Registration_Id");
@@ -159,6 +160,7 @@ class Ticket extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getRegistration() : Registration
     {
@@ -176,6 +178,7 @@ class Ticket extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getPrice()
     {
@@ -193,6 +196,7 @@ class Ticket extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getTicketId()
     {
@@ -210,8 +214,9 @@ class Ticket extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
-    public function getLastValidedTimestamp() : \DateTime
+    public function getLastValidedTimestamp() : DateTime
     {
         $this->load();
         return $this->LastValidedTimestamp;
@@ -219,7 +224,7 @@ class Ticket extends Modal {
     /**
      * @param mixed $LastValidedTimestamp
      */
-    public function setLastValidedTimestamp(\DateTime $LastValidedTimestamp): void
+    public function setLastValidedTimestamp(DateTime $LastValidedTimestamp): void
     {
         $this->LastValidedTimestamp = $LastValidedTimestamp;
     }

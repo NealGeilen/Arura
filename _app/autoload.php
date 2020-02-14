@@ -1,4 +1,8 @@
 <?php
+
+use Arura\Sessions;
+use Arura\Settings\Application;
+
 define("__ARURA__DIR_NAME__", "dashboard");
 define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
 define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
@@ -24,8 +28,8 @@ require_once __APP__    . "Rights.php";
 require_once __APP__ . "Functions.php";
 require_once __VENDOR__ . "autoload.php";
 session_set_cookie_params(0, "/", "");
-\Arura\Sessions::Start();
-if ((int)\Arura\Settings\Application::get("arura", "Debug")){
+Sessions::Start();
+if ((int)Application::get("arura", "Debug")){
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
