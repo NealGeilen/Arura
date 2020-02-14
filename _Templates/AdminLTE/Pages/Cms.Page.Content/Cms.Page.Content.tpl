@@ -1,4 +1,4 @@
-{extends "$TEMPLATEDIR/index.tpl"}
+{extends "../../index.tpl"}
 {block content}
     <script>
         var _Page_Id = {$aCmsPage.Page_Id}

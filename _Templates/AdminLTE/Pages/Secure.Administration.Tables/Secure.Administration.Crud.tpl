@@ -1,4 +1,4 @@
-{extends "$TEMPLATEDIR/index.tpl"}
+{extends "../../index.tpl"}
 {block content}
     <script>
         _TABLE_ID = {$aTable.Table_Id}

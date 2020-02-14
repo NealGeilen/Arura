@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-{include "$TEMPLATEDIR/Sections/body_head.tpl"}
+{include "./Sections/body_head.tpl"}
 <body class="hold-transition sidebar-mini-md layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
 <div class="wrapper">
 
   <!-- Navbar -->
-  {include "$TEMPLATEDIR/Sections/navbar.tpl"}
+  {include "./Sections/navbar.tpl"}
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  {include "$TEMPLATEDIR/Sections/sidebar.tpl"}
+  {include "./Sections/sidebar.tpl"}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -40,8 +40,8 @@
     WEB_URL = "{$aWebsite.url}";
     MOBILE_USER = "{$bMobileUser}";
   </script>
-  {include "$TEMPLATEDIR/Sections/footer.tpl"}
-  {include "$TEMPLATEDIR/Sections/body_modals.tpl"}
+  {include "./Sections/footer.tpl"}
+  {include "./Sections/body_modals.tpl"}
 
 
   {if $sPageSideBar != NULL}
@@ -55,6 +55,6 @@
 </div>
 <!-- ./wrapper -->
 
-{include "$TEMPLATEDIR/Sections/body_end.tpl"}
+{include "./Sections/body_end.tpl"}
 </body>
 </html>

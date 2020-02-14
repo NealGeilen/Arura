@@ -1,4 +1,4 @@
-{extends "$TEMPLATEDIR/index.tpl"}
+{extends "../../index.tpl"}
 {block content}
 <div class="row">
     <div class="col-md-3 col-6">

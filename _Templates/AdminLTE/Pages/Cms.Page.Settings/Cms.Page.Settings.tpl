@@ -1,4 +1,4 @@
-{extends "$TEMPLATEDIR/index.tpl"}
+{extends "../../index.tpl"}
 {block content}
     <header class="page-header">
         <h3>{$aCmsPage.Page_Title}</h3>
