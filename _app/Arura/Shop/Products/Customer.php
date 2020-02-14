@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Shop\Products;
 
+use Arura\Exceptions\Error;
 use Arura\Modal;
 use Arura\Database;
 use Arura\Exceptions\Forbidden;
@@ -43,6 +44,7 @@ class Customer extends Modal {
     /**
      * Set values on properties
      * @param bool $force
+     * @throws Error
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
@@ -62,6 +64,7 @@ class Customer extends Modal {
 
     /**
      * Save the properties to the database
+     * @throws Error
      */
     public function save(){
         if ($this->isLoaded){
@@ -75,6 +78,7 @@ class Customer extends Modal {
     /**
      * Return the active customer with is currently logged in.
      * @return Customer|null
+     * @throws Forbidden
      */
     public static function activeCustomer(){
         if (self::isLogged()){
