@@ -33,5 +33,4 @@ foreach ($aEventIds as $iEventId){
     }
     $aEvents[] = $aEvent;
 }
-
 $oSmarty->assign("aEvents", $aEvents);

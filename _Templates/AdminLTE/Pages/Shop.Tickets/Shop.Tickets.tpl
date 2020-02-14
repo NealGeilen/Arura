@@ -7,7 +7,7 @@
 
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">Aanmeldingen voor {$aEvent.Event_Name}</h3>
+            <h3 class="card-title">Aanmeldingen</h3>
         </div>
         <div class="card-body table-responsive">
             <table class="table registrations-table">
