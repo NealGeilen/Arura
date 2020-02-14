@@ -3,6 +3,7 @@
 namespace Arura\Settings;
 
 use Arura\Database;
+use Arura\Exceptions\Error;
 
 class Application{
 
@@ -10,7 +11,7 @@ class Application{
 
 
     /**
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     protected static function load(){
         if (empty(self::$aSettingData)){
@@ -27,7 +28,7 @@ class Application{
      * @param string $sPlg
      * @param string $sName
      * @return mixed
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public static function get($sPlg = "", $sName = ""){
         self::load();
@@ -36,7 +37,7 @@ class Application{
 
     /**
      * @return array
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public static function getAll(){
         self::load();

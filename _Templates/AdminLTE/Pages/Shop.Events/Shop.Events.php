@@ -1,6 +1,5 @@
 <?php
 
-use Arura\Crud;
 use Arura\Dashboard\Page;
 use Arura\Database;
 use Arura\Shop\Events\Event;
@@ -8,7 +7,6 @@ use Arura\Shop\Events\Event;
 $oSmarty =  Page::getSmarty();
 $db = new Database();
 if (isset($_GET["c"])){
-
     if (isset($_POST["Event_Name"])){
         unset($_POST["files"]);
         $_POST["Event_Start_Timestamp"] = strtotime($_POST["Event_Start_Timestamp"]);
@@ -20,7 +18,7 @@ if (isset($_GET["c"])){
         header("Location: /dashboard/winkel/evenementen/beheer?e=" . $e->getId());
     }
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
-    return Page::getHtml(__DIR__ . "/Shop.Events.Create.tpl");
+    Page::$ContentTpl = __DIR__ . "/Shop.Events.Create.tpl";
 } else if (isset($_GET["e"]) && !empty($_GET["e"])){
     $oEvent = new Event($_GET["e"]);
     $oSmarty->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
@@ -28,12 +26,10 @@ if (isset($_GET["c"])){
     $oSmarty->assign("bTickets", $oEvent->hasEventTickets());
     $bTicketsSold = $oEvent->hasEventRegistrations();
     $oSmarty->assign("bHasEventTicketsSold", $bTicketsSold);
-    if (!$bTicketsSold && !$oEvent->getIsActive()){
-        $oSmarty->assign("sTicketsCrud", (string)Crud::drop(__DATAFILES__ . "Events.TicketTypes.json", ["e" => $_GET["e"]], ["Ticket_Event_Id" => $_GET["e"]], "tickets"));
-    }
-    return Page::getHtml(__DIR__ . "/Shop.Events.Edit.tpl");
+    $oSmarty->assign("sTicketsCrud", $oEvent->getTicketGrud());
+    Page::$ContentTpl = __DIR__ . "/Shop.Events.Edit.tpl";
+} else {
+    $oSmarty->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));
 }
-$oSmarty->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));
-return Page::getHtml(__DIR__);
 
 

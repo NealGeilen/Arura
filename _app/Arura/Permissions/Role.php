@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Permissions;
 use Arura\Database;
+use Arura\Exceptions\Error;
 
 
 class Role
@@ -60,6 +61,7 @@ class Role
     /**
      * Load role properties form database
      * @param bool $force
+     * @throws Error
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
@@ -169,7 +171,7 @@ class Role
     /**
      * @param string $sRoleName
      * @return Role
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public static function createRole($sRoleName = ""){
         $db = new Database();

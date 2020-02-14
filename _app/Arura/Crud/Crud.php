@@ -2,6 +2,7 @@
 namespace Arura\Crud;
 
 use Arura\Database;
+use Arura\Exceptions\Error;
 use Exception;
 use Arura\Crud\Fields\Field;
 
@@ -44,6 +45,7 @@ class Crud{
     /**
      * Get HTML Crud
      * @return string
+     * @throws Error
      */
     public function __toString()
     {
@@ -125,6 +127,9 @@ class Crud{
         return $this->aParams;
     }
 
+    /**
+     * @throws Error
+     */
     protected function CollectColumnData(){
         foreach ($this->db->fetchAll("SHOW columns FROM {$this->sTable}") as $column){
             $this -> aColumnData[$column["Field"]] = $column;

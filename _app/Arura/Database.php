@@ -2,6 +2,7 @@
 namespace Arura;
 
 use Arura\Exceptions\Error;
+use PDOStatement;
 
 class Database{
 
@@ -61,7 +62,7 @@ class Database{
     /**
      * @param string $statment
      * @param array $parameters
-     * @return bool|\PDOStatement
+     * @return bool|PDOStatement
      * @throws Error
      */
     public static function ExecQuery($statment = "", array $parameters = []){
@@ -85,7 +86,7 @@ class Database{
     /**
      * @param string $statment
      * @param array $parameters
-     * @return \PDOStatement
+     * @return PDOStatement
      * @throws Error
      */
     public function query($statment = "", array $parameters = []){
@@ -161,7 +162,7 @@ class Database{
      * @param string $sTable
      * @param array $aData
      * @param string $sPrimaryKey
-     * @return \PDOStatement
+     * @return PDOStatement
      * @throws Error
      */
     public function updateRecord($sTable = "", $aData = [], $sPrimaryKey = ""){
@@ -173,7 +174,7 @@ class Database{
      * @param string $sQuery
      * @param array $aData
      * @param string $sPrimaryKey
-     * @return \PDOStatement
+     * @return PDOStatement
      * @throws Error
      */
     private function buildSetString($sQuery = "", $aData = [], $sPrimaryKey = ""){

@@ -2,6 +2,8 @@
 namespace Arura\FileManger;
 
 use Arura\Exceptions\NotAcceptable;
+use Exception;
+use FilesystemIterator;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class FileManger{
@@ -9,7 +11,7 @@ class FileManger{
 
     /**
      * @param string $sDir
-     * @throws \Exception
+     * @throws Exception
      */
     public function uploadFiles($sDir = ""){
         foreach ($_FILES as $file){
@@ -22,7 +24,7 @@ class FileManger{
                 }
             } else {
                 unlink($file['tmp_name']);
-                throw new \Exception('file or directorie already exits',500);
+                throw new Exception('file or directorie already exits',500);
             }
         }
     }
@@ -54,7 +56,7 @@ class FileManger{
                             ];
                     }
                 } else if (is_dir($sPath)){
-                    $isDirEmpty = (new \FilesystemIterator($sPath))->valid();
+                    $isDirEmpty = (new FilesystemIterator($sPath))->valid();
                     $aOutcome[] =
                         [
                             'text' => $Item,
@@ -85,7 +87,6 @@ class FileManger{
      * @return string
      */
     public static function getIcon($sFileType = ''){
-        $sType = '';
         switch ($sFileType){
             case 'file':
                 $sType = 'fas fa-file';
@@ -106,7 +107,6 @@ class FileManger{
      */
     public static function getFileType($sFilePath = ""){
         if (is_file($sFilePath)){
-            $sType = '';
             switch (strtolower(pathinfo($sFilePath, PATHINFO_EXTENSION))){
                 case 'png':
                 case 'jpg':
@@ -129,16 +129,16 @@ class FileManger{
      * @param string $sDir
      * @param string $sName
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function createDir($sDir = "", $sName = ""){
         $sNewDir = __FILES__ . $sDir . $sName;
         if (!is_dir($sNewDir) && !is_file($sNewDir) && is_dir(__FILES__ . $sDir)){
             if (!mkdir($sNewDir)){
-                throw new \Exception('Dir creation has failed', 500);
+                throw new Exception('Dir creation has failed', 500);
             }
         } else {
-            throw new \Exception('Dir already exits', 500);
+            throw new Exception('Dir already exits', 500);
         }
         return true;
     }
@@ -146,7 +146,7 @@ class FileManger{
     /**
      * @param string $sPath
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function deleteItem($sPath = ""){
         if (is_file($sPath)){
@@ -159,7 +159,7 @@ class FileManger{
             }
             rmdir($sPath);
         } else {
-            throw new \Exception('item does not exists', 404);
+            throw new Exception('item does not exists', 404);
         }
         return true;
     }
@@ -168,7 +168,7 @@ class FileManger{
      * @param string $sPath
      * @param string $sNewName
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
     public function renameItem($sPath = "", $sNewName = ""){
         $sRootPath = __FILES__ . $sPath;
@@ -190,7 +190,7 @@ class FileManger{
 
             }
         }
-        throw new \Exception('item does not exists', 404);
+        throw new Exception('item does not exists', 404);
     }
 
     /**

@@ -55,8 +55,12 @@ class Table {
      */
     protected function getActionButtons($iRowId = null){
         $s = "<div class='btn-group btn-group-sm'>";
-        $s .= "<a class='btn btn-danger' href='{$this->oCrud->getUrl(["action" => Actions::DELETE, "_key" => $iRowId])}'><i class=\"fas fa-trash\"></i></a>";
-        $s .= "<a class='btn btn-primary' href='{$this->oCrud->getUrl(["action" => Actions::EDIT, "_key" => $iRowId])}'><i class=\"fas fa-pen\"></i></a>";
+        if ($this->oCrud->canEdit()){
+            $s .= "<a class='btn btn-primary' href='{$this->oCrud->getUrl(["action" => Actions::EDIT, "_key" => $iRowId])}'><i class=\"fas fa-pen\"></i></a>";
+        }
+        if ($this->oCrud->canDelete()){
+            $s .= "<a class='btn btn-danger' href='{$this->oCrud->getUrl(["action" => Actions::DELETE, "_key" => $iRowId])}'><i class=\"fas fa-trash\"></i></a>";
+        }
         $s .= "</div>";
         return $s;
     }
@@ -72,12 +76,15 @@ class Table {
         foreach ($this->oCrud->getFields() as $oField){
             $sHtml .= "<th>{$oField->getName()}</th>";
         }
-        $sHtml .= "<th>";
-        //If action is not create or edit add btn for creation
-        if (!isset($_GET["action"]) || ($_GET["action"] !== Actions::CREATE && $_GET["action"] !== Actions::EDIT)){
-            $sHtml .= "<a class='btn btn-primary btn-sm' href='{$this->oCrud->getUrl(["action" => "create"])}'><i class=\"fas fa-plus\"></i></a>";
+        if ($this->oCrud->canEdit() || $this->oCrud->canDelete() || $this->oCrud->canInsert()){
+            $sHtml .= "<th>";
+            //If action is not create or edit add btn for creation
+            if (!isset($_GET["action"]) || ($_GET["action"] !== Actions::CREATE && $_GET["action"] !== Actions::EDIT) && $this->oCrud->canInsert()){
+                $sHtml .= "<a class='btn btn-primary btn-sm' href='{$this->oCrud->getUrl(["action" => "create"])}'><i class=\"fas fa-plus\"></i></a>";
+            }
+            $sHtml .= "</th>";
         }
-        $sHtml .= "</th></tr></thead><tbody>";
+        $sHtml.="</tr></thead><tbody>";
         //Create rows
         foreach ($this->aRecords as $record){
             $sHtml  .= "<tr>";
@@ -85,7 +92,9 @@ class Table {
             foreach ($this->oCrud->getFields() as $oField){
                 $sHtml .= "<td>{$oField->getData($record[$oField->getTag()])}</td>";
             }
-            $sHtml .= "<td>{$this->getActionButtons($record[$this->oCrud->sPrimaryKey])}</td>";
+            if ($this->oCrud->canDelete() || $this->oCrud->canEdit()){
+                $sHtml .= "<td>{$this->getActionButtons($record[$this->oCrud->sPrimaryKey])}</td>";
+            }
             $sHtml  .= "</tr>";
 
         }

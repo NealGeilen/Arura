@@ -9,4 +9,3 @@ $aRights = $db -> fetchAll('SELECT * FROM tblRights ORDER BY Right_ID');
 
 
 $smarty->assign('aRights', $aRights);
-return Page::getHtml(__DIR__);

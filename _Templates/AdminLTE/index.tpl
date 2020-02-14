@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
-{$body_head}
+{include "$TEMPLATEDIR/Sections/body_head.tpl"}
 <body class="hold-transition sidebar-mini-md layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
 <div class="wrapper">
 
   <!-- Navbar -->
-  {$navbar}
+  {include "$TEMPLATEDIR/Sections/navbar.tpl"}
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  {$sidebar}
+  {include "$TEMPLATEDIR/Sections/sidebar.tpl"}
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -27,7 +27,8 @@
 
     <!-- Main content -->
     <section class="content">
-      {$sContent}
+      {block content}
+      {/block}
     </section>
 
     <!-- /.content -->
@@ -39,19 +40,21 @@
     WEB_URL = "{$aWebsite.url}";
     MOBILE_USER = "{$bMobileUser}";
   </script>
-  {$footer}
-  {$body_modals}
+  {include "$TEMPLATEDIR/Sections/footer.tpl"}
+  {include "$TEMPLATEDIR/Sections/body_modals.tpl"}
+
 
   {if $sPageSideBar != NULL}
-  <!-- Control Sidebar -->
-  <aside class="control-sidebar control-sidebar-dark">
-    {$sPageSideBar}
-  </aside>
-  <!-- /.control-sidebar -->
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+      {$sPageSideBar}
+    </aside>
+    <!-- /.control-sidebar -->
   {/if}
+
 </div>
 <!-- ./wrapper -->
 
-{$body_end}
+{include "$TEMPLATEDIR/Sections/body_end.tpl"}
 </body>
 </html>

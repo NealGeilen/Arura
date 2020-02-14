@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
-{$body_head}
+{include "$TEMPLATEDIR/Sections/body_head.tpl"}
 <body class="hold-transition login-page" style="background: url('{$aWebsite.banner}') center no-repeat">
-
-{$sContent}
+{block content}
+{/block}
 <script>
     ARURA_DIR = "{$aArura.dir}";
     ARURA_API_DIR = "/{$aArura.dir}/{$aArura.api}/";
 </script>
-{$body_end}
+{include "$TEMPLATEDIR/Sections/body_end.tpl"}
 
 </body>
 </html>

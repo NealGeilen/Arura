@@ -1,9 +1,12 @@
 <?php
 namespace Arura\Pages;
 
+use Arura\Exceptions\Error;
 use Arura\Modal;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
+use Smarty;
+use SmartyException;
 
 class Page extends Modal implements PageEnum{
 
@@ -54,21 +57,21 @@ class Page extends Modal implements PageEnum{
     }
 
     /**
-     * @return |null
+     * @return null
      */
     public function getPageContent(){
         return $this->PageContend;
     }
 
     /**
-     * @return \Smarty
+     * @return Smarty
      */
-    public static function getSmarty() : \Smarty{
+    public static function getSmarty() : Smarty{
         return self::$smarty;
     }
 
     /**
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function forceHTTPS(){
         if (Application::get("website", "HTTPS")){
@@ -84,8 +87,8 @@ class Page extends Modal implements PageEnum{
     }
 
     /**
-     * @throws \Arura\Exceptions\Error
-     * @throws \SmartyException
+     * @throws Error
+     * @throws SmartyException
      */
     public function showPage(){
         $this->forceHTTPS();
@@ -115,8 +118,8 @@ class Page extends Modal implements PageEnum{
      * @param string $sSlug
      * @param int $iRight
      * @param callable|null $function
-     * @throws \Arura\Exceptions\Error
-     * @throws \SmartyException
+     * @throws Error
+     * @throws SmartyException
      */
     public static function displayView($sSlug = "", $iRight = \Rights::CMS_PAGES , callable $function = null){
         $_SERVER["REDIRECT_URL"] = $sSlug;

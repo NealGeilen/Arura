@@ -3,6 +3,7 @@ namespace Arura\Client;
 
 use Arura\Database;
 use Arura\Exceptions\BadRequest;
+use Arura\Exceptions\Error;
 use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\MethodNotAllowed;
 use Arura\Exceptions\NotAcceptable;
@@ -10,6 +11,7 @@ use Arura\Exceptions\Unauthorized;
 use Arura\Permissions\Restrict;
 use Arura\Sessions;
 use Arura\User\User;
+use Exception;
 
 
 class RequestHandler{
@@ -51,7 +53,7 @@ class RequestHandler{
     }
 
     /**
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function TriggerEvent(){
         Database::ExecQuery('UPDATE tblSessions SET Session_Last_Active = ? WHERE Session_Id = ? ',
@@ -130,7 +132,7 @@ class RequestHandler{
                         throw new MethodNotAllowed();
                     }
                 }
-            }catch (\Exception $e){
+            }catch (Exception $e){
                 ResponseHandler::setErrorData($e);
             }
         }

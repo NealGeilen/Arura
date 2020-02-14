@@ -1,7 +1,10 @@
 <?php
 namespace Arura\Dashboard;
 
+use Arura\Exceptions\Error;
 use Arura\Settings\Application;
+use Exception;
+use Smarty;
 
 class Page{
 
@@ -21,15 +24,17 @@ class Page{
 
     protected static $sSideBar = null;
 
+    public static $ContentTpl;
+
     /**
      * @return mixed
-     * @throws \Arura\Exceptions\Error
-     * @throws \Exception
+     * @throws Error
+     * @throws Exception
      */
     public function showPage(){
         if (!is_null($this->getRight())){
             if (!$this->getRight()){
-                throw new \Exception('No Access', 403);
+                throw new Exception('No Access', 403);
             }
         }
         self::getSmarty()->assign("aWebsite" ,Application::getAll()["website"]);
@@ -46,9 +51,12 @@ class Page{
         if (empty($this->getMasterPath())){
             return $this -> getFileLocation();
         } else {
+            self::$ContentTpl = $this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.tpl';
+            if (is_file($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php')){
+                include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php');
+            }
             self::setResourceFiles(json_decode(file_get_contents($this->getMasterPath(). 'config.json'),true));
-            self::getSmarty()->assign('sContent', include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php'));
-            //          Load page res
+
             foreach (scandir($this->getFileLocation()) as $item){
                 $sPath = $this->getFileLocation() . DIRECTORY_SEPARATOR . $item;
                 switch (pathinfo($sPath, PATHINFO_EXTENSION)){
@@ -63,21 +71,10 @@ class Page{
                 }
             }
             self::getSmarty()->assign("sPageSideBar", self::getSideBar());
-
-
             self::getSmarty()->assign('aResourceFiles', self::getResourceFiles());
-
-//          Loading page sections
-            foreach (scandir($this->getMasterPath() . 'Sections'.DIRECTORY_SEPARATOR) as $item){
-                if (pathinfo($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item, PATHINFO_EXTENSION) === 'tpl'){
-                    $sName = str_replace('.tpl', '', $item);
-                    self::getSmarty()->assign($sName, self::getSmarty()->fetch($this->getMasterPath() .'Sections'.DIRECTORY_SEPARATOR. $item));
-                }
-            }
-
-
+            self::getSmarty()->assign('TEMPLATEDIR', $this->getMasterPath());
 //          Show Master Page
-            self::getSmarty()->display(($this->getMasterPath() . 'index.tpl'));
+            return self::getSmarty()->display(self::$ContentTpl);
         }
     }
 
@@ -90,9 +87,9 @@ class Page{
     }
 
     /**
-     * @param mixed $oSmarty
+     * @param Smarty $oSmarty
      */
-    public static function setSmarty(\Smarty $oSmarty)
+    public static function setSmarty(Smarty $oSmarty)
     {
         self::$oSmarty = $oSmarty;
     }
@@ -103,7 +100,8 @@ class Page{
      */
     public static function getHtml($sLocation = ""){
         if (is_file($sLocation)){
-            return self::getSmarty()->fetch($sLocation);
+            self::$ContentTpl = $sLocation;
+            return true;
         } else {
             return self::getSmarty()->fetch($sLocation . '/' . basename($sLocation) . '.tpl');
         }
@@ -116,7 +114,7 @@ class Page{
      * Setters and Getter
      */
     /**
-     * @return mixed
+     * @return string
      */
     public function getUrl()
     {
@@ -124,7 +122,7 @@ class Page{
     }
 
     /**
-     * @param mixed $sUrl
+     * @param string $sUrl
      */
     public function setUrl($sUrl)
     {
@@ -132,7 +130,7 @@ class Page{
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function getMasterPath()
     {
@@ -245,7 +243,7 @@ class Page{
     }
 
     /**
-     * @param string $sSideBar
+     * @param null $sHtmlFile
      */
     public static function setSideBar($sHtmlFile = null)
     {

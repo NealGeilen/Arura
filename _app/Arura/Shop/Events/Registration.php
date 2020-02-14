@@ -10,6 +10,12 @@ use Arura\QR;
 use Arura\Settings\Application;
 use Arura\Shop\Payment;
 use Arura\Database;
+use DateTime;
+use Exception;
+use Mollie\Api\Exceptions\ApiException;
+use Mpdf\HTMLParserMode;
+use Mpdf\MpdfException;
+use SmartyException;
 
 class Registration extends Modal {
 
@@ -41,6 +47,7 @@ class Registration extends Modal {
     /**
      * @param Payment $oPayment
      * @return Registration
+     * @throws Error
      */
     public static function getRegistrationFromPayment(Payment $oPayment){
         $db = new Database();
@@ -65,7 +72,7 @@ class Registration extends Modal {
             throw new Error("Email not valid");
         }
         if (!$oEvent->hasEventTickets()){
-            if ($oEvent->getCapacity() < $oEvent->getRegisteredAmount()){
+            if (($Amount + $oEvent->getRegisteredAmount()) > $oEvent->getCapacity()){
                 throw new Error("Max of capacity is reached");
             }
         }
@@ -80,13 +87,14 @@ class Registration extends Modal {
             "Registration_Payment_Id" => $PaymentId
         ]);
         if (!$db->isQuerySuccessful()){
-            throw new \Error();
+            throw new Error();
         }
         return new self($i);
     }
 
     /**
      * @return array
+     * @throws Exception
      */
     public function __ToArray() : array
     {
@@ -105,7 +113,7 @@ class Registration extends Modal {
 
     /**
      * @param bool $force
-     * @throws \Exception
+     * @throws Exception
      */
     public function load($force = false){
         if (!$this->isLoaded || $force) {
@@ -115,7 +123,7 @@ class Registration extends Modal {
             $this->setLastname($aRegistration["Registration_Lastname"]);
             $this->setEmail($aRegistration["Registration_Email"]);
             $this->setTel($aRegistration["Registration_Tel"]);
-            $CreationTime = new \DateTime();
+            $CreationTime = new DateTime();
             $CreationTime->setTimestamp($aRegistration["Registration_Timestamp"]);
             $this->setSignUpTime($CreationTime);
             $this->setAmount($aRegistration["Registration_Amount"]);
@@ -127,6 +135,7 @@ class Registration extends Modal {
      * @param int $iTicketId
      * @param float $fPrice
      * @return bool|string
+     * @throws Error
      */
     protected function addTicket($iTicketId = 0, $fPrice = 0.0){
         $sHash = getHash("tblEventOrderedTickets", "OrderedTicket_Hash");
@@ -145,6 +154,7 @@ class Registration extends Modal {
 
     /**
      * @return bool
+     * @throws Error
      */
     protected function areTicketsMade(){
         return (count($this->db->fetchAll("SELECT OrderedTicket_Hash FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id"=> $this->getId()])) > 0);
@@ -152,6 +162,8 @@ class Registration extends Modal {
 
     /**
      * @return array|bool
+     * @throws Error
+     * @throws Exception
      */
     protected function createTickets(){
         $aTickets = [];
@@ -175,14 +187,17 @@ class Registration extends Modal {
      * @param $aTickets
      * @return string
      * @throws Error
-     * @throws \Mpdf\MpdfException
+     * @throws ApiException
+     * @throws MpdfException
+     * @throws SmartyException
+     * @throws Exception
      */
     protected function GeneratePDFs($aTickets){
         $oPDF = new PDF();
         $oPDF->assign("aWebsite", Application::getAll()["website"]);
         $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
         $oPDF->assign("btwPer", Application::get("plg.shop", "BtwPer"));
-        $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), \Mpdf\HTMLParserMode::HEADER_CSS);
+        $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), HTMLParserMode::HEADER_CSS);
         $oPDF->assign("aTickets", $this->getPayment()->getMetadata());
         $oPDF->assign("aPayment", $this->getPayment()->__ToArray());
         $oPDF->SetHTMLFooter(self::TemplateDir. "footer.tpl");
@@ -202,6 +217,8 @@ class Registration extends Modal {
 
     /**
      * @return bool
+     * @throws Error
+     * @throws Exception
      */
     public function needsRegistrationTickets(){
         return $this->getEvent()->hasEventTickets();
@@ -209,6 +226,7 @@ class Registration extends Modal {
 
     /**
      * @return array
+     * @throws Error
      */
     public function getTickets(){
         $aData = $this->db->fetchAll("SELECT OrderedTicket_Hash, Ticket_Id, Ticket_Name, Ticket_Price, Ticket_Capacity, Ticket_Description, Ticket_Event_Id FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $this->getId()]);
@@ -222,9 +240,12 @@ class Registration extends Modal {
     }
 
     /**
+     * @throws ApiException
      * @throws Error
-     * @throws \Mpdf\MpdfException
+     * @throws MpdfException
+     * @throws SmartyException
      * @throws \PHPMailer\PHPMailer\Exception
+     * @throws Exception
      */
     public function sendEventDetails(){
         $oMailer = new Mailer();
@@ -271,6 +292,7 @@ class Registration extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getEvent() : Event
     {
@@ -288,8 +310,9 @@ class Registration extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
-    public function getSignUpTime() :\DateTime
+    public function getSignUpTime() : DateTime
     {
         $this->load();
         return $this->signUpTime;
@@ -305,6 +328,7 @@ class Registration extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getFirstname()
     {
@@ -322,6 +346,7 @@ class Registration extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getLastname()
     {
@@ -339,6 +364,7 @@ class Registration extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getTel()
     {
@@ -356,6 +382,7 @@ class Registration extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getEmail()
     {
@@ -389,6 +416,7 @@ class Registration extends Modal {
 
     /**
      * @return mixed
+     * @throws Exception
      */
     public function getPayment() : Payment
     {
