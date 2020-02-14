@@ -72,7 +72,7 @@ class Registration extends Modal {
             throw new Error("Email not valid");
         }
         if (!$oEvent->hasEventTickets()){
-            if ($oEvent->getCapacity() < $oEvent->getRegisteredAmount()){
+            if (($Amount + $oEvent->getRegisteredAmount()) > $oEvent->getCapacity()){
                 throw new Error("Max of capacity is reached");
             }
         }
@@ -87,7 +87,7 @@ class Registration extends Modal {
             "Registration_Payment_Id" => $PaymentId
         ]);
         if (!$db->isQuerySuccessful()){
-            throw new \Error();
+            throw new Error();
         }
         return new self($i);
     }

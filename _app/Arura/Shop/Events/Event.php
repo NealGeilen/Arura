@@ -250,6 +250,7 @@ class Event Extends Page {
                             }
                             self::getSmarty()->assign("aTickets", $aList);
                             $oPage->setTitle($oPage->getName());
+                            self::getSmarty()->assign("iRegistartions", $oPage->getRegisteredAmount());
                             $oPage->showPage();
                             break;
                     }
@@ -385,11 +386,11 @@ class Event Extends Page {
     }
 
     /**
-     * @return array
+     * @return int
      * @throws Error
      */
     public function getRegisteredAmount(){
-        return $this->db->fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
+        return (int)$this->db->fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
     }
 
     /**
