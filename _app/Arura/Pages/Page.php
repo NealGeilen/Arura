@@ -5,6 +5,7 @@ use Arura\Exceptions\Error;
 use Arura\Modal;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
+use Rights;
 use Smarty;
 use SmartyException;
 
@@ -26,7 +27,7 @@ class Page extends Modal implements PageEnum{
     /**
      * @var string
      */
-    public static $MasterPage = "index.html";
+    public static $MasterPage = "index.tpl";
 
 
     //Page variables
@@ -97,7 +98,7 @@ class Page extends Modal implements PageEnum{
 
         $smarty->assign('content', $this->getPageContent());
         $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
-        $smarty->assign('aMainNav', \Arura\Pages\Menu::getMenuStructure());
+        $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', Application::getAll()['website']);
@@ -121,7 +122,7 @@ class Page extends Modal implements PageEnum{
      * @throws Error
      * @throws SmartyException
      */
-    public static function displayView($sSlug = "", $iRight = \Rights::CMS_PAGES , callable $function = null){
+    public static function displayView($sSlug = "", $iRight = Rights::CMS_PAGES , callable $function = null){
         $_SERVER["REDIRECT_URL"] = $sSlug;
         if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation($iRight)){
             if (!Application::get("website", "maintenance") || Restrict::Validation($iRight)){

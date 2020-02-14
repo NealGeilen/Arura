@@ -51,11 +51,11 @@ class Page{
         if (empty($this->getMasterPath())){
             return $this -> getFileLocation();
         } else {
+            self::setResourceFiles(json_decode(file_get_contents($this->getMasterPath(). 'config.json'),true));
             self::$ContentTpl = $this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.tpl';
             if (is_file($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php')){
                 include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php');
             }
-            self::setResourceFiles(json_decode(file_get_contents($this->getMasterPath(). 'config.json'),true));
 
             foreach (scandir($this->getFileLocation()) as $item){
                 $sPath = $this->getFileLocation() . DIRECTORY_SEPARATOR . $item;
