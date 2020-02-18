@@ -193,7 +193,7 @@ $aNavBarPages =
         "/analytics" => [
             "Right" =>
                 (
-                Restrict::Validation(Rights::ARURA_USERS)
+                Restrict::Validation(Rights::ANALYTICS)
                 ),
             "Title" => "Analytics",
             "FileName" => "Analytics.Home",

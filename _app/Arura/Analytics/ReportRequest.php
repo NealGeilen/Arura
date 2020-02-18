@@ -70,11 +70,8 @@ class ReportRequest extends Analytics {
                 foreach ($row->metrics as $metric){
                     $aMetrics = $metric->values;
                 }
-                $aRow = [
-                    "dimensions" => $row->dimensions,
-                    "metrics" => $aMetrics
-                ];
-                $aRecords["rows"][] = $aRow;
+                $aRecords["rows"]["metrics"][] = $aMetrics[0];
+                $aRecords["rows"]["dimensions"][]  = $row->dimensions[0];
             }
             return $aRecords;
         }
