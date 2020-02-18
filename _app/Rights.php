@@ -22,6 +22,8 @@ class Rights{
     const SECURE_ADMINISTRATION = 40;
     const SECURE_ADMINISTRATION_CREATE = 41;
 
+    const ANALYTICS = 50;
+
 
 
     static function getConstants() {

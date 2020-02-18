@@ -19,17 +19,19 @@ class Analytics{
      * @throws Google_Exception
      * @throws NotFound
      */
-    public function buildClient(){
-        if (!is_file(__SETTINGS__ . "gsac.json")){
+    protected function buildClient(){
+        if (!is_file(__ROOT__ . '/ferrous-aleph-262210-5bda3e712a12.json')){
             throw new NotFound("Settings file not configured");
         }
         $this->setClient(new Google_Client());
         $this->getClient()->setHttpClient(new Client(['verify' => false]));
         $this->getClient()->setApplicationName("Hello Analytics Reporting");
-        $this->getClient()->setAuthConfig(__SETTINGS__ . "gsac.json");
+        $this->getClient()->setAuthConfig(__ROOT__ . '/ferrous-aleph-262210-5bda3e712a12.json');
         $this->getClient()->setScopes(['https://www.googleapis.com/auth/analytics.readonly']);
         $this->setReporting(new Google_Service_AnalyticsReporting($this->getClient()));
     }
+
+
 
     /**
      * @return Google_Client
