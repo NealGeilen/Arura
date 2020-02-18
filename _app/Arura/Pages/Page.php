@@ -137,7 +137,7 @@ class Page extends Modal implements PageEnum{
         } else {
 
             $oPage = new self();
-            $oPage::$MasterPage = "Launchpage.html";
+            $oPage::$MasterPage = "Launchpage.tpl";
             $oPage->setTitle("Home");
             $oPage->showPage();
             exit;
