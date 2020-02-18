@@ -83,6 +83,10 @@
     {
       "Right_Id": "25",
       "Right_Name": "SHOP_EVENT_VALIDATION"
+    },
+    {
+      "Right_Id": "50",
+      "Right_Name": "ANALYTICS"
     }
   ]
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 {include "./Sections/body_head.tpl"}
-<body class="hold-transition login-page" style="background: url('{$aWebsite.banner}') center no-repeat">
+<body class="hold-transition login-page" style="background-image: url('{$aWebsite.banner}')">
 {block content}
 {/block}
 <script>

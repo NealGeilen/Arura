@@ -190,6 +190,16 @@ $aNavBarPages =
                     ]
                 ]
         ],
+        "/analytics" => [
+            "Right" =>
+                (
+                Restrict::Validation(Rights::ANALYTICS)
+                ),
+            "Title" => "Analytics",
+            "FileName" => "Analytics.Home",
+            "Icon" => "fas fa-qrcode",
+            "MasterPage" => "AdminLTE"
+        ],
         '/arura' => [
             "Right" =>
                 (
@@ -251,13 +261,6 @@ $aNavBarPages =
             "FileName" => "User.Profile",
             "MasterPage" => "AdminLTE",
             "Right" => User::isLogged(),
-            "Icon" => null
-        ],
-        "/ticket" => [
-            "Title" => "Home",
-            "FileName" => "Ticket",
-            "MasterPage" => "Clean",
-            "Right" => true,
             "Icon" => null
         ],
         "/login" => [

@@ -86,7 +86,9 @@ Templates
     margin: 4px;
     border-radius: 5px;
 }
-
+.login-page{
+    background: center center/cover no-repeat;
+}
 .login-page .login-box{
     padding: 15px;
     background: rgba(255,255,255,0.7) ;
