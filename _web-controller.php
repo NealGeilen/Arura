@@ -197,7 +197,7 @@ $aNavBarPages =
                 ),
             "Title" => "Analytics",
             "FileName" => "Analytics.Home",
-            "Icon" => "fas fa-qrcode",
+            "Icon" => "fas fa-chart-line",
             "MasterPage" => "AdminLTE"
         ],
         '/arura' => [

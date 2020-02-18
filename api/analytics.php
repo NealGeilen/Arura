@@ -17,6 +17,9 @@ $request->sandbox(function ($aData) use ($response, $request){
     $request->addType("devices", function ($aData) use ($response){
         $response->exitSuccess(Reports::Devices($aData["start"],$aData["end"]));
     });
+    $request->addType("readtime", function ($aData) use ($response){
+        $response->exitSuccess(Reports::ReadTimePage($aData["start"],$aData["end"]));
+    });
 });
 
 $response->exitScript();
