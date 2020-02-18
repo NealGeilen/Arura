@@ -261,7 +261,7 @@ $aNavBarPages =
             "Icon" => null
         ],
         "/login" => [
-            "Title" => "Home",
+            "Title" => "Login",
             "FileName" => "User.Login",
             "MasterPage" => "Clean",
             "Right" => !User::isLogged(),
