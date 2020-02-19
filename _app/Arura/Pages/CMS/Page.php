@@ -129,7 +129,7 @@ class Page extends Pages\Page{
      */
     public static function getAllPages(){
         $db = new Database();
-        return $db->fetchAll('SELECT * FROM tblCmsPages');
+        return $db->fetchAll('SELECT * FROM tblCmsPages WHERE Page_Visible = 1');
     }
 
     /**

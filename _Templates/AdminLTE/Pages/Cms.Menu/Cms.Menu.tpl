@@ -63,22 +63,42 @@
 
     </style>
 
-    <div class="card">
-        <div class="card-header">
-            <h2 class="card-title">Hoofd menu</h2>
-            <div class="card-tools">
-                <div class="btn-group btn-group-sm">
-                    <button class="btn btn-primary" onclick="creatNavBarItemModal()">
-                        <i class="fas fa-plus"></i>
-                    </button>
-                    <button class="btn btn-primary" onclick="save()">
-                        <i class="fas fa-save"></i>
-                    </button>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Hoofd menu</h2>
+                    <div class="card-tools">
+                        <div class="btn-group btn-group-sm">
+                            <button class="btn btn-primary" onclick="creatNavBarItemModal()">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <button class="btn btn-primary" onclick="save()">
+                                <i class="fas fa-save"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="dd" id="nestable-json"></div>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="dd" id="nestable-json"></div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Sitemap</h2>
+                </div>
+                <div class="card-body">
+                    <button class="btn btn-primary" onclick="buildSitemap()">
+                        Update sitemap
+                    </button>
+                    <button class="btn btn-secondary" onclick="submitSitemap()">
+                        Sitemap verzenden naar Google
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
 
