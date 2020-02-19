@@ -215,7 +215,7 @@ class Event Extends Page {
         parent::displayView($sSlug, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
-                if ($oPage->isOpen() && $oPage->getStart()->getTimestamp() > time()){
+                if ($oPage->getIsVisible() && $oPage->getStart()->getTimestamp() > time()){
                     switch ($_GET["type"]){
                         case "checkout":
                             if ($oPage->isOpen()){
