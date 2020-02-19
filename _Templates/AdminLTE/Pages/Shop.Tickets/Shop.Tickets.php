@@ -19,18 +19,20 @@ if (isset($_GET["e"]) && !empty($_GET["e"])){
         Page::$ContentTpl = __DIR__ . DIRECTORY_SEPARATOR . "Shop.Registrations.tpl";
     }
 
+} else {
+    $aEventIds = $db->fetchAllColumn("SELECT Event_Id FROM tblEvents");
+    $aEvents = [];
+    foreach ($aEventIds as $iEventId){
+        $oEvent = new Event($iEventId);
+        $aEvent = $oEvent->__ToArray();
+        if ($oEvent->hasEventTickets()){
+            $aEvent["Amount"] = (int)$db->fetchRow("SELECT COUNT(OrderedTicket_Hash) AS Amount FROM tblEventOrderedTickets JOIN tblEventRegistration ON Registration_Id = OrderedTicket_Registration_Id WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $oEvent->getId()])["Amount"];
+        } else {
+            $aEvent["Amount"] = (int)$db -> fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration AS Amount WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $oEvent->getId()])["Amount"];
+        }
+        $aEvents[] = $aEvent;
+    }
+    $oSmarty->assign("aEvents", $aEvents);
+    Page::$ContentTpl = __DIR__ . DIRECTORY_SEPARATOR . "Shop.Events.tpl";
 }
 
-$aEventIds = $db->fetchAllColumn("SELECT Event_Id FROM tblEvents");
-$aEvents = [];
-foreach ($aEventIds as $iEventId){
-    $oEvent = new Event($iEventId);
-    $aEvent = $oEvent->__ToArray();
-    if ($oEvent->hasEventTickets()){
-        $aEvent["Amount"] = (int)$db->fetchRow("SELECT COUNT(OrderedTicket_Hash) AS Amount FROM tblEventOrderedTickets JOIN tblEventRegistration ON Registration_Id = OrderedTicket_Registration_Id WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $oEvent->getId()])["Amount"];
-    } else {
-        $aEvent["Amount"] = (int)$db -> fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration AS Amount WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $oEvent->getId()])["Amount"];
-    }
-    $aEvents[] = $aEvent;
-}
-$oSmarty->assign("aEvents", $aEvents);
