@@ -67,7 +67,7 @@ class Page extends Modal implements PageEnum{
      * @throws SmartyException
      */
     public function getPageContent(){
-        if (is_file($this->PageContend)){
+        if (!is_array($this->PageContend) && is_file($this->PageContend)){
             return self::getSmarty()->fetch($this->PageContend);
         }
         return $this->PageContend;

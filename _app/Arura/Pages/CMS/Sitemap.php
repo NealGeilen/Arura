@@ -40,19 +40,16 @@ class Sitemap
         $xml  = simplexml_load_file($this->file, "SimpleXMLElement", LIBXML_NOCDATA);
         $json = json_encode($xml);
         $raw  = json_decode($json, true);
-
         $this->tree = null;
 
         $this->urlset = array_map(function ($url) {
             return [
-                'loc'        => "",
+                'loc'        => $url['loc'],
                 'changefreq' => array_key_exists('changefreq', $url) ? $url['changefreq']          : null,
                 'priority'   => array_key_exists('priority', $url)   ? floatval($url['priority'])  : null,
                 'lastmod'    => array_key_exists('lastmod', $url)    ? date_parse($url['lastmod']) : null
             ];
-        }, is_array($raw['url'])
-            ? $raw['url']
-            : [$raw['url']]);
+        }, $raw["url"]);
     }
 
     public function save()
