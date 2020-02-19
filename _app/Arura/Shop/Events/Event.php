@@ -332,7 +332,9 @@ class Event Extends Page {
         $Crud->addField(new Crud\Fields\Field("text", "Ticket_Name", "Naam"));
         $Crud->addField(new Crud\Fields\Field("text", "Ticket_Description", "Omschrijving"));
         $Crud->addField(new Crud\Fields\Field("number", "Ticket_Capacity", "Capacity"));
-        $Crud->addField(new Crud\Fields\Field("number", "Ticket_Price", "Prijs"));
+        $Currancy = new Crud\Fields\Field("number", "Ticket_Price", "Prijs");
+        $Currancy->addAttribute("step", "0.01");
+        $Crud->addField($Currancy);
         return $Crud;
 
     }
