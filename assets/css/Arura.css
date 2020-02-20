@@ -185,5 +185,8 @@ Templates
 }
 canvas.chartjs-render-monitor{
     width: 100% !important;
-    height: 300px!important;
+    max-height: 300px!important;
+}
+.table.dataTable{
+    width: 100%!important;
 }

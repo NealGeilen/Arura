@@ -37,7 +37,7 @@ class Reports{
      * @throws Exception
      */
     public static function VistorsPerCountry($startDate,$endDate){
-        $Report = self::Report("ga:country", "ga:sessions");
+        $Report = self::Report("ga:countryIsoCode", "ga:sessions");
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }

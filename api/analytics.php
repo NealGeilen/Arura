@@ -20,6 +20,15 @@ $request->sandbox(function ($aData) use ($response, $request){
     $request->addType("readtime", function ($aData) use ($response){
         $response->exitSuccess(Reports::ReadTimePage($aData["start"],$aData["end"]));
     });
+    $request->addType("exitpages", function ($aData) use ($response){
+        $response->exitSuccess(Reports::ExitPages($aData["start"],$aData["end"]));
+    });
+    $request->addType("MediaVisitors", function ($aData) use ($response){
+        $response->exitSuccess(Reports::SocialMediaVisitors($aData["start"],$aData["end"]));
+    });
+    $request->addType("CountryVisitors", function ($aData) use ($response){
+        $response->exitSuccess(Reports::VistorsPerCountry($aData["start"],$aData["end"]));
+    });
 });
 
 $response->exitScript();
