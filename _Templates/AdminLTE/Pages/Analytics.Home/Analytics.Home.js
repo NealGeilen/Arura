@@ -61,167 +61,122 @@ let Analytics = {
         $.ajax(settings);
     },
     Charts: {
-        Devices: function () {
-            Analytics.Xhr({
-                url: ARURA_API_DIR + 'analytics.php?type=devices',
+        Devices: function (data) {
+            new Chart($(".devices-chart")[0], {
+                type: 'pie',
                 data: {
-                  start: "2020-01-01",
-                  end : "today"
-                },
-                success: function (response) {
-                    new Chart($(".devices-chart")[0], {
-                        type: 'pie',
-                        data: {
-                            datasets: [{
-                                backgroundColor: Analytics.Colors,
-                                data: response.data.rows.metrics
-                            }],
-                            labels: response.data.rows.dimensions
-                        }
-                    });
-                    $(".devices-table").dataTable({
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
-                        },
-                        pageLength: 5,
-                        bLengthChange: false,
-                        data: Analytics.CombineArrays(response.data.rows.dimensions, response.data.rows.metrics)
-                    })
+                    datasets: [{
+                        backgroundColor: Analytics.Colors,
+                        data: data.rows.metrics
+                    }],
+                    labels: data.rows.dimensions
                 }
             });
-        },
-        ReadTime: function () {
-            Analytics.Xhr({
-                url: ARURA_API_DIR + 'analytics.php?type=readtime',
-                data: {
-                    start: "2020-01-01",
-                    end : "today"
+            $(".devices-table").dataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
                 },
-                success: function (response) {
-                    new Chart($(".readtime-chart")[0], {
-                        type: 'polarArea',
-                        data: {
-                            datasets: [{
-                                backgroundColor: Analytics.Colors,
-                                data: response.data.rows.metrics
-                            }],
-                            labels: response.data.rows.dimensions
-                        },
-                        options: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    });
-                    $(".readtime-table").dataTable({
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
-                        },
-                        pageLength: 5,
-                        bLengthChange: false,
-                        data: Analytics.CombineArrays(response.data.rows.dimensions, response.data.rows.metrics)
-                    })
-                }
+                pageLength: 5,
+                bLengthChange: false,
+                data: Analytics.CombineArrays(data.rows.dimensions, data.rows.metrics)
             })
         },
-        ExitPages: function () {
-            Analytics.Xhr({
-                url: ARURA_API_DIR + 'analytics.php?type=exitpages',
+        ReadTime: function (data) {
+            new Chart($(".readtime-chart")[0], {
+                type: 'polarArea',
                 data: {
-                    start: "2020-01-01",
-                    end : "today"
+                    datasets: [{
+                        backgroundColor: Analytics.Colors,
+                        data: data.rows.metrics
+                    }],
+                    labels: data.rows.dimensions
                 },
-                success: function (response) {
-                    new Chart($(".exit-chart")[0], {
-                        type: 'bar',
-                        data: {
-                            datasets: [{
-                                backgroundColor: Analytics.Colors,
-                                data: response.data.rows.metrics
-                            }],
-                            labels: response.data.rows.dimensions
-                        },
-                        options: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    });
-                    $(".exit-table").dataTable({
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
-                        },
-                        pageLength: 5,
-                        bLengthChange: false,
-                        data: Analytics.CombineArrays(response.data.rows.dimensions, response.data.rows.metrics)
-                    })
+                options: {
+                    legend: {
+                        display: false
+                    }
                 }
+            });
+            $(".readtime-table").dataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+                },
+                pageLength: 5,
+                bLengthChange: false,
+                data: Analytics.CombineArrays(data.rows.dimensions, data.rows.metrics)
             })
         },
-        MediaVisitors: function () {
-            Analytics.Xhr({
-                url: ARURA_API_DIR + 'analytics.php?type=MediaVisitors',
+        ExitPages: function (data) {
+            new Chart($(".exit-chart")[0], {
+                type: 'bar',
                 data: {
-                    start: "2020-01-01",
-                    end : "today"
+                    datasets: [{
+                        backgroundColor: Analytics.Colors,
+                        data: data.rows.metrics
+                    }],
+                    labels: data.rows.dimensions
                 },
-                success: function (response) {
-                    new Chart($(".media-chart")[0], {
-                        type: 'bar',
-                        data: {
-                            datasets: [{
-                                backgroundColor: Analytics.Colors,
-                                data: response.data.rows.metrics
-                            }],
-                            labels: response.data.rows.dimensions
-                        },
-                        options: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    });
-                    $(".media-table").dataTable({
-                        "language": {
-                            "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
-                        },
-                        pageLength: 5,
-                        bLengthChange: false,
-                        data: Analytics.CombineArrays(response.data.rows.dimensions, response.data.rows.metrics)
-                    })
+                options: {
+                    legend: {
+                        display: false
+                    }
                 }
+            });
+            $(".exit-table").dataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+                },
+                pageLength: 5,
+                bLengthChange: false,
+                data: Analytics.CombineArrays(data.rows.dimensions, data.rows.metrics)
             })
         },
-        CountryVisitors: function () {
-            Analytics.Xhr({
-                url: ARURA_API_DIR + 'analytics.php?type=CountryVisitors',
+        MediaVisitors: function (data) {
+            new Chart($(".media-chart")[0], {
+                type: 'bar',
                 data: {
-                    start: "2020-01-01",
-                    end : "today"
+                    datasets: [{
+                        backgroundColor: Analytics.Colors,
+                        data: data.rows.metrics
+                    }],
+                    labels: data.rows.dimensions
                 },
-                success: function (response) {
-                    let list = {};
-                    $.each(response.data.rows.dimensions, function (i, country) {
-                        list[getCountryISO3(country)] = {amount: response.data.rows.metrics[i], fillKey: "count"};
-                    });
-                    var map = new Datamap({
-                        scope: "world",
-                        element: document.getElementById('container'),
-                        fills: {
-                            count: "#6f42c1",
-                            defaultFill: '#17a2b8'
-                        },
-                        data: list,
-                        geographyConfig: {
-                            popupTemplate: function(geography, data) {
-                                return '<div class="hoverinfo">' + geography.properties.name + '<br/>Bezoekers:<b>' + data.amount+ "</b></div>"
-                            },
-                            highlightBorderWidth: 0,
-                            highlightFillColor: '#007bff',
-                        },
-                    });
+                options: {
+                    legend: {
+                        display: false
+                    }
                 }
+            });
+            $(".media-table").dataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+                },
+                pageLength: 5,
+                bLengthChange: false,
+                data: Analytics.CombineArrays(data.rows.dimensions, data.rows.metrics)
             })
+        },
+        CountryVisitors: function (data) {
+            let list = {};
+            $.each(data.rows.dimensions, function (i, country) {
+                list[getCountryISO3(country)] = {amount: data.rows.metrics[i], fillKey: "count"};
+            });
+            var map = new Datamap({
+                scope: "world",
+                element: document.getElementById('container'),
+                fills: {
+                    count: "#6f42c1",
+                    defaultFill: '#17a2b8'
+                },
+                data: list,
+                geographyConfig: {
+                    popupTemplate: function(geography, data) {
+                        return '<div class="hoverinfo">' + geography.properties.name + '<br/>Bezoekers:<b>' + data.amount+ "</b></div>"
+                    },
+                    highlightBorderWidth: 0,
+                    highlightFillColor: '#007bff',
+                },
+            });
         }
     },
     CombineArrays: function (ar1, ar2) {
@@ -232,13 +187,28 @@ let Analytics = {
         return list;
     }
 };
+$(document).ready(function () {
+    Analytics.Xhr({
+        url: ARURA_API_DIR + 'analytics.php',
+        data: {
+            start: "2020-01-01",
+            end : "today"
+        },
+        success: function (response) {
+            endPageLoad();
+            let data = response.data;
+            Analytics.Charts.Devices(data.Devices);
+            Analytics.Charts.ReadTime(data.ReadTime);
+            Analytics.Charts.ExitPages(data.ExitPages);
+            Analytics.Charts.MediaVisitors(data.MediaVisitors);
+            Analytics.Charts.CountryVisitors(data.CountryVisitors);
+            console.log(data);
+        }
+    })
+});
 
 
-Analytics.Charts.Devices();
-Analytics.Charts.ReadTime();
-Analytics.Charts.ExitPages();
-Analytics.Charts.MediaVisitors();
-Analytics.Charts.CountryVisitors();
+
 
 var countryISOMapping = {
     AF: 'AFG',

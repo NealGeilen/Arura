@@ -46,9 +46,6 @@ class ReportRequest extends Analytics {
         $this->getReportRequest()->setDimensions($this->getDimensions());
         $this->getReportRequest()->setMetrics($this->getMetrics());
 
-
-
-
         $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
         $body->setReportRequests(array($this->getReportRequest()));
 

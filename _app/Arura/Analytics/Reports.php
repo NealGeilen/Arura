@@ -42,6 +42,20 @@ class Reports{
         return $Report->getReport();
     }
 
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     * @throws NotFound
+     * @throws Google_Exception
+     * @throws Exception
+     */
+    public static function VistorsPerCity($startDate,$endDate){
+        $Report = self::Report("ga:city", "ga:sessions");
+        $Report->setDataRange($startDate, $endDate);
+        return $Report->getReport();
+    }
+
 
     /**
      * @param $startDate
@@ -81,6 +95,20 @@ class Reports{
      */
     public static function ReadTimePage($startDate,$endDate){
         $Report = self::Report("ga:pageTitle", "ga:avgTimeOnPage");
+        $Report->setDataRange($startDate, $endDate);
+        return $Report->getReport();
+    }
+
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     * @throws Google_Exception
+     * @throws NotFound
+     * @throws Exception
+     */
+    public static function UserAge($startDate,$endDate){
+        $Report = self::Report("ga:userAgeBracket", "ga:sessions");
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }

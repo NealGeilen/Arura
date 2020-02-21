@@ -26,7 +26,7 @@
                 <h3 class="card-title">Bezoekers per land</h3>
             </div>
             <div class="card-body">
-                <div id="container" style="position: relative; width: 700px; height: 400px;"></div>
+                <div id="container" style="position: relative; width: 700px; height: 400px; max-width: 100%"></div>
             </div>
         </div>
     </div>
