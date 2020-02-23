@@ -2,6 +2,7 @@
 namespace Arura\Pages;
 
 use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 use Arura\Modal;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
@@ -10,6 +11,10 @@ use Smarty;
 use SmartyException;
 
 class Page extends Modal implements PageEnum{
+
+    const DEAFULT_PAGES = [
+        "/sitemap" => "sitemap"
+    ];
 
     /**
      * @var
@@ -59,8 +64,12 @@ class Page extends Modal implements PageEnum{
 
     /**
      * @return null
+     * @throws SmartyException
      */
     public function getPageContent(){
+        if (!is_array($this->PageContend) && is_file($this->PageContend)){
+            return self::getSmarty()->fetch($this->PageContend);
+        }
         return $this->PageContend;
     }
 
@@ -96,20 +105,12 @@ class Page extends Modal implements PageEnum{
         $smarty = self::getSmarty();
         self::$pageJsCssFiles = json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
 
-        $smarty->assign('content', $this->getPageContent());
         $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', Application::getAll()['website']);
-
-        foreach (scandir(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR) as $item){
-            if (pathinfo(self::TemplatePath . "Sections" . DIRECTORY_SEPARATOR . $item, PATHINFO_EXTENSION) === 'html'){
-                $sName = str_replace('.html', '', $item);
-                $smarty->assign($sName, $smarty->fetch(self::TemplatePath .'Sections'.DIRECTORY_SEPARATOR. $item));
-            }
-        }
-
+        $smarty->assign('content', $this->getPageContent());
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
         exit;
@@ -121,12 +122,21 @@ class Page extends Modal implements PageEnum{
      * @param callable|null $function
      * @throws Error
      * @throws SmartyException
+     * @throws NotFound
      */
     public static function displayView($sSlug = "", $iRight = Rights::CMS_PAGES , callable $function = null){
         $_SERVER["REDIRECT_URL"] = $sSlug;
         if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation($iRight)){
             if (!Application::get("website", "maintenance") || Restrict::Validation($iRight)){
-                $function($sSlug);
+                if (isset(self::DEAFULT_PAGES[$sSlug])){
+                    if (is_file(__DEAFULT_PAGES__ . self::DEAFULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEAFULT_PAGES[$sSlug] . ".php")){
+                        include __DEAFULT_PAGES__ . self::DEAFULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEAFULT_PAGES[$sSlug] . ".php";
+                    } else {
+                        throw new NotFound("Deafult page noy found");
+                    }
+                } else {
+                    $function($sSlug);
+                }
             } else {
                 $oPage = new self();
                 $oPage->setPageContend("<section><h1 class='text-center'>Website is op het moment in onderhoud, Probeer later opnieuw!</h1></section>");
@@ -146,7 +156,7 @@ class Page extends Modal implements PageEnum{
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");
-        $oPage->setPageContend(self::getSmarty()->fetch(__WEB_TEMPLATES__ . "Errors/404.php"));
+        $oPage->setPageContend(__WEB_TEMPLATES__ . "Errors/404.php");
         $oPage->showPage();
     }
 

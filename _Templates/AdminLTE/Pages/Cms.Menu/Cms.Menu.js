@@ -1,10 +1,7 @@
 var Nestable = $('#nestable-json');
 $.ajax({
-    url: ARURA_API_DIR+'cms/Menu.php',
+    url: ARURA_API_DIR+'cms/Menu.php?type=get',
     type: 'post',
-    data: ({
-        type: "get"
-    }),
     dataType: 'json',
     success: function(response){
         var options = {
@@ -42,11 +39,10 @@ $.ajax({
 function save(){
     aNavData = Nestable.nestable('serialize');
     $.ajax({
-        url: ARURA_API_DIR+'cms/Menu.php',
+        url: ARURA_API_DIR+'cms/Menu.php?type=set',
         type: 'post',
         data: ({
-            NavData: aNavData,
-            type: "set"
+            NavData: aNavData
         }),
         dataType: 'json',
         success: function (response) {
@@ -118,6 +114,43 @@ function getNewId(){
         }
     });
     return ++iH
+}
+
+
+function buildSitemap(){
+    $.ajax({
+        url: ARURA_API_DIR+'cms/Menu.php?type=build-sitemap',
+        type: 'post',
+        dataType: 'json',
+        success: function (response) {
+            addSuccessMessage("Sitemap gebouwd");
+        },
+        error: function () {
+            addErrorMessage("Sitemap bouwen mislukt")
+        }
+    });
+}
+
+
+function submitSitemap(){
+    Modals.Warning({
+        Title: "Sitemap verzenden naar Google",
+        Message: "Weet je zeker dat je de sitemap naar google wilt verzenden. Dit kan enkle minuten duren!",
+        onConfirm: function () {
+            $.ajax({
+                url: ARURA_API_DIR+'cms/Menu.php?type=send-sitemap',
+                type: 'post',
+                dataType: 'json',
+                success: function (response) {
+                    addSuccessMessage("Sitemap verzonden");
+                },
+                error: function () {
+                    addErrorMessage("Sitemap verzenden mislukt")
+                }
+            });
+        }
+    });
+
 }
 
 
