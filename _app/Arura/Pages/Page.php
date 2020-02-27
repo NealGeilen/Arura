@@ -13,7 +13,8 @@ use SmartyException;
 class Page extends Modal implements PageEnum{
 
     const DEAFULT_PAGES = [
-        "/sitemap" => "sitemap"
+        "/sitemap" => "sitemap",
+        "/cookiebeleid" => "cookiestatment"
     ];
 
     /**
