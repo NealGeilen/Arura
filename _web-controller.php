@@ -26,16 +26,16 @@ $aNavBarPages =
             "FileName" => "Home",
             "MasterPage" => "AdminLTE",
             "Right" => User::isLogged(),
-            "Icon" => "fas fa-tachometer-alt"
+            "Icon" => "fas fa-home"
         ],
         /**
          * CMS Beheer
          */
         "/content" => [
             "Right" => Restrict::Validation(Rights::CMS_MENU) || Restrict::Validation(Rights::CMS_PAGES),
-            "Title" => "Website content",
+            "Title" => "Content",
             "FileName" => null,
-            "Icon" => "fas fa-globe-europe",
+            "Icon" => "fas fa-columns",
             "MasterPage" => null,
             "Children" =>
                 [
@@ -79,7 +79,7 @@ $aNavBarPages =
                 Restrict::Validation(Rights::FILES_READ) &&
                 Restrict::Validation(Rights::FILES_EDIT)
             ),
-            "Icon" => "fas fa-file",
+            "Icon" => "fas fa-folder",
             "Children" => null
         ],
         '/administration' => [
@@ -197,7 +197,7 @@ $aNavBarPages =
                 ),
             "Title" => "Analytics",
             "FileName" => "Analytics.Home",
-            "Icon" => "fas fa-qrcode",
+            "Icon" => "fas fa-chart-line",
             "MasterPage" => "AdminLTE"
         ],
         '/arura' => [
@@ -210,7 +210,7 @@ $aNavBarPages =
                 ),
             "Title" => "Arura",
             "FileName" => null,
-            "Icon" => "fas fa-cube",
+            "Icon" => "fas fa-toolbox",
             "MasterPage" => "AdminLTE",
             "Children" =>
                 [

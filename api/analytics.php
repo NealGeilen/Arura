@@ -13,10 +13,19 @@ $request->setRequestMethod('POST');
 $request->setRight(Rights::ANALYTICS);
 $response->isDebug(true);
 $request->sandbox(function ($aData) use ($response, $request){
+    $startData = $aData["start"];
+    $endData = $aData["end"];
     $request->TriggerEvent();
-    $request->addType("devices", function ($aData) use ($response){
-        $response->exitSuccess(Reports::Devices($aData["start"],$aData["end"]));
-    });
+    $analyticData = [
+        "Devices" => Reports::Devices($startData,$endData),
+        "ReadTime" => Reports::ReadTimePage($startData,$endData),
+        "ExitPages" => Reports::ExitPages($startData,$endData),
+        "MediaVisitors" => Reports::SocialMediaVisitors($startData,$endData),
+        "CountryVisitors" => Reports::VistorsPerCountry($startData,$endData),
+        "CityVisitors" => Reports::VistorsPerCity($startData,$endData),
+        "AgeVisitors" =>Reports::UserAge($startData,$endData)
+    ];
+    $response->exitSuccess($analyticData);
 });
 
 $response->exitScript();

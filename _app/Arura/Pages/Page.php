@@ -13,7 +13,8 @@ use SmartyException;
 class Page extends Modal implements PageEnum{
 
     const DEAFULT_PAGES = [
-        "/sitemap" => "sitemap"
+        "/sitemap" => "sitemap",
+        "/cookiebeleid" => "cookiestatment"
     ];
 
     /**
@@ -110,6 +111,7 @@ class Page extends Modal implements PageEnum{
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', Application::getAll()['website']);
+        $smarty->assign("app", Application::getAll());
         $smarty->assign('content', $this->getPageContent());
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
