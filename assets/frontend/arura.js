@@ -251,7 +251,7 @@ Arura = {
     },
     Cookies: {
         init: function(){
-          if (Cookies.get("CookieBar") === undefined){
+          if (Cookies.get("CookieBar") === undefined && window.location.pathname !== "/cookiebeleid"){
               this.showModal();
           }
         },
@@ -261,15 +261,12 @@ Arura = {
                 Title: "Cookie melding",
                 Message: "Deze website maakt gebruik van cookies – inclusief cookies van derde partijen – om informatie te verzamelen over de manier waarop bezoekers onze website gebruiken. Hiermee kunnen we u de best mogelijke ervaring bieden, onze website blijven verbeteren en u aanbiedingen doen die aansluiten bij uw interesses. Door op ‘Accepteren’ te klikken gaat u akkoord met het gebruik van deze cookies. ",
                 Buttons:[
-                    '<a class="btn btn-secondary modal-denied" type="reset">Meer informatie</a>',
+                    '<a class="btn btn-secondary modal-denied" type="reset" href="/cookiebeleid">Meer informatie</a>',
                     '<button class="btn btn-primary modal-confirm" type="submit">Accepteren</button>'
                 ],
                 onConfirm: function () {
-                    Cookies.set("CookieBar", true, { expires: 356})
-                    //TODO set analytics
-                },
-                onDeny: function () {
-                    //TODO Redirect user to cookie statment
+                    Cookies.set("CookieBar", true, { expires: 356});
+                    location.reload();
                 }
             })
         }

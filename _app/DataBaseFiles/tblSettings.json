@@ -16,7 +16,7 @@
     },
     "Setting_Value": {
       "Type": "varchar(255)",
-      "Null": "NO",
+      "Null": "YES",
       "Key": "",
       "Default": null,
       "Extra": ""
@@ -169,6 +169,18 @@
       "Setting_Required": "0",
       "Setting_Type": "checkbox",
       "Setting_Plg": "website"
+    },
+    {
+      "Setting_Name": "Tag",
+      "Setting_Required": "1",
+      "Setting_Type": "text",
+      "Setting_Plg": "analytics google"
+    },
+    {
+      "Setting_Name": "Vieuw",
+      "Setting_Required": "1",
+      "Setting_Type": "text",
+      "Setting_Plg": "analytics google"
     }
   ]
 }

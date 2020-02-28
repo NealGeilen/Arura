@@ -2,14 +2,13 @@
 namespace Arura\Analytics;
 
 use Arura\Exceptions\NotFound;
+use Arura\Settings\Application;
 use Exception;
 use Google_Exception;
 use Google_Service_AnalyticsReporting_DateRange;
 use Google_Service_AnalyticsReporting_Dimension;
 use Google_Service_AnalyticsReporting_GetReportsRequest;
-use Google_Service_AnalyticsReporting_GetReportsResponse;
 use Google_Service_AnalyticsReporting_Metric;
-use Google_Service_AnalyticsReporting_Report;
 use Google_Service_AnalyticsReporting_ReportRequest;
 
 class ReportRequest extends Analytics {
@@ -41,7 +40,7 @@ class ReportRequest extends Analytics {
      * @throws Exception
      */
     public function getReport(){
-        $this->getReportRequest()->setViewId("166821020");
+        $this->getReportRequest()->setViewId(Application::get("analytics google", "Vieuw"));
         $this->getReportRequest()->setPageSize("10000");
         $this->getReportRequest()->setDimensions($this->getDimensions());
         $this->getReportRequest()->setMetrics($this->getMetrics());
