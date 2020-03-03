@@ -25,8 +25,6 @@
     "/dashboard/assets/js/Arura.js"
   ],
   "Css" : [
-    "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700",
-    "/dashboard/assets/vendor/fontawesome-free/css/all.min.css",
     "/dashboard/assets/vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
     "/dashboard/assets/css/adminlte.css",
     "/dashboard/assets/vendor/summernote/summernote-bs4.css",

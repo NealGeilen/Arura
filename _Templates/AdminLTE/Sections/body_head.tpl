@@ -4,9 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{$aWebsite.favicon}">
     <title>{$aPage.title} | Dashboard | {$aWebsite.name}</title>
-    {foreach from=$aResourceFiles.Css item=File}
-    <link href="{$File}" rel="stylesheet">
-    {/foreach}
+    <link href="/dashboard/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+    {combine input=$aResourceFiles.Css output='/cache/arura-admin.css'}
 </head>
 <style>
     {$aResourceFiles.CssPage}
