@@ -67,7 +67,7 @@ class Sitemap
      */
     private function parsePages()
     {
-        $aPages = Page::getAllPages();
+        $aPages = Page::getAllVisiblePages();
 
         foreach ($aPages as $page) {
             $lastmod = new DateTime();

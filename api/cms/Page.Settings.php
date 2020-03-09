@@ -1,8 +1,13 @@
 <?php
+
+use Arura\Client\RequestHandler;
+use Arura\Client\ResponseHandler;
+use Arura\Pages\CMS\Page;
+
 require_once __DIR__ . '/../../_app/autoload.php';
 
-$response = new \Arura\Client\ResponseHandler();
-$request = new \Arura\Client\RequestHandler();
+$response = new ResponseHandler();
+$request = new RequestHandler();
 $request->setRight(Rights::CMS_PAGES);
 $request->TriggerEvent();
 $response->isDebug(true);
@@ -13,16 +18,16 @@ $request->sandbox(function ($aData) use ($response){
     unset($aData['type']);
     switch ($sType){
         case 'save-settings':
-            (new \Arura\Pages\CMS\Page($aData["Page_Id"]))->set($aData);
+            (new Page($aData["Page_Id"]))->set($aData);
             break;
         case 'get-all-pages':
-            $aOutcome = \Arura\Pages\CMS\Page::getAllPages();
+            $aOutcome = Page::getAllPages();
             break;
         case 'delete-page':
-            (new \Arura\Pages\CMS\Page($aData['Page_Id']))->delete();
+            (new Page($aData['Page_Id']))->delete();
             break;
         case 'create-page':
-            $aOutcome = \Arura\Pages\CMS\Page::Create($aData['Page_Title'], $aData['Page_Url'])->__toArray();
+            $aOutcome = Page::Create($aData['Page_Title'], $aData['Page_Url'])->__toArray();
             break;
     }
     $response->exitSuccess($aOutcome);
