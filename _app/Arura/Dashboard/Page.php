@@ -62,11 +62,11 @@ class Page{
                 switch (pathinfo($sPath, PATHINFO_EXTENSION)){
                     case "js":
                         if (!(is_file(($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). ".min.js")) && !str_contains(".min.js", $item))){
-                            self::$aResourceFiles["JsPage"] .= file_get_contents($sPath);
+                            self::addSourceScriptJs(file_get_contents($sPath));
                         }
                         break;
                     case "css":
-                        self::$aResourceFiles["CssPage"] .= file_get_contents($sPath);
+                        self::addSourceScriptCss(file_get_contents($sPath));
                         break;
                 }
             }

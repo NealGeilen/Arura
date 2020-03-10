@@ -1,5 +1,5 @@
 <?php
 
 use Arura\Dashboard\Page;
-Page::addResourceFile('Js', '//cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.js');
-Page::addResourceFile('Css', '//cdnjs.cloudflare.com/ajax/libs/nestable2/1.6.0/jquery.nestable.min.css');
+Page::addSourceScriptJs(file_get_contents(__ARURA__ROOT__ . "/assets/vendor/Nestable2-1.6.0/dist/jquery.nestable.min.js"));
+Page::addSourceScriptCss(file_get_contents(__ARURA__ROOT__ ."/assets/vendor/Nestable2-1.6.0/dist/jquery.nestable.min.css"));

@@ -27,7 +27,6 @@
   "Css" : [
     "/dashboard/assets/vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
     "/dashboard/assets/css/adminlte.css",
-    "/dashboard/assets/vendor/summernote/summernote-bs4.css",
     "/dashboard/assets/vendor/dropzone/css/basic.css",
     "/dashboard/assets/vendor/jstree/themes/default/style.css",
     "/dashboard/assets/vendor/datatables-bs4/css/dataTables.bootstrap4.css",
