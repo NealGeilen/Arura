@@ -3,6 +3,7 @@ namespace Arura\Pages\CMS;
 
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 use Arura\Pages;
 use Arura\Permissions\Restrict;
 use Rights;
@@ -337,6 +338,7 @@ class Page extends Pages\Page{
      * @param callable|null $function
      * @throws Error
      * @throws SmartyException
+     * @throws NotFound
      */
     public static function displayView($sSlug = "", $iRight = null, callable $function = null){
         parent::displayView($sSlug, Rights::CMS_PAGES, function ($sUrl){

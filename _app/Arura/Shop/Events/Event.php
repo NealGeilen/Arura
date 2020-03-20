@@ -3,6 +3,7 @@ namespace Arura\Shop\Events;
 
 use Arura\Crud;
 use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 use Arura\Pages\Page;
 use Arura\Shop\Payment;
 use Arura\Database;
@@ -210,6 +211,7 @@ class Event Extends Page {
      * @param callable|null $function
      * @throws Error
      * @throws SmartyException
+     * @throws NotFound
      */
     public static function displayView($sSlug = "", $iRight = null,callable $function = null){
         parent::displayView($sSlug, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){

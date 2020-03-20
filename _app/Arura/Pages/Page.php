@@ -6,6 +6,8 @@ use Arura\Exceptions\NotFound;
 use Arura\Modal;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
+use Cacher\Cacher;
+use Exception;
 use Rights;
 use Smarty;
 use SmartyException;
@@ -98,15 +100,32 @@ class Page extends Modal implements PageEnum{
     }
 
     /**
+     * @return array
+     * @throws Exception
+     */
+    protected function loadResourceFiles(){
+        $C = new Cacher();
+        foreach (json_decode(file_get_contents(self::TemplatePath.'config.json'), true) as $cath => $files){
+            foreach ($files as $file){
+                $C->add($cath, __ROOT__ . $file);
+            }
+        }
+        $C->setName("site");
+        $C->setCachDirectorie("cached");
+        return $C->getMinifyedFiles();
+    }
+
+
+    /**
      * @throws Error
      * @throws SmartyException
+     * @throws Exception
      */
     public function showPage(){
         $this->forceHTTPS();
         $smarty = self::getSmarty();
-        self::$pageJsCssFiles = json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
 
-        $smarty->assign('aResourceFiles', self::$pageJsCssFiles);
+        $smarty->assign('aResourceFiles', $this->loadResourceFiles());
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('sPageTitle', $this->getTitle());
         $smarty->assign('sPageDescription', $this->getDescription());
