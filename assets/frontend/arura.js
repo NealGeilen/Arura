@@ -26,7 +26,6 @@ $.validator.setDefaults({
 
 $(document).ready(function () {
     Arura.Cms.Corrections();
-    Arura.Cookies.init();
     Arura.Event.BankSelect();
     Arura.Event.RegisterForm($(".form-event-checkout"));
     Arura.Event.OrderTicketAmountForm($(".form-event-order"));
