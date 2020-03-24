@@ -6,8 +6,6 @@
     <title>{$aPage.title} | Dashboard | {$aWebsite.name}</title>
     <link href="/dashboard/assets/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="/dashboard/assets/vendor/summernote/summernote-bs4.css" rel="stylesheet">
-    {combine input=$aResourceFiles.Css output='/cache/arura-admin.css'}
+    <link href="{$aResourceFiles.arura.css}" rel="stylesheet">
+    <link href="{$aResourceFiles.page.css}" rel="stylesheet">
 </head>
-<style>
-    {$aResourceFiles.CssPage}
-</style>

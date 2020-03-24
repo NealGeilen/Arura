@@ -1,8 +1,6 @@
-{foreach from=$aResourceFiles.Js item=File}
-<script src="{$File}?{$smarty.now}"></script>
-{/foreach}
+<script src="{$aResourceFiles.arura.js}"></script>
+<script src="{$aResourceFiles.page.js}"></script>
 <script>
-    {$aResourceFiles.JsPage}
     setInterval(validateUser, 5000);
     loadChartJsPhp();
 </script>

@@ -3,6 +3,7 @@ namespace Arura\Dashboard;
 
 use Arura\Exceptions\Error;
 use Arura\Settings\Application;
+use Cacher\Cacher;
 use Exception;
 use Smarty;
 
@@ -20,7 +21,7 @@ class Page{
 
     protected static $oSmarty;
 
-    protected static $aResourceFiles = ["JsPage" =>"", "CssPage"=>""];
+    protected static $aResourceFiles = ["JsPage" =>[], "CssPage"=>[]];
 
     protected static $sSideBar = null;
 
@@ -57,25 +58,66 @@ class Page{
                 include ($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). '.php');
             }
 
+
             foreach (scandir($this->getFileLocation()) as $item){
                 $sPath = $this->getFileLocation() . DIRECTORY_SEPARATOR . $item;
                 switch (pathinfo($sPath, PATHINFO_EXTENSION)){
                     case "js":
-                        if (!(is_file(($this->getFileLocation() . DIRECTORY_SEPARATOR . basename($this->getFileLocation()). ".min.js")) && !str_contains(".min.js", $item))){
-                            self::addSourceScriptJs(file_get_contents($sPath));
-                        }
+                        self::addSourceScriptJs($sPath);
                         break;
                     case "css":
-                        self::addSourceScriptCss(file_get_contents($sPath));
+                        self::addSourceScriptCss($sPath);
                         break;
                 }
             }
             self::getSmarty()->assign("sPageSideBar", self::getSideBar());
-            self::getSmarty()->assign('aResourceFiles', self::getResourceFiles());
+            self::getSmarty()->assign('aResourceFiles', ["page" => $this->loadResourceOfPageFiles(), "arura" => $this->loadResourceFiles()]);
             self::getSmarty()->assign('TEMPLATEDIR', $this->getMasterPath());
 //          Show Master Page
             return self::getSmarty()->display(self::$ContentTpl);
         }
+    }
+
+    /**
+     * @throws Exception
+     * @return array
+     */
+    protected function loadResourceOfPageFiles(){
+        $Ch = new Cacher();
+        $Ch->setName(str_replace(" ", "-", $this->getTitle()));
+        $Ch->setCachDirectorie("cached/arura");
+        foreach (self::getResourceFiles()["JsPage"] as $js){
+            if (!is_file($js)){
+                $js = __ROOT__ . $js;
+            }
+            $Ch->add(Cacher::Js,$js);
+        }
+        foreach (self::getResourceFiles()["CssPage"] as $css){
+            if (!is_file($css)){
+                $css = __ROOT__ . $css;
+            }
+            $Ch->add(Cacher::Css,$css);
+        }
+
+        return $Ch->getMinifyedFiles();
+    }
+
+    /**
+     * @return array
+     * @throws Exception
+     */
+    protected function loadResourceFiles(){
+        $Ch = new Cacher();
+        $Ch->setName("Arura");
+        $Ch->setCachDirectorie("cached");
+        foreach (self::getResourceFiles()["Js"] as $js){
+            $Ch->add(Cacher::Js,__ROOT__ . $js);
+        }
+        foreach (self::getResourceFiles()["Css"] as $js){
+            $Ch->add(Cacher::Css,__ROOT__ . $js);
+        }
+
+        return $Ch->getMinifyedFiles();
     }
 
     /**
@@ -212,6 +254,7 @@ class Page{
     /**
      * @param $sCategory
      * @param $sFileLocation
+     * @deprecated
      */
     public static function addResourceFile($sCategory, $sFileLocation){
         self::$aResourceFiles[$sCategory][] = $sFileLocation;
@@ -221,14 +264,14 @@ class Page{
      * @param $sScript
      */
     public static function addSourceScriptCss($sScript){
-        self::$aResourceFiles["CssPage"] .= $sScript;
+        self::$aResourceFiles["CssPage"][] = $sScript;
     }
 
     /**
      * @param $sScript
      */
     public static function addSourceScriptJs($sScript){
-        self::$aResourceFiles["JsPage"] .= $sScript;
+        self::$aResourceFiles["JsPage"][] = $sScript;
     }
 
     /**

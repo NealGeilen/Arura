@@ -18,6 +18,7 @@
     "/dashboard/assets/vendor/Chart/driver.js",
     "/dashboard/assets/vendor/bootstrap-notify/bootstrap-notify.js",
     "/dashboard/assets/vendor/jquery-validation/jquery.validate.js",
+    "/dashboard/assets/vendor/bootstrap-iconpicker/bootstrap-iconpicker.min.js",
     "/dashboard/assets/vendor/jquery-validation/localization/messages_nl.js",
     "/dashboard/assets/js/Modals.js",
     "/dashboard/assets/js/Filemanger.js",
@@ -27,6 +28,7 @@
   "Css" : [
     "/dashboard/assets/vendor/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css",
     "/dashboard/assets/css/adminlte.css",
+    "/dashboard/assets/vendor/bootstrap-iconpicker/bootstrap-iconpicker.min.css",
     "/dashboard/assets/vendor/dropzone/css/basic.css",
     "/dashboard/assets/vendor/jstree/themes/default/style.css",
     "/dashboard/assets/vendor/datatables-bs4/css/dataTables.bootstrap4.css",

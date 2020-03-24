@@ -1,7 +1,2 @@
-{foreach from=$aResourceFiles.Js item=File}
-<script src="{$File}"></script>
-{/foreach}
-<script>
-    {$aResourceFiles.JsPage}
-
-</script>
+<script src="{$aResourceFiles.arura.js}"></script>
+<script src="{$aResourceFiles.page.js}"></script>
