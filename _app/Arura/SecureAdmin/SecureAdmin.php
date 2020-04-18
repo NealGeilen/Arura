@@ -28,7 +28,7 @@ class SecureAdmin extends Modal {
         if (self::doesTableExits($id)){
             $this->setId($id);
         } else {
-            throw new \Error();
+            throw new \Exception("Not found", 404);
         }
     }
 

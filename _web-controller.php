@@ -3,84 +3,74 @@
 use Arura\Dashboard\Host;
 use Arura\Dashboard\Page;
 use Arura\Permissions\Restrict;
+use Arura\Router;
 use Arura\Settings\Application;
 use Arura\User\User;
 
 require_once __DIR__ . "/_app/autoload.php";
-$aExceptionPages = ["/login", "/login/password", "/ticket"];
+$aExceptionPages = ["/login", "/login/password"];
 if (!User::isLogged() && !in_array('/'.$_GET['_url_'], $aExceptionPages)){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
 }
+$router = new Router();
+$router->getRouter()->setBasePath("/dashboard");
+$router->getRouter()->setNamespace("App\Controllers");
 
 
-$Host = new Host();
-$smarty = new Smarty();
 foreach (Rights::getConstants() as $sName => $iValue){
     $aPermissions[$sName] = Restrict::Validation($iValue);
 }
+Router::getSmarty()->assign("aPermissions", $aPermissions);
 $aNavBarPages =
     [
         "/home" => [
             "Title" => "Home",
-            "FileName" => "Home",
-            "MasterPage" => "AdminLTE",
+            "Function" => "Pages@Home",
             "Right" => User::isLogged(),
             "Icon" => "fas fa-home"
         ],
-        /**
-         * CMS Beheer
-         */
         "/content" => [
             "Right" => Restrict::Validation(Rights::CMS_MENU) || Restrict::Validation(Rights::CMS_PAGES),
             "Title" => "Content",
-            "FileName" => null,
             "Icon" => "fas fa-columns",
-            "MasterPage" => null,
             "Children" =>
                 [
-                    "/content/pagina" => [
+                    "/content/paginas" => [
                         "Right" => Restrict::Validation(Rights::CMS_PAGES),
                         "Title" => "Pagina's",
-                        "FileName" => "Cms.Pages",
                         "Icon" => "fas fa-file",
-                        "MasterPage" => "AdminLTE"
+                        "Function" => "CMS@Pages"
                     ],
                     "/content/menu" => [
                         "Right" => Restrict::Validation(Rights::CMS_MENU),
                         "Title" => "Menu",
-                        "FileName" => "Cms.Menu",
                         "Icon" => "fas fa-bars",
-                        "MasterPage" => "AdminLTE"
+                        "Function" => "CMS@Menu"
                     ],
-                    "/content/pagina/content" => [
+                    "/content/pagina/{id}/content" => [
                         "Right" => Restrict::Validation(Rights::CMS_PAGES) && !isUserOnMobile(),
-                        "FileName" => "Cms.Page.Content",
                         "Title" => "Pagina content",
+                        "Function" => "CMS@Content",
                         "Icon" => null,
-                        "MasterPage" => "AdminLTE"
                     ],
-                    "/content/pagina/instellingen" => [
+                    "/content/pagina/{id}/instellingen" => [
                         "Right" => Restrict::Validation(Rights::CMS_PAGES),
                         "Title" => "Pagina instellingen",
-                        "FileName" => "Cms.Page.Settings",
                         "Icon" => null,
-                        "MasterPage" => "AdminLTE"
+                        "Function" => "CMS@Settings",
                     ],
                 ]
         ],
         "/files" => [
             "Title" => "Bestanden",
-            "FileName" => "FileManger",
-            "MasterPage" => "AdminLTE",
-            "isChild" => false,
             "Right" => (
                 Restrict::Validation(Rights::FILES_UPLOAD) &&
                 Restrict::Validation(Rights::FILES_READ) &&
                 Restrict::Validation(Rights::FILES_EDIT)
             ),
             "Icon" => "fas fa-folder",
-            "Children" => null
+            "Function" => "FileManger@Home",
         ],
         '/administration' => [
             "Right" =>
@@ -88,11 +78,35 @@ $aNavBarPages =
                 Restrict::Validation(Rights::SECURE_ADMINISTRATION)
                 ),
             "Title" => "Beveiligde administratie",
-            "FileName" => "Secure.Administration.Tables",
             "Icon" => "fas fa-shield-alt",
-            "isChild" => false,
-            "MasterPage" => "AdminLTE",
-            "Children" => null
+            "Function" => "SecureAdministration@Home",
+        ],
+        '/administration/{id}/settings' => [
+            "Right" =>
+                (
+                Restrict::Validation(Rights::SECURE_ADMINISTRATION)
+                ),
+            "Title" => "Beveiligde administratie",
+            "Icon" => null,
+            "Function" => "SecureAdministration@Settings",
+        ],
+        '/administration/{id}/edit' => [
+            "Right" =>
+                (
+                Restrict::Validation(Rights::SECURE_ADMINISTRATION)
+                ),
+            "Title" => "Beveiligde administratie",
+            "Icon" => null,
+            "Function" => "SecureAdministration@Edit",
+        ],
+        '/administration/create' => [
+            "Right" =>
+                (
+                Restrict::Validation(Rights::SECURE_ADMINISTRATION_CREATE)
+                ),
+            "Title" => "Beveiligde administratie aanmaken",
+            "Icon" => null,
+            "Function" => "SecureAdministration@Create",
         ],
         '/winkel' => [
             "Right" =>
@@ -103,10 +117,7 @@ $aNavBarPages =
                     Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                 ),
             "Title" => "Webshop",
-            "FileName" => null,
             "Icon" => "fas fa-shopping-bag",
-            "isChild" => false,
-            "MasterPage" => "AdminLTE",
             "Children" =>
                 [
                     '/winkel/betalingen' => [
@@ -115,43 +126,39 @@ $aNavBarPages =
                             Restrict::Validation(Rights::SHOP_PAYMENTS)
                             ),
                         "Title" => "Betalingen",
-                        "FileName" => "Shop.Payments",
+                        "Function" => "Shop\Payments@Management",
                         "Icon" => "fas fa-money-bill-wave-alt",
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
                     ],
-                    '/winkel/categorieen' => [
-                        "Right" =>
-                            (
-                            Restrict::Validation(Rights::SHOP_CATEGORIES)
-                            ),
-                        "Title" => "Categorieën",
-                        "FileName" => null,
-                        "Icon" => "fas fa-tag",
-                        "isChild" => true,
-                        "MasterPage" => "AdminLTE",
-                        "Children" => null
-                    ],
-                    '/winkel/producten' => [
-                        "Right" =>
-                            (
-                            Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
-                            ),
-                        "Title" => "Producten",
-                        "FileName" => null,
-                        "Icon" => "fas fa-box-open",
-                        "isChild" => true,
-                        "MasterPage" => "AdminLTE"
-                    ],
+//                    '/winkel/categorieen' => [
+//                        "Right" =>
+//                            (
+//                            Restrict::Validation(Rights::SHOP_CATEGORIES)
+//                            ),
+//                        "Title" => "Categorieën",
+//                        "FileName" => null,
+//                        "Icon" => "fas fa-tag",
+//                        "isChild" => true,
+//                        "MasterPage" => "AdminLTE",
+//                        "Children" => null
+//                    ],
+//                    '/winkel/producten' => [
+//                        "Right" =>
+//                            (
+//                            Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT)
+//                            ),
+//                        "Title" => "Producten",
+//                        "FileName" => null,
+//                        "Icon" => "fas fa-box-open",
+//                        "isChild" => true,
+//                        "MasterPage" => "AdminLTE"
+//                    ],
                     '/winkel/evenementen' => [
                         "Right" =>
                             (
                             Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
                             ),
                         "Title" => "Evenementen",
-                        "FileName" => "Shop.Events",
                         "Icon" => "far fa-calendar-alt",
-                        "MasterPage" => "AdminLTE",
                         "Children" => [
                             '/winkel/evenementen/beheer' => [
                                 "Right" =>
@@ -159,10 +166,26 @@ $aNavBarPages =
                                     Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
                                     ),
                                 "Title" => "Beheer",
-                                "FileName" => "Shop.Events",
                                 "Icon" => "fas fa-calendar-day",
-                                "isChild" => true,
-                                "MasterPage" => "AdminLTE"
+                                "Function" => "Shop\Events@Management",
+                            ],
+                            '/winkel/evenementen/beheer/{id}/aanpassen' => [
+                                "Right" =>
+                                    (
+                                    Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    ),
+                                "Title" => "Beheer",
+                                "Icon" => null,
+                                "Function" => "Shop\Events@Edit",
+                            ],
+                            '/winkel/evenementen/beheer/aanmaken' => [
+                                "Right" =>
+                                    (
+                                    Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    ),
+                                "Title" => "Evenement aanmaken",
+                                "Icon" => "far fa-calendar-plus",
+                                "Function" => "Shop\Events@Create",
                             ],
                             '/winkel/evenementen/tickets' => [
                                 "Right" =>
@@ -170,21 +193,26 @@ $aNavBarPages =
                                     Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
                                     ),
                                 "Title" => "Inschrijvingen",
-                                "FileName" => "Shop.Tickets",
                                 "Icon" => "fas fa-ticket-alt",
-                                "isChild" => true,
-                                "MasterPage" => "AdminLTE"
+                                "Function" => "Shop\Tickets@Management"
+                            ],
+                            '/winkel/evenementen/tickets/{id}' => [
+                                "Right" =>
+                                    (
+                                    Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
+                                    ),
+                                "Title" => "Inschrijvingen",
+                                "Icon" => null,
+                                "Function" => "Shop\Tickets@Tickets"
                             ],
                             '/winkel/evenementen/valideren' => [
                                 "Right" =>
                                     (
                                     Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
                                     ),
-                                "Title" => "Valideren",
-                                "FileName" => "Events.Validation",
+                                "Function" => "Shop\Events@Validation",
+                                "Title" => "Ticket controleren",
                                 "Icon" => "fas fa-qrcode",
-                                "isChild" => true,
-                                "MasterPage" => "AdminLTE"
                             ],
                         ]
                     ]
@@ -196,9 +224,8 @@ $aNavBarPages =
                 Restrict::Validation(Rights::ANALYTICS)
                 ),
             "Title" => "Analytics",
-            "FileName" => "Analytics.Home",
             "Icon" => "fas fa-chart-line",
-            "MasterPage" => "AdminLTE"
+            "Function" => "Analytics@Home",
         ],
         '/arura' => [
             "Right" =>
@@ -209,9 +236,7 @@ $aNavBarPages =
                     Restrict::Validation(Rights::ARURA_UPDATER)
                 ),
             "Title" => "Arura",
-            "FileName" => null,
             "Icon" => "fas fa-toolbox",
-            "MasterPage" => "AdminLTE",
             "Children" =>
                 [
                     '/arura/users' => [
@@ -220,9 +245,8 @@ $aNavBarPages =
                             Restrict::Validation(Rights::ARURA_USERS)
                             ),
                         "Title" => "Gebruikers",
-                        "FileName" => "Arura.Users",
                         "Icon" => "fas fa-users",
-                        "MasterPage" => "AdminLTE"
+                        "Function" => "Arura@Users",
                     ],
                     '/arura/roles' => [
                         "Right" =>
@@ -230,9 +254,8 @@ $aNavBarPages =
                             Restrict::Validation(Rights::ARURA_ROLLES)
                             ),
                         "Title" => "Rollen",
-                        "FileName" => "Arura.Roles",
+                        "Function" => "Arura@Roles",
                         "Icon" => "fas fa-key",
-                        "MasterPage" => "AdminLTE"
                     ],
                     '/arura/settings' => [
                         "Right" =>
@@ -240,9 +263,8 @@ $aNavBarPages =
                             Restrict::Validation(Rights::ARURA_SETTINGS)
                             ),
                         "Title" => "Instellingen",
-                        "FileName" => "Arura.Settings",
+                        "Function" => "Arura@Settings",
                         "Icon" => "fas fa-cogs",
-                        "MasterPage" => "AdminLTE"
                     ],
                     '/arura/updater' => [
                         "Right" =>
@@ -250,108 +272,44 @@ $aNavBarPages =
                             Restrict::Validation(Rights::ARURA_UPDATER)
                             ),
                         "Title" => "Updaten",
-                        "FileName" => "Arura.Updater",
+                        "Function" => "Arura@Updater",
                         "Icon" => "fas fa-server",
-                        "MasterPage" => "AdminLTE"
                     ],
                 ]
         ],
         "/profile" => [
             "Title" => "Profiel",
-            "FileName" => "User.Profile",
-            "MasterPage" => "AdminLTE",
+            "Function" => "Pages@Profile",
+            "Icon" => null,
             "Right" => User::isLogged(),
-            "Icon" => null
         ],
         "/login" => [
             "Title" => "Login",
-            "FileName" => "User.Login",
-            "MasterPage" => "Clean",
+            "Function" => "Pages@Login",
             "Right" => !User::isLogged(),
             "Icon" => null
         ],
-        "/login/password" => [
-            "Title" => "Nieuw wachtwoord",
-            "FileName" => "User.Login.Password",
-            "MasterPage" => "Clean",
-            "Right" => !User::isLogged(),
-            "Icon" => null
-        ]
+//        "/login/password" => [
+//            "Title" => "Nieuw wachtwoord",
+//            "FileName" => "User.Login.Password",
+//            "MasterPage" => "Clean",
+//            "Right" => !User::isLogged(),
+//            "Icon" => null
+//        ]
 
     ];
-if (User::isLogged()){
-    $oUser = User::activeUser();
-    $oUser->TriggerEvent();
-    $aUser  = $oUser->__toArray();
-    $smarty->assign('aUser', $aUser);
-    $smarty->assign('aPermissions', $aPermissions);
-}
 
-Page::setSmarty($smarty);
-foreach ($aNavBarPages as $sUrl => $aProperties){
-    if (isset($aProperties["MasterPage"])){
-        $P = new Page();
-        $P->setUrl($sUrl);
-        $P->setTitle($aProperties['Title']);
-        $P->setRight($aProperties["Right"]);
-        $P->setMasterPath(__ARURA_TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR);
-        $P->setFileLocation(__ARURA_TEMPLATES__   . $aProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aProperties['FileName']);
-        $Host->addPage($P);
-    }
-    if (isset($aProperties["Children"])){
-        foreach ($aProperties["Children"] as $ChildUrl => $aChildProperties){
-            $P = new Page();
-            $P->setUrl($ChildUrl);
-            $P->setTitle($aChildProperties['Title']);
-            $P->setRight($aChildProperties["Right"]);
-            $P->setMasterPath(__ARURA_TEMPLATES__   . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR);
-            $P->setFileLocation(__ARURA_TEMPLATES__  . $aChildProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aChildProperties['FileName']);
-            $Host->addPage($P);
 
-            if (isset($aChildProperties["Children"])){
-                foreach ($aChildProperties["Children"] as $GrandUrl => $aGrandProperties){
-                    $P = new Page();
-                    $P->setUrl($GrandUrl);
-                    $P->setTitle($aGrandProperties['Title']);
-                    $P->setRight($aGrandProperties["Right"]);
-                    $P->setMasterPath(__ARURA_TEMPLATES__   . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR);
-                    $P->setFileLocation(__ARURA_TEMPLATES__  . $aGrandProperties["MasterPage"] . DIRECTORY_SEPARATOR . 'Pages' .DIRECTORY_SEPARATOR. $aGrandProperties['FileName']);
-                    $Host->addPage($P);
-                    if (isset($aNavBarPages[$sUrl]["Open"])){
-                        if (!$aNavBarPages[$sUrl]["Open"]){
-                            $aNavBarPages[$sUrl]["Open"]= substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl();
-                        }
-                    } else {
-                        $aNavBarPages[$sUrl]["Open"]= substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__)) === $P->getUrl();
-                    }
-                }
-            }
 
-        }
-    }
-}
-try{
-    $oCurrentPage = $Host->getRequestPage();
-    $smarty->assign('aNavPages', $aNavBarPages);
-    $smarty->assign("bMobileUser", (int)isUserOnMobile());
-    $smarty->assign('sRequestUrl', substr($_SERVER["REDIRECT_URL"], strlen("/".__ARURA__DIR_NAME__) ));
-    $oCurrentPage->showPage();
-
+Router::getSmarty()->assign("aNavPages", $aNavBarPages);
+$router->loadRoutes($aNavBarPages);
+try {
+    $router->getRouter()->run();
 } catch (Exception $e){
-    switch ($e->getCode()){
-        case 404:
-        case 403:
-            header("Location: /" . __ARURA__DIR_NAME__);
-            break;
-        default:
-            if ((int)Application::get("arura", "Debug")){
-                var_dump($e);
-                exit;
-            }
-            header("Location: /" . __ARURA__DIR_NAME__);
-            break;
-    }
-    exit;
+    var_dump($e);
 }
+
+
+
 
 

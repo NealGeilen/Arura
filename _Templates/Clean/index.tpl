@@ -5,8 +5,8 @@
 {block content}
 {/block}
 <script>
-    ARURA_DIR = "{$aArura.dir}";
-    ARURA_API_DIR = "/{$aArura.dir}/{$aArura.api}/";
+    ARURA_DIR = "dashboard";
+    ARURA_API_DIR = "/dashboard/api/";
 </script>
 {include "./Sections/body_end.tpl"}
 

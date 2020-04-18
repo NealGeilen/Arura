@@ -89,6 +89,9 @@ class Page extends Pages\Page{
         if (!$this->isLoaded || $force) {
             //load user properties from database
             $aPage = $this -> db -> fetchRow("SELECT * FROM tblCmsPages WHERE Page_Id = ? ", [$this -> getId()]);
+            if (empty($aPage)){
+                throw new \Exception("Page not found", 404);
+            }
             $this->setDescription($aPage["Page_Description"]);
             $this->setVisible((bool)$aPage["Page_Visible"]);
             $this->setTitle($aPage["Page_Title"]);
