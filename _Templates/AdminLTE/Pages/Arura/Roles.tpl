@@ -64,7 +64,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-row" method="post" action="/{$aArura.dir}/{$aArura.api}/user/roles.php">
+                    <form class="form-row" method="post">
                         <input type="hidden" value="create-role" name="type">
                         <div class="form-group col-12">
                             <label class="control-label">Naam</label>
@@ -82,7 +82,7 @@
 
     <div style="display: none">
         <div class="template-role-edit">
-            <form class="form-row table-card" method="post" action="/{$aArura.dir}/{$aArura.api}/roles.php">
+            <form class="form-row table-card" method="post">
                 <input type="hidden" value="save-role" name="type">
                 <input type="hidden" name="Role_Id">
                 <div class="form-group col-12">

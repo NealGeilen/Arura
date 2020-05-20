@@ -116,18 +116,19 @@ class RequestHandler{
     }
 
     /**
-     * @param callable|null $callback
+     * @param callable $callback
      */
-    public function sandbox(callable $callback = null){
+    public function sandbox(callable $callback, string $type){
+        $this->setRequestMethod($type);
+        $responseHandler = new ResponseHandler();
+        $this->CollectData();
         $this->validateRequest();
         if (!ResponseHandler::hasError()){
             try{
-                $callback(
-                    $this -> aData
-                );
-                if (!empty($this->aTypes) && isset($_GET["type"])){
-                    if (isset($this->aTypes[$_GET["type"]])){
-                        $this->aTypes[$_GET["type"]]($this->aData);
+                $responseHandler->exitSuccess($callback($this, $responseHandler));
+                if (!empty($this->aTypes) && isset($_POST["type"])){
+                    if (isset($this->aTypes[$_POST["type"]])){
+                        $responseHandler->exitSuccess($this->aTypes[$_POST["type"]]($this->aData));
                     } else {
                         throw new MethodNotAllowed();
                     }
@@ -135,6 +136,7 @@ class RequestHandler{
             }catch (Exception $e){
                 ResponseHandler::setErrorData($e);
             }
+            $responseHandler->exitScript();
         }
     }
 
@@ -144,5 +146,13 @@ class RequestHandler{
      */
     public function addType($sType = "", callable $function = null){
         $this->aTypes[$sType] = $function;
+    }
+
+    /**
+     * @return array
+     */
+    public function getData(): array
+    {
+        return $this->aData;
     }
 }

@@ -49,7 +49,7 @@ let Analytics = {
     Xhr: function (options) {
         startPageLoad();
         let settings = $.extend({
-            url: ARURA_API_DIR + 'analytics.php?type=devices',
+            url: window.location.href,
             type: 'post',
             dataType: 'json',
             error: function () {
@@ -189,7 +189,7 @@ let Analytics = {
 };
 $(document).ready(function () {
     Analytics.Xhr({
-        url: ARURA_API_DIR + 'analytics.php',
+        url: window.location.href,
         data: {
             start: "2020-01-01",
             end : "today"

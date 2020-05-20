@@ -1,6 +1,9 @@
 <?php
 namespace Arura\Client;
 
+use Arura\Settings\Application;
+use Exception;
+
 class ResponseHandler{
 
     /**
@@ -39,14 +42,14 @@ class ResponseHandler{
     protected $isDebug = false;
 
     /**
-     * @param \Exception $e
+     * @param Exception $e
      */
-    public static function setErrorData(\Exception $e){
+    public static function setErrorData(Exception $e){
         self::setHttpCode($e->getCode());
         self::$ErrorProperty = $e;
     }
 
-    public static function getErrorData() : \Exception
+    public static function getErrorData() : Exception
     {
         return self::$ErrorProperty;
     }
@@ -57,7 +60,7 @@ class ResponseHandler{
     public function checkError(){
         if (self::hasError()){
             self::$Outcome['error']['code'] = self::getErrorData()->getCode();
-            if ($this->isDebug){
+            if ((int)Application::get("arura", "Debug")){
                 self::$Outcome['error']['file'] = self::getErrorData()->getFile();
                 self::$Outcome['error']['code'] = self::getErrorData()->getCode();
                 self::$Outcome['error']['message'] = self::getErrorData()->getMessage();
@@ -94,6 +97,7 @@ class ResponseHandler{
         $this->checkError();
         http_response_code(self::$HttpCode);
         echo json_encode(self::$Outcome);
+        exit;
     }
 
     /**

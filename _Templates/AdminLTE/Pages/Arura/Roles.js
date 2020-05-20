@@ -7,7 +7,7 @@ var Roles = {
         setTable: function (o) {
             oElement = $('#rolles-overview');
             this.oTable = oElement.DataTable({
-                dataSource: ARURA_API_DIR + 'user/roles.php',
+                dataSource: window.location.href,
                 dataSrc: 'data',
                 "columns": [
                     {"data": "Role_Id"},
@@ -32,7 +32,7 @@ var Roles = {
                 ],
                 rowId: "Role_Id",
                 ajax: {
-                    url: ARURA_API_DIR + 'user/roles.php',
+                    url: window.location.href,
                     type: "post",
                     data: {
                         type: 'get-roles'
@@ -63,7 +63,7 @@ var Roles = {
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
-                        url: ARURA_API_DIR + 'user/roles.php',
+                        url: window.location.href,
                         data: ({
                             type: 'remove-right',
                             Right_Id: $(this).data('right').Right_Id,
@@ -83,7 +83,7 @@ var Roles = {
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
-                        url: ARURA_API_DIR + 'user/roles.php',
+                        url: window.location.href,
                         data: ({
                             type: 'get-avalibel-rights',
                             Role_Id: aData.Role_Id
@@ -91,7 +91,7 @@ var Roles = {
                         success: function (response) {
                             t = $('<select>').addClass('form-control');
 
-                            $.each(response.data, function (i, Right) {
+                            $.each(response, function (i, Right) {
                                 t.append($('<option>').val(Right.Right_Id).text(Right.Right_Name));
                             });
 
@@ -103,7 +103,7 @@ var Roles = {
                                     $.ajax({
                                         type: 'post',
                                         dataType: 'json',
-                                        url: ARURA_API_DIR + 'user/roles.php',
+                                        url: window.location.href,
                                         data: ({
                                             type: 'assign-right',
                                             Right_Id: iRightId,
@@ -113,7 +113,7 @@ var Roles = {
                                             if (aData.Rights !== []){
                                                 aData.Rights = [];
                                             }
-                                            aData.Rights[iRightId] = response.data[iRightId];
+                                            aData.Rights[iRightId] = response[iRightId];
                                             row.data(aData).draw();
                                             row.child.hide();
                                             tr.removeClass('shown');
@@ -140,7 +140,7 @@ var Roles = {
                 aData = row.data();
                 oTemplate.FormAjax({
                     success: function (response) {
-                        data = $.extend(aData, response.data);
+                        data = $.extend(aData, response);
                         row.data(data).draw();
                         row.child.hide();
                         tr.removeClass('shown');
@@ -172,7 +172,7 @@ var Roles = {
             $.ajax({
                 type: 'post',
                 dataType: 'json',
-                url: ARURA_API_DIR + 'user/roles.php',
+                url: window.location.href,
                 data: ({
                     type: 'delete-role',
                     Role_Id: aData.Role_Id
@@ -190,7 +190,7 @@ var Roles = {
             Table = this.oTable;
             oForm.FormAjax({
                 success: function (response) {
-                    Table.row.add(response.data).draw();
+                    Table.row.add(response).draw();
                     oModal.modal("hide");
                     addSuccessMessage('Rol aangemaakt');
                 }

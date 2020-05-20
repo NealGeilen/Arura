@@ -10,7 +10,7 @@ $('.settings-form').submit(function (e) {
             type: 'post',
             data : (aList),
             dataType: 'json',
-            url : ARURA_API_DIR + 'settings.php',
+            url : window.location.href,
             success: function () {
                 addSuccessMessage('Instellingen opgeslagen');
             },

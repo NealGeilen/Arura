@@ -2,6 +2,8 @@
 
 namespace Arura\User;
 use Arura\Database;
+use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 use Arura\Permissions\Right;
 use Arura\Permissions\Role;
 use Arura\Sessions;
@@ -109,7 +111,7 @@ class User
 
     /**
      * @return bool
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function removeUser(){
         $this -> db->query('DELETE FROM ' . self::$tblUser . ' WHERE User_Id = ?', [$this -> getId()]);
@@ -123,7 +125,7 @@ class User
      * @param $email
      * @param $password
      * @return User
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public static function createUser($username, $firstname, $lastname, $email, $password){
         $db = new Database();
@@ -143,12 +145,12 @@ class User
         if (!empty($aUser)){
             return new self($aUser["User_Id"]);
         }
-        return false;
+        throw new NotFound("User not found");
     }
 
     /**
      * @return bool
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function TriggerEvent(){
         $this->db->query('UPDATE tblSessions SET Session_Last_Active = ? WHERE Session_Id = ? ',

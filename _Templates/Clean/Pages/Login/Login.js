@@ -29,7 +29,7 @@ function validateRequest(oForm) {
     oForm.validate({
         submitHandler: function (oForm) {
             $.ajax({
-                url: ARURA_API_DIR + 'user/log-in.php',
+                url: window.location.href,
                 type: 'post',
                 dataType: 'json',
                 data: (serializeArray($(oForm))),

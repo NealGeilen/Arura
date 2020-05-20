@@ -2,18 +2,39 @@
 namespace App\Controllers;
 
 use Arura\AbstractController;
+use Arura\Client\Request;
+use Arura\Client\RequestHandler;
+use Arura\Client\ResponseHandler;
 use Arura\Database;
+use Arura\Exceptions\Forbidden;
+use Arura\Exceptions\Unauthorized;
 use Arura\Permissions\Restrict;
 use Arura\Router;
 use Arura\SecureAdmin\SecureAdmin;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
+use Arura\User\Password;
 use Arura\User\User;
 use Rights;
 
 class Pages extends AbstractController {
 
     public function Login(){
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+            if (User::canUserLogin()){
+                $email = htmlentities($requestHandler->getData()['email']);
+                $pw = htmlentities($requestHandler->getData()['password']);
+                $user = User::getUserOnEmail($email);
+                if(Password::Verify($pw, $user->getPassword())){
+                    $user->logInUser();
+                } else{
+                    User::addLoginAttempt();
+                    throw new Forbidden();
+                }
+            } else {
+                throw new Unauthorized();
+            }
+        });
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "Clean/Pages/Login/Login.js");
         $this->render("Clean/Pages/Login/Login.tpl", [
             "title" => "Login"

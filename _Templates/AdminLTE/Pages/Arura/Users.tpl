@@ -75,7 +75,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form class="form-row" method="post" action="/{$aArura.dir}/{$aArura.api}/user/manage.php">
+                    <form class="form-row" method="post">
                         <input type="hidden" value="create-user" name="type">
                         <div class="form-group col-6">
                             <label class="control-label" for="user-username">Gebruikersnaam</label>
@@ -117,7 +117,7 @@
     </div>
     <div style="display: none">
         <div class="template-user-edit">
-            <form class="form-row table-panel" method="post" action="/{$aArura.dir}/{$aArura.api}/user/manage.php">
+            <form class="form-row table-panel" method="post">
                 <input type="hidden" value="save-user" name="type">
                 <input type="hidden" name="User_Id">
                 <div class="form-group col-6">

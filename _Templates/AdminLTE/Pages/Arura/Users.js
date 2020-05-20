@@ -8,8 +8,8 @@ var Users = {
         setTable: function (o) {
             oElement = $('#users-overview');
             this.oTable =  oElement.DataTable({
-                dataSource: ARURA_API_DIR + 'user/manage.php',
-                dataSrc: 'data',
+                "dataSrc": "data",
+                dataSource: window.location.href,
                 "columns":[
                     { "data": "User_Id" },
                     { "data": "User_Username" },
@@ -36,7 +36,7 @@ var Users = {
                 ],
                 rowId: "User_Id",
                 ajax:{
-                    url: ARURA_API_DIR + 'user/manage.php',
+                    url: window.location.href,
                     type: "post",
                     data: {
                         type: 'get-users'
@@ -67,7 +67,7 @@ var Users = {
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
-                        url : ARURA_API_DIR + 'user/manage.php',
+                        url : window.location.href,
                         data: ({
                             type: 'remove-role',
                             Role_Id : $(this).data('role').Role_Id,
@@ -87,7 +87,7 @@ var Users = {
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
-                        url : ARURA_API_DIR + 'user/manage.php',
+                        url : window.location.href,
                         data: ({
                             type: 'get-avalibel-roles',
                             User_Id:  aData.User_Id
@@ -107,7 +107,7 @@ var Users = {
                                     $.ajax({
                                         type: 'post',
                                         dataType: 'json',
-                                        url : ARURA_API_DIR + 'user/manage.php',
+                                        url : window.location.href,
                                         data: ({
                                             type: 'assign-role',
                                             Role_Id: iRoleId,
@@ -178,7 +178,7 @@ var Users = {
                     $.ajax({
                         type: 'post',
                         dataType: 'json',
-                        url : ARURA_API_DIR + 'user/manage.php',
+                        url : window.location.href,
                         data: ({
                             type: 'delete-user',
                             User_Id:  aData.User_Id
@@ -213,8 +213,8 @@ var Users = {
         setTable: function (o) {
             oElement = $('#sessions-overview');
             this.oTable  = oElement.DataTable({
-                dataSource: ARURA_API_DIR + 'user/manage.php',
-                dataSrc: 'data',
+                dataSource: window.location.href,
+                "dataSrc": "data",
                 "columns":[
                     { "data": "Session_Id" },
                     { "data": "User_Username" },
@@ -224,7 +224,7 @@ var Users = {
                 ],
                 rowId: "Session_Id",
                 ajax:{
-                    url: ARURA_API_DIR + 'user/manage.php',
+                    url: window.location.href,
                     type: "post",
                     data: {
                         type: 'get-sessions'
@@ -239,7 +239,7 @@ var Users = {
             $.ajax({
                 type: 'post',
                 dataType: 'json',
-                url : ARURA_API_DIR + 'user/manage.php',
+                url : window.location.href,
                 data: ({
                     type: 'delete-session',
                     Session_Id:  aData.Session_Id
