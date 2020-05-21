@@ -1,8 +1,11 @@
 var Nestable = $('#nestable-json');
 $.ajax({
-    url: ARURA_API_DIR+'cms/Menu.php?type=get',
+    url: window.location.href,
     type: 'post',
     dataType: 'json',
+    data: {
+        type: 'get'
+    },
     success: function(response){
         var options = {
             'json': response.data,
@@ -39,9 +42,10 @@ $.ajax({
 function save(){
     aNavData = Nestable.nestable('serialize');
     $.ajax({
-        url: ARURA_API_DIR+'cms/Menu.php?type=set',
+        url: window.location.href,
         type: 'post',
         data: ({
+            type: 'set',
             NavData: aNavData
         }),
         dataType: 'json',
@@ -119,9 +123,12 @@ function getNewId(){
 
 function buildSitemap(){
     $.ajax({
-        url: ARURA_API_DIR+'cms/Menu.php?type=build-sitemap',
+        url: window.location.href,
         type: 'post',
         dataType: 'json',
+        data: {
+          type : "build-sitemap"
+        },
         success: function (response) {
             addSuccessMessage("Sitemap gebouwd");
         },
@@ -138,9 +145,12 @@ function submitSitemap(){
         Message: "Weet je zeker dat je de sitemap naar google wilt verzenden. Dit kan enkle minuten duren!",
         onConfirm: function () {
             $.ajax({
-                url: ARURA_API_DIR+'cms/Menu.php?type=send-sitemap',
+                url: window.location.href,
                 type: 'post',
                 dataType: 'json',
+                data: {
+                    type: "send-sitemap"
+                },
                 success: function (response) {
                     addSuccessMessage("Sitemap verzonden");
                 },

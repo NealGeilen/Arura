@@ -16,6 +16,18 @@ use Arura\Router;
 class CMS extends AbstractController {
 
     public function Pages(){
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+            $requestHandler->addType("get-all-pages", function ($aData){
+                return \Arura\Pages\CMS\Page::getAllPages();
+            });
+            $requestHandler->addType("delete-page", function ($aData){
+                $p = new \Arura\Pages\CMS\Page($aData["Page_Id"]);
+                return $p->delete();
+            });
+            $requestHandler->addType("create-page", function ($aData){
+                return \Arura\Pages\CMS\Page::Create($aData["Page_Title"], $aData["Page_Url"])->__toArray();
+            });
+        });
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Pages.js");
         $this->render("AdminLTE/Pages/CMS/Pages.tpl", [
             "title" =>"Pagina's"
@@ -89,9 +101,6 @@ class CMS extends AbstractController {
             });
             $requestHandler->addType("delete-page", function ($aData) use ($p){
                 return $p->delete();
-            });
-            $requestHandler->addType("create-page", function ($aData) use ($p){
-                return \Arura\Pages\CMS\Page::Create($aData["Page_Title"], $aData["Page_Url"])->__toArray();
             });
         });
         Router::getSmarty() -> assign('aCmsPage', $p->__toArray());

@@ -142,7 +142,7 @@ function validateUser(){
     $.ajax({
         type: 'post',
         dataType: 'json',
-        url : ARURA_API_DIR + 'user/validate.php',
+        url : "/dashboard/validate",
         error: function () {
             Modals.Error({
                 Title:"Sessie verlopen",

@@ -102,7 +102,7 @@ function dumpDB() {
                         Message : "Administartie succesvol verwijdert",
                         Buttons: [Modals.Buttons.confirm],
                         onConfirm: function () {
-                            location.reload();
+                            location.replace("/dashboard/administration")
                         }
                     })
                 },

@@ -94,19 +94,21 @@ class Pages extends AbstractController {
         $this->redirect("/dashboard");
     }
     public function Validate(){
-        $db = new Database();
-        $aSessionData = $db ->fetchRow('SELECT * FROM tblSessions WHERE Session_Id = :Session_Id',
-            [
-                'Session_Id'=> Sessions::getSessionId()
-            ]);
-        if (!empty($aSessionData)){
-            if (((int)$aSessionData['Session_Last_Active'] + 1800) < time()){
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+            $db = new Database();
+            $aSessionData = $db ->fetchRow('SELECT * FROM tblSessions WHERE Session_Id = :Session_Id',
+                [
+                    'Session_Id'=> Sessions::getSessionId()
+                ]);
+            if (!empty($aSessionData)){
+                if (((int)$aSessionData['Session_Last_Active'] + 1800) < time()){
+                    User::activeUser()->logOutUser();
+                    throw new Exception('expelled',403);
+                }
+            } else {
                 User::activeUser()->logOutUser();
-                throw new Exception('expelled',403);
+                Sessions::End();
             }
-        } else {
-            User::activeUser()->logOutUser();
-            Sessions::End();
-        }
+        });
     }
 }

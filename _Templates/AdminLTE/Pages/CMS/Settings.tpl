@@ -13,7 +13,7 @@
             <div class="card-tools">
                 <div class="btn-group btn-group-sm">
                     {if !$bMobileUser}
-                        <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/content?c={$aCmsPage.Page_Id}" target="_blank">
+                        <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/content" target="_blank">
                             <i class="fas fa-pen"></i>
                         </a>
                     {/if}
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="card-body">
-            <form action="/{$aArura.dir}/{$aArura.api}/cms/Page.Settings.php" method="post" class="page-settings form-sender">
+            <form method="post" class="page-settings form-sender">
                 <input type="hidden" name="type" value="save-settings">
                 <input type="hidden" name="Page_Id" value="{$aCmsPage.Page_Id}">
                 <div class="row">

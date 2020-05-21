@@ -5,7 +5,7 @@ Pages = {
             "language": {
                 "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
             },
-            dataSource: ARURA_API_DIR+'cms/Page.Settings.php',
+            dataSource: window.location.href,
             dataSrc: 'data',
             "columns":[
                 { "data": "Page_Title" },
@@ -43,7 +43,7 @@ Pages = {
             ],
             rowId: "Page_Id",
             ajax:{
-                url: ARURA_API_DIR+'cms/Page.Settings.php',
+                url: window.location.href,
                 type: "post",
                 data: {
                     type: 'get-all-pages'
@@ -79,7 +79,7 @@ Pages = {
                $.ajax({
                    type: 'post',
                    dataType: 'json',
-                   url : ARURA_API_DIR+'cms/Page.Settings.php',
+                   url : window.location.href,
                    data: ({
                        type: 'delete-page',
                        Page_Id:  aData.Page_Id

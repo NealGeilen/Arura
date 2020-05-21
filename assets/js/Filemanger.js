@@ -22,7 +22,7 @@ var Filemanger = {
                 'data' : {
                     "type": "POST",
 
-                    "url" : ARURA_API_DIR +"filemanger/read.php",
+                    "url" : "/dashboard/files",
                     "data" : function (node) {
                         if (typeof node.original === "undefined"){
                             node.original = {dir: null};
@@ -36,7 +36,7 @@ var Filemanger = {
             nodeDir = data.node.original.dir;
             parentDir = Filemanger.oFileThree.jstree(true).get_node(data.parent).original.dir;
             $.ajax({
-                url: ARURA_API_DIR + '/filemanger/edit.php',
+                url: "/dashboard/files",
                 type: 'post',
                 dataType: 'json',
                 data: ({
@@ -78,7 +78,7 @@ var Filemanger = {
         }  else {
             var eModalContent = $($('.modal-template-fileupload').html());
             eModalContent.find('form').dropzone({
-                url: ARURA_API_DIR + "filemanger/upload.php",
+                url: "/dashboard/files",
                 params: {
                     dir : nodes[0].original.dir
                 }
@@ -105,7 +105,7 @@ var Filemanger = {
                         aData[i] = Node.original;
                     });
                     $.ajax({
-                        url: ARURA_API_DIR +'filemanger/edit.php',
+                        url: "/dashboard/files",
                         type: 'post',
                         dataType: 'json',
                         data: ({
@@ -152,7 +152,7 @@ var Filemanger = {
                         sDirname = oModal.find('input[type=text]').val();
 
                         $.ajax({
-                            url: ARURA_API_DIR +'filemanger/edit.php',
+                            url: "/dashboard/files",
                             type: 'post',
                             dataType: 'json',
                             data: ({
@@ -183,7 +183,7 @@ var Filemanger = {
                         sNewName = oModal.find('input[type=text]').val();
                         node = nodes[0];
                         $.ajax({
-                            url: ARURA_API_DIR +'filemanger/edit.php',
+                            url: "/dashboard/files",
                             type: 'post',
                             dataType: 'json',
                             data: ({

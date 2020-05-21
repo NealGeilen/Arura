@@ -15,7 +15,7 @@
         <div class="card">
             <header class="card-header page-toolbar">
                 <div class="btn-group btn-group-sm" style="float: right">
-                    <a class="btn btn-default" href="/{$aArura.dir}/content/pagina/instellingen?p={$aCmsPage.Page_Id}" target="_blank">
+                    <a class="btn btn-default" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen" target="_blank">
                         <i class="fas fa-cog"></i>
                     </a>
                     <button class="btn btn-primary" onclick="Builder.Structure.save(true)">

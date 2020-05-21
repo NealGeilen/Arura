@@ -65,8 +65,9 @@
                     <h2 class="card-title">Instelling - {$aTable.Table_Name}</h2>
                 </div>
                 <div class="card-body">
-                    <form class="form-update-table" method="post" action="/{$aArura.dir}/api/secureadmin/secureadmin.php?type=save-table">
+                    <form class="form-update-table" method="post">
                         <input value="{$aTable.Table_Id}" type="hidden" name="Table_Id">
+                        <input value="save-table" type="hidden" name="type">
                         <div class="form-row">
                             <div class="col-6 form-group">
                                 <label>Naam</label>

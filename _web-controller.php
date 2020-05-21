@@ -301,13 +301,13 @@ $aNavBarPages =
         "/logout" => [
             "Title" => "Logout",
             "Function" => "Pages@Logout",
-            "Right" => !User::isLogged(),
+            "Right" => User::isLogged(),
             "Icon" => null
         ],
         "/validate" => [
             "Title" => "Validate",
             "Function" => "Pages@Validate",
-            "Right" => !User::isLogged(),
+            "Right" => User::isLogged(),
             "Icon" => null
         ],
 //        "/login/password" => [

@@ -17,7 +17,7 @@ var Builder = {
     Xhr:function(options){
         startPageLoad();
         var settings = $.extend({
-            url: ARURA_API_DIR + '/cms/Page.Content.php',
+            url: window.location.href,
             type: 'post',
             dataType: 'json',
             error: function () {
