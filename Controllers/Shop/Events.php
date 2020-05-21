@@ -1,10 +1,15 @@
 <?php
 namespace App\Controllers\Shop;
 use Arura\AbstractController;
+use Arura\Client\Request;
+use Arura\Client\RequestHandler;
+use Arura\Client\ResponseHandler;
 use Arura\Database;
+use Arura\Exceptions\Error;
 use Arura\Permissions\Right;
 use Arura\Router;
 use Arura\Shop\Events\Event;
+use Arura\Shop\Events\Ticket;
 
 class Events extends AbstractController {
 
@@ -17,6 +22,20 @@ class Events extends AbstractController {
 
     public function Edit($id){
         $oEvent = new Event($id);
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($oEvent){
+            $requestHandler->addType("save-event", function ($aData){
+                $db = new Database();
+                $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
+                $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
+                $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
+                $db->updateRecord("tblEvents", $aData, "Event_Id");
+            });
+            $requestHandler->addType("delete-event", function ($aData) use ($oEvent){
+                if (!$oEvent->delete()){
+                    throw new Error();
+                }
+            });
+        });
         $db = new Database();
         Router::getSmarty()->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
         Router::getSmarty()->assign("aEvent", $oEvent->__ToArray());
@@ -49,6 +68,10 @@ class Events extends AbstractController {
     }
 
     public function Validation(){
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+            $oTicket = new Ticket($requestHandler->getData()["Hash"]);
+            return $oTicket->Validate();
+        });
         Router::addSourceScriptJs(__ARURA__ROOT__ . "/dashboard/assets/vendor/Instascan/instascan.min.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Validation.js");
         $this->render("AdminLTE/Pages/Shop/Events/Validation.tpl", [

@@ -99,6 +99,15 @@ $aNavBarPages =
             "Icon" => null,
             "Function" => "SecureAdministration@Edit",
         ],
+        '/administration/{id}/export' => [
+            "Right" =>
+                (
+                Restrict::Validation(Rights::SECURE_ADMINISTRATION)
+                ),
+            "Title" => "Beveiligde administratie",
+            "Icon" => null,
+            "Function" => "SecureAdministration@Export",
+        ],
         '/administration/create' => [
             "Right" =>
                 (
@@ -286,6 +295,18 @@ $aNavBarPages =
         "/login" => [
             "Title" => "Login",
             "Function" => "Pages@Login",
+            "Right" => !User::isLogged(),
+            "Icon" => null
+        ],
+        "/logout" => [
+            "Title" => "Logout",
+            "Function" => "Pages@Logout",
+            "Right" => !User::isLogged(),
+            "Icon" => null
+        ],
+        "/validate" => [
+            "Title" => "Validate",
+            "Function" => "Pages@Validate",
             "Right" => !User::isLogged(),
             "Icon" => null
         ],

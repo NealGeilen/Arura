@@ -112,13 +112,16 @@ class RequestHandler{
                     $this -> aData = $_GET;
                     break;
             }
+            if (isset($this->aData["type"])){
+                unset($this->aData["type"]);
+            }
         }
     }
 
     /**
      * @param callable $callback
      */
-    public function sandbox(callable $callback, string $type){
+    public function sandbox(callable $callback, string $type = "POST"){
         $this->setRequestMethod($type);
         $responseHandler = new ResponseHandler();
         $this->CollectData();

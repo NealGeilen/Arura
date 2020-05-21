@@ -6,8 +6,9 @@ function addUser() {
         $.ajax({
             type: 'post',
             dataType: 'json',
-            url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=add-user',
+            url : window.location.href,
             data: ({
+                type: "add-user",
                 User_Id : oModal.find("select").val(),
                 Table_Id : oModal.find("select").attr("table-id")
             }),
@@ -29,8 +30,9 @@ function removeUser(iUserId) {
             $.ajax({
                 type: 'post',
                 dataType: 'json',
-                url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=remove-user',
+                url : window.location.href,
                 data: ({
+                    type: "remove-user",
                     User_Id : iUserId,
                     Table_Id : _TABLE_ID
                 }),
@@ -51,8 +53,9 @@ function updateRights(iUserId) {
         $.ajax({
             type: 'post',
             dataType: 'json',
-            url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=set-right-user',
+            url : window.location.href,
             data: ({
+                type: "set-right-user",
                 User_Id : iUserId,
                 Table_Id : _TABLE_ID,
                 Right: count
@@ -88,8 +91,9 @@ function dumpDB() {
             $.ajax({
                 type: 'post',
                 dataType: 'json',
-                url : ARURA_API_DIR+'secureadmin/secureadmin.php?type=drop-table',
+                url : window.location.href,
                 data: ({
+                    type: "drop-table",
                     Table_Id : _TABLE_ID,
                 }),
                 success: function () {

@@ -3,6 +3,7 @@ namespace Arura;
 
 use Arura\Settings\Application;
 use Arura\User\User;
+use Exception;
 
 abstract class AbstractController{
 
@@ -13,12 +14,12 @@ abstract class AbstractController{
 
     public function throwNotFound(){
         header('HTTP/1.1 404 Not Found');
-        throw new \Exception("Page not found", 404);
+        throw new Exception("Page not found", 404);
     }
 
     public function throwAccessDenied(){
         header('HTTP/1.1 403 Access Denied');
-        throw new \Exception("Access Denied", 403);
+        throw new Exception("Access Denied", 403);
     }
 
     /**
@@ -46,6 +47,11 @@ abstract class AbstractController{
             Router::getSmarty()->display(__ARURA_TEMPLATES__. $i);
             exit;
         }
+    }
+
+    protected final function redirect($url = ""){
+        header('Location: ' . $url, true,  302);
+        exit();
     }
 
 
