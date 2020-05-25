@@ -44,7 +44,7 @@ class FileManger{
             $sPath = $sDirLockUp .$Item;
             $sMangerPath = $sDir . $Item;
 
-            if (strlen($Item) > 3){
+            if (strlen($Item) > 3 && substr( $Item, 0, 1 ) !== "."){
                 if (is_file($sPath)){
                     if (empty($sType) || self::getFileType($sPath) === $sType){
                         $aOutcome[] =

@@ -179,6 +179,7 @@ class Page extends Modal implements PageEnum{
         $oPage->setDescription("Deze pagina bestaat niet");
         $oPage->setPageContend(__WEB_TEMPLATES__ . "Errors/404.php");
         $oPage->showPage();
+        exit;
     }
 
 

@@ -14,6 +14,8 @@
     "/dashboard/assets/vendor/datatables-fixedheader/js/fixedHeader.bootstrap4.js",
     "/dashboard/assets/vendor/datatables-responsive/js/responsive.bootstrap4.min.js",
     "/dashboard/assets/vendor/dropzone/dropzone.js",
+    "/dashboard/assets/vendor/elfinder/js/elfinder.min.js",
+    "/dashboard/assets/vendor/elfinder/js/i18n/elfinder.nl.js",
     "/dashboard/assets/vendor/Chart/Chart.bundle.js",
     "/dashboard/assets/vendor/Chart/driver.js",
     "/dashboard/assets/vendor/bootstrap-notify/bootstrap-notify.js",
@@ -33,6 +35,7 @@
     "/dashboard/assets/vendor/jstree/themes/default/style.css",
     "/dashboard/assets/vendor/datatables-bs4/css/dataTables.bootstrap4.css",
     "/dashboard/assets/vendor/datatables-responsive/css/responsive.bootstrap4.css",
+    "/dashboard/assets/vendor/elfinder/css/elfinder.min.css",
     "/dashboard/assets/css/Arura.css"
   ]
 }

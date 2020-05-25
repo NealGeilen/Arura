@@ -72,6 +72,16 @@ $aNavBarPages =
             "Icon" => "fas fa-folder",
             "Function" => "FileManger@Home",
         ],
+        "/files/connection" => [
+            "Title" => "Bestanden",
+            "Right" => (
+                Restrict::Validation(Rights::FILES_UPLOAD) &&
+                Restrict::Validation(Rights::FILES_READ) &&
+                Restrict::Validation(Rights::FILES_EDIT)
+            ),
+            "Icon" => null,
+            "Function" => "FileManger@connection",
+        ],
         '/administration' => [
             "Right" =>
                 (
