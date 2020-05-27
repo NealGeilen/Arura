@@ -56,5 +56,7 @@
 <!-- ./wrapper -->
 
 {include "./Sections/body_end.tpl"}
+{block JsPage}
+{/block}
 </body>
 </html>

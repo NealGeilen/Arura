@@ -6,6 +6,7 @@ use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Form;
 use Arura\Pages\CMS\ContentBlock;
 use Arura\Pages\CMS\Group;
 use Arura\Pages\CMS\Sitemap;
@@ -24,13 +25,16 @@ class CMS extends AbstractController {
                 $p = new \Arura\Pages\CMS\Page($aData["Page_Id"]);
                 return $p->delete();
             });
-            $requestHandler->addType("create-page", function ($aData){
-                return \Arura\Pages\CMS\Page::Create($aData["Page_Title"], $aData["Page_Url"])->__toArray();
-            });
         });
+        $form = \Arura\Pages\CMS\Page::getForm();
+        if ($form->isSuccess()){
+            \Arura\Pages\CMS\Page::Create($form->getValues('array'));
+        }
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Pages.js");
         $this->render("AdminLTE/Pages/CMS/Pages.tpl", [
-            "title" =>"Pagina's"
+            "title" =>"Pagina's",
+            "createForm" => (string)$form,
+            "createFormError" =>$form->hasErrors()
         ]);
     }
 
@@ -92,20 +96,17 @@ class CMS extends AbstractController {
 
     public function Settings($id){
         $p = new \Arura\Pages\CMS\Page($id);
-        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($p){
-            $requestHandler->addType("save-settings", function ($aData) use ($p){
-                return $p->set($aData);
-            });
-            $requestHandler->addType("get-all-pages", function ($aData) use ($p){
-                return \Arura\Pages\CMS\Page::getAllPages();
-            });
-            $requestHandler->addType("delete-page", function ($aData) use ($p){
-                return $p->delete();
-            });
-        });
-        Router::getSmarty() -> assign('aCmsPage', $p->__toArray());
+        $form = \Arura\Pages\CMS\Page::getForm();
+        $form->setDefaults($p->__toArray());
+        $form->addHidden("Page_Id")
+            ->addRule(Form::INTEGER);
+        if ($form->isSuccess()){
+            $p->set($form->getValues('array'));
+        }
         $this->render("AdminLTE/Pages/CMS/Settings.tpl", [
-            "title" =>"Pagina instellingen"
+            "title" =>"Pagina instellingen",
+            "form" => (string) $form,
+            "aCmsPage" => $p->__toArray()
         ]);
     }
 

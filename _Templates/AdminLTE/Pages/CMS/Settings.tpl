@@ -21,33 +21,7 @@
             </div>
         </div>
         <div class="card-body">
-            <form method="post" class="page-settings form-sender">
-                <input type="hidden" name="type" value="save-settings">
-                <input type="hidden" name="Page_Id" value="{$aCmsPage.Page_Id}">
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label>Naam</label>
-                        <input type="text" class="form-control" value="{$aCmsPage.Page_Title}" name="Page_Title">
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label>Url</label>
-                        <input type="text" class="form-control" value="{$aCmsPage.Page_Url}" name="Page_Url">
-                    </div>
-                    <div class="col-12 form-group">
-                        <label>Omschrijving</label>
-                        <textarea class="form-control" maxlength="1000" name="Page_Description">{$aCmsPage.Page_Description}</textarea>
-                    </div>
-                    <div class="form-group col-4">
-                        <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="pagepublic" name="Page_Visible" {if $aCmsPage.Page_Visible}checked{/if}>
-                            <label class="custom-control-label" for="pagepublic">Pagina openbaar</label>
-                        </div>
-                    </div>
-                </div>
-                <button class="btn btn-primary btn-sm" type="submit">
-                    Opslaan
-                </button>
-            </form>
+            {$form}
         </div>
     </section>
     {/block}

@@ -4,7 +4,7 @@
         <header class="card-header">
             <div class="card-tools">
                 <div class="btn-group btn-group-sm">
-                    <button onclick="Pages.createPage()" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                    <button data-toggle="modal" data-target="#createModal" class="btn btn-primary"><i class="fas fa-plus"></i></button>
                 </div>
 
             </div>
@@ -41,21 +41,30 @@
                 </button>
             </div>
         </div>
-        <form class="template-create-page form-row" action="/{$aArura.dir}/{$aArura.api}/cms/Page.Settings.php" method="post">
-            <input type="hidden" value="create-page" name="type">
-            <div class="form-group col-6">
-                <label>Naam</label>
-                <input type="text" name="Page_Title" class="form-control" required>
-                <div class="help-block with-errors"></div>
-            </div>
-            <div class="form-group col-6">
-                <label>Url</label>
-                <input type="text" name="Page_Url" class="form-control" required>
-                <div class="help-block with-errors"></div>
-            </div>
-            <div class="col-6">
-                <input type="submit" class="btn btn-success modal-confirm" value="Opslaan">
-            </div>
-        </form>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="createModal" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Pagina aanmaken</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    {$createForm}
+                </div>
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block JsPage}
+    <script>
+        {if $createFormError}
+            $("#createModal").modal("show");
+        {/if}
+    </script>
 {/block}

@@ -4,8 +4,10 @@ namespace Arura\Pages\CMS;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
+use Arura\Form;
 use Arura\Pages;
 use Arura\Permissions\Restrict;
+use Exception;
 use Rights;
 use SmartyException;
 
@@ -90,7 +92,7 @@ class Page extends Pages\Page{
             //load user properties from database
             $aPage = $this -> db -> fetchRow("SELECT * FROM tblCmsPages WHERE Page_Id = ? ", [$this -> getId()]);
             if (empty($aPage)){
-                throw new \Exception("Page not found", 404);
+                throw new Exception("Page not found", 404);
             }
             $this->setDescription($aPage["Page_Description"]);
             $this->setVisible((bool)$aPage["Page_Visible"]);
@@ -166,8 +168,9 @@ class Page extends Pages\Page{
      * @return Page
      * @throws Error
      */
-    public static function Create($sPageName = "", $sPageUrl = ""){
-        $i = (new Database()) ->createRecord('tblCmsPages',['Page_Title'=>$sPageName,'Page_Url'=>$sPageUrl]);
+    public static function Create($data){
+        $data["Page_Visible"] = (int)$data["Page_Visible"];
+        $i = (new Database()) ->createRecord('tblCmsPages',$data);
         return new self($i);
     }
 
@@ -353,6 +356,20 @@ class Page extends Pages\Page{
                 }
             }
         });
+    }
+
+    public static function getForm(){
+        $form = new Form("Page-Form");
+        $form->addText("Page_Title", "Naam")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Page_Url", "Url")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addTextArea("Page_Description", "Omschrijving")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addCheckbox("Page_Visible", "Pagina openbaar");
+        $form->addSubmit("submit", "Opslaan");
+
+        return $form;
     }
 
     /**
