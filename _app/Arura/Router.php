@@ -1,8 +1,10 @@
 <?php
 namespace Arura;
 
+use Arura\Exceptions\NotFound;
 use Cacher\Cacher;
 use Exception;
+use Smarty;
 
 class Router{
 
@@ -13,7 +15,7 @@ class Router{
     public function __construct()
     {
         $this->router = new \Bramus\Router\Router();
-        self::$smarty = new \Smarty();
+        self::$smarty = new Smarty();
         self::setResourceFiles(json_decode(file_get_contents(__ARURA_TEMPLATES__. 'config.json'),true));
     }
 
@@ -95,9 +97,9 @@ class Router{
     }
 
     /**
-     * @return \Smarty
+     * @return Smarty
      */
-    public static function getSmarty(): \Smarty
+    public static function getSmarty(): Smarty
     {
         return self::$smarty;
     }

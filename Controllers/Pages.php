@@ -17,6 +17,7 @@ use Arura\Sessions;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
 use Arura\User\Password;
+use Arura\User\Recovery;
 use Arura\User\User;
 use Exception;
 use Rights;
@@ -24,16 +25,18 @@ use Rights;
 class Pages extends AbstractController {
 
     public function Login(){
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "Clean/Pages/Login/Login.js");
         if (User::canUserLogin()){
             $form = Password::loginForm();
-            $this->addParameter("form", $form);
+            $this->addParameter("loginForm", $form);
             if ($form->isSuccess()){
                 $this->redirect("/dashboard/home");
             }
         }
+        $recoverForm = Recovery::getRequestForm();
         $this->render("Clean/Pages/Login/Login.tpl", [
             "title" => "Login",
+            "recoverForm" => $recoverForm,
+            "recoverFormHasError" => $recoverForm->hasErrors(),
             "canUserLogin" => User::canUserLogin()
         ]);
     }
@@ -86,6 +89,7 @@ class Pages extends AbstractController {
         User::activeUser()->logOutUser();
         $this->redirect("/dashboard");
     }
+
     public function Validate(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $db = new Database();
@@ -103,5 +107,28 @@ class Pages extends AbstractController {
                 Sessions::End();
             }
         });
+    }
+
+    public function Password($hash){
+        if (!Recovery::isTokenValid($hash)){
+            if(!User::isLogged()){
+                $this->redirect("/dashboard/login");
+            } else {
+                $this->redirect("/dashboard/home");
+            }
+        }
+        $form = Recovery::getRecoveryForm();
+        $recovery = new Recovery($hash);
+        $recovery->getUser()->load();
+        if ($form->isValid() && $form->isSubmitted()){
+            $recovery->setPassword($form->getValues()->password);
+            $recovery->getUser()->logInUser();
+            $this->redirect("/dashboard/home");
+        }
+        $this->render("Clean/Pages/Password/Password.tpl", [
+            "title" => "Wachtwoord vergeten",
+            "form" => $form,
+            "user" => $recovery->getUser()->__toArray()
+        ]);
     }
 }

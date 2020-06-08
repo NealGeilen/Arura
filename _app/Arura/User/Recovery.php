@@ -2,6 +2,7 @@
 namespace Arura\User;
 
 use Arura\Exceptions\Error;
+use Arura\Form;
 use Arura\Modal;
 use Arura\Database;
 use Arura\Exceptions\NotAcceptable;
@@ -11,6 +12,7 @@ use PHPMailer\PHPMailer\Exception;
 use SmartyException;
 
 class Recovery extends Modal {
+
     protected $iTimeOfCreation;
     protected $oUser;
     protected $sToken;
@@ -74,6 +76,7 @@ class Recovery extends Modal {
         $oRequest = new self($sToken);
         $oRequest->setTimeOfCreation(time());
         $oRequest->setUser($oUser);
+        $oRequest->isLoaded = true;
         if ($oRequest->hasUserToken()){
             $oRequest->removeTokenFromUser();
         }
@@ -108,7 +111,7 @@ class Recovery extends Modal {
         Mailer::getSmarty()->assign("aUser", $this->getUser()->__toArray());
         $oMailer->setBody(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . Application::get('plg.recovery','template'));
         $oMailer->setSubject("Wachtwoord herstel");
-        $oMailer->addBCC($this->getUser()->getEmail());
+        $oMailer->addAddress($this->getUser()->getEmail());
         return $oMailer->send();
     }
 
@@ -119,11 +122,11 @@ class Recovery extends Modal {
      * @throws Error
      * @throws NotAcceptable
      */
-    public function setPassword($sPassword, $sToken){
-        if (self::isTokenValid($sToken)){
+    public function setPassword($sPassword){
+        if (self::isTokenValid($this->getToken())){
             $this->load();
             $this->getUser()->load();
-            $this->getUser()->setPassword($sPassword);
+            $this->getUser()->setPassword(Password::Create($sPassword));
             if ($this->getUser()->save()){
                 return $this->removeRecovery();
             }
@@ -133,11 +136,44 @@ class Recovery extends Modal {
         }
     }
 
+    public static function getRequestForm() :Form
+    {
+        $form = new Form("request-form");
+        $form->addEmail("mail", "E-mailadres")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("submit", "Herstel mail aanvragen");
+        if ($form->isSubmitted()){
+            $user = User::getUserOnEmail($form->getValues()->mail);
+            if ($user === false){
+                $form->addError("E-mailadres niet bekend");
+            }
+        }
+        if ($form->isSuccess()){
+            $user = User::getUserOnEmail($form->getValues()->mail);
+            $recovery = self::requestToken($user);
+            $recovery->sendRecoveryMail();
+        }
+        return  $form;
+    }
+
+    public static function getRecoveryForm() : Form{
+        $form = new Form("recovery-form");
+        $form->addPassword('password', 'Wachtwoord:')
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
+            ->addRule(Form::MIN_LENGTH, 'Je wachtwoord moet minimaal %d karakters lang zijn', 8);
+        $form->addPassword('passwordVerify', 'Wachtwoord herhalen:')
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
+            ->addRule(Form::EQUAL, 'Wachtwoord is niet gelijk', $form['password']);
+        $form->addSubmit("submit", "Wachtwoord veranderen");
+        return  $form;
+    }
+
     /**
      * @return mixed
      */
     public function getTimeOfCreation() : Int
     {
+        $this->load();
         return $this->iTimeOfCreation;
     }
 
@@ -154,6 +190,7 @@ class Recovery extends Modal {
      */
     public function getUser() : User
     {
+        $this->load();
         return $this->oUser ;
     }
 
