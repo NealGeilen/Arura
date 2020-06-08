@@ -11,7 +11,7 @@
             <div class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item" href="/{$aArura.dir}/profile">Profiel</a>
                 <div class="dropdown-divider"></div>
-                <button class="dropdown-item" href="#" onclick="LogOutUser()">Uitloggen</button>
+                <a class="dropdown-item" href="/{$aArura.dir}/logout" >Uitloggen</a>
             </div>
         </li>
             {if $sPageSideBar != NULL}
