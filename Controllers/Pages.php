@@ -24,24 +24,17 @@ use Rights;
 class Pages extends AbstractController {
 
     public function Login(){
-        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
-            if (User::canUserLogin()){
-                $email = htmlentities($requestHandler->getData()['email']);
-                $pw = htmlentities($requestHandler->getData()['password']);
-                $user = User::getUserOnEmail($email);
-                if(Password::Verify($pw, $user->getPassword())){
-                    $user->logInUser();
-                } else{
-                    User::addLoginAttempt();
-                    throw new Forbidden();
-                }
-            } else {
-                throw new Unauthorized();
-            }
-        });
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "Clean/Pages/Login/Login.js");
+        if (User::canUserLogin()){
+            $form = Password::loginForm();
+            $this->addParameter("form", $form);
+            if ($form->isSuccess()){
+                $this->redirect("/dashboard/home");
+            }
+        }
         $this->render("Clean/Pages/Login/Login.tpl", [
-            "title" => "Login"
+            "title" => "Login",
+            "canUserLogin" => User::canUserLogin()
         ]);
     }
 

@@ -145,7 +145,7 @@ class User
         if (!empty($aUser)){
             return new self($aUser["User_Id"]);
         }
-        throw new NotFound("User not found");
+        return false;
     }
 
     /**

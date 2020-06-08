@@ -8,17 +8,13 @@
     <!-- /.login-logo -->
     <div class="card">
       <div class="card-body login-card-body">
-        <p class="login-box-msg">Inloggen</p>
+        {if $canUserLogin}
+          <p class="login-box-msg">Inloggen</p>
 
-        <form class="inlog-form">
-          <div class="form-group mb-3">
-            <input type="email" class="form-control" placeholder="Email" name="email" required>
-          </div>
-          <div class="form-group mb-3">
-            <input type="password" class="form-control" placeholder="Wachtwoord" name="password" required>
-          </div>
-          <button type="submit" class="btn btn-primary btn-block">Inloggen</button>
-        </form>
+          {$form}
+          {else}
+          <p>Je hebt herhaaldelijk geprobeert in te loggen. Probeer het later opnieuw.</p>
+        {/if}
 
         <p class="mb-1">
           <a href="javascript:sendRecoveryMail()">Wachtwoord vergeten?</a>

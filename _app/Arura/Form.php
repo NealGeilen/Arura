@@ -7,9 +7,9 @@ class Form extends \Nette\Forms\Form{
 
     public function __construct(string $name = null)
     {
-//        Sessions::Start();
+        Sessions::Start();
         parent::__construct($name);
-//        $this->addProtection();
+        $this->addProtection();
         $this->onRender[] = 'Arura\Form::makeBootstrap4';
     }
 
@@ -24,8 +24,8 @@ class Form extends \Nette\Forms\Form{
         $renderer->wrappers['controls']['container'] = null;
         $renderer->wrappers['pair']['container'] = 'div class="form-group row"';
         $renderer->wrappers['pair']['.error'] = 'has-danger';
-        $renderer->wrappers['control']['container'] = 'div class=col-sm-9';
-        $renderer->wrappers['label']['container'] = 'div class="col-sm-3 col-form-label"';
+        $renderer->wrappers['control']['container'] = 'div class=col-12';
+        $renderer->wrappers['label']['container'] = 'div class="col-12 col-form-label"';
         $renderer->wrappers['control']['description'] = 'span class=form-text';
         $renderer->wrappers['control']['errorcontainer'] = 'span class=form-control-feedback';
         $renderer->wrappers['control']['.error'] = 'is-invalid';

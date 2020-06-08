@@ -49,6 +49,10 @@ abstract class AbstractController{
         }
     }
 
+    protected final function addParameter($name, $value){
+        Router::getSmarty()->assign($name, $value);
+    }
+
     protected final function redirect($url = ""){
         header('Location: ' . $url, true,  302);
         exit();
