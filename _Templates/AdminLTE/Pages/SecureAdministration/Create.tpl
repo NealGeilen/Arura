@@ -11,7 +11,7 @@
         </div>
         <div class="card-body">
             <label>Data bestand</label>
-            <form action="/{$aArura.dir}/api/secureadmin/create.php" id="file-upload" class="dropzone">
+            <form action="/dashboard/administration/create" id="file-upload" class="dropzone">
                 <div class="fallback">
                     <input name="file" type="file" multiple accept="application/json"/>
                 </div>

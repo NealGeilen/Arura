@@ -1,5 +1,4 @@
 $(document).ready(function () {
-    validateRequest($('.inlog-form'));
     oModal = $('.modal-recovery-mail');
     oModal.find("form").validate({
         submitHandler: function (oForm) {
@@ -24,36 +23,6 @@ $(document).ready(function () {
         }
     });
 });
-
-function validateRequest(oForm) {
-    oForm.validate({
-        submitHandler: function (oForm) {
-            $.ajax({
-                url: window.location.href,
-                type: 'post',
-                dataType: 'json',
-                data: (serializeArray($(oForm))),
-                success: function () {
-                    addSuccessMessage('U wordt ingelogd');
-                    setTimeout(function () {
-                        location.replace("/dashboard/home");
-                    },500);
-                },
-                statusCode: {
-                    500: function () {
-                        addErrorMessage('Server fout, Contacteert systeem beheerder wanneer dit aanhoudt');
-                    },
-                    403: function () {
-                        addErrorMessage('Gegegevens onjuist, probeer opnieuw');
-                    },
-                    401: function() {
-                        addErrorMessage('U heeft meerderen malen fout ingeloged, probeer later opnieuw');
-                    }
-                }
-            });
-        }
-    });
-}
 function sendRecoveryMail() {
     oModal = $('.modal-recovery-mail');
     oModal.modal("show");

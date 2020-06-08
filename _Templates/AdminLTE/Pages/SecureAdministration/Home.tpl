@@ -1,41 +1,48 @@
 
 {extends "../../index.tpl"}
 {block content}
-    <div class="card">
-        <div class="card-header">
-            <h2 class="card-title">Administraties beschikbaar</h2>
-            <div class="card-tools">
-                {if $aPermissions.SECURE_ADMINISTRATION_CREATE}
-                    <a class="btn btn-primary btn-sm" href="/{$aArura.dir}/administration?c">
-                        <i class="fas fa-plus"></i>
-                    </a>
-                {/if}
+    <div class="row">
+        {if $aPermissions.SECURE_ADMINISTRATION_CREATE}
+        <div class="col-md-4 col-sm-6 col-12">
+            <div class="card card-info card-outline">
+                <div class="card-header">
+                    <h2 class="card-title">Administartie aanmaken</h2>
+                </div>
+                <div class="card-body">
+                    <p>JSON bestand vereist</p>
+                        <a class="btn btn-primary" href="/{$aArura.dir}/administration/create">
+                            <i class="fas fa-plus"></i> Aanmaken
+                        </a>
+                </div>
             </div>
         </div>
-        <div class="card-body table-responsive">
-            <table class="table Arura-Table">
-                <thead>
-                <tr>
-                    <th>Naam</th>
-                    <th>Rol</th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                {foreach from=$aTables key=$iKey item=aTable}
-                    <tr>
-                        <td>{$aTable.Table_Name}</td>
-                        <td>{if $aTable.Table_Owner_User_Id == $aUser.User_Id}Eigenaar{else}Gebruiker{/if}</td>
-                        <td>
-                            <div class="btn-group text-white btn-group-sm">
-                                {if $aTable.Table_Owner_User_Id == $aUser.User_Id}<a class="btn btn-primary" href="/{$aArura.dir}/administration/{$aTable.Table_Id}/settings"><i class="fas fa-cogs"></i></a>{/if}
-                                <a class="btn btn-secondary" href="/{$aArura.dir}/administration/{$aTable.Table_Id}/edit"><i class="fas fa-pen"></i></a>
-                            </div>
-                        </td>
-                    </tr>
-                {/foreach}
-                </tbody>
-            </table>
-        </div>
+        {/if}
+        {foreach from=$aTables key=$iKey item=aTable}
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="card card-outline {if $aTable.Table_Owner_User_Id == $aUser.User_Id}card-primary{else}card-secondary{/if} ">
+                    <div class="card-header">
+                        <h2 class="card-title">{$aTable.Table_Name}</h2>
+                        <div class="card-tools">
+                            <i class="fas fa-database"></i> {$aTable.ROWCOUNT}
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            {if $aTable.Table_Owner_User_Id == $aUser.User_Id}Eigenaar{else}Gebruiker{/if}
+                        </p>
+                        <div class="btn-group">
+                            {if $aTable.Table_Owner_User_Id == $aUser.User_Id}
+                                <a class="btn btn-primary" href="/{$aArura.dir}/administration/{$aTable.Table_Id}/settings">
+                                    <i class="fas fa-cogs"></i> Instellingen
+                                </a>
+                            {/if}
+                            <a class="btn btn-secondary" href="/{$aArura.dir}/administration/{$aTable.Table_Id}/edit">
+                                <i class="fas fa-pen"></i> Bewerken
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {/foreach}
     </div>
 {/block}
