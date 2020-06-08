@@ -1,10 +1,7 @@
 <?php
 
-use Arura\Dashboard\Host;
-use Arura\Dashboard\Page;
 use Arura\Permissions\Restrict;
 use Arura\Router;
-use Arura\Settings\Application;
 use Arura\User\User;
 
 require_once __DIR__ . "/_app/autoload.php";
