@@ -144,23 +144,9 @@ class Sitemap
     public function submit()
     {
         Restrict::Validation(Rights::CMS_MENU);
-
-        $client = new Google_Client();
-
-        $client->setScopes([Google_Service_Webmasters::WEBMASTERS, Google_Service_Webmasters::WEBMASTERS_READONLY]);
-        if (!is_file(__SETTINGS__ . '/gsac.json')){
-            throw new NotFound("Settings file not set");
-        }
-        $client->setAuthConfig(__SETTINGS__ . '/gsac.json');
-
-        $service = new Google_Service_Webmasters($client);
-
-        foreach ($service->sites->listSites() as $site) {
-            $siteUrl = $site->getSiteUrl();
-
-            if (str_contains( Application::get("website", "url"),$siteUrl)) {
-                $service->sitemaps->submit($siteUrl, $siteUrl . 'sitemap.xml');
-            }
+        $url = Application::get("website", "url");
+        if (!file_get_contents("http://www.google.com/ping?sitemap={$url}sitemap.xml")){
+            throw new Error();
         }
     }
 }
