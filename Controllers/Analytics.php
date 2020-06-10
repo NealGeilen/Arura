@@ -13,19 +13,31 @@ class Analytics extends AbstractController {
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $startData = $requestHandler->getData()["start"];
             $endData = $requestHandler->getData()["end"];
-            return [
-                "Devices" => Reports::Devices($startData,$endData),
-                "ReadTime" => Reports::ReadTimePage($startData,$endData),
-                "ExitPages" => Reports::ExitPages($startData,$endData),
-                "MediaVisitors" => Reports::SocialMediaVisitors($startData,$endData),
-                "CountryVisitors" => Reports::VistorsPerCountry($startData,$endData),
-                "CityVisitors" => Reports::VistorsPerCity($startData,$endData),
-                "AgeVisitors" =>Reports::UserAge($startData,$endData)
-            ];
+            $requestHandler->addType("Devices", function () use ($startData, $endData){
+                return Reports::Devices($startData,$endData);
+            });
+            $requestHandler->addType("ReadTime", function () use ($startData, $endData){
+                return Reports::ReadTimePage($startData,$endData);
+            });
+            $requestHandler->addType("ExitPages", function () use ($startData, $endData){
+                return Reports::ExitPages($startData,$endData);
+            });
+            $requestHandler->addType("MediaVisitors", function () use ($startData, $endData){
+                return Reports::SocialMediaVisitors($startData,$endData);
+            });
+            $requestHandler->addType("CountryVisitors", function () use ($startData, $endData){
+                return Reports::VistorsPerCountry($startData,$endData);
+            });
+            $requestHandler->addType("CityVisitors", function () use ($startData, $endData){
+                return Reports::VistorsPerCity($startData,$endData);
+            });
+            $requestHandler->addType("AgeVisitors", function () use ($startData, $endData){
+                return Reports::UserAge($startData,$endData);
+            });
         });
-        Router::addSourceScriptJs("/dashboard/assets/vendor/d3/d3.min.js");
-        Router::addSourceScriptJs("/dashboard/assets/vendor/topojson/topojson.min.js");
-        Router::addSourceScriptJs("/dashboard/assets/vendor/datamaps/datamaps.world.min.js");
+//        Router::addSourceScriptJs("/dashboard/assets/vendor/d3/d3.min.js");
+//        Router::addSourceScriptJs("/dashboard/assets/vendor/topojson/topojson.min.js");
+//        Router::addSourceScriptJs("/dashboard/assets/vendor/datamaps/datamaps.world.min.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
         $this->render("AdminLTE/Pages/Analytics/Home.tpl", [
             "title" =>"Analytics"
