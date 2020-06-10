@@ -65,8 +65,8 @@
 
 
     <div class="row">
-        <div class="col-md-6">
-            <div class="card">
+        <div class="col-12 ">
+            <div class="card card-primary card-outline">
                 <div class="card-header">
                     <h2 class="card-title">Hoofd menu</h2>
                     <div class="card-tools">
@@ -86,7 +86,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
+            <div class="card card-secondary card-outline">
                 <div class="card-header">
                     <h2 class="card-title">Sitemap</h2>
                 </div>
