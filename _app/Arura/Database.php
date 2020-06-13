@@ -2,6 +2,7 @@
 namespace Arura;
 
 use Arura\Exceptions\Error;
+use PDO;
 use PDOStatement;
 
 class Database{
@@ -71,13 +72,13 @@ class Database{
     }
 
     /**
-     * @return \PDO
+     * @return PDO
      */
-    protected function connect() :\PDO
+    protected function connect() : PDO
     {
         if (!isset(self::$connection)){
             $dsn = 'mysql:host=' . $this->host . ';dbname=' . $this->database;
-            self::$connection = new \PDO($dsn, $this->username,$this->password);
+            self::$connection = new PDO($dsn, $this->username,$this->password);
         }
         return  self::$connection;
     }
@@ -102,13 +103,24 @@ class Database{
     }
 
     /**
+     * @return mixed
+     */
+    public static function getConnection()
+    {
+        if (empty(self::$connection)){
+            return self::getConnection();
+        }
+        return self::$connection;
+    }
+
+    /**
      * @param string $statment
      * @param array $parameters
      * @return array
      * @throws Error
      */
     public function fetchAll($statment = "", array $parameters = []){
-        return $this->query($statment,$parameters)->fetchAll(\PDO::FETCH_ASSOC);
+        return $this->query($statment,$parameters)->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
@@ -119,7 +131,7 @@ class Database{
      * @throws Error
      */
     public function fetchAllColumn($statment = "", array $parameters = []){
-        return $this->query($statment,$parameters)->fetchAll(\PDO::FETCH_COLUMN);
+        return $this->query($statment,$parameters)->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
@@ -129,7 +141,7 @@ class Database{
      * @throws Error
      */
     public function fetchRow($statment = "", array $parameters = []){
-        return $this->query($statment,$parameters)->fetch(\PDO::FETCH_ASSOC);
+        return $this->query($statment,$parameters)->fetch(PDO::FETCH_ASSOC);
     }
 
     /**

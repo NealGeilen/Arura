@@ -1,7 +1,6 @@
 <?php
 namespace Arura\Shop\Events;
 
-use Arura\Crud;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Pages\Page;
@@ -9,6 +8,8 @@ use Arura\Shop\Payment;
 use Arura\Database;
 use Arura\Settings\Application;
 use Arura\User\User;
+use Crud\Crud;
+use Crud\Fields\Field;
 use DateTime;
 use Exception;
 use Mollie\Api\Exceptions\ApiException;
@@ -320,21 +321,21 @@ class Event Extends Page {
 
 
     /**
-     * @return Crud\Crud
+     * @return Crud
      * @throws Error
      */
     public function getTicketGrud(){
-        $Crud = new Crud\Crud("tblEventTickets","Ticket_Id");
+        $Crud = new Crud("tblEventTickets","Ticket_Id", Database::getConnection());
         $Open = !$this->hasEventRegistrations();
         $Crud->setCanDelete($Open);
         $Crud->setCanEdit($Open);
         $Crud->setCanInsert($Open);
         $Crud->addParam("e", $this->getId());
         $Crud->addDefaultValue("Ticket_Event_Id", $this->getId());
-        $Crud->addField(new Crud\Fields\Field("text", "Ticket_Name", "Naam"));
-        $Crud->addField(new Crud\Fields\Field("text", "Ticket_Description", "Omschrijving"));
-        $Crud->addField(new Crud\Fields\Field("number", "Ticket_Capacity", "Capacity"));
-        $Currancy = new Crud\Fields\Field("number", "Ticket_Price", "Prijs");
+        $Crud->addField(new Field("text", "Ticket_Name", "Naam"));
+        $Crud->addField(new Field("text", "Ticket_Description", "Omschrijving"));
+        $Crud->addField(new Field("number", "Ticket_Capacity", "Capacity"));
+        $Currancy = new Field("number", "Ticket_Price", "Prijs");
         $Currancy->addAttribute("step", "0.01");
         $Crud->addField($Currancy);
         return $Crud;

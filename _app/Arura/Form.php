@@ -21,11 +21,9 @@ class Form extends \Nette\Forms\Form{
     protected static function makeBootstrap4(Form $form): void
     {
         $renderer = $form->getRenderer();
-        $renderer->wrappers['controls']['container'] = null;
-        $renderer->wrappers['pair']['container'] = 'div class="form-group row"';
+        $renderer->wrappers['controls']['container'] = 'div class="row"';
+        $renderer->wrappers['pair']['container'] = 'div class="form-group col-md-6 col-12"';
         $renderer->wrappers['pair']['.error'] = 'has-danger';
-        $renderer->wrappers['control']['container'] = 'div class=col-12';
-        $renderer->wrappers['label']['container'] = 'div class="col-12 col-form-label"';
         $renderer->wrappers['control']['description'] = 'span class=form-text';
         $renderer->wrappers['control']['errorcontainer'] = 'span class=form-control-feedback';
         $renderer->wrappers['control']['.error'] = 'is-invalid';
