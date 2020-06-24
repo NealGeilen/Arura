@@ -359,7 +359,7 @@ class Page extends Pages\Page{
     }
 
     public static function getForm(){
-        $form = new Form("Page-Form");
+        $form = new Form("Page-Form", Form::OneColumnRender);
         $form->addText("Page_Title", "Naam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("Page_Url", "Url")

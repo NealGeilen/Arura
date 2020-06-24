@@ -97,11 +97,12 @@ class CMS extends AbstractController {
     public function Settings($id){
         $p = new \Arura\Pages\CMS\Page($id);
         $form = \Arura\Pages\CMS\Page::getForm();
-        $form->setDefaults($p->__toArray());
         $form->addHidden("Page_Id")
             ->addRule(Form::INTEGER);
-        if ($form->isSuccess()){
+        $form->setDefaults($p->__toArray());
+        if ($form->isSubmitted()){
             $p->set($form->getValues('array'));
+            $p->load(true);
         }
         $this->render("AdminLTE/Pages/CMS/Settings.tpl", [
             "title" =>"Pagina instellingen",

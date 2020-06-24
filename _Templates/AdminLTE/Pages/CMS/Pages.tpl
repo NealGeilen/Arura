@@ -1,6 +1,6 @@
 {extends "../../index.tpl"}
 {block content}
-    <section class="card">
+    <section class="card card-primary card-outline">
         <header class="card-header">
             <div class="card-tools">
                 <div class="btn-group btn-group-sm">
