@@ -27,7 +27,7 @@ class Pages extends AbstractController {
     public function Login(){
         if (User::canUserLogin()){
             $form = Password::loginForm();
-            $this->addParameter("loginForm", $form);
+            $this->addParameter('loginForm', $form);
             if ($form->isSuccess()){
                 $this->redirect("/dashboard/home");
             }

@@ -10,8 +10,11 @@
       <div class="card-body login-card-body">
         {if $canUserLogin}
           <p class="login-box-msg">Inloggen</p>
-
-          {$loginForm}
+          {$loginForm->startForm()}
+            {$loginForm->getControl("mail")}
+            {$loginForm->getControl("password")}
+            {$loginForm->getControl("submit")}
+          {$loginForm->endForm()}
           {else}
           <p>Je hebt herhaaldelijk geprobeert in te loggen. Probeer het later opnieuw.</p>
         {/if}

@@ -23,7 +23,7 @@ class Password{
 
     public static function loginForm() : Form
     {
-        $form = new Form("admin-login");
+        $form = new Form("admin-login", Form::OneColumnRender);
         $form->addEmail("mail", "E-mailadres")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addPassword("password", "Wachtwoord")

@@ -138,7 +138,7 @@ class Recovery extends Modal {
 
     public static function getRequestForm() :Form
     {
-        $form = new Form("request-form");
+        $form = new Form("request-form", Form::OneColumnRender);
         $form->addEmail("mail", "E-mailadres")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Herstel mail aanvragen");
