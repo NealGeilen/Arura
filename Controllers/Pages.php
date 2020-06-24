@@ -58,30 +58,10 @@ class Pages extends AbstractController {
     }
 
     public function Profile(){
-        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
-            Sessions::Start();
-            $aData = $requestHandler->getData();
-            $user = User::activeUser();
-            $user->load(true);
-            $user -> setEmail(htmlentities($aData['User_Email']));
-            $user -> setUsername(htmlentities($aData['User_Username']));
-            $user -> setFirstname(htmlentities($aData['User_Firstname']));
-            $user -> setLastname(htmlentities($aData['User_Lastname']));
-
-            if (isset($aData['Password1']) && isset($aData['Password2'])){
-                if ($aData['Password1'] === $aData['Password2'] && $aData['Password1'] !== '' && $aData['Password2'] !== ''){
-                    $user -> setPassword(Password::Create(htmlentities($aData['Password1'])));
-                } else {
-                    throw new NotAcceptable();
-                }
-            }
-
-            if (!$user->save()){
-                throw new Error();
-            }
-        });
         $this->render("AdminLTE/Pages/Pages/Profile.tpl", [
-            "title" => "Profiel"
+            "title" => "Profiel",
+            "form" => User::getProfileForm(),
+            "PasswordForm" => User::getPasswordForm()
         ]);
     }
 

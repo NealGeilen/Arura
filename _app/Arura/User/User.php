@@ -4,6 +4,7 @@ namespace Arura\User;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
+use Arura\Form;
 use Arura\Permissions\Right;
 use Arura\Permissions\Role;
 use Arura\Sessions;
@@ -343,6 +344,67 @@ class User
             return true;
         }
         return false;
+    }
+
+
+
+    public static function getPasswordForm(){
+        $form = new Form("password-form");
+        $user = self::activeUser();
+        $form->addPassword("password_1", "Wachtwoord")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addPassword("password_2", "Wachtwoord herhalen")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("submit", "Opslaan");
+
+        if ($form->isSubmitted()){
+            if ($form->getValues()->password_1 === $form->getValues()->password_2){
+                $user -> setPassword(Password::Create($form->getValues()->password_1));
+
+                if (!$user->save()){
+                    $form->addError("Opslaan mislukt");
+                }
+
+            } else {
+                $form->addError("Wachtwoorden zijn niet gelijk aan elkaar");
+            }
+        }
+        return $form;
+    }
+    /**
+     * @return Form
+     */
+    public static function getProfileForm(){
+        $form = new Form("profile-form");
+        $user = self::activeUser();
+        $form->addText("User_Username", "Gebruikersnaam")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
+            ->setDefaultValue($user->getUsername());
+        $form->addEmail("User_Email", "E-mailadres")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
+            ->setDefaultValue($user->getEmail());
+        $form->addText("User_Firstname", "Voornaam")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
+            ->setDefaultValue($user->getFirstname());
+        $form->addText("User_Lastname", "Achternaam")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
+            ->setDefaultValue($user->getLastname());
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSubmitted()){
+
+            $user->load(true);
+            if ($form->getValues()->User_Email) {
+                $user->setEmail($form->getValues()->User_Email);
+                $user->setUsername($form->getValues()->User_Username);
+                $user->setFirstname($form->getValues()->User_Firstname);
+                $user->setLastname($form->getValues()->User_Lastname);
+            }
+
+            if (!$user->save()){
+                $form->addError("Opslaan mislukt");
+            }
+        }
+        return $form;
     }
 
 

@@ -1,42 +1,51 @@
 {extends "../../index.tpl"}
 {block content}
-    <div class="card">
-        <header class="card-header">
-            <h2 class="card-title">Profiel instellingen</h2>
-        </header>
-        <div class="card-body">
-            <form class="form-sender" action="/{$aArura.dir}/{$aArura.api}/user/update-user.php" method="post" autocomplete="off">
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="username-profile">Gebruikersnaam</label>
-                        <input type="text" class="form-control" id="username-profile" value="{$aUser.User_Username}" placeholder="Gebruikersnaam" name="User_Username" required>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary card-outline">
+                <header class="card-header">
+                    <h2 class="card-title">Gegevens</h2>
+                </header>
+                <div class="card-body">
+                    {$form->startForm()}
+                    <div class="row">
+                        <div class="col-md-6">
+                            {$form->getControl("User_Username")}
+                        </div>
+                        <div class="col-md-6">
+                            {$form->getControl("User_Email")}
+                        </div>
+                        <div class="col-md-6">
+                            {$form->getControl("User_Firstname")}
+                        </div>
+                        <div class="col-md-6">
+                            {$form->getControl("User_Lastname")}
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="firstname-profile">Voornaam</label>
-                        <input type="text" class="form-control" id="firstname-profile" value="{$aUser.User_Firstname}" placeholder="Voornaam" name="User_Firstname" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="lastname-profile">Achternaam</label>
-                        <input type="text" class="form-control" id="lastname-profile" value="{$aUser.User_Lastname}" placeholder="Achternaam" name="User_Lastname" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="email-profile">E-mail</label>
-                        <input type="email" class="form-control" id="email-profile" value="{$aUser.User_Email}" placeholder="E-mail" name="User_Email" required>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="password-two-profile">Wachtwoord</label>
-                        <input type="password" class="form-control" id="password-two-profile" name="Password1">
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="password-one-profile">Wachtwoord bevestiging</label>
-                        <input type="password" class="form-control" id="password-one-profile" name="Password2">
-                    </div>
+                    {$form->getControl("submit")}
+                    {$form->endForm()}
                 </div>
-                <div class="btn-group" role="group">
-                    <button type="submit" class="btn btn-success">Opslaan</button>
-                    <button type="reset" class="btn btn-danger">Annuleren</button>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-secondary card-outline">
+                <header class="card-header">
+                    <h2 class="card-title">Wachtwoord</h2>
+                </header>
+                <div class="card-body">
+                    {$PasswordForm->startForm()}
+                    <div class="row">
+                        <div class="col-6">
+                            {$PasswordForm->getControl("password_1")}
+                        </div>
+                        <div class="col-6">
+                            {$PasswordForm->getControl("password_2")}
+                        </div>
+                    </div>
+                    {$PasswordForm->getControl("submit")}
+                    {$PasswordForm->endForm()}
                 </div>
-            </form>
+            </div>
         </div>
     </div>
     {/block}
