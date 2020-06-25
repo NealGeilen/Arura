@@ -9,8 +9,12 @@
     }
   ],
   "autoload": {
-    "psr-4": {"Arura\\": "_app/Arura","App\\Controllers\\": "Controllers"}
-
+    "psr-4": {"Arura\\": "_app/Arura","App\\Controllers\\": "Controllers"},
+    "files": [
+      "_app/Functions.php",
+      "_app/autoload.php",
+      "_app/Rights.php"
+    ]
   },
   "require" : {
     "php": "^7.1",
