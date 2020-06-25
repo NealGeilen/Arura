@@ -9,7 +9,7 @@
     }
   ],
   "autoload": {
-    "psr-4": {"Arura\\": "dashboard/_app/Arura","App\\Controllers\\": "dashboard/Controllers"}
+    "psr-4": {"Arura\\": "_app/Arura","App\\Controllers\\": "Controllers"}
 
   },
   "require" : {
