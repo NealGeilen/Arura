@@ -27,6 +27,7 @@
                         {foreach from=$aPage.Children item=Child key=ChildHref}
                             {if $Child.Right && $Child.Icon != NULL}
                                 <li class="nav-item {if isset($Child.Children)}has-treeview{if in_array($sRequestUrl,array_keys($Child.Children))} menu-open{/if}{/if}">
+{*                                    {in_array($sRequestUrl,array_keys($Child.Children))|var_dump}*}
                                     <a href="/{$aArura.dir}{$ChildHref}" class="nav-link{if $ChildHref === $sRequestUrl} active{/if}">
                                         <i class="{$Child.Icon} nav-icon"></i>
                                         <p>
