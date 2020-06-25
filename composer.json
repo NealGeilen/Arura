@@ -1,0 +1,42 @@
+{
+  "name": "arura/dashboard",
+  "description": "Arura",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Neal Geilen",
+      "email": "nealgeilen@gmail.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {"Arura\\": "dashboard/_app/Arura","App\\Controllers\\": "dashboard/Controllers"}
+
+  },
+  "require" : {
+    "php": "^7.1",
+    "smarty/smarty": "~3.1",
+    "spatie/image-optimizer": "1.2.0",
+    "mollie/mollie-api-php": "^2.1",
+    "czproject/git-php": "^3.17",
+    "phpmailer/phpmailer": "^6.0",
+    "html2text/html2text": "4.1.0",
+    "google/apiclient": "2.4.0",
+    "mpdf/mpdf": "^8.0",
+    "chillerlan/php-qrcode": "3.2.0",
+    "ejdamm/chart.js-php": "v2.0",
+    "nette/forms": "3.0.4",
+    "nealg/crud": "1.*",
+    "nealg/cacher" :  "v1.0",
+    "bramus/router": "~1.4",
+
+    "ext-pdo": "*",
+    "ext-curl": "*",
+    "ext-simplexml": "*",
+    "ext-dom": "*",
+    "ext-libxml": "*",
+    "ext-mbstring": "*",
+    "ext-exif": "*",
+    "ext-openssl": "*",
+    "ext-json": "*"
+  }
+}
