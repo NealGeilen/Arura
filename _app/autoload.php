@@ -25,9 +25,6 @@ define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/
 
 $GLOBALS["Querys"] = [];
 
-require_once __APP__    . "Rights.php";
-require_once __APP__ . "Functions.php";
-require_once __VENDOR__ . "autoload.php";
 session_set_cookie_params(0, "/", "");
 Sessions::Start();
 if ((int)Application::get("arura", "Debug")){
