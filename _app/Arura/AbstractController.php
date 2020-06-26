@@ -36,7 +36,7 @@ abstract class AbstractController{
             if (!isset($parameters["sPageSideBar"])){
                 Router::getSmarty()->assign("sPageSideBar", null);
             }
-            Router::getSmarty()->assign("sRequestUrl", "/" . $_GET["_url_"]);
+            Router::getSmarty()->assign("sRequestUrl", "/" . $_GET["_dashboard_"]);
             Router::getSmarty()->assign("aManifest", json_array_decode(file_get_contents(__ARURA__ROOT__ . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR . "manifest.json")));
 
             Router::getSmarty()->assign("aUser", (User::isLogged()) ? User::activeUser()->__toArray() : null);
