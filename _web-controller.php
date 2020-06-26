@@ -2,6 +2,7 @@
 
 use Arura\Permissions\Restrict;
 use Arura\Router;
+use Arura\Settings\Application;
 use Arura\User\User;
 
 require_once __DIR__ . "/_app/autoload.php";
@@ -9,6 +10,14 @@ $aExceptionPages = ["/login", "/login/password"];
 if (!User::isLogged() && !strpos($_GET["_dashboard_"], "login") === 0){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
+}
+if (empty($_GET["_dashboard_"])){
+    if(!User::isLogged()){
+        header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
+        exit;
+    } else {
+        header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR . "home");
+    }
 }
 $router = new Router();
 $router->getRouter()->setBasePath("/dashboard");
@@ -333,7 +342,9 @@ $router->loadRoutes($aNavBarPages);
 try {
     $router->getRouter()->run();
 } catch (Exception $e){
-    var_dump($e);
+    if ((int)Application::get("arura", "Debug")){
+        dd($e);
+    }
 }
 
 

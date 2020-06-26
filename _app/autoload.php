@@ -21,7 +21,6 @@ define("__WEB_TEMPLATES__",     __WEB__ROOT__   . DIRECTORY_SEPARATOR . "Templat
 define('__RESOURCES__',         __WEB__ROOT__   . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR     . 'Resources'  . DIRECTORY_SEPARATOR);
 
 $GLOBALS["Querys"] = [];
-
 session_set_cookie_params(0, "/", "");
 Sessions::Start();
 if ((int)Application::get("arura", "Debug")){
