@@ -10,7 +10,7 @@ require_once __WEB__ROOT__ . "/_config.php";
 define('__SETTINGS__',          __APP_ROOT__    . DIRECTORY_SEPARATOR. 'settings'   . DIRECTORY_SEPARATOR);
 define('__VENDOR__',            __WEB__ROOT__   . DIRECTORY_SEPARATOR. 'vendor'     . DIRECTORY_SEPARATOR);
 
-define('__ARURA__ROOT__', __VENDOR__ . DIRECTORY_SEPARATOR ."arura". DIRECTORY_SEPARATOR .  __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR);
+define('__ARURA__ROOT__',       __VENDOR__ ."arura". DIRECTORY_SEPARATOR .  __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR);
 define("__ARURA_TEMPLATES__",   __ARURA__ROOT__ .DIRECTORY_SEPARATOR. '_Templates' . DIRECTORY_SEPARATOR);
 define('__APP__',               __ARURA__ROOT__ . DIRECTORY_SEPARATOR. '_app'       . DIRECTORY_SEPARATOR);
 define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/Resources/DataFiles'  . DIRECTORY_SEPARATOR);
