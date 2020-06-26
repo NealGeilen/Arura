@@ -14,9 +14,20 @@ use SmartyException;
 
 class Page extends Modal implements PageEnum{
 
-    const DEAFULT_PAGES = [
+    const DEFAULT_PAGES = [
         "/sitemap" => "sitemap",
         "/cookiebeleid" => "cookiestatment"
+    ];
+
+    const DEFAULT_RESOURCE_FILES = [
+       "js" => [
+           "arura.js",
+           "Cookies.js",
+           "Modals.js"
+       ],
+       "css" => [
+
+       ]
     ];
 
     /**
@@ -105,7 +116,13 @@ class Page extends Modal implements PageEnum{
      */
     protected function loadResourceFiles(){
         if (DEBUG_MODE){
-            return json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
+            $aFiles = json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
+            foreach (self::DEFAULT_RESOURCE_FILES as $cath => $files){
+                foreach ($files as $file){
+                    $aFiles[$cath][] = DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "frontend" .DIRECTORY_SEPARATOR. $file;
+                }
+            }
+            return $aFiles;
         } else {
             $C = new Cacher();
             foreach (json_decode(file_get_contents(self::TemplatePath.'config.json'), true) as $cath => $files){
@@ -113,6 +130,13 @@ class Page extends Modal implements PageEnum{
                     $C->add($cath, __ROOT__ . $file);
                 }
             }
+
+            foreach (self::DEFAULT_RESOURCE_FILES as $cath => $files){
+                foreach ($files as $file){
+                    $C->add($cath, __ARURA__ROOT__ . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "frontend" .DIRECTORY_SEPARATOR. $file);
+                }
+            }
+
             $C->setName("site");
             $C->setCachDirectorie("cached");
             $aFiles= $C->getMinifyedFiles();
@@ -157,9 +181,9 @@ class Page extends Modal implements PageEnum{
         $_SERVER["REDIRECT_URL"] = $sSlug;
         if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation($iRight)){
             if (!Application::get("website", "maintenance") || Restrict::Validation($iRight)){
-                if (isset(self::DEAFULT_PAGES[$sSlug])){
-                    if (is_file(__DEAFULT_PAGES__ . self::DEAFULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEAFULT_PAGES[$sSlug] . ".php")){
-                        include __DEAFULT_PAGES__ . self::DEAFULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEAFULT_PAGES[$sSlug] . ".php";
+                if (isset(self::DEFAULT_PAGES[$sSlug])){
+                    if (is_file(__DEAFULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php")){
+                        include __DEAFULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php";
                     } else {
                         throw new NotFound("Deafult page noy found");
                     }
