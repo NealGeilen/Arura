@@ -50,13 +50,13 @@ class Router{
         $Ch->setCachDirectorie("cached/arura");
         foreach (self::getResourceFiles()["JsPage"] as $js){
             if (!is_file($js)){
-                $js = __ROOT__ . $js;
+                $js = __ARURA__ROOT__ . $js;
             }
             $Ch->add(Cacher::Js,$js);
         }
         foreach (self::getResourceFiles()["CssPage"] as $css){
             if (!is_file($css)){
-                $css = __ROOT__ . $css;
+                $css = __ARURA__ROOT__ . $css;
             }
             $Ch->add(Cacher::Css,$css);
         }
@@ -73,10 +73,10 @@ class Router{
         $Ch->setName("Arura");
         $Ch->setCachDirectorie("cached");
         foreach (self::getResourceFiles()["Js"] as $js){
-            $Ch->add(Cacher::Js,__ROOT__ . $js);
+            $Ch->add(Cacher::Js,__ARURA__ROOT__ . $js);
         }
         foreach (self::getResourceFiles()["Css"] as $js){
-            $Ch->add(Cacher::Css,__ROOT__ . $js);
+            $Ch->add(Cacher::Css,__ARURA__ROOT__ . $js);
         }
 
         return $Ch->getMinifyedFiles();
