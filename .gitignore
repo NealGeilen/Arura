@@ -1,1 +1,5 @@
-/templates_c/*
+!/templates_c/*
+!/composer.phar
+!/composer.lock
+!/vendor/*
+!/vendor/
