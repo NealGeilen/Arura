@@ -12,7 +12,8 @@
     "psr-4": {"Arura\\": "_app/Arura","App\\Controllers\\": "Controllers"},
     "files": [
       "_app/Functions.php",
-      "_app/Rights.php"
+      "_app/Rights.php",
+      "_app/autoload.php"
     ]
   },
   "require" : {
