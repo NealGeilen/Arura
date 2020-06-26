@@ -45,23 +45,30 @@ class Router{
      * @return array
      */
     public static function loadResourceOfPageFiles($title = ""){
-        $Ch = new Cacher();
-        $Ch->setName(str_replace(" ", "-", $title));
-        $Ch->setCachDirectorie("cached/arura");
-        foreach (self::getResourceFiles()["JsPage"] as $js){
-            if (!is_file($js)){
-                $js = __ARURA__ROOT__ . $js;
+        if (DEBUG_MODE){
+            return ["js" => [],"css"=>[],];
+        } else {
+            $Ch = new Cacher();
+            $Ch->setName(str_replace(" ", "-", $title));
+            $Ch->setCachDirectorie("cached/arura");
+            foreach (self::getResourceFiles()["JsPage"] as $js){
+                if (!is_file($js)){
+                    $js = __ARURA__ROOT__ . $js;
+                }
+                $Ch->add(Cacher::Js,$js);
             }
-            $Ch->add(Cacher::Js,$js);
-        }
-        foreach (self::getResourceFiles()["CssPage"] as $css){
-            if (!is_file($css)){
-                $css = __ARURA__ROOT__ . $css;
+            foreach (self::getResourceFiles()["CssPage"] as $css){
+                if (!is_file($css)){
+                    $css = __ARURA__ROOT__ . $css;
+                }
+                $Ch->add(Cacher::Css,$css);
             }
-            $Ch->add(Cacher::Css,$css);
+            $aFiles= $Ch->getMinifyedFiles();
+            return [
+                "css" =>  [$aFiles["css"]],
+                "js" => [$aFiles["js"]]
+            ];
         }
-
-        return $Ch->getMinifyedFiles();
     }
 
     /**
@@ -69,17 +76,30 @@ class Router{
      * @throws Exception
      */
     public static function loadResourceFiles(){
-        $Ch = new Cacher();
-        $Ch->setName("Arura");
-        $Ch->setCachDirectorie("cached");
-        foreach (self::getResourceFiles()["Js"] as $js){
-            $Ch->add(Cacher::Js,__ARURA__ROOT__ . $js);
+        if (DEBUG_MODE){
+            $aFiles = [];
+            foreach (self::getResourceFiles() as $type=>$files){
+                foreach ($files as $file){
+                    $aFiles[$type][] = "/dashboard/" . $file;
+                }
+            }
+            return  $aFiles;
+        } else {
+            $Ch = new Cacher();
+            $Ch->setName("Arura");
+            $Ch->setCachDirectorie("cached");
+            foreach (self::getResourceFiles()["js"] as $js){
+                $Ch->add(Cacher::Js,__ARURA__ROOT__ . $js);
+            }
+            foreach (self::getResourceFiles()["css"] as $js){
+                $Ch->add(Cacher::Css,__ARURA__ROOT__ . $js);
+            }
+            $aFiles= $Ch->getMinifyedFiles();
+            return [
+                "css" =>  [$aFiles["css"]],
+                "js" => [$aFiles["js"]]
+            ];
         }
-        foreach (self::getResourceFiles()["Css"] as $js){
-            $Ch->add(Cacher::Css,__ARURA__ROOT__ . $js);
-        }
-
-        return $Ch->getMinifyedFiles();
     }
 
     /**

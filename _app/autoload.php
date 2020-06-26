@@ -6,12 +6,16 @@ use Arura\Settings\Application;
 define("__ARURA__DIR_NAME__", "dashboard");
 define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
 define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
+
 require_once __ROOT__ . "/_config.php";
 
 if (!defined("DEV_MODE")){
     define("DEV_MODE", false);
 }
 
+if (!defined("DEBUG_MODE")){
+    define("DEBUG_MODE", false);
+}
 define('__SETTINGS__',          __APP_ROOT__    . DIRECTORY_SEPARATOR. 'settings'   . DIRECTORY_SEPARATOR);
 
 if (DEV_MODE){
@@ -46,4 +50,3 @@ if ((int)Application::get("arura", "Debug")){
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 }
-exit;

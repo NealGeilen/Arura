@@ -104,15 +104,23 @@ class Page extends Modal implements PageEnum{
      * @throws Exception
      */
     protected function loadResourceFiles(){
-        $C = new Cacher();
-        foreach (json_decode(file_get_contents(self::TemplatePath.'config.json'), true) as $cath => $files){
-            foreach ($files as $file){
-                $C->add($cath, __ROOT__ . $file);
+        if (DEBUG_MODE){
+            return json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
+        } else {
+            $C = new Cacher();
+            foreach (json_decode(file_get_contents(self::TemplatePath.'config.json'), true) as $cath => $files){
+                foreach ($files as $file){
+                    $C->add($cath, __ROOT__ . $file);
+                }
             }
+            $C->setName("site");
+            $C->setCachDirectorie("cached");
+            $aFiles= $C->getMinifyedFiles();
+            return [
+                "css" =>  [$aFiles["css"]],
+                "js" => [$aFiles["js"]]
+            ];
         }
-        $C->setName("site");
-        $C->setCachDirectorie("cached");
-        return $C->getMinifyedFiles();
     }
 
 

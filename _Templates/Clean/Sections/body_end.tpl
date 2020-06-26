@@ -1,2 +1,6 @@
-<script src="{$aResourceFiles.arura.js}"></script>
-<script src="{$aResourceFiles.page.js}"></script>
+{foreach $aResourceFiles.arura.js as $file}
+    <script src="{$file}"></script>
+{/foreach}
+{foreach $aResourceFiles.page.js as $file}
+    <script src="{$file}"></script>
+{/foreach}
