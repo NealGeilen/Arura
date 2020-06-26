@@ -17,6 +17,7 @@ if (empty($_GET["_dashboard_"])){
         exit;
     } else {
         header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR . "home");
+        exit;
     }
 }
 $router = new Router();
