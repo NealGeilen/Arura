@@ -27,8 +27,7 @@ class FileManger extends AbstractController {
     }
 
     public function connection(){
-        $var = include __APP__ . "Elfinder/connector.minimal.php";
-        dd($var);
+        require_once __APP__ . "Elfinder/connector.minimal.php";
     }
 
 }
