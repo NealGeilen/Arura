@@ -279,7 +279,7 @@ Arura = {
                             locale: {
                                 nl :{
                                     name:'Functionele cookies',
-                                    description: 'Deze cookies zijn nootzakelijk voor een juiste werking van de website.',
+                                    description: 'Deze cookies zijn noodzakelijk voor een juiste werking van de website.',
                                 }
                             }
                         }
