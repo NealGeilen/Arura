@@ -21,12 +21,11 @@ class Page extends Modal implements PageEnum{
 
     const DEFAULT_RESOURCE_FILES = [
        "js" => [
+           "cookieconsent-1.2.3/cookieconsent.min.js",
            "arura.js",
-           "Cookies.js",
            "Modals.js"
        ],
        "css" => [
-
        ]
     ];
 

@@ -250,24 +250,105 @@ Arura = {
     },
     Cookies: {
         init: function(){
-          if (Cookies.get("CookieBar") === undefined && window.location.pathname !== "/cookiebeleid"){
-              this.showModal();
-          }
-        },
-        showModal: function() {
-            Modals.Custom({
-                Size: "large",
-                Title: "Cookie melding",
-                Message: "Deze website maakt gebruik van cookies – inclusief cookies van derde partijen – om informatie te verzamelen over de manier waarop bezoekers onze website gebruiken. Hiermee kunnen we u de best mogelijke ervaring bieden, onze website blijven verbeteren en u aanbiedingen doen die aansluiten bij uw interesses. Door op ‘Accepteren’ te klikken gaat u akkoord met het gebruik van deze cookies. ",
-                Buttons:[
-                    '<a class="btn btn-secondary modal-denied" type="reset" href="/cookiebeleid">Meer informatie</a>',
-                    '<button class="btn btn-primary modal-confirm" type="submit">Accepteren</button>'
-                ],
-                onConfirm: function () {
-                    Cookies.set("CookieBar", true, { expires: 356});
-                    location.reload();
+            window.CookieConsent.init({
+                barTimeout: 0,
+                language: {
+                    current: 'nl',
+                    locale: {
+                        nl: {
+                            barMainText: 'Deze website gebruikt cookies om er voor te zorgen dat je de beste ervaring hebt op onze website',
+                            barLinkSetting: 'Cookie Instellingen',
+                            barBtnAcceptAll: 'Accepteer alle cookies',
+                            modalMainTitle: 'Cookies',
+                            modalMainText: 'Cookies zijn kleine stukjes gegevens die vanaf een website worden verzonden en door de webbrowser van de gebruiker worden opgeslagen op de computer van de gebruiker terwijl de gebruiker aan het browsen is. Uw browser slaat elk bericht op in een klein bestandje, cookie genaamd. Wanneer u een andere pagina van de server opvraagt, stuurt uw browser de cookie terug naar de server. Cookies zijn ontworpen als een betrouwbaar mechanisme voor websites om informatie te onthouden of om de browse-activiteit van de gebruiker vast te leggen.\n',
+                            modalBtnSave: 'Huidige instellingen opslaan',
+                            modalBtnAcceptAll: 'Accepteer alle cookies en sluiten',
+                            modalAffectedSolutions: 'Getroffen oplossingen:',
+                            learnMore: 'Meer leren',
+                            on: 'Aan',
+                            off: 'Uit',
+                        }
+                    }
+                },
+                categories: {
+                    necessary: {
+                        needed: true,
+                        wanted: true,
+                        checked: true,
+                        language: {
+                            locale: {
+                                nl :{
+                                    name:'Functionele cookies',
+                                    description: 'Deze cookies zijn nootzakelijk voor een juiste werking van de website.',
+                                }
+                            }
+                        }
+                    },
+                    analytics: {
+                        needed: false,
+                        wanted: false,
+                        checked: true,
+                        language: {
+                            locale: {
+                                nl: {
+                                    name: 'Analytische cookies',
+                                    description: 'Cookies waarmee het gebruik van de website wordt gemeten.',
+                                },
+                            }
+                        }
+                    }
+                },
+                services: {
+                    id: {
+                        category: 'necessary',
+                        type: 'Localcookie',
+                        cookies: [
+                        ],
+                        language: {
+                            locale: {
+                                nl: {
+                                    name: 'Sessie ID'
+                                }
+                            }
+                        }
+                    },
+                    cart: {
+                        category: 'necessary',
+                        type: 'Localcookie',
+                        cookies: [
+                        ],
+                        language: {
+                            locale: {
+                                nl: {
+                                    name: 'Winkelwagen'
+                                }
+                            }
+                        }
+                    },
+                    analytics: {
+                        category: 'analytics',
+                        type: 'dynamic-script',
+                        search: 'analytics',
+                        cookies: [
+                            {
+                                name: '_gid',
+                                domain: `.${window.location.hostname}`
+                            },
+                            {
+                                name: /_ga/,
+                                domain: `.${window.location.hostname}`
+                            }
+                        ],
+                        language: {
+                            locale: {
+                                nl: {
+                                    name: 'Google Analytics'
+                                }
+                            }
+                        }
+                    }
                 }
-            })
+            });
         }
     }
 };
