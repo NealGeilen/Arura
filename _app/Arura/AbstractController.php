@@ -37,10 +37,14 @@ abstract class AbstractController{
                 Router::getSmarty()->assign("sPageSideBar", null);
             }
             Router::getSmarty()->assign("sRequestUrl", $_GET["_dashboard_"]);
-            Router::getSmarty()->assign("aManifest", json_array_decode(file_get_contents(__ARURA__ROOT__ . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR . "manifest.json")));
+            if (DEV_MODE){
+                $sVersion = "DEV MODE";
+            } else {
+                $sVersion = json_array_decode(file_get_contents(__VENDOR__ . "../" . "composer.json"))["require"]["arura/dashboard"];
+            }
 
             Router::getSmarty()->assign("aUser", (User::isLogged()) ? User::activeUser()->__toArray() : null);
-            Router::getSmarty()->assign("aArura" ,["dir" => __ARURA__DIR_NAME__, "api" => "api"]);
+            Router::getSmarty()->assign("aArura" ,["dir" => __ARURA__DIR_NAME__, "api" => "api", "version" => $sVersion]);
             Router::getSmarty()->assign("bMobileUser", isUserOnMobile());
             Router::getSmarty()->assign("aWebsite" ,Application::getAll()["website"]);
             Router::getSmarty()->assign('aResourceFiles', ["page" => Router::loadResourceOfPageFiles($parameters["title"]), "arura" => Router::loadResourceFiles()]);

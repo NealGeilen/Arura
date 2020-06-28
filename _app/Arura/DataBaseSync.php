@@ -43,6 +43,44 @@ class DataBaseSync extends Modal {
         }
     }
 
+    public function getChanges(){
+        $Changes = [];
+        foreach ($this->aTables as $sTable => $aData){
+            if (count($this -> db -> fetchall("SHOW TABLES LIKE '" .$sTable."'")) > 0){
+                //Table exits
+                foreach ($aData["columns"] as $sColumn => $aSQL){
+                    $aColumn = $this->getColumn($sColumn, $sTable);
+                    if (!empty($aColumn)){
+                        $b["Field"] = $sColumn;
+                        $b = array_merge($b, $this->aTables[$sTable]["columns"][$sColumn]);
+                        if ($aColumn !== $b){
+                            //Column needs changing;
+                            $Changes[] = "Kolom: '{$sColumn}' van tabel: '{$sTable}' updaten";
+                        }
+                    } else {
+                        $Changes[] = "Kolom: '{$sColumn}' van tabel: '{$sTable}' aanmaken";
+                    }
+                }
+                //Check for columns in databse what are not needed. when found drop these columns
+                foreach ($this->getAllColumns($sTable) as $column){
+                    if (!isset($this->aTables[$sTable]["columns"][$column["Field"]])){
+                        $Changes[] = "Kolom: '{$column["Field"]}' van tabel: '{$sTable}' moet verwijdert worden";
+                    }
+                }
+            } else {
+                //Create Table
+                $Changes[] = "Nieuwe tabel : {$sTable}";
+            }
+        }
+        //Drop Tables if they dont have a file, When found drop table
+        foreach ($this->getAllTables() as $sTable){
+            if (!isset($this->aTables[$sTable]) && substr( $sTable, 0, 3 ) !== "SA_" ){
+                $Changes[] = "tabel: '{$sTable}' moet verwijderd worden";
+            }
+        }
+        return $Changes;
+    }
+
     /**
      * @throws Exceptions\Error
      */

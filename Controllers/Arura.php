@@ -8,9 +8,9 @@ use Arura\Database;
 use Arura\DataBaseSync;
 use Arura\Exceptions\NotAcceptable;
 use Arura\Git;
-use Arura\Permissions\Right;
 use Arura\Permissions\Role;
 use Arura\Router;
+use Arura\Updater;
 use Arura\User\Password;
 use Arura\User\User;
 use Exception;
@@ -169,29 +169,26 @@ class Arura extends AbstractController {
     }
 
     public function Updater(){
+
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+            $updater = new Updater();
+            $requestHandler->addType("get-packages-updates", function ()  use ($updater){
+                return $updater->getPackagesNeededUpdate();
+            });
+            $requestHandler->addType("update-package", function ($data)  use ($updater){
+                return $updater->updatePackage($data["name"]);
+            });
+            $requestHandler->addType("update-all-packages", function ()  use ($updater){
+                return $updater->updateAllPackages();
+            });
+        });
         $smarty = Router::getSmarty();
-        $repo = new Git(__ARURA__ROOT__);
+//        $repo = new Git(__ARURA__ROOT__);
+        $DB = new DataBaseSync(__APP__ . "DataBaseFiles");
 
 
-        if (isset($_POST["gitpull"])){
-            $repo->Reset(true);
-            $repo->pull();
-            $Data = new DataBaseSync(__APP__ . "DataBaseFiles");
-            $Data->Reload();
-            $repo = new Git(__ARURA__ROOT__);
-        }
-        if (isset($_POST["reload"])){
-            $Data = new DataBaseSync(__APP__ . "DataBaseFiles");
-            $Data->Reload();
-        }
-        if (isset($_POST["gitreset"])){
-            $repo->Reset(true);
-            $repo = new Git(__ARURA__ROOT__);
-
-        }
-
-        $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
-        $smarty->assign("Status", $repo->getStatus());
+        $smarty->assign("aDBChanges", $DB->getChanges());
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater.js");
         $this->render("AdminLTE/Pages/Arura/Updater.tpl", [
             "title" =>"Updaten"
         ]);

@@ -39,7 +39,7 @@ class Page{
             }
         }
         self::getSmarty()->assign("aWebsite" ,Application::getAll()["website"]);
-        self::getSmarty()->assign("aManifest", json_array_decode(file_get_contents(__ARURA__ROOT__ . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR . "manifest.json")));
+        self::getSmarty()->assign("aComposer", json_array_decode(file_get_contents(__VENDOR__ . "../" . "composer.json")));
 
         self::getSmarty()->assign("aArura" ,[
             "dir" => __ARURA__DIR_NAME__,

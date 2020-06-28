@@ -22,14 +22,14 @@
       "Extra": ""
     },
     "Event_Start_Timestamp": {
-      "Type": "Int(15)",
+      "Type": "int(15)",
       "Null": "NO",
       "Key": "",
       "Default": null,
       "Extra": ""
     },
     "Event_End_Timestamp": {
-      "Type": "Int(15)",
+      "Type": "int(15)",
       "Null": "NO",
       "Key": "",
       "Default": null,
@@ -57,7 +57,7 @@
       "Extra": ""
     },
     "Event_Organizer_User_Id": {
-      "Type": "Int(11)",
+      "Type": "int(11)",
       "Null": "NO",
       "Key": "",
       "Default": null,
@@ -78,14 +78,14 @@
       "Extra": ""
     },
     "Event_Capacity": {
-      "Type": "Int(100)",
+      "Type": "int(100)",
       "Null": "NO",
       "Key": "",
       "Default": null,
       "Extra": ""
     },
     "Event_Registration_End_Timestamp": {
-      "Type": "Int(15)",
+      "Type": "int(15)",
       "Null": "YES",
       "Key": "",
       "Default": null,

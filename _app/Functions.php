@@ -7,20 +7,20 @@ use Arura\Database;
  * @param $haystack
  * @return bool
  */
-function str_contains($needle, $haystack)
-{
-    return strpos($haystack, $needle) !== false;
-}
+//function str_contains($needle, $haystack)
+//{
+//    return strpos($haystack, $needle) !== false;
+//}
 
 /**
  * @param $value
  */
-function dd($value){
-    echo "<pre>";
-    var_dump($value);
-    echo "</pre>";
-    exit;
-}
+//function dd($value){
+//    echo "<pre>";
+//    var_dump($value);
+//    echo "</pre>";
+//    exit;
+//}
 
 /**
  * @return bool

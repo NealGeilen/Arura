@@ -26,24 +26,6 @@ Array.prototype.insert = function ( index, item ) {
     this.splice( index, 0, item );
 };
 
-function LogOutUser(){
-    $.ajax({
-        url: ARURA_API_DIR + 'user/log-out.php',
-        type: 'post',
-        dataType: 'json',
-        data: ({
-        }),
-        success: function () {
-            addSuccessMessage('U bent Uitgelogd');
-            setTimeout(function () {
-                location.replace("/"+ARURA_DIR + "/login");
-            },500);
-        },
-        error: function () {
-            addErrorMessage('Uitloggen mislukt');
-        }
-    });
-}
 
 function serializeArray(oForm) {
     aList = {};
