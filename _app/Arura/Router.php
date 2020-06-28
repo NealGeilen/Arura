@@ -50,8 +50,12 @@ class Router{
         $Ch->setCachDirectorie("cached/arura");
 
         if (DEBUG_MODE){
-            unlink(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.js");
-            unlink(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.css");
+            if (is_file(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.js")){
+                unlink(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.js");
+            }
+            if (is_file(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.css")){
+                unlink(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.css");
+            }
         }
         foreach (self::getResourceFiles()["JsPage"] as $js){
             if (!is_file($js)){

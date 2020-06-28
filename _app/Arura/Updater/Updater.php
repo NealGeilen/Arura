@@ -1,5 +1,5 @@
 <?php
-namespace Arura;
+namespace Arura\Updater;
 
 use mikehaertl\shellcommand\Command;
 

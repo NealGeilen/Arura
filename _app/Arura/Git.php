@@ -17,6 +17,10 @@ class Git extends GitRepository {
         });
     }
 
+    public function isGit(){
+        return is_dir($this->repository . DIRECTORY_SEPARATOR . '.git');
+    }
+
     /**
      * @param bool $force
      * @return NULL|string[]

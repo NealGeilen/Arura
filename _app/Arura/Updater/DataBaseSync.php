@@ -1,5 +1,7 @@
 <?php
-namespace Arura;
+namespace Arura\Updater;
+
+use Arura\Modal;
 
 /**
  * Class DataBaseSync

@@ -5,12 +5,12 @@ use Arura\Client\Request;
 use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
 use Arura\Database;
-use Arura\DataBaseSync;
 use Arura\Exceptions\NotAcceptable;
 use Arura\Git;
 use Arura\Permissions\Role;
 use Arura\Router;
-use Arura\Updater;
+use Arura\Updater\DataBaseSync;
+use Arura\Updater\Updater;
 use Arura\User\Password;
 use Arura\User\User;
 use Exception;
@@ -182,11 +182,34 @@ class Arura extends AbstractController {
                 return $updater->updateAllPackages();
             });
         });
+
         $smarty = Router::getSmarty();
-//        $repo = new Git(__ARURA__ROOT__);
+        $repo = new Git(__WEB__ROOT__);
+
+
+        if ($repo->isGit()){
+            $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
+
+            if (isset($_POST["gitpull"])){
+                $repo->Reset(true);
+                $repo->pull();
+                $repo = new Git(__WEB__ROOT__);
+            }
+
+            if (isset($_POST["gitreset"])){
+                $repo->Reset(true);
+                $repo = new Git(__WEB__ROOT__);
+            }
+            $smarty->assign("Status", $repo->getStatus());
+        }
+
         $DB = new DataBaseSync(__APP__ . "DataBaseFiles");
 
+        if (isset($_POST["reload"])){
+            $DB->Reload();
+        }
 
+        $smarty->assign("bGit", $repo->isGit());
         $smarty->assign("aDBChanges", $DB->getChanges());
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater.js");
         $this->render("AdminLTE/Pages/Arura/Updater.tpl", [
