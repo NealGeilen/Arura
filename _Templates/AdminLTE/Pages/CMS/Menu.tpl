@@ -64,40 +64,40 @@
     </style>
 
 
-    <div class="row">
-        <div class="col-12 ">
-            <div class="card card-primary card-outline">
-                <div class="card-header">
-                    <h2 class="card-title">Hoofd menu</h2>
-                    <div class="card-tools">
-                        <div class="btn-group btn-group-sm">
-                            <button class="btn btn-primary" onclick="creatNavBarItemModal()">
-                                <i class="fas fa-plus"></i>
-                            </button>
-                            <button class="btn btn-primary" onclick="save()">
-                                <i class="fas fa-save"></i>
-                            </button>
-                        </div>
+    <div class="container">
+        <div class="card card-primary">
+            <div class="card-header">
+                <h2 class="card-title">Hoofd menu</h2>
+                <div class="card-tools">
+                    <div class="btn-group">
+                        <button class="btn btn-primary" onclick="creatNavBarItemModal()">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                        <button class="btn btn-primary" onclick="save()">
+                            <i class="fas fa-save"></i>
+                        </button>
+                        <button class="btn btn-primary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                     </div>
                 </div>
-                <div class="card-body">
-                    <div class="dd" id="nestable-json"></div>
-                </div>
+            </div>
+            <div class="card-body">
+                <div class="dd" id="nestable-json"></div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="card card-secondary card-outline">
-                <div class="card-header">
-                    <h2 class="card-title">Sitemap</h2>
+        <div class="card card-secondary">
+            <div class="card-header">
+                <h2 class="card-title">Sitemap</h2>
+                <div class="card-tools">
+                    <button class="btn btn-secondary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                 </div>
-                <div class="card-body">
-                    <button class="btn btn-primary" onclick="buildSitemap()">
-                        Update sitemap
-                    </button>
-                    <button class="btn btn-secondary" onclick="submitSitemap()">
-                        Sitemap verzenden naar Google
-                    </button>
-                </div>
+            </div>
+            <div class="card-body">
+                <button class="btn btn-primary" onclick="buildSitemap()">
+                    Update sitemap
+                </button>
+                <button class="btn btn-secondary" onclick="submitSitemap()">
+                    Sitemap verzenden naar Google
+                </button>
             </div>
         </div>
     </div>
