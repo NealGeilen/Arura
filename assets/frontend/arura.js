@@ -30,6 +30,7 @@ $(document).ready(function () {
     Arura.Event.RegisterForm($(".form-event-checkout"));
     Arura.Event.OrderTicketAmountForm($(".form-event-order"));
     Arura.Event.RegisterEvent($(".event-signup"));
+    Arura.Cms.ContactForm();
 });
 
 
@@ -215,7 +216,7 @@ Arura = {
                 Arura.System.EndPageLoad();
             });
         },
-        ContactForm: function (oForm) {
+        ContactForm: function (oForm  = $("[form=contact]")) {
             oForm.validate({
                 submitHandler: function (oForm) {
                     Arura.System.StartPageLoad();
