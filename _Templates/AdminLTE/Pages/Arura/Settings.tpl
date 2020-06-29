@@ -3,8 +3,8 @@
     <div class="row">
         {foreach from=$aSettings key=$Key item=aSettingsGroup}
             <div class="col-md-6">
-                <section class="card">
-                    <form class="settings-form" data-toggle="validator" autocomplete="off">
+                <section class="card card-primary card-outline">
+                    <form class="settings-form" autocomplete="off">
                         <div class="card-body table-responsive">
                             <h2 class="text-capitalize">{$Key}</h2>
                             <table class="table Arura-Table">

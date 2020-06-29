@@ -27,8 +27,10 @@
 
     <!-- Main content -->
     <section class="content">
-      {block content}
-      {/block}
+      <div class="container">
+        {block content}
+        {/block}
+      </div>
     </section>
 
     <!-- /.content -->

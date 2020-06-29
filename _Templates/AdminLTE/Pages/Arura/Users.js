@@ -219,7 +219,7 @@ var Users = {
                     { "data": "Session_Id" },
                     { "data": "User_Username" },
                     { "data": "Session_Last_Active" },
-                    { "data": null, "defaultContent": "<div class='btn-group btn-group-sm'><button class='btn btn-danger' onclick='Users.Sessions.Delete($(this))'><i class='fas fa-trash-alt'></i></button></div>"
+                    { "data": null, "defaultContent": "<div class='btn-group'><button class='btn btn-danger' onclick='Users.Sessions.Delete($(this))'><i class='fas fa-trash-alt'></i></button></div>"
                     }
                 ],
                 rowId: "Session_Id",

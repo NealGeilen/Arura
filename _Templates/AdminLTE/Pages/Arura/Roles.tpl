@@ -1,6 +1,6 @@
 {extends "../../index.tpl"}
 {block content}
-    <section class="card">
+    <div class="card card-primary">
         <header class="card-header">
             <div class="card-tools">
                 <button class="btn btn-primary btn-sm" onclick="Roles.Roles.Create()">
@@ -29,9 +29,9 @@
                 </tbody>
             </table>
         </div>
-    </section>
+    </div>
 
-    <section class="card">
+    <div class="card card-secondary">
         <header class="card-header">
             <h2 class="card-title">Rechten</h2>
         </header>
@@ -53,7 +53,7 @@
                 </tbody>
             </table>
         </div>
-    </section>
+    </div>
     <div class="modal modal-role-create" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

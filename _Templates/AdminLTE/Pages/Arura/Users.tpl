@@ -1,9 +1,9 @@
 {extends "../../index.tpl"}
 {block content}
-    <section class="card">
+    <div class="card card-primary">
         <header class="card-header">
             <div class="card-tools">
-                <button class="btn btn-primary btn-sm" onclick="Users.Users.Create()">
+                <button class="btn btn-primary" onclick="Users.Users.Create()">
                     <i class="fas fa-plus"></i>
                 </button>
             </div>
@@ -38,9 +38,9 @@
                 </tbody>
             </table>
         </div>
-    </section>
+    </div>
 
-    <section class="card">
+    <div class="card card-secondary">
         <header class="card-header">
             <h2 class="card-title">Sessies</h2>
         </header>
@@ -64,7 +64,7 @@
                 </tbody>
             </table>
         </div>
-    </section>
+    </div>
     <div class="modal modal-user-create" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -159,7 +159,7 @@
             <div class="table-card">
                 <div class="row">
                     <div class="col-12">
-                        <button class="btn btn-primary btn-sm btn-role-add">
+                        <button class="btn btn-primary btn-role-add">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -176,7 +176,7 @@
                     <span class="title"></span>
                 </div>
                 <div class="col-4">
-                    <button class='btn btn-danger btn-sm btn-role-delete'>
+                    <button class='btn btn-danger btn-role-delete'>
                         <i class='fas fa-trash-alt'></i>
                     </button>
                 </div>
@@ -187,24 +187,23 @@
 
         <div class="template-user-edit-btns">
             <div>
-                <div class="btn-group btn-group-sm btn-user-menu">
+                <div class="btn-group btn-user-menu">
                     <button class='btn btn-primary' onclick="Users.Users.AltUser($(this))">
                         <i class="fas fa-pen"></i>
                     </button>
                     <button class='btn btn-primary' onclick="Users.Users.AltRoles($(this))">
                         <i class="fas fa-user-tag"></i>
                     </button>
+                    <button class='btn btn-danger' onclick="Users.Users.Delete($(this))">
+                        <i class='fas fa-trash-alt'></i>
+                    </button>
                 </div>
 
-                <div class="btn-group btn-group-sm btn-user-menu-close" style="display: none" onclick="Users.Users.CloseMenu($(this))">
+                <div class="btn-group btn-user-menu-close" style="display: none" onclick="Users.Users.CloseMenu($(this))">
                     <button class="btn btn-secondary">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
-
-                <button class='btn btn-danger btn-sm' onclick="Users.Users.Delete($(this))">
-                    <i class='fas fa-trash-alt'></i>
-                </button>
             </div>
         </div>
 

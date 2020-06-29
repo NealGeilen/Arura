@@ -1,33 +1,30 @@
 {extends "../../index.tpl"}
 {block content}
-    <div class="container">
-        <div class="card card-primary">
-            <header class="card-header">
-                <div class="card-tools">
-                    <div class="btn-group">
-                        <button data-toggle="modal" data-target="#createModal" class="btn btn-primary"><i class="fas fa-plus"></i></button>
-                    </div>
-
+    <div class="card card-primary">
+        <header class="card-header">
+            <div class="card-tools">
+                <div class="btn-group">
+                    <button data-toggle="modal" data-target="#createModal" class="btn btn-primary"><i class="fas fa-plus"></i></button>
                 </div>
-                <h2 class="card-title">Pagina's</h2>
-            </header>
-            <div class="card-body table-responsive" style="display: block;">
-                <table class="table pages-overvieuw">
-                    <thead>
-                    <tr>
-                        <th>Titel</th>
-                        <th>Url</th>
-                        <th>Zichtbaarheid</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+
             </div>
+            <h2 class="card-title">Pagina's</h2>
+        </header>
+        <div class="card-body table-responsive" style="display: block;">
+            <table class="table pages-overvieuw">
+                <thead>
+                <tr>
+                    <th>Titel</th>
+                    <th>Url</th>
+                    <th>Zichtbaarheid</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
         </div>
     </div>
-
 
     <div style="display: none">
         <div class="template-pages-btns">
