@@ -6,6 +6,7 @@ use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Flasher;
 use Arura\Form;
 use Arura\Pages\CMS\ContentBlock;
 use Arura\Pages\CMS\Group;
@@ -29,6 +30,7 @@ class CMS extends AbstractController {
         $form = \Arura\Pages\CMS\Page::getForm();
         if ($form->isSuccess()){
             \Arura\Pages\CMS\Page::Create($form->getValues('array'));
+            Flasher::addFlash("Pagina aangemaakt");
         }
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Pages.js");
         $this->render("AdminLTE/Pages/CMS/Pages.tpl", [
@@ -103,6 +105,7 @@ class CMS extends AbstractController {
         if ($form->isSubmitted()){
             $p->set($form->getValues('array'));
             $p->load(true);
+            Flasher::addFlash("Pagina '{$p->getTitle()}' opgeslagen");
         }
         $this->render("AdminLTE/Pages/CMS/Settings.tpl", [
             "title" =>"Pagina instellingen",

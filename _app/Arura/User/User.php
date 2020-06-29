@@ -4,6 +4,7 @@ namespace Arura\User;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
+use Arura\Flasher;
 use Arura\Form;
 use Arura\Permissions\Right;
 use Arura\Permissions\Role;
@@ -363,6 +364,8 @@ class User
 
                 if (!$user->save()){
                     $form->addError("Opslaan mislukt");
+                } else {
+                    Flasher::addFlash("Wachtwoord aangepast");
                 }
 
             } else {
@@ -402,6 +405,8 @@ class User
 
             if (!$user->save()){
                 $form->addError("Opslaan mislukt");
+            } else {
+                Flasher::addFlash("Profiel opgeslagen");
             }
         }
         return $form;

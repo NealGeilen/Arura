@@ -193,3 +193,6 @@ canvas.chartjs-render-monitor{
 section.content>.container{
     padding: unset!important;
 }
+.flashes .alert{
+    margin-bottom: 5px!important;
+}

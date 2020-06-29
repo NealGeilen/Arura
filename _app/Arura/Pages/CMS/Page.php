@@ -180,6 +180,7 @@ class Page extends Pages\Page{
      * @throws Error
      */
     public function set($aPageData = []){
+        $aPageData["Page_Visible"] = (int)$aPageData["Page_Visible"];
         $this->db->updateRecord('tblCmsPages', $aPageData, 'Page_Id');
         return $this -> db -> isQuerySuccessful();
     }

@@ -3,24 +3,22 @@ $(document).ready(function () {
     endPageLoad();
 });
 function addSuccessMessage(sMessage) {
-    var oSettings = {
-        placement: {
-            from: "bottom",
-            align: "right"
-        },
-        type:'success'
-    };
-    $.notify({message:sMessage},oSettings);
+    oAlert = $("<div class='alert alert-success bg-success'>"+sMessage+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>")
+    $(".flashes").append(oAlert);
+    setTimeout(function () {
+        oAlert.slideUp(400, function () {
+            oAlert.remove();
+        });
+    }, 5000)
 }
 function addErrorMessage(sMessage) {
-    var oSettings = {
-        placement: {
-            from: "bottom",
-            align: "right"
-        },
-        type:'danger'
-    };
-    $.notify({message:sMessage},oSettings);
+    oAlert = $("<div class='alert alert-danger bg-danger'>"+sMessage+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>")
+    $(".flashes").append(oAlert);
+    setTimeout(function () {
+        oAlert.slideUp(400, function () {
+            oAlert.remove();
+        });
+    }, 5000)
 }
 Array.prototype.insert = function ( index, item ) {
     this.splice( index, 0, item );
@@ -169,4 +167,12 @@ function endPageLoad() {
 if ($("body").hasClass("layout-fixed")){
     $("body").overlayScrollbars({ });
 }
+
+$(".flashes .alert").each(function (i ,element) {
+    setTimeout(function () {
+        $(element).slideUp(400, function () {
+            $(element).remove();
+        });
+    }, 5000)
+})
 
