@@ -59,10 +59,59 @@ let Analytics = {
         $.ajax(settings);
     },
     Charts: {
+        VisitorsDays : {
+            object : null,
+            table: null,
+            set: function (data) {
+                console.log(data);
+                oCard = $(".VisitorsDays");
+                oCard.find(".overlay").remove();
+                this.object = new Chart(oCard.find("canvas")[0], {
+                    type: 'line',
+                    data: {
+                        datasets: [{
+                            data: data.rows.metrics,
+                            borderColor: "#17a2b8",
+                            fill: false,
+                            label: "Bezoekers aantallen"
+                        }],
+                        labels: data.rows.dimensions
+                    },
+                    options: {
+                        legend: { display: false },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    min: 0
+                                }
+                            }]
+                        }
+                    }
+                });
+                this.table = oCard.find("table").DataTable({
+                    "language": {
+                        "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+                    },
+                    searching: false,
+                    info: false,
+                    sPaginationType: "simple",
+                    pageLength: 5,
+                    bLengthChange: false,
+                    data: Analytics.CombineArrays(data.rows.dimensions, data.rows.metrics)
+                })
+            },
+            destroy: function () {
+                if (this.object !== null){
+                    this.object.destroy();
+                    this.table.destroy();
+                }
+            }
+        },
         Devices : {
             object : null,
             table: null,
             set: function (data) {
+                $(".devices-chart").parents(".card").find(".overlay").remove();
                 this.object = new Chart($(".devices-chart")[0], {
                     type: 'pie',
                     data: {
@@ -96,6 +145,7 @@ let Analytics = {
             object : null,
             table: null,
             set: function (data) {
+                $(".readtime-chart").parents(".card").find(".overlay").remove();
                 this.object = new Chart($(".readtime-chart")[0], {
                     type: 'polarArea',
                     data: {
@@ -135,6 +185,7 @@ let Analytics = {
             object : null,
             table: null,
             set: function (data) {
+                $(".exit-chart").parents(".card").find(".overlay").remove();
                 this.object = new Chart($(".exit-chart")[0], {
                     type: 'bar',
                     data: {
@@ -173,6 +224,7 @@ let Analytics = {
             object : null,
             tbale: null,
             set: function (data) {
+                $(".media-chart").parents(".card").find(".overlay").remove();
                 this.object = new Chart($(".media-chart")[0], {
                     type: 'bar',
                     data: {
@@ -207,36 +259,6 @@ let Analytics = {
                 }
             }
         },
-        // CountryVisitors: {
-        //     object : null,
-        //     set: function (data) {
-        //         let list = {};
-        //         $.each(data.rows.dimensions, function (i, country) {
-        //             list[getCountryISO3(country)] = {amount: data.rows.metrics[i], fillKey: "count"};
-        //         });
-        //         this.object = new Datamap({
-        //             scope: "world",
-        //             element: document.getElementById('container'),
-        //             fills: {
-        //                 count: "#6f42c1",
-        //                 defaultFill: '#17a2b8'
-        //             },
-        //             data: list,
-        //             geographyConfig: {
-        //                 popupTemplate: function(geography, data) {
-        //                     return '<div class="hoverinfo">' + geography.properties.name + '<br/>Bezoekers:<b>' + data.amount+ "</b></div>"
-        //                 },
-        //                 highlightBorderWidth: 0,
-        //                 highlightFillColor: '#007bff',
-        //             },
-        //         });
-        //     },
-        //     destroy: function () {
-        //         if (this.object !== null){
-        //             this.object.destroy();
-        //         }
-        //     }
-        // }
     },
     CombineArrays: function (ar1, ar2) {
         let list = [];

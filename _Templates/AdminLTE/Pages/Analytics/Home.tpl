@@ -1,6 +1,6 @@
 {extends "../../index.tpl"}
 {block content}
-    <div class="card card-primary card-outline">
+    <div class="card card-primary">
         <div class="card-body">
             <form class="form-dates">
                 <div class="row">
@@ -17,25 +17,46 @@
             </form>
         </div>
     </div>
-{*<div class="row">*}
-{*    <div class="col-lg-6">*}
-{*        <div class="card">*}
-{*            <div class="card-header">*}
-{*                <h3 class="card-title">Bezoekers per land</h3>*}
-{*                <div class="card-tools">*}
-{*                    <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>*}
-{*                    </button>*}
-{*                </div>*}
-{*            </div>*}
-{*            <div class="card-body">*}
-{*                <div id="container" style="position: relative; width: 700px; height: 400px; max-width: 100%"></div>*}
-{*            </div>*}
-{*        </div>*}
-{*    </div>*}
-{*</div>*}
     <div class="row">
         <div class="col-md-6 col-sm-12">
-            <div class="card card-secondary card-outline">
+            <div class="card card-secondary VisitorsDays">
+                <div class="card-header d-flex p-0">
+                    <h3 class="card-title p-3">Bezoekers per dag</h3>
+                    <ul class="nav nav-pills ml-auto p-2">
+                        <li class="nav-item"><a class="nav-link active" href="#tab-VisitorsDays-1" data-toggle="tab"><i class="fas fa-chart-pie"></i></a></li>
+                        <li class="nav-item"><a class="nav-link" href="#tab-VisitorsDays-2" data-toggle="tab"><i class="fas fa-table"></i></a></li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-card-widget="collapse"><i class="fas fa-minus"></i></a>
+                        </li>
+                    </ul>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab-VisitorsDays-1">
+                            <canvas></canvas>
+                        </div>
+                        <!-- /.tab-pane -->
+                        <div class="tab-pane" id="tab-VisitorsDays-2">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Datum</th>
+                                    <th>Aantal</th>
+                                </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <!-- /.tab-pane -->
+                    </div>
+                    <!-- /.tab-content -->
+                </div><!-- /.card-body -->
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card card-secondary">
                 <div class="card-header d-flex p-0">
                     <h3 class="card-title p-3">Soorten apparaten</h3>
                     <ul class="nav nav-pills ml-auto p-2">
@@ -66,10 +87,13 @@
                     </div>
                     <!-- /.tab-content -->
                 </div><!-- /.card-body -->
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
             </div>
         </div>
         <div class="col-md-6 col-sm-12">
-            <div class="card card-secondary card-outline">
+            <div class="card card-secondary">
                 <div class="card-header d-flex p-0">
                     <h3 class="card-title p-3">Gemiddeld leestijd per pagina</h3>
                     <ul class="nav nav-pills ml-auto p-2">
@@ -100,10 +124,13 @@
                     </div>
                     <!-- /.tab-content -->
                 </div><!-- /.card-body -->
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
             </div>
         </div>
         <div class="col-md-6 col-sm-12">
-            <div class="card card-secondary card-outline">
+            <div class="card card-secondary">
                 <div class="card-header d-flex p-0">
                     <h3 class="card-title p-3">Exit pagina's</h3>
                     <ul class="nav nav-pills ml-auto p-2">
@@ -133,10 +160,13 @@
                     </div>
                     <!-- /.tab-content -->
                 </div><!-- /.card-body -->
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
             </div>
         </div>
         <div class="col-md-6 col-sm-12">
-            <div class="card card-secondary card-outline">
+            <div class="card card-secondary">
                 <div class="card-header d-flex p-0">
                     <h3 class="card-title p-3">Bezoekers vanuit verschillinde media</h3>
                     <ul class="nav nav-pills ml-auto p-2">
@@ -167,6 +197,9 @@
                     </div>
                     <!-- /.tab-content -->
                 </div><!-- /.card-body -->
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
             </div>
         </div>
     </div>

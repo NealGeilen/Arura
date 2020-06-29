@@ -127,6 +127,20 @@ class Reports{
         return $Report->getReport();
     }
 
+    public static function Visitors($startDate,$endDate){
+        $Report = self::Report("ga:date", "ga:sessions");
+        $Report->setDataRange($startDate, $endDate);
+        $aData = $Report->getReport();
+
+        foreach ($aData["rows"]["dimensions"] as $i => $data){
+            $data = substr_replace($data, "-", 4, 0);
+            $data = substr_replace($data, "-", 7, 0);
+            $aData["rows"]["dimensions"][$i] = (date("d-m-Y",strtotime($data)));
+        }
+
+        return $aData;
+    }
+
 
 
 

@@ -34,10 +34,10 @@ class Analytics extends AbstractController {
             $requestHandler->addType("AgeVisitors", function () use ($startData, $endData){
                 return Reports::UserAge($startData,$endData);
             });
+            $requestHandler->addType("VisitorsDays", function () use ($startData, $endData){
+                return Reports::Visitors($startData,$endData);
+            });
         });
-//        Router::addSourceScriptJs("/dashboard/assets/vendor/d3/d3.min.js");
-//        Router::addSourceScriptJs("/dashboard/assets/vendor/topojson/topojson.min.js");
-//        Router::addSourceScriptJs("/dashboard/assets/vendor/datamaps/datamaps.world.min.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
         $this->render("AdminLTE/Pages/Analytics/Home.tpl", [
             "title" =>"Analytics"
