@@ -70,7 +70,7 @@
 
         <div class="row">
             <div class="col-md-6 col-12">
-                <div class="card card-primary">
+                <div class="card card-primary paymentsTimeLine">
                     <div class="card-header">
                         <h2 class="card-title">Betalingen van de afgelopen 2 weken</h2>
                         <div class="card-tools">
@@ -78,12 +78,15 @@
                         </div>
                     </div>
                     <div class="card-body">
-
+                        <canvas></canvas>
+                    </div>
+                    <div class="overlay">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
                     </div>
                 </div>
             </div>
             <div class="col-md-6 col-12">
-                <div class="card card-secondary">
+                <div class="card card-secondary Issuers">
                     <div class="card-header">
                         <h2 class="card-title">Gekozen banken</h2>
                         <div class="card-tools">
@@ -91,20 +94,10 @@
                         </div>
                     </div>
                     <div class="card-body">
-
+                        <canvas></canvas>
                     </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-12">
-                <div class="card card-secondary">
-                    <div class="card-header">
-                        <h2 class="card-title">Success ratio</h2>
-                        <div class="card-tools">
-                            <button class="btn btn-secondary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-
+                    <div class="overlay">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
                     </div>
                 </div>
             </div>

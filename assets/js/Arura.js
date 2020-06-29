@@ -166,4 +166,5 @@ function startPageLoad() {
 function endPageLoad() {
     $('.loader-container').remove()
 }
+$("body").overlayScrollbars({ });
 

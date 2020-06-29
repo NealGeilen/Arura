@@ -3,6 +3,7 @@
     "assets/vendor/jquery/jquery.min.js",
     "assets/vendor/jquery-ui/jquery-ui.min.js",
     "assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
+    "assets/vendor/jquery-overlayScrollbars/jquery.overlayScrollbars.min.js",
     "assets/vendor/jstree/jstree.js",
     "assets/vendor/jquery-knob/jquery.knob.min.js",
     "assets/vendor/moment/moment.min.js",
@@ -27,6 +28,7 @@
   "css" : [
     "assets/css/adminlte.css",
     "assets/vendor/bootstrap-iconpicker/bootstrap-iconpicker.min.css",
+    "assets/vendor/jquery-overlayScrollbars/OverlayScrollbars.min.css",
     "assets/vendor/dropzone/css/basic.css",
     "assets/vendor/fontawesome-free/css/all.min.css",
     "assets/vendor/summernote/summernote-bs4.css",

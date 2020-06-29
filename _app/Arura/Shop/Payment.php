@@ -5,6 +5,7 @@ use Arura\Chart;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Modal;
+use Exception;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Exceptions\IncompatiblePlatform;
 use Mollie\Api\MollieApiClient;
@@ -15,7 +16,6 @@ use Mollie\Api\Types\PaymentMethod;
 class Payment extends Modal {
 
     const METHOD_IDEAL = PaymentMethod::IDEAL;
-    const METHOD_PAYPAL = PaymentMethod::PAYPAL;
     const PAYMENT_TYPES = [
         "open" =>
             [
@@ -206,71 +206,39 @@ class Payment extends Modal {
     protected $status;
 
     /**
-     * @return string
+     * @return array
      * @throws Error
      */
-    public static function getLineChart(){
-        function getData($sStatus = "paid"){
-            $db = new Database();
-            $aData = $db -> fetchAll("
+    public static function getPaymentsPerMonth(){
+        $db = new Database();
+        $aPayments = $db -> fetchAll("
                 SELECT COUNT(Payment_Id) as y,
-                       date_format(FROM_UNIXTIME(Payment_Timestamp), '%m %Y') as t
+                       date_format(FROM_UNIXTIME(Payment_Timestamp), '%d-%m') as t
                 FROM tblPayments 
-                WHERE Payment_Status = :status 
-                GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%m %Y') ",[
-                "status" => $sStatus
-            ]);
-            return $aData;
-        }
+                WHERE Payment_Status = :status AND Payment_Timestamp > UNIX_TIMESTAMP(NOW()) -1209600
+                GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%d-%m') ",[
+            "status" => "paid"
+        ]);
 
-        $data = [
-            'datasets' => []
+        $aPaymentsAmounts = $db -> fetchAll("
+                SELECT SUM(Payment_Amount) as y,
+                       date_format(FROM_UNIXTIME(Payment_Timestamp), '%d-%m') as t
+                FROM tblPayments 
+                WHERE Payment_Status = :status AND Payment_Timestamp > UNIX_TIMESTAMP(NOW()) -1209600
+                GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%d-%m') ",[
+            "status" => "paid"
+        ]);
+        return [
+            "AmountPayments" => $aPayments,
+            "AmountMony" => $aPaymentsAmounts
         ];
-        foreach (self::PAYMENT_TYPES as $sName => $aData){
-            $data["datasets"][] = [
-                'data' => getData($sName),
-                "label" => $aData["name"],
-                "borderColor" => $aData["bgColor"],
-                "backgroundColor" => "rgba(0,0,0,0)",
-                "fill" => false
-            ];
-        }
-        $options = [
-            "responsive"=> true,
-            "maintainAspectRatio" => false,
-            "scales" => [
-                "xAxes"=> [[
-                    "type"=> 'time',
-                    "time"=> [
-                        "format" => "MM YYYY",
-                        "min" => "01-".date("Y", strtotime(Application::get("website", "Launchdate"))),
-                        "max" => date("m-Y", strtotime("+1 month")),
-                        "unit"=> 'month',
-                        "stepSize" => 1,
-                        "round" => "month",
-                        "displayFormats" => [
-                            "month" => "MMM YYYY"
-                        ]
-                    ]
-                ]],
-                "yAxes" =>  [[
-                    "ticks"=> [
-                        'suggestedMin'=> 0,
-                        'suggestedMax'=> 30,
-                        "stepSize" => 5
-                    ]
-                ]]
-            ]
-        ];
-        $attributes = ['width' => "100%", 'height' => "300px"];
-        return Chart::Build("line",$data,$options,$attributes);
     }
 
     /**
-     * @return string
+     * @return array[]
      * @throws Error
      */
-    public static function getDonutBanksChart(){
+    public static function getIssuersData(){
         $aIssuers = self::ISSUERS;
         $db = new Database();
         $Labels =[];
@@ -286,61 +254,11 @@ class Payment extends Modal {
             $Data[] = $aData["Count"];
             $Colors[] = $aIssuer["color"];
         }
-
-        $data = [
-            "labels"=> $Labels,
-            'datasets' => [[
-                "backgroundColor" => $Colors,
-                "data" => $Data
-            ]]
+        return [
+            "Labels" => $Labels,
+            "Data" => $Data,
+            "Colors" => $Colors,
         ];
-        $options = [
-            "responsive"=> true,
-            "maintainAspectRatio" => false,
-            "title" => [
-                "display" => true,
-                "text" => "Banken"
-            ]
-        ];
-        $attributes = ['width' => "100%", 'height' => "300"];
-        return Chart::Build("pie",$data,$options,$attributes);
-    }
-
-    /**
-     * @return string
-     * @throws Error
-     */
-    public static function getAveragePaymentTimeChart(){
-        $db = new Database();
-        $aTimes = ["00:00", "01:00", "02:00", "03:00","04:00", "05:00", "06:00", "07:00", "08:00", "09:00","10:00", "11:00", "12:00", "13:00","14:00", "15:00", "16:00", "17:00", "18:00", "19:00","20:00", "21:00", "22:00", "23:00"];
-        $aData = array_fill(0, count($aTimes), []);
-
-        foreach ($db->fetchAll("SELECT COUNT(Payment_Id) AS y, date_format(FROM_UNIXTIME(Payment_Timestamp), '%H:00') AS x FROM tblPayments GROUP BY date_format(FROM_UNIXTIME(Payment_Timestamp), '%H')") as $data){
-            $aData[(int)array_search($data["x"], $aTimes)] = $data;
-        }
-        $data = [
-            "labels"=> $aTimes,
-            'datasets' => [[
-                "borderColor"=> "#007bff",
-                'label' => "Betalingen per uur",
-                'data' => $aData
-            ]]
-        ];
-        $options = [
-            "responsive"=> true,
-            "maintainAspectRatio" => false,
-            "scales" => [
-                "yAxes" =>  [[
-                    "ticks"=> [
-                        'suggestedMin'=> 0,
-                        'suggestedMax'=> 30,
-                        "stepSize" => 5
-                    ]
-                ]]
-            ]
-        ];
-        $attributes = ['width' => "100%", 'height' => "300px"];
-        return Chart::Build("line",$data,$options,$attributes);
     }
 
     /**
@@ -362,19 +280,20 @@ class Payment extends Modal {
             }
             return self::$Mollie;
         }
+        throw new Error("Mollie API not set");
     }
 
     /**
      * Payment constructor.
      * @param $sId
-     * @throws \Exception
+     * @throws Exception
      */
     public function __construct($sId)
     {
         parent::__construct();
         if (!is_null($sId)){
             if (count($this->db->fetchAll("SELECT Payment_Id FROM tblPayments WHERE Payment_Id = :Payment_Id", ["Payment_Id"=>$sId])) < 0){
-                throw new \Exception("Payment not found", 404);
+                throw new Exception("Payment not found", 404);
             }
             $this->id = $sId;
         }
