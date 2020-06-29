@@ -63,7 +63,6 @@ let Analytics = {
             object : null,
             table: null,
             set: function (data) {
-                console.log(data);
                 oCard = $(".VisitorsDays");
                 oCard.find(".overlay").remove();
                 this.object = new Chart(oCard.find("canvas")[0], {
