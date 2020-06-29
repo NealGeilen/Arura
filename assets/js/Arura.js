@@ -166,5 +166,7 @@ function startPageLoad() {
 function endPageLoad() {
     $('.loader-container').remove()
 }
-$("body").overlayScrollbars({ });
+if ($("body").hasClass("layout-fixed")){
+    $("body").overlayScrollbars({ });
+}
 
