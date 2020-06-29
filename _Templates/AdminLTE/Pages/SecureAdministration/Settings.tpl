@@ -5,13 +5,13 @@
     </script>
     <div class="row">
         <div class="col-md-12">
-            <div class="card">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h2 class="card-title">Gebruikers - {$aTable.Table_Name}</h2>
                     <div class="card-tools">
-                        <div class="btn-group btn-group-sm">
+                        <div class="btn-group">
                             <a class="btn btn-primary" href="/{$aArura.dir}/administration"><i class="fas fa-long-arrow-alt-left"></i></a>
-                            <a class="btn btn-secondary" href="/{$aArura.dir}/administration/{$aTable.Table_Id}/edit"><i class="fas fa-pen"></i></a>
+                            <a class="btn btn-primary" href="/{$aArura.dir}/administration/{$aTable.Table_Id}/edit"><i class="fas fa-pen"></i></a>
                         </div>
                     </div>
                 </div>
@@ -21,7 +21,7 @@
                         <tr>
                             <th>Naam gebruiker</th>
                             <th>Recht</th>
-                            <th><button class="btn btn-primary btn-sm" onclick="addUser()"><i class="fas fa-plus"></i></button></th>
+                            <th><button class="btn btn-primary" onclick="addUser()"><i class="fas fa-plus"></i></button></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -60,7 +60,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
+            <div class="card card-secondary">
                 <div class="card-header">
                     <h2 class="card-title">Instelling - {$aTable.Table_Name}</h2>
                 </div>
@@ -95,7 +95,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
+            <div class="card card-secondary">
                 <div class="card-header">
                     <h2 class="card-title">Verwijder - {$aTable.Table_Name}</h2>
                 </div>

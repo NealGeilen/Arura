@@ -1,6 +1,8 @@
 <?php
 namespace Arura\SecureAdmin;
+use Arura\Exceptions\Error;
 use Arura\User\User;
+use Exception;
 
 class Crud extends Database {
 
@@ -14,7 +16,7 @@ class Crud extends Database {
      * @param $aData
      * @param $sKey
      * @param SecureAdmin $oAdmin
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function __construct($aData, $sKey, SecureAdmin $oAdmin){
         $this->aDataFile = $aData;
@@ -47,7 +49,7 @@ class Crud extends Database {
                 case 'save':
                     if ($this->isActionAllowed(SecureAdmin::CREATE)){
                         foreach ($_POST as $sName => $sValue){
-                            if (str_contains("auto_increment",$this->aColumnInfo[$sName]['Extra'])){
+                            if (str_contains($this->aColumnInfo[$sName]['Extra'], "auto_increment")){
                                 unset($_POST[$sName]);
                             }
                         }
@@ -79,14 +81,14 @@ class Crud extends Database {
                     }
                     break;
             }
-        } catch (\Exception $e){
+        } catch (Exception $e){
             header('Location:' . $_SERVER["REDIRECT_URL"] . "?t=" . $this->oAdmin->getId());
         }
     }
 
     /**
      * @return string
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     public function getHTMLTable()
     {
@@ -98,7 +100,7 @@ class Crud extends Database {
     }
 
     /**
-     * @throws \Arura\Exceptions\Error
+     * @throws Error
      */
     private function buildTable(){
         $aData = $this->SelectAll($this->oAdmin->getDbName(), $this->aDataFile["primarykey"]);
@@ -164,7 +166,7 @@ class Crud extends Database {
                 $value = $aData[$tag];
             }
             $sInputGroup = "<div class='form-group col-xl-3 col-md-3 col-sm-6 col-12'>";
-            if (!str_contains("auto_increment",$this->aColumnInfo[$tag]["Extra"])){
+            if (!str_contains($this->aColumnInfo[$tag]["Extra"], "auto_increment")){
                 $sInputGroup .= "<label>".$column['name']."</label>";
                 switch ($column["type"]){
                     case "dropdown":
@@ -180,7 +182,6 @@ class Crud extends Database {
                         $sInputGroup.= "<input type='".$column["type"]."' name='".$tag."' value='".$value."' class='form-control' ".(($sAction === "update" && $tag === $this->aDataFile["primarykey"]) ? "readonly" : null)."/>";
                         break;
                 }
-                ;
 
             } else {
                 $sInputGroup = "<input type='hidden' name='".$tag."' value='".$value."'/>";
@@ -200,6 +201,7 @@ class Crud extends Database {
      */
     public function __toString()
     {
+//        return "";
         return $this->getHTMLTable();
     }
 }

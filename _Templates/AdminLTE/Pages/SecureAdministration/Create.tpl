@@ -1,6 +1,6 @@
 {extends "../../index.tpl"}
 {block content}
-    <div class="card">
+    <div class="card card-primary">
         <div class="card-header">
             <h2 class="card-title">Administartie aanmaken</h2>
             <div class="card-tools">
