@@ -19,23 +19,30 @@ class Flasher{
         $_SESSION[self::$SESSION][$system][] = ["type" => $type, "message" => $message];
     }
 
+    /**
+     * @param string $system
+     * @return string|null
+     */
     public static function getFlashes($system = self::Backend){
-        $sHtml = "";
-        foreach ($_SESSION[self::$SESSION][$system] as $index => $flash){
-            switch ($flash["type"]){
-                case self::Info:
-                    $sHtml .=  "<div class='alert alert-info bg-info'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
-                    break;
-                case self::Error:
-                    $sHtml .= "<div class='alert alert-danger bg-danger'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
-                    break;
-                case self::Success:
-                default:
-                    $sHtml .="<div class='alert alert-success bg-success'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
-                    break;
+        if (isset($_SESSION[self::$SESSION][$system])){
+            $sHtml = "";
+            foreach ($_SESSION[self::$SESSION][$system] as $index => $flash){
+                switch ($flash["type"]){
+                    case self::Info:
+                        $sHtml .=  "<div class='alert alert-info bg-info'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
+                        break;
+                    case self::Error:
+                        $sHtml .= "<div class='alert alert-danger bg-danger'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
+                        break;
+                    case self::Success:
+                    default:
+                        $sHtml .="<div class='alert alert-success bg-success'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
+                        break;
+                }
+                unset($_SESSION[self::$SESSION][$system][$index]);
             }
-            unset($_SESSION[self::$SESSION][$system][$index]);
+            return $sHtml;
         }
-        return $sHtml;
+        return null;
     }
 }
