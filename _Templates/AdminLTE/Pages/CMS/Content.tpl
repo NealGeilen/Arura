@@ -13,19 +13,21 @@
 
     <div class="CMS-overvieuw">
         <div class="card card-primary card-outline">
-            <header class="card-header page-toolbar">
-                <div class="btn-group btn-group-sm" style="float: right">
-                    <a class="btn btn-secondary" href="/{$aArura.dir}/content/paginas">
-                        <i class="fas fa-arrow-left"></i>
-                    </a>
-                    <a class="btn btn-secondary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen" target="_blank">
-                        <i class="fas fa-cog"></i>
-                    </a>
-                    <button class="btn btn-primary" onclick="Builder.Structure.save(true)">
-                        <i class="fas fa-save"></i>
-                    </button>
+            <div class="card-header">
+                <div class="card-tools">
+                    <div class="btn-group">
+                        <a class="btn btn-secondary" href="/{$aArura.dir}/content/paginas">
+                            <i class="fas fa-arrow-left"></i>
+                        </a>
+                        <a class="btn btn-secondary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen" target="_blank">
+                            <i class="fas fa-cog"></i>
+                        </a>
+                        <button class="btn btn-primary" onclick="Builder.Structure.save(true)">
+                            <i class="fas fa-save"></i>
+                        </button>
+                    </div>
                 </div>
-            </header>
+            </div>
             <div class="card-body">
                 <div class="CMS-Page-Editor">
 

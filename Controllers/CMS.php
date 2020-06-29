@@ -84,7 +84,7 @@ class CMS extends AbstractController {
                 return ["Content_Id" => ContentBlock::Create()->getId()];
             });
             $requestHandler->addType("Create-Group", function ($aData) use ($p){
-                return Group::Create($p->getId());
+                return Group::Create($p->getId())->get();
             });
         });
         Router::getSmarty() -> assign('aCmsPage', $p->__toArray());
