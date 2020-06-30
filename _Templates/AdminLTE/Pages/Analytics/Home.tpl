@@ -32,7 +32,7 @@
                 </div><!-- /.card-header -->
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab-VisitorsDays-1">
+                        <div class="tab-pane active position-relative" id="tab-VisitorsDays-1">
                             <canvas></canvas>
                         </div>
                         <!-- /.tab-pane -->
@@ -69,7 +69,7 @@
                 </div><!-- /.card-header -->
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab-devices-1">
+                        <div class="tab-pane active position-relative" id="tab-devices-1">
                             <canvas class="devices-chart"></canvas>
                         </div>
                         <!-- /.tab-pane -->
@@ -106,7 +106,7 @@
                 </div><!-- /.card-header -->
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab-readtime-1">
+                        <div class="tab-pane active position-relative" id="tab-readtime-1">
                             <canvas class="readtime-chart"></canvas>
                         </div>
                         <!-- /.tab-pane -->
@@ -143,7 +143,7 @@
                 </div><!-- /.card-header -->
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab-exit-1">
+                        <div class="tab-pane active position-relative" id="tab-exit-1">
                             <canvas class="exit-chart"></canvas>
                         </div>
                         <!-- /.tab-pane -->
@@ -179,7 +179,7 @@
                 </div><!-- /.card-header -->
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active" id="tab-media-1">
+                        <div class="tab-pane active position-relative" id="tab-media-1">
                             <canvas class="media-chart"></canvas>
                         </div>
                         <!-- /.tab-pane -->
