@@ -1,6 +1,8 @@
 <?php
 namespace Arura\Updater;
 
+use Arura\Exceptions\Error;
+use Arura\Settings\Application;
 use mikehaertl\shellcommand\Command;
 
 class Updater{
@@ -27,7 +29,8 @@ class Updater{
     }
 
     /**
-     * @return int|string|null
+     * @return array|int|mixed|null
+     * @throws Error
      */
     public function getPackagesNeededUpdate(){
         $command = new Command(self::COMPOSER." show -o --format=json --direct");
@@ -35,7 +38,10 @@ class Updater{
         if ($command->execute()) {
             return json_array_decode($command->getOutput());
         } else {
-            return $exitCode = $command->getExitCode();
+            if ((bool)Application::get("arura", "Debug")){
+                return $command->getError();
+            }
+            return  $command->getExitCode();
         }
     }
 

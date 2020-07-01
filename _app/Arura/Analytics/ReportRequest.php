@@ -69,6 +69,7 @@ class ReportRequest extends Analytics {
                 $aRecords["rows"]["metrics"][] = $aMetrics[0];
                 $aRecords["rows"]["dimensions"][]  = $row->dimensions[0];
             }
+
             return $aRecords;
         }
         catch (Exception $ex)

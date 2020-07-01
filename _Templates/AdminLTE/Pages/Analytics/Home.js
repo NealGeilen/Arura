@@ -81,7 +81,8 @@ let Analytics = {
                         scales: {
                             yAxes: [{
                                 ticks: {
-                                    min: 0
+                                    min: 0,
+                                    stepSize: 4
                                 }
                             }]
                         }
@@ -197,6 +198,14 @@ let Analytics = {
                     options: {
                         legend: {
                             display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    min: 0,
+                                    stepSize: 5
+                                }
+                            }]
                         }
                     }
                 });
@@ -236,6 +245,14 @@ let Analytics = {
                     options: {
                         legend: {
                             display: false
+                        },
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    min: 0,
+                                    stepSize: 5
+                                }
+                            }]
                         }
                     }
                 });
