@@ -55,7 +55,7 @@ class DataBaseSync extends Modal {
                     if (!empty($aColumn)){
                         $b["Field"] = $sColumn;
                         $b = array_merge($b, $this->aTables[$sTable]["columns"][$sColumn]);
-                        if ($aColumn !== $b){
+                        if (!($aColumn == $b)){
                             //Column needs changing;
                             $Changes[] = "Kolom: '{$sColumn}' van tabel: '{$sTable}' updaten";
                         }
