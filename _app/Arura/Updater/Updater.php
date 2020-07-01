@@ -35,6 +35,7 @@ class Updater{
     public function getPackagesNeededUpdate(){
         $command = new Command(self::COMPOSER." show -o --format=json --direct");
         $command->procCwd = self::$MAIN_DIR;
+        $command->procEnv = getenv();
         if ($command->execute()) {
             return json_array_decode($command->getOutput());
         } else {
@@ -48,6 +49,7 @@ class Updater{
     public function updatePackage($name = ""){
         $command = new Command(self::COMPOSER." update {$name}");
         $command->procCwd = self::$MAIN_DIR;
+        $command->procEnv = getenv();
         if ($command->execute()) {
             return (string)$command->getOutput();
         } else {
@@ -58,6 +60,7 @@ class Updater{
     public function updateAllPackages(){
         $command = new Command(self::COMPOSER." update");
         $command->procCwd = self::$MAIN_DIR;
+        $command->procEnv = getenv();
         if ($command->execute()) {
             return (string)$command->getOutput();
         } else {
