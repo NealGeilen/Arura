@@ -39,7 +39,7 @@ class Updater{
             return json_array_decode($command->getOutput());
         } else {
             if ((bool)Application::get("arura", "Debug")){
-                return $command->getError();
+                return $command->getError(false);
             }
             return  $command->getExitCode();
         }
