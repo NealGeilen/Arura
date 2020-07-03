@@ -258,7 +258,7 @@ Arura = {
                     current: 'nl',
                     locale: {
                         nl: {
-                            barMainText: 'Deze website gebruikt cookies om er voor te zorgen dat je de beste ervaring hebt.',
+                            barMainText: 'Deze website maakt gebruik van cookies',
                             barLinkSetting: 'Cookie Instellingen',
                             barBtnAcceptAll: 'Accepteer alle cookies',
                             modalMainTitle: 'Cookies',
