@@ -10,7 +10,7 @@
     </style>
     <div class="row">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">
                         Scanner
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
+            <div class="card card-secondary">
                 <div class="card-header">
                     <h3 class="card-title">
                         Gescande tickets

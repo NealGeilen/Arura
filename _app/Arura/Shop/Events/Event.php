@@ -329,8 +329,7 @@ class Event Extends Page {
         $Open = !$this->hasEventRegistrations();
         $Crud->setCanDelete($Open);
         $Crud->setCanEdit($Open);
-        $Crud->setCanInsert($Open);
-        $Crud->addParam("e", $this->getId());
+        $Crud->setCanInsert($Open);                         
         $Crud->addDefaultValue("Ticket_Event_Id", $this->getId());
         $Crud->addField(new Field("text", "Ticket_Name", "Naam"));
         $Crud->addField(new Field("text", "Ticket_Description", "Omschrijving"));
@@ -338,6 +337,7 @@ class Event Extends Page {
         $Currancy = new Field("number", "Ticket_Price", "Prijs");
         $Currancy->addAttribute("step", "0.01");
         $Crud->addField($Currancy);
+        $Crud->setPageUrl($_SERVER["REDIRECT_URL"]);
         return $Crud;
 
     }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Controllers\Errors;
+use Arura\Exceptions\NotFound;
 use Arura\Permissions\Restrict;
 use Arura\Router;
 use Arura\Settings\Application;
@@ -340,12 +342,15 @@ $aNavBarPages =
 
 Router::getSmarty()->assign("aNavPages", $aNavBarPages);
 $router->loadRoutes($aNavBarPages);
+
+$errors = new Errors();
 try {
+    $router->getRouter()->set404(function () use ($errors){
+        $errors->error(new NotFound("Page not found"));
+    });
     $router->getRouter()->run();
 } catch (Exception $e){
-    if ((int)Application::get("arura", "Debug")){
-        dd($e);
-    }
+    $errors->error($e);
 }
 
 

@@ -3,13 +3,10 @@ var Scanner = {
     scanner: null,
     SelectCameras: function(){
         Instascan.Camera.getCameras().then(function (cameras) {
-            // startPageLoad();
-            console.log(cameras);
             if (cameras.length > 0) {
                 oMessage = $("<div><p>Selecteer een camera</p><select class='form-control'></select></div>");
 
                 $.each(cameras, function (i, camera) {
-                    console.log(i,camera);
                     oMessage.find("select").append("<option value='"+i+"'>"+camera.name+"</option>");
                 });
                 Modals.Custom({
@@ -26,7 +23,6 @@ var Scanner = {
                 addErrorMessage("Geen camera gevonden.");
             }
         }).catch(function (e) {
-            console.error(e);
         });
     },
     StartCamera : function () {
@@ -76,7 +72,6 @@ var Scanner = {
         });
     },
     AddTicketToTable: function (aData) {
-        console.log(aData);
         $(".ticket-table").find("tbody").append("<tr><td>"+aData.Ticket.OrderedTicket_Hash+"</td><td>"+aData.Ticket.Ticket_Description+"</td><td>"+aData.Event.Event_Name+"</td></tr>")
     }
 };

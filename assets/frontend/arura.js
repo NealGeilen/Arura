@@ -218,8 +218,10 @@ Arura = {
         },
         ContactForm: function (oForm  = $("[form=contact]")) {
             oForm.validate({
-                submitHandler: function (oForm) {
+                submitHandler: function (oForm, event) {
+                    event.preventDefault();
                     Arura.System.StartPageLoad();
+                    oForm = $(oForm);
                     oForm.find(':submit').prop('disabled', true);
                     Arura.xhr({
                         url: Arura.API_DIR + 'contact.php',
@@ -233,8 +235,7 @@ Arura = {
                                     oForm.find('.alert-success').slideUp('slow');
                                 }, 10000);
                             });
-                        }
-                        ,
+                        },
                         error : function () {
                             Arura.System.EndPageLoad();
                             oForm.find('.alert-danger').slideDown('slow', function () {
