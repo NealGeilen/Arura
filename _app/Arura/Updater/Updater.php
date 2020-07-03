@@ -51,6 +51,7 @@ class Updater{
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
         if ($command->execute()) {
+            array_map( 'unlink', array_filter((array) glob(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached" . DIRECTORY_SEPARATOR . "*") ) );
             return (string)$command->getOutput();
         } else {
             return $exitCode = $command->getExitCode();
@@ -62,6 +63,7 @@ class Updater{
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
         if ($command->execute()) {
+            array_map( 'unlink', array_filter((array) glob(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached" . DIRECTORY_SEPARATOR . "*") ) );
             return (string)$command->getOutput();
         } else {
             return $exitCode = $command->getExitCode();
