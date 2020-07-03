@@ -2,7 +2,7 @@
 {block content}
     <div class="row">
         <div class="col-md-6">
-            <div class="card card-primary card-outline">
+            <div class="card card-primary">
                 <header class="card-header">
                     <h2 class="card-title">Gegevens</h2>
                 </header>
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card card-secondary card-outline">
+            <div class="card card-secondary">
                 <header class="card-header">
                     <h2 class="card-title">Wachtwoord</h2>
                 </header>

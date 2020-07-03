@@ -116,9 +116,14 @@ class Page extends Modal implements PageEnum{
     protected function loadResourceFiles(){
         if (DEBUG_MODE){
             $aFiles = json_decode(file_get_contents(self::TemplatePath.'config.json'), true);
+            if (DEV_MODE){
+                $path = DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR;
+            } else {
+                $path = DIRECTORY_SEPARATOR . "vendor" . DIRECTORY_SEPARATOR . "arura" .DIRECTORY_SEPARATOR . "dashboard" . DIRECTORY_SEPARATOR;
+            }
             foreach (self::DEFAULT_RESOURCE_FILES as $cath => $files){
                 foreach ($files as $file){
-                    $aFiles[$cath][] = DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "frontend" .DIRECTORY_SEPARATOR. $file;
+                    $aFiles[$cath][] =  $path . "assets" . DIRECTORY_SEPARATOR . "frontend" .DIRECTORY_SEPARATOR. $file;
                 }
             }
             return $aFiles;

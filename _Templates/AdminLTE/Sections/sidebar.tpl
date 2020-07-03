@@ -2,7 +2,7 @@
     <!-- Brand Logo -->
     <a href="/dashboard" class="brand-link">
         <img src="{$aWebsite.logo}" class="brand-image">
-        <span class="brand-text font-weight-light">{$aWebsite.name}</span>
+        <div class="brand-text font-weight-light">{$aWebsite.name}</div>
     </a>
 
     <!-- Sidebar -->

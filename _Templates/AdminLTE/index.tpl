@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 {include "./Sections/body_head.tpl"}
-<body class="hold-transition sidebar-mini-md layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
+<body class="hold-transition layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
 <div class="wrapper">
 
   <!-- Navbar -->

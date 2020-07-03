@@ -1,6 +1,6 @@
 {extends "../../../index.tpl"}
 {block content}
-    <div class="card">
+    <div class="card card-primary">
         <div class="card-header">
             <h2 class="card-title">Bestaande evenementen</h2>
         </div>

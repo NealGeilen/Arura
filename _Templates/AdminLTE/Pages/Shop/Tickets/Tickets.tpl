@@ -5,7 +5,7 @@
     </script>
 
 
-    <div class="card">
+    <div class="card card-primary">
         <div class="card-header">
             <h3 class="card-title">Aanmeldingen</h3>
         </div>
