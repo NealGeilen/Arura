@@ -93,6 +93,20 @@ class Reports{
      * @throws NotFound
      * @throws Exception
      */
+    public static function PageViews($startDate,$endDate){
+        $Report = self::Report("ga:pagePath", "ga:pageviews");
+        $Report->setDataRange($startDate, $endDate);
+        return $Report->getReport();
+    }
+
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     * @throws Google_Exception
+     * @throws NotFound
+     * @throws Exception
+     */
     public static function ReadTimePage($startDate,$endDate){
         $Report = self::Report("ga:pageTitle", "ga:avgTimeOnPage");
         $Report->setDataRange($startDate, $endDate);

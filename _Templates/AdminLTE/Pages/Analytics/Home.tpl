@@ -132,7 +132,7 @@
         <div class="col-md-6 col-sm-12">
             <div class="card card-secondary">
                 <div class="card-header d-flex p-0">
-                    <h3 class="card-title p-3">Exit pagina's</h3>
+                    <h3 class="card-title p-3">Pagina bezoekers</h3>
                     <ul class="nav nav-pills ml-auto p-2">
                         <li class="nav-item"><a class="nav-link active" href="#tab-exit-1" data-toggle="tab"><i class="fas fa-chart-pie"></i></a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab-exit-2" data-toggle="tab"><i class="fas fa-table"></i></a></li>
@@ -168,7 +168,7 @@
         <div class="col-md-6 col-sm-12">
             <div class="card card-secondary">
                 <div class="card-header d-flex p-0">
-                    <h3 class="card-title p-3">Bezoekers vanuit verschillinde media</h3>
+                    <h3 class="card-title p-3">Bezoekers vanuit verschillende media</h3>
                     <ul class="nav nav-pills ml-auto p-2">
                         <li class="nav-item"><a class="nav-link active" href="#tab-media-1" data-toggle="tab"><i class="fas fa-chart-pie"></i></a></li>
                         <li class="nav-item"><a class="nav-link" href="#tab-media-2" data-toggle="tab"><i class="fas fa-table"></i></a></li>

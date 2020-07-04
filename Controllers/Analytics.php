@@ -20,7 +20,7 @@ class Analytics extends AbstractController {
                 return Reports::ReadTimePage($startData,$endData);
             });
             $requestHandler->addType("ExitPages", function () use ($startData, $endData){
-                return Reports::ExitPages($startData,$endData);
+                return Reports::PageViews($startData,$endData);
             });
             $requestHandler->addType("MediaVisitors", function () use ($startData, $endData){
                 return Reports::SocialMediaVisitors($startData,$endData);
@@ -38,6 +38,9 @@ class Analytics extends AbstractController {
                 return Reports::Visitors($startData,$endData);
             });
         });
+        Router::addSourceScriptJs("assets/vendor/chartjs-chart-geo-2.1.0/Chart.Geo.min.js");
+//        Router::addSourceScriptJs("assets/vendor/tui.chart-3.11.2/dist/tui-chart-polyfill.min.js");
+//        Router::addSourceScriptJs("assets/vendor/tui.chart-3.11.2/dist/maps/world.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
         $this->render("AdminLTE/Pages/Analytics/Home.tpl", [
             "title" =>"Analytics"

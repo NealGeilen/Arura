@@ -61,7 +61,11 @@ class Router{
             if (!is_file($js)){
                 $js = __ARURA__ROOT__ . $js;
             }
-            $Ch->add(Cacher::Js,$js);
+            if (is_file($js)){
+                $Ch->add(Cacher::Js,$js);
+            } else {
+                throw new NotFound("'{$js}' not found");
+            }
         }
         foreach (self::getResourceFiles()["CssPage"] as $css){
             if (!is_file($css)){
