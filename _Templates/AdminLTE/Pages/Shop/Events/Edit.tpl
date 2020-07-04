@@ -11,7 +11,8 @@
             </div>
         </div>
         <div class="card-body">
-            <form class="form-row form-sender" action="/{$aArura.dir}/api/shop/event.php?type=save-event" method="post">
+            <form class="form-row form-sender" method="post">
+                <input type="hidden" name="type" value="save-event">
                 <input type="hidden" name="Event_Id" value="{$aEvent.Event_Id}" required>
                 <div class="col-12">
                     <h6>Basis</h6>
@@ -99,7 +100,7 @@
                         <button class="btn btn-secondary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
                     </div>
                 </div>
-                <div class="card-body table-responsive">
+                <div class="card-body table-responsive" id="tickets">
                     {$sTicketsCrud}
                 </div>
             </div>

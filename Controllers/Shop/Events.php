@@ -58,7 +58,7 @@ class Events extends AbstractController {
             $_POST["Event_IsActive"] = 0;
             $_POST["Event_IsVisible"] = 0;
             $e = Event::Create($_POST);
-            header("Location: /dashboard/winkel/evenementen/beheer" . $e->getId() . "/aanpassen");
+            header("Location: /dashboard/winkel/evenementen/beheer/" . $e->getId() . "/aanpassen");
         }
         $db = new Database();
         Router::getSmarty()->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));

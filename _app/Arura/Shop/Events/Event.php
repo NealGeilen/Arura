@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Shop\Events;
 
+use Arura\Crud\Crud;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Pages\Page;
@@ -8,7 +9,6 @@ use Arura\Shop\Payment;
 use Arura\Database;
 use Arura\Settings\Application;
 use Arura\User\User;
-use Crud\Crud;
 use Crud\Fields\Field;
 use DateTime;
 use Exception;
@@ -329,7 +329,8 @@ class Event Extends Page {
         $Open = !$this->hasEventRegistrations();
         $Crud->setCanDelete($Open);
         $Crud->setCanEdit($Open);
-        $Crud->setCanInsert($Open);                         
+        $Crud->setCanInsert($Open);
+        $Crud->setCssId("tickets");
         $Crud->addDefaultValue("Ticket_Event_Id", $this->getId());
         $Crud->addField(new Field("text", "Ticket_Name", "Naam"));
         $Crud->addField(new Field("text", "Ticket_Description", "Omschrijving"));

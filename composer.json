@@ -28,7 +28,6 @@
     "mpdf/mpdf": "^8.0",
     "chillerlan/php-qrcode": "^3",
     "nette/forms": "^3",
-    "nealg/crud": "^1",
     "nealg/cacher" :  "^1.0",
     "bramus/router": "^1.4",
     "mikehaertl/php-shellcommand": "^1.6",
