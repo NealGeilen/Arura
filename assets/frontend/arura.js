@@ -54,9 +54,11 @@ Arura = {
     Event: {
         RegisterEvent: function (oForm) {
             oForm.validate({
-                submitHandler: function () {
+                submitHandler: function (oForm, event) {
+                    event.preventDefault();
+                    oForm = $(oForm);
                     Arura.xhr({
-                        url: Arura.API_DIR + "shopper.php?type=register-event",
+                        url: window.location.href,
                         data: serializeArray(oForm),
                         success:function () {
                             oForm[0].reset();

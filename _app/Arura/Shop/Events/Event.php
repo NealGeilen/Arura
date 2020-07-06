@@ -1,8 +1,11 @@
 <?php
 namespace Arura\Shop\Events;
 
+use Arura\Client\Request;
+use Arura\Client\RequestHandler;
 use Arura\Crud\Crud;
 use Arura\Exceptions\Error;
+use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\NotFound;
 use Arura\Pages\Page;
 use Arura\Shop\Payment;
@@ -244,6 +247,17 @@ class Event Extends Page {
                             }
                             break;
                         default:
+                            Request::handleXmlHttpRequest(function (RequestHandler $requestHandler){
+                                $requestHandler->addType("register-event", function ($aData){
+                                    $oEvent = new Event((int)$aData["id"]);
+                                    if (!$oEvent->hasEventTickets()){
+                                        $R = Registration::NewRegistration($oEvent, $aData["firstname"], $aData["lastname"], $aData["email"], $aData["tel"], $aData["amount"]);
+                                        $R->sendEventDetails();
+                                    } else {
+                                        throw new Forbidden();
+                                    }
+                                });
+                            });
                             $db = new Database();
                             $aTickets = $db->fetchAll("SELECT Ticket_Id,Ticket_Capacity,Ticket_Description, Ticket_Name,Ticket_Price FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]);
                             $aList = [];

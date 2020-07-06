@@ -14,7 +14,8 @@ use Arura\Shop\Events\Ticket;
 class Events extends AbstractController {
 
     public function Management(){
-        Router::getSmarty()->assign("aEvents", Event::getAllEvents());
+        $db = new Database();
+        Router::getSmarty()->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));
         $this->render("AdminLTE/Pages/Shop/Events/Management.tpl", [
             "title" =>"Evenementen beheer"
         ]);
