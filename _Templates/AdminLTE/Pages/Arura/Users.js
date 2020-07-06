@@ -202,7 +202,7 @@ var Users = {
                     aUser = response.data.User;
                     aRoles = response.data.Roles;
                     Table.row.add(aUser).draw();
-                    oModal.Modal("hide");
+                    $('.modal-user-create').Modal("hide");
                     addSuccessMessage('Gebruiker aangemaakt');
                 }
             });

@@ -91,7 +91,7 @@ var Roles = {
                         success: function (response) {
                             t = $('<select>').addClass('form-control');
 
-                            $.each(response, function (i, Right) {
+                            $.each(response.data, function (i, Right) {
                                 t.append($('<option>').val(Right.Right_Id).text(Right.Right_Name));
                             });
 
