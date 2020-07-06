@@ -119,8 +119,9 @@
                             Een evenement kan niet verwijdert worden wanneer er inschrijvingen zijn.
                         </div>
                     {else}
-                        <form id="delete-event" action="/{$aArura.dir}/api/shop/event.php?type=delete-event" method="post">
+                        <form id="delete-event" method="post">
                             <input type="hidden" name="Event_Id" value="{$aEvent.Event_Id}" required>
+                            <input type="hidden" name="type" value="delete-event" required>
                             <button type="submit" class="btn btn-danger">
                                 <i class="fas fa-trash"></i>
                             </button>
