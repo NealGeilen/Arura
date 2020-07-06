@@ -3,7 +3,7 @@ $("#delete-event").FormAjax({
        addSuccessMessage("Verwijderd");
        startPageLoad();
        setTimeout(function () {
-           Location.replace("/dashboard/winkel/evenementen/beheer")
+           window.location.replace("/dashboard/winkel/evenementen/beheer");
        }, 500)
    },
     error: function () {
