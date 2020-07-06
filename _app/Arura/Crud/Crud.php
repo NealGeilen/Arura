@@ -1,7 +1,7 @@
 <?php
 namespace Arura\Crud;
+use Arura\Crud\Fields\Field;
 use Arura\Database;
-use Crud\Fields\Field;
 use Exception;
 use PDO;
 
