@@ -207,3 +207,23 @@ section.content>.container{
     display: none!important;
     z-index: 0!important;
 }
+
+[data-notify=container]{
+    position: fixed!important;
+    top: 30px!important;
+    left: 40%!important;
+    right: 40%!important;
+}
+[data-notify=container] .alert{
+    margin: 0 auto!important;
+    position: relative;
+}
+
+[data-notify=progressbar]{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background-color: unset;
+}

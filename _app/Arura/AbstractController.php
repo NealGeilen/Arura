@@ -43,7 +43,7 @@ abstract class AbstractController{
                 $sVersion = json_array_decode(file_get_contents(__VENDOR__ . "../" . "composer.json"))["require"]["arura/dashboard"];
             }
 
-            Router::getSmarty()->assign("Flashes", Flasher::getFlashes());
+            Router::getSmarty()->assign("Flashes", json_encode(Flasher::getFlashes()));
             Router::getSmarty()->assign("aUser", (User::isLogged()) ? User::activeUser()->__toArray() : null);
             Router::getSmarty()->assign("aArura" ,["dir" => __ARURA__DIR_NAME__, "api" => "api", "version" => $sVersion]);
             Router::getSmarty()->assign("bMobileUser", isUserOnMobile());

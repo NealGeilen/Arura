@@ -3,22 +3,59 @@ $(document).ready(function () {
     endPageLoad();
 });
 function addSuccessMessage(sMessage) {
-    oAlert = $("<div class='alert alert-success bg-success'>"+sMessage+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>")
-    $(".flashes").append(oAlert);
-    setTimeout(function () {
-        oAlert.slideUp(400, function () {
-            oAlert.remove();
-        });
-    }, 5000)
+    var oSettings = {
+        type:'success',
+        icon_type: 'class',
+        z_index: 1050,
+        newest_on_top: true,
+        showProgressbar: true,
+        template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
+            '<span data-notify="icon" class="text-white"></span> ' +
+            '<span data-notify="title" class="text-bold">{1}: </span>' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '</div>'
+    };
+    $.notify({title: "Success",message:sMessage, icon: '<i class="fas fa-check"></i>'},oSettings);
 }
+function addInfoMessage(sMessage) {
+    var oSettings = {
+        type:'info',
+        icon_type: 'class',
+        z_index: 1050,
+        newest_on_top: true,
+        showProgressbar: true,
+        template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
+            '<span data-notify="icon" class="text-white"></span> ' +
+            '<span data-notify="title" class="text-bold">{1}: </span>' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '</div>'
+    };
+    $.notify({title: "Opgelet",message:sMessage, icon: '<i class="fas fa-info"></i>'},oSettings);
+}
+
 function addErrorMessage(sMessage) {
-    oAlert = $("<div class='alert alert-danger bg-danger'>"+sMessage+"<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>")
-    $(".flashes").append(oAlert);
-    setTimeout(function () {
-        oAlert.slideUp(400, function () {
-            oAlert.remove();
-        });
-    }, 5000)
+    var oSettings = {
+        type:'danger',
+        icon_type: 'class',
+        z_index: 1050,
+        newest_on_top: true,
+        showProgressbar: true,
+        template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
+            '<span data-notify="icon" class="text-white"></span> ' +
+            '<span data-notify="title" class="text-bold">{1}: </span>' +
+            '<span data-notify="message">{2}</span>' +
+            '<div class="progress" data-notify="progressbar">' +
+            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+            '</div>' +
+            '</div>'
+    };
+    $.notify({title: "Mislukt",message:sMessage, icon: '<i class="fas fa-exclamation-triangle"></i>'},oSettings);
 }
 Array.prototype.insert = function ( index, item ) {
     this.splice( index, 0, item );
@@ -165,7 +202,7 @@ function endPageLoad() {
     $('.loader-container').remove()
 }
 if ($("body").hasClass("layout-fixed")){
-    $("body").overlayScrollbars({ });
+    // $("body").overlayScrollbars({ });
 }
 
 $(".flashes .alert").each(function (i ,element) {
@@ -175,4 +212,26 @@ $(".flashes .alert").each(function (i ,element) {
         });
     }, 5000)
 })
+
+$.each(JSON.parse(FLASHES), function (type, messages) {
+    $.each(messages, function (index, message) {
+        switch (type) {
+            case "success":
+                addSuccessMessage(message);
+                break;
+            case"info":
+                addInfoMessage(message);
+                break;
+            case "error":
+                addErrorMessage(message);
+                break;
+        }
+    })
+});
+
+Number.prototype.pad = function(size) {
+    var s = String(this);
+    while (s.length < (size || 2)) {s = "0" + s;}
+    return s;
+}
 

@@ -21,27 +21,16 @@ class Flasher{
 
     /**
      * @param string $system
-     * @return string|null
+     * @return array|null
      */
     public static function getFlashes($system = self::Backend){
         if (isset($_SESSION[self::$SESSION][$system])){
-            $sHtml = "";
+            $aData = [];
             foreach ($_SESSION[self::$SESSION][$system] as $index => $flash){
-                switch ($flash["type"]){
-                    case self::Info:
-                        $sHtml .=  "<div class='alert alert-info bg-info'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
-                        break;
-                    case self::Error:
-                        $sHtml .= "<div class='alert alert-danger bg-danger'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
-                        break;
-                    case self::Success:
-                    default:
-                        $sHtml .="<div class='alert alert-success bg-success'>{$flash["message"]}<button type='button' class='close' data-dismiss='alert' aria-label='Close'><i class='fas fa-times'></i></button></div>";
-                        break;
-                }
+                $aData[$flash["type"]][] = $flash["message"];
                 unset($_SESSION[self::$SESSION][$system][$index]);
             }
-            return $sHtml;
+            return $aData;
         }
         return null;
     }

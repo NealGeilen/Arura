@@ -1,7 +1,7 @@
 {extends "../../index.tpl"}
 {block content}
     <div class="row">
-        <div class="col-6 col-md-4">
+        <div class="col-12 col-md-4">
             <div class="small-box bg-primary">
                 <div class="inner">
                     <h3>Hallo</h3>
@@ -14,7 +14,7 @@
             </div>
         </div>
         {if $smarty.now|date_format:"%Y-%m-%d" < $aWebsite.Launchdate}
-            <div class="col-6 col-md-4">
+            <div class="col-12 col-md-4">
                 <div class="small-box bg-secondary">
                     <div class="inner">
                         <h3>{$aWebsite.Launchdate|date_format:"%d/%m/%Y"}</h3>
@@ -28,7 +28,7 @@
             </div>
         {/if}
         {if $iUserCount != null}
-            <div class="col-6 col-md-4">
+            <div class="col-12 col-md-4">
                 <div class="small-box bg-warning">
                     <div class="inner">
                         <h3>{$iUserCount}</h3>
@@ -42,7 +42,7 @@
             </div>
         {/if}
         {if $iPageCount !== null}
-            <div class="col-md-4 col-6">
+            <div class="col-md-4 col-12">
                 <div class="small-box bg-success">
                     <div class="inner">
                         <h3>{$iPageCount}</h3>
@@ -51,6 +51,45 @@
                     </div>
                     <div class="icon">
                         <i class="fas fa-globe-europe"></i>
+                    </div>
+                </div>
+            </div>
+        {/if}
+    </div>
+    <div class="row">
+        {if $aPermissions.ANALYTICS}
+            <div class="col-12 col-md-6">
+                <div class="card card-secondary VisitorsDays">
+                    <div class="card-header">
+                        <h3 class="card-title">Bezoekers per dag</h3>
+                        <div class="card-tools">
+                            <button class="btn btn-secondary btn-sm" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div><!-- /.card-header -->
+                    <div class="card-body">
+                        <canvas></canvas>
+                        <!-- /.tab-content -->
+                    </div><!-- /.card-body -->
+                    <div class="overlay">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                    </div>
+                </div>
+            </div>
+        {/if}
+        {if $aPermissions.SHOP_PAYMENTS}
+            <div class="col-12 col-md-6">
+                <div class="card card-secondary paymentsTimeLine">
+                    <div class="card-header">
+                        <h2 class="card-title">Betalingen van de afgelopen 7 dagen</h2>
+                        <div class="card-tools">
+                            <button class="btn btn-secondary btn-sm" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <canvas></canvas>
+                    </div>
+                    <div class="overlay">
+                        <i class="fas fa-2x fa-sync-alt fa-spin"></i>
                     </div>
                 </div>
             </div>

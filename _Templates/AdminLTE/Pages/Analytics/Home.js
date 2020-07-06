@@ -48,7 +48,7 @@ let Analytics = {
     ],
     Xhr: function (options) {
         let settings = $.extend({
-            url: window.location.href,
+            url: "/dashboard/analytics",
             type: 'post',
             dataType: 'json',
             error: function () {
@@ -283,8 +283,7 @@ let Analytics = {
         });
         return list;
     },
-    loadType: function (name, callback) {
-        data = serializeArray($(".form-dates"));
+    loadType: function (name, callback, data = serializeArray($(".form-dates"))) {
         callback.destroy();
         Analytics.Xhr({
             data: {
@@ -307,11 +306,13 @@ let Analytics = {
 
 };
 $(document).ready(function () {
-    Analytics.loadData();
-    $(".form-dates").submit(function (e) {
-        e.preventDefault();
+    if ($(".analytics-page").length){
         Analytics.loadData();
-    })
+        $(".form-dates").submit(function (e) {
+            e.preventDefault();
+            Analytics.loadData();
+        })
+    }
 });
 
 

@@ -16,9 +16,6 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container-fluid">
-        <div class="flashes">
-          {$Flashes}
-        </div>
         <div class="row mb-2">
           <div class="col-sm-6">
             <h1 class="m-0 text-dark">{$aPage.title}</h1>
@@ -40,10 +37,11 @@
   </div>
   <!-- /.content-wrapper -->
   <script>
-    ARURA_DIR = "{$aArura.dir}";
-    ARURA_API_DIR = "/{$aArura.dir}/{$aArura.api}/";
-    WEB_URL = "{$aWebsite.url}";
-    MOBILE_USER = "{$bMobileUser}";
+    var ARURA_DIR = "{$aArura.dir}";
+    var ARURA_API_DIR = "/{$aArura.dir}/{$aArura.api}/";
+    var WEB_URL = "{$aWebsite.url}";
+    var MOBILE_USER = "{$bMobileUser}";
+    var FLASHES = '{$Flashes}';
   </script>
   {include "./Sections/footer.tpl"}
   {include "./Sections/body_modals.tpl"}

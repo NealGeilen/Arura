@@ -49,7 +49,7 @@ let Payments = {
     ],
     Xhr: function (options) {
         let settings = $.extend({
-            url: window.location.href,
+            url: "/dashboard/winkel/betalingen",
             type: 'post',
             dataType: 'json',
             error: function () {
@@ -152,8 +152,7 @@ let Payments = {
         });
         return list;
     },
-    loadType: function (name, callback) {
-        data = serializeArray($(".form-dates"));
+    loadType: function (name, callback, data = serializeArray($(".form-dates"))) {
         callback.destroy();
         this.Xhr({
             data: {
@@ -175,5 +174,6 @@ let Payments = {
     }
 
 };
-
-Payments.loadData();
+if ($(".PaymentPage").length){
+    Payments.loadData();
+}

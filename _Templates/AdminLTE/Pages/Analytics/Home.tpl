@@ -1,6 +1,6 @@
 {extends "../../index.tpl"}
 {block content}
-    <div class="card card-primary">
+    <div class="card card-primary analytics-page">
         <div class="card-body">
             <form class="form-dates">
                 <div class="row">
