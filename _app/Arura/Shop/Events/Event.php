@@ -60,7 +60,7 @@ class Event Extends Page {
     public static function getAllEvents() : array
     {
         $db = new Database();
-        return $db -> fetchAll("SELECT * FROM tblEvents WHERE Event_IsVisible = 1 AND Event_Start_Timestamp > UNIX_TIMESTAMP()");
+        return $db -> fetchAll("SELECT * FROM tblEvents WHERE Event_IsVisible = 1 AND Event_Start_Timestamp > UNIX_TIMESTAMP() ORDER BY  Event_Start_Timestamp");
     }
 
     /**
