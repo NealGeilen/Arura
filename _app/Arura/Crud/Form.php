@@ -1,7 +1,7 @@
 <?php
 namespace Arura\Crud;
 
-use Crud\Fields\Field;
+use Arura\Crud\Fields\Field;
 use Nette\Forms\Controls\Checkbox;
 
 class Form {

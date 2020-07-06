@@ -73,7 +73,7 @@ class Events extends AbstractController {
             $oTicket = new Ticket($requestHandler->getData()["Hash"]);
             return $oTicket->Validate();
         });
-        Router::addSourceScriptJs(__ARURA__ROOT__ . "/dashboard/assets/vendor/Instascan/instascan.min.js");
+        Router::addSourceScriptJs("assets/vendor/Instascan/instascan.min.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Validation.js");
         $this->render("AdminLTE/Pages/Shop/Events/Validation.tpl", [
             "title" =>"Ticket controleren"
