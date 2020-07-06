@@ -203,3 +203,7 @@ section.content>.container{
 .flashes .alert{
     margin-bottom: 5px!important;
 }
+.modal-backdrop{
+    display: none!important;
+    z-index: 0!important;
+}
