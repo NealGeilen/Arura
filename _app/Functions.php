@@ -3,26 +3,6 @@
 use Arura\Database;
 
 /**
- * @param $needle
- * @param $haystack
- * @return bool
- */
-//function str_contains($needle, $haystack)
-//{
-//    return strpos($haystack, $needle) !== false;
-//}
-
-/**
- * @param $value
- */
-//function dd($value){
-//    echo "<pre>";
-//    var_dump($value);
-//    echo "</pre>";
-//    exit;
-//}
-
-/**
  * @return bool
  */
 function isUserOnMobile(){
@@ -137,4 +117,25 @@ function str_dir_strip($str){
     $str = mb_ereg_replace("([^\w\s\d\-_~,;\[\]\(\).])", '', $str);
     $str = mb_ereg_replace("([\.]{2,})", '', $str);
     return $str;
+}
+
+/**
+ * @param string $sPath
+ * @return bool
+ * @throws Exception
+ */
+function deleteItem($sPath = ""){
+    if (is_file($sPath)){
+        unlink($sPath);
+    } else if (is_dir($sPath)){
+        foreach (scandir($sPath) as $item){
+            if (strlen($item) > 3){
+                deleteItem($sPath .DIRECTORY_SEPARATOR. $item);
+            }
+        }
+        rmdir($sPath);
+    } else {
+        throw new Exception('item does not exists', 500);
+    }
+    return true;
 }
