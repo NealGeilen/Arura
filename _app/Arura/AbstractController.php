@@ -37,11 +37,7 @@ abstract class AbstractController{
                 Router::getSmarty()->assign("sPageSideBar", null);
             }
             Router::getSmarty()->assign("sRequestUrl", $_GET["_dashboard_"]);
-            if (DEV_MODE){
-                $sVersion = "DEV MODE";
-            } else {
-                $sVersion = json_array_decode(file_get_contents(__VENDOR__ . "../" . "composer.json"))["require"]["arura/dashboard"];
-            }
+            $sVersion = json_array_decode(file_get_contents(__ARURA__ROOT__ . "composer.json"))["version"];
 
             Router::getSmarty()->assign("Flashes", json_encode(Flasher::getFlashes()));
             Router::getSmarty()->assign("aUser", (User::isLogged()) ? User::activeUser()->__toArray() : null);

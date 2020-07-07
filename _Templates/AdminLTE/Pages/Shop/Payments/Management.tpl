@@ -36,7 +36,7 @@
             color: red;
         }
     </style>
-    <div class="row">
+    <div class="row PaymentPage">
         <div class="col-6">
             <div class="small-box bg-success">
                 <div class="inner">

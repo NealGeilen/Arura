@@ -174,6 +174,7 @@ let Payments = {
     }
 
 };
+
 if ($(".PaymentPage").length){
     Payments.loadData();
 }
