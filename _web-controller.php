@@ -13,7 +13,7 @@ if (!User::isLogged() && !strpos($_GET["_dashboard_"], "login") === 0){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
 }
-if (empty($_GET["_dashboard_"])){
+if (empty($_GET["_dashboard_"]) || $_GET["_dashboard_"] === "/"){
     if(!User::isLogged()){
         header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
         exit;
