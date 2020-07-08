@@ -105,7 +105,7 @@ class CMS extends AbstractController {
         if ($form->isSubmitted()){
             $p->set($form->getValues('array'));
             $p->load(true);
-            Flasher::addFlash("Pagina '{$p->getTitle()}' opgeslagen");
+            Flasher::addFlash("Pagina {$p->getTitle()} opgeslagen");
         }
         $this->render("AdminLTE/Pages/CMS/Settings.tpl", [
             "title" =>"Pagina instellingen",

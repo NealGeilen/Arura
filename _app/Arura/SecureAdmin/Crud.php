@@ -1,6 +1,7 @@
 <?php
 namespace Arura\SecureAdmin;
 use Arura\Exceptions\Error;
+use Arura\Flasher;
 use Arura\User\User;
 use Exception;
 
@@ -54,6 +55,7 @@ class Crud extends Database {
                             }
                         }
                         $this->createRecord($this->oAdmin->getDbName(), $_POST);
+                        Flasher::addFlash("Gegevens aangemaakt");
                         header('Location:' . $_SERVER["REDIRECT_URL"] . "?t=" . $this->oAdmin->getId());
                     }
                     break;
@@ -68,6 +70,7 @@ class Crud extends Database {
                     if (isset($_POST[$this->aDataFile["primarykey"]]) && $this->isActionAllowed(SecureAdmin::EDIT)){
                         $this->updateRecord($this->oAdmin->getDbName(), $_POST, $this->aDataFile["primarykey"]);
                         if ($this->isQuerySuccessful()){
+                            Flasher::addFlash("Gegevens opgeslagen");
                             header('Location:' . $_SERVER["REDIRECT_URL"] . "?t=" . $this->oAdmin->getId());
                         }
                     }
@@ -76,12 +79,14 @@ class Crud extends Database {
                     if (isset($_GET['_key']) || $this->isActionAllowed(SecureAdmin::DELETE)){
                         $this->query('DELETE FROM '. $this->oAdmin->getDbName() . ' WHERE ' . $this->aDataFile["primarykey"] . ' = :'.$this->aDataFile["primarykey"], [$this->aDataFile["primarykey"] => $_GET['_key']]);
                         if ($this->isQuerySuccessful()){
+                            Flasher::addFlash("Gegevens verwijderd");
                             header('Location:' . $_SERVER["REDIRECT_URL"] . "?t=" . $this->oAdmin->getId());
                         }
                     }
                     break;
             }
         } catch (Exception $e){
+            Flasher::addFlash("Handeling mislukt", Flasher::Error);
             header('Location:' . $_SERVER["REDIRECT_URL"] . "?t=" . $this->oAdmin->getId());
         }
     }

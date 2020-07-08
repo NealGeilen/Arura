@@ -6,6 +6,7 @@ use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Flasher;
 use Arura\Router;
 use Arura\SecureAdmin\SecureAdmin;
 use Arura\User\User;
@@ -25,17 +26,22 @@ class SecureAdministration extends AbstractController {
             Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
                 $requestHandler->addType("add-user", function ($aData){
                     $oTable = new SecureAdmin($aData["Table_Id"]);
-                    $oTable->shareTable(new User($aData["User_Id"]), 1);
+                    $user = new User($aData["User_Id"]);
+                    $oTable->shareTable($user, 1);
+                    Flasher::addFlash("Gebruiker '{$user->getUsername()}' toegevoegd");
                 });
                 $requestHandler->addType("remove-user", function ($aData){
                     $oTable = new SecureAdmin($aData["Table_Id"]);
-                    $oTable->removeUserShare(new User($aData["User_Id"]));
+                    $user = new User($aData["User_Id"]);
+                    $oTable->removeUserShare($user);
+                    Flasher::addFlash("Gebruiker '{$user->getUsername()}' verwijderd");
                 });
                 $requestHandler->addType("drop-table", function ($aData){
                     $oTable = new SecureAdmin($aData["Table_Id"]);
                     if (!$oTable->Drop()){
                         throw new Error();
                     }
+                    Flasher::addFlash("Administartie verwijderd");
                 });
                 $requestHandler->addType("set-right-user", function ($aData){
                     $oTable = new SecureAdmin($aData["Table_Id"]);
@@ -46,6 +52,8 @@ class SecureAdministration extends AbstractController {
                     if ($oTable->isUserOwner(User::activeUser())){
                         $db = new Database();
                         $db -> updateRecord("tblSecureAdministration", $aData, "Table_Id");
+                        $oTable->load(true);
+                        Flasher::addFlash("Administartie {$oTable->getName()} opgeslagen");
                     }
                 });
             });

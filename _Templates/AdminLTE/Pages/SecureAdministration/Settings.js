@@ -97,14 +97,7 @@ function dumpDB() {
                     Table_Id : _TABLE_ID,
                 }),
                 success: function () {
-                    Modals.Success({
-                        Title: "Verwijderd",
-                        Message : "Administartie succesvol verwijdert",
-                        Buttons: [Modals.Buttons.confirm],
-                        onConfirm: function () {
-                            location.replace("/dashboard/administration")
-                        }
-                    })
+                    location.replace("/dashboard/administration");
                 },
                 error : function () {
                     addErrorMessage("Niet kunnen verwijderen")

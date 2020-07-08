@@ -1,6 +1,7 @@
 startPageLoad();
 $(document).ready(function () {
     endPageLoad();
+    setInterval(validateUser, 5000);
 });
 function addSuccessMessage(sMessage) {
     var oSettings = {
