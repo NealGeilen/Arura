@@ -203,6 +203,9 @@ let Analytics = {
                         case "South Holland":
                             name = "Zuid-Holland";
                             break;
+                        case "North Brabant":
+                            name = "Noord-Brabant";
+                            break;
                         default:
                             name = value
                             break;
