@@ -61,5 +61,8 @@
 {include "./Sections/body_end.tpl"}
 {block JsPage}
 {/block}
+<script>
+  setInterval(validateUser, 5000);
+</script>
 </body>
 </html>
