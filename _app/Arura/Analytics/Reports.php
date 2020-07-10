@@ -56,6 +56,20 @@ class Reports{
         return $Report->getReport();
     }
 
+    /**
+     * @param $startDate
+     * @param $endDate
+     * @return array
+     * @throws NotFound
+     * @throws Google_Exception
+     * @throws Exception
+     */
+    public static function VistorsPerProvince($startDate,$endDate){
+        $Report = self::Report("ga:region", "ga:sessions");
+        $Report->setDataRange($startDate, $endDate);
+        return $Report->getReport();
+    }
+
 
     /**
      * @param $startDate

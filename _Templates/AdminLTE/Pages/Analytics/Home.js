@@ -59,6 +59,227 @@ let Analytics = {
         $.ajax(settings);
     },
     Charts: {
+        CountryVisitors : {
+            object : null,
+            table: null,
+            set: function (data) {
+                list = {};
+                $.each(data.rows.dimensions, function (i, value) {
+                    list[(value.toUpperCase())] = {value: data.rows.metrics[i], tooltip: {content: "<b>"+data.rows.metrics[i]+"</b> Bezoekers"}};
+                });
+                oCard = $(".CountryVisitors");
+                oCard.find(".overlay").remove();
+                this.object = oCard.find(".map-container").mapael({
+                    map: {
+                        name: "european_union",
+                        defaultArea: {
+                            tooltip: {
+                              content: "Geen bezoeker"
+                            },
+                            attrs: {
+                                stroke: "#fff",
+                                "stroke-width": 1,
+                                fill: "lightgray"
+                            },
+                            attrsHover: {
+                                fill: "gray"
+                            }
+                        }
+                    },
+                    legend: {
+                        area: {
+                            slices: [
+                                {
+                                    min: 1,
+                                    max: 10,
+                                    attrs: {
+                                        fill: "#8ff0ff"
+                                    },
+                                    label: "Minder dan 10"
+                                },
+                                {
+                                    min: 10,
+                                    max: 25,
+                                    attrs: {
+                                        fill: "#46dbf2"
+                                    },
+                                    label: "Tussen de 10 en 25 bezoekers"
+                                },
+                                {
+                                    min: 25,
+                                    max: 50,
+                                    attrs: {
+                                        fill: "#17a2b8"
+                                    },
+                                    label: "Tussen de 25 en 50 bezoekers"
+                                },
+                                {
+                                    min: 50,
+                                    max: 100,
+                                    attrs: {
+                                        fill: "#04a6bf"
+                                    },
+                                    label: "Tussen de 50 en 100 bezoekers"
+                                },
+                                {
+                                    min: 100,
+                                    attrs: {
+                                        fill: "#015663"
+                                    },
+                                    label: "Meer dan 100 bezoekers"
+                                }
+                            ]
+                        }
+                    },
+                    areas: list
+                });
+            },
+            destroy: function () {
+                if (this.object !== null){
+                    this.object.data("mapael").destroy();
+                }
+            }
+        },
+        ProviceVisitors : {
+            object : null,
+            table: null,
+            set: function (data) {
+                list = {
+                    "Drenthe": {
+                        value : 0,
+                        tooltip: {content: "Drenthe <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Overijssel": {
+                        value : 0,
+                        tooltip: {content: "Overijssel <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Gelderland" : {
+                        value : 0,
+                        tooltip: {content: "Gelderland <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Utrecht": {
+                        value : 0,
+                        tooltip: {content: "Utrecht <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Noord-Holland" : {
+                        value : 0,
+                        tooltip: {content: "Noord-Holland <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Limburg": {
+                        value : 0,
+                        tooltip: {content: "Limburg <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Flevoland": {
+                        value : 0,
+                        tooltip: {content: "Flevoland <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Friesland": {
+                        value : 0,
+                        tooltip: {content: "Friesland <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Groningen" :{
+                        value : 0,
+                        tooltip: {content: "Groningen <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Zeeland": {
+                        value : 0,
+                        tooltip: {content: "Zeeland <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Zuid-Holland":{
+                        value : 0,
+                        tooltip: {content: "Zuid-Holland <br/> <b>0</b> Bezoekers"}
+                    },
+                    "Noord-Brabant": {
+                        value : 0,
+                        tooltip: {content: "Noord-Brabant <br/> <b>0</b> Bezoekers"}
+                    },
+                };
+                $.each(data.rows.dimensions, function (i, value) {
+                    var name = "";
+                    switch (value) {
+                        case "North Holland":
+                            name = "Noord-Holland";
+                            break;
+                        case "South Holland":
+                            name = "Zuid-Holland";
+                            break;
+                        default:
+                            name = value
+                            break;
+                    }
+                    list[name] = {value: parseInt(data.rows.metrics[i]), tooltip: {content: name +" <br/> <b>" +data.rows.metrics[i] +  "</b> Bezoekers"}};
+                });
+                oCard = $(".ProviceVisitors");
+                oCard.find(".overlay").remove();
+                this.object = oCard.find(".map-container").mapael({
+                    map: {
+                        name: "netherlands",
+                        width: "300",
+                        defaultArea: {
+                            attrs: {
+                                stroke: "#fff",
+                                "stroke-width": 1,
+                                fill: "lightgray"
+                            },
+                            attrsHover: {
+                                fill: "gray"
+                            }
+                        }
+                    },
+                    legend: {
+                        area: {
+                            slices: [
+                                {
+                                    min: 1,
+                                    max: 10,
+                                    attrs: {
+                                        fill: "#8ff0ff"
+                                    },
+                                    label: "Minder dan 10"
+                                },
+                                {
+                                    min: 10,
+                                    max: 25,
+                                    attrs: {
+                                        fill: "#46dbf2"
+                                    },
+                                    label: "Tussen de 10 en 25 bezoekers"
+                                },
+                                {
+                                    min: 25,
+                                    max: 50,
+                                    attrs: {
+                                        fill: "#17a2b8"
+                                    },
+                                    label: "Tussen de 25 en 50 bezoekers"
+                                },
+                                {
+                                    min: 50,
+                                    max: 100,
+                                    attrs: {
+                                        fill: "#04a6bf"
+                                    },
+                                    label: "Tussen de 50 en 100 bezoekers"
+                                },
+                                {
+                                    min: 100,
+                                    attrs: {
+                                        fill: "#015663"
+                                    },
+                                    label: "Meer dan 100 bezoekers"
+                                }
+                            ]
+                        }
+                    },
+                    areas: list
+                });
+            },
+            destroy: function () {
+                if (this.object !== null){
+                    this.object.data("mapael").destroy();
+                }
+            }
+        },
         VisitorsDays : {
             object : null,
             table: null,

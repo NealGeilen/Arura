@@ -31,6 +31,9 @@ class Analytics extends AbstractController {
             $requestHandler->addType("CityVisitors", function () use ($startData, $endData){
                 return Reports::VistorsPerCity($startData,$endData);
             });
+            $requestHandler->addType("ProviceVisitors", function () use ($startData, $endData){
+                return Reports::VistorsPerProvince($startData,$endData);
+            });
             $requestHandler->addType("AgeVisitors", function () use ($startData, $endData){
                 return Reports::UserAge($startData,$endData);
             });
@@ -38,6 +41,10 @@ class Analytics extends AbstractController {
                 return Reports::Visitors($startData,$endData);
             });
         });
+        Router::addSourceScriptJs( "assets/vendor/raphael/raphael.min.js");
+        Router::addSourceScriptJs( "assets/vendor/jquery-mapael/jquery.mapael.js");
+        Router::addSourceScriptJs( "assets/vendor/jquery-mapael/maps/eu.js");
+        Router::addSourceScriptJs( "assets/vendor/jquery-mapael/maps/netherlands.min.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
         $this->render("AdminLTE/Pages/Analytics/Home.tpl", [
             "title" =>"Analytics"

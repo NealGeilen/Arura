@@ -1,5 +1,11 @@
 {extends "../../index.tpl"}
 {block content}
+    <style>
+        .map > svg{
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
     <div class="card card-primary analytics-page">
         <div class="card-body">
             <form class="form-dates">
@@ -18,6 +24,52 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <div class="card card-secondary CountryVisitors" >
+                <div class="card-header">
+                    <h3 class="card-title p-3">Bezoekers per land</h3>
+                    <div class="card-tools">
+                        <button class="btn btn-secondary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                    <div class="map-container">
+                        <div class="map">
+
+                        </div>
+                        <div class="areaLegend">
+
+                        </div>
+                    </div>
+                </div><!-- /.card-body -->
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 col-sm-12">
+            <div class="card card-secondary ProviceVisitors" >
+                <div class="card-header">
+                    <h3 class="card-title p-3">Bezoekers per provincie</h3>
+                    <div class="card-tools">
+                        <button class="btn btn-secondary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+                    </div>
+                </div><!-- /.card-header -->
+                <div class="card-body">
+                    <div class="map-container">
+                        <div class="map">
+
+                        </div>
+                        <div class="areaLegend">
+
+                        </div>
+                    </div>
+                </div><!-- /.card-body -->
+                <div class="overlay">
+                    <i class="fas fa-2x fa-sync-alt fa-spin"></i>
+                </div>
+            </div>
+        </div>
         <div class="col-md-6 col-sm-12">
             <div class="card card-secondary VisitorsDays">
                 <div class="card-header d-flex p-0">

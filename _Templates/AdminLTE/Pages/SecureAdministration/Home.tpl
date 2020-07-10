@@ -43,6 +43,19 @@
                     </div>
                 </div>
             </div>
+            {foreachelse}
+            <div class="col-md-4 col-sm-6 col-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h2 class="card-title">Geen administartie</h2>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            Er is op het moment geen administartie beschikbaar
+                        </p>
+                    </div>
+                </div>
+            </div>
         {/foreach}
     </div>
 {/block}
