@@ -9,18 +9,13 @@ use Arura\User\User;
 
 require_once __DIR__ . "/_app/autoload.php";
 $aExceptionPages = ["/login", "/login/password"];
-if (!User::isLogged() && !strpos($_GET["_dashboard_"], "login") === 0){
+if (!User::isLogged() && $_GET["_dashboard_"] !== "login"){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
 }
 if (empty($_GET["_dashboard_"]) || $_GET["_dashboard_"] === "/"){
-    if(!User::isLogged()){
-        header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
-        exit;
-    } else {
-        header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR . "home");
-        exit;
-    }
+    header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR . "home");
+    exit;
 }
 $router = new Router();
 $router->getRouter()->setBasePath("/dashboard");

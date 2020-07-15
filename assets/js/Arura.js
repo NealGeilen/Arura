@@ -1,65 +1,115 @@
+var Dashboard = {
+    System : {
+        Alerts: {
+            modal: function (type,title,icon, message) {
+                var oSettings = {
+                    type: type,
+                    icon_type: 'class',
+                    z_index: 1050,
+                    newest_on_top: true,
+                    showProgressbar: true,
+                    template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
+                        '<span data-notify="icon" class="text-white"></span> ' +
+                        '<span data-notify="title" class="text-bold">{1}: </span>' +
+                        '<span data-notify="message">{2}</span>' +
+                        '<div class="progress" data-notify="progressbar">' +
+                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
+                        '</div>' +
+                        '</div>'
+                };
+                $.notify({title: title,message:message, icon: icon},oSettings);
+            },
+            Success: function (message) {
+                this.modal("success", "Succes", '<i class="fas fa-check"></i>', message);
+            },
+            Info: function (message) {
+                this.modal("info", "Opgelet", '<i class="fas fa-info"></i>', message);
+            },
+            Error: function (message) {
+                this.modal("danger", "Mislukt", '<i class="fas fa-exclamation-triangle"></i>', message);
+            }
+        },
+        PageLoad: {
+            Start: function () {
+                $('body').append('<div class="loader-container"><div class="loader"></div></div>');
+            },
+            End: function () {
+                $('.loader-container').remove();
+            }
+        }
+    },
+    Tables: {
+        Standard: function (oTable = $(".table.Arura-Table-Mini"), options = {}) {
+            var settings = $.extend({
+                searching: false,
+                bLengthChange: false,
+                info: false,
+                sPaginationType: "simple",
+                pageLength: 5,
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+                }
+            },options);
+
+            return oTable.DataTable(settings);
+        },
+        Mini: function (oTable = $(".table.Arura-Table"), options = {}) {
+            var settings = $.extend({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
+                }
+            },options);
+
+            return oTable.DataTable(settings);
+        }
+    },
+    Xhr: function (options) {
+        var settings = $.extend({
+            type: "POST",
+            dataType: 'json',
+            url : window.location.href,
+            beforeSend: function(){
+                startPageLoad();
+            },
+            success: function(){
+                endPageLoad();
+                addSuccessMessage('Opgeslagen');
+            },
+            error: function(){
+                endPageLoad();
+            },
+            statusCode:{
+                401: function () {
+                    Dashboard.System.Alerts.Error("Je moet ingelogd zijn om deze handeling uit te voeren");
+                },
+                403: function () {
+                    Dashboard.System.Alerts.Error("Deze handeling is niet toegestaan");
+                }
+            }
+        }, options);
+
+        $.ajax(settings);
+    }
+}
+
 startPageLoad();
 $(document).ready(function () {
     endPageLoad();
 });
 function addSuccessMessage(sMessage) {
-    var oSettings = {
-        type:'success',
-        icon_type: 'class',
-        z_index: 1050,
-        newest_on_top: true,
-        showProgressbar: true,
-        template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
-            '<span data-notify="icon" class="text-white"></span> ' +
-            '<span data-notify="title" class="text-bold">{1}: </span>' +
-            '<span data-notify="message">{2}</span>' +
-            '<div class="progress" data-notify="progressbar">' +
-            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-            '</div>' +
-            '</div>'
-    };
-    $.notify({title: "Success",message:sMessage, icon: '<i class="fas fa-check"></i>'},oSettings);
+    Dashboard.System.Alerts.Success(sMessage);
 }
-function addInfoMessage(sMessage) {
-    var oSettings = {
-        type:'info',
-        icon_type: 'class',
-        z_index: 1050,
-        newest_on_top: true,
-        showProgressbar: true,
-        template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
-            '<span data-notify="icon" class="text-white"></span> ' +
-            '<span data-notify="title" class="text-bold">{1}: </span>' +
-            '<span data-notify="message">{2}</span>' +
-            '<div class="progress" data-notify="progressbar">' +
-            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-            '</div>' +
-            '</div>'
-    };
-    $.notify({title: "Opgelet",message:sMessage, icon: '<i class="fas fa-info"></i>'},oSettings);
-}
-
 function addErrorMessage(sMessage) {
-    var oSettings = {
-        type:'danger',
-        icon_type: 'class',
-        z_index: 1050,
-        newest_on_top: true,
-        showProgressbar: true,
-        template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
-            '<span data-notify="icon" class="text-white"></span> ' +
-            '<span data-notify="title" class="text-bold">{1}: </span>' +
-            '<span data-notify="message">{2}</span>' +
-            '<div class="progress" data-notify="progressbar">' +
-            '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-            '</div>' +
-            '</div>'
-    };
-    $.notify({title: "Mislukt",message:sMessage, icon: '<i class="fas fa-exclamation-triangle"></i>'},oSettings);
+    Dashboard.System.Alerts.Error(sMessage);
 }
 Array.prototype.insert = function ( index, item ) {
     this.splice( index, 0, item );
 };
+Number.prototype.pad = function(size) {
+    var s = String(this);
+    while (s.length < (size || 2)) {s = "0" + s;}
+    return s;
+}
 
 
 function serializeArray(oForm) {
@@ -87,32 +137,6 @@ $("select[value]").each(function() {
     }
 });
 $("select.form-control option:first").attr('selected','selected');
-$(".table.Arura-Table").DataTable({
-    "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
-    }
-});
-$(".table.Arura-Table-Mini").DataTable({
-    searching: false,
-    bLengthChange: false,
-    info: false,
-    sPaginationType: "simple",
-    pageLength: 5,
-    "language": {
-        "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Dutch.json"
-    }
-});
-
-$(".table.Arura-Table .btn-delete").on("click", function () {
-    oBtn = $(this);
-    Modals.Warning({
-        Title: "Verwijderen",
-        Message: "Weet je zeker dat je dit wilt verwijderen?",
-        onConfirm: function () {
-            location.replace(oBtn.attr("href"));
-        }
-    })
-});
 
 
 $("textarea.richtext").ready(function () {
@@ -136,30 +160,22 @@ $("textarea.richtext").ready(function () {
 
 $.fn.FormAjax = function( options = {} ) {
     $(this).validate({
-        submitHandler: function (oForm) {
-            var settings = $.extend({
+        submitHandler: function (oForm, e) {
+            e.preventDefault();
+            Dashboard.Xhr({
                 type: $(oForm).attr('method'),
-                dataType: 'json',
                 data: serializeArray($(oForm)),
                 url : $(oForm).attr('action'),
-                success: function(){
-                    addSuccessMessage('Opgeslagen');
-                },
-                error: function () {
-                    addErrorMessage('Het opslaan is niet juist gegaan');
-                }
-            }, options);
-
-            $.ajax(settings);
+            });
         }
     });
 };
 $("form.form-sender").FormAjax();
 function validateUser(){
-    $.ajax({
-        type: 'post',
-        dataType: 'json',
+    Dashboard.Xhr({
         url : "/dashboard/validate",
+        success: null,
+        beforeSend: null,
         error: function () {
             Modals.Error({
                 Title:"Sessie verlopen",
@@ -193,45 +209,31 @@ $(window).scroll(function(){
         }
     }
 });
+if ($("body").hasClass("layout-fixed")){
+    $("body").overlayScrollbars({ });
+}
+
+$.each(JSON.parse(FLASHES), function (type, messages) {
+    Dashboard.System.Alerts[(type.charAt(0).toUpperCase() + type.slice(1))](messages);
+});
 
 function startPageLoad() {
-    $('body').append('<div class="loader-container"><div class="loader"></div></div>');
+    Dashboard.System.PageLoad.Start();
 }
 
 function endPageLoad() {
-    $('.loader-container').remove()
-}
-if ($("body").hasClass("layout-fixed")){
-    // $("body").overlayScrollbars({ });
+    Dashboard.System.PageLoad.End();
 }
 
-$(".flashes .alert").each(function (i ,element) {
-    setTimeout(function () {
-        $(element).slideUp(400, function () {
-            $(element).remove();
-        });
-    }, 5000)
-})
-
-$.each(JSON.parse(FLASHES), function (type, messages) {
-    $.each(messages, function (index, message) {
-        switch (type) {
-            case "success":
-                addSuccessMessage(message);
-                break;
-            case"info":
-                addInfoMessage(message);
-                break;
-            case "error":
-                addErrorMessage(message);
-                break;
+Dashboard.Tables.Standard();
+Dashboard.Tables.Mini();
+$(".table.Arura-Table .btn-delete").on("click", function () {
+    oBtn = $(this);
+    Modals.Warning({
+        Title: "Verwijderen",
+        Message: "Weet je zeker dat je dit wilt verwijderen?",
+        onConfirm: function () {
+            location.replace(oBtn.attr("href"));
         }
     })
 });
-
-Number.prototype.pad = function(size) {
-    var s = String(this);
-    while (s.length < (size || 2)) {s = "0" + s;}
-    return s;
-}
-
