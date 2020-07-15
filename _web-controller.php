@@ -9,7 +9,7 @@ use Arura\User\User;
 
 require_once __DIR__ . "/_app/autoload.php";
 $aExceptionPages = ["/login", "/login/password"];
-if (!User::isLogged() && $_GET["_dashboard_"] !== "login"){
+if (!User::isLogged() && !in_array($_GET["_dashboard_"], $aExceptionPages)){
     header("Location:" . DIRECTORY_SEPARATOR . __ARURA__DIR_NAME__ . DIRECTORY_SEPARATOR."login");
     exit;
 }
