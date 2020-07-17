@@ -1,0 +1,56 @@
+h1, h2,h3,h4,h5,h6, p,body{
+    font-family: Arial;
+}
+.logo{
+    max-height: 150px;
+}
+img{
+    display: block;
+    margin: 0 auto;
+    background: white;
+}
+h1{
+    padding: 15px;
+    color: rgb(21,15,95);
+}
+h1, h2,h3,h4,h5,h6{
+    text-align: center;
+}
+.section{
+    padding: 20px;
+    background: #f6f6f6;
+    margin: 15px;
+    text-align: center;
+}
+.section th, .section td{
+    padding: 10px;
+}
+table{
+    width: 100%;
+}
+.table {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+}
+
+.table th,
+.table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #eceeef;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #eceeef;
+}
+
+.table tbody + tbody {
+    border-top: 2px solid #eceeef;
+}
+
+.table .table {
+    background-color: #fff;
+}
+

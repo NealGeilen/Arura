@@ -40,12 +40,15 @@ if (DEV_MODE){
 define("__ARURA_TEMPLATES__",   __ARURA__ROOT__ .DIRECTORY_SEPARATOR. '_Templates' . DIRECTORY_SEPARATOR);
 define('__APP__',               __ARURA__ROOT__ . DIRECTORY_SEPARATOR. '_app'       . DIRECTORY_SEPARATOR);
 define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/Resources/DataFiles'  . DIRECTORY_SEPARATOR);
-define('__DEAFULT_PAGES__',     __ARURA__ROOT__ . DIRECTORY_SEPARATOR .'_DEAFULT_PAGES' . DIRECTORY_SEPARATOR);
+define('__DEFAULT_PAGES__',     __ARURA__ROOT__ . DIRECTORY_SEPARATOR .'_DEFAULT_PAGES' . DIRECTORY_SEPARATOR);
 
 define('__FILES__',             __WEB__ROOT__   . DIRECTORY_SEPARATOR. 'files'      . DIRECTORY_SEPARATOR);
 define("__WEB_TEMPLATES__",     __WEB__ROOT__   . DIRECTORY_SEPARATOR . "Templates" . DIRECTORY_SEPARATOR);
 define('__RESOURCES__',         __WEB__ROOT__   . DIRECTORY_SEPARATOR . "_app" . DIRECTORY_SEPARATOR     . 'Resources'  . DIRECTORY_SEPARATOR);
 
+
+define("__STANDARD_MODULES__" , __ARURA_TEMPLATES__ . "Modules" . DIRECTORY_SEPARATOR);
+define("__CUSTOM_MODULES__", __WEB_TEMPLATES__ . "Custom" . DIRECTORY_SEPARATOR. "Modules". DIRECTORY_SEPARATOR);
 
 $GLOBALS["Querys"] = [];
 session_set_cookie_params(0, "/", "");

@@ -186,8 +186,8 @@ class Page extends Modal implements PageEnum{
         if (strtotime(Application::get("website", "Launchdate")) < time() || Restrict::Validation($iRight)){
             if (!Application::get("website", "maintenance") || Restrict::Validation($iRight)){
                 if (isset(self::DEFAULT_PAGES[$sSlug])){
-                    if (is_file(__DEAFULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php")){
-                        include __DEAFULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php";
+                    if (is_file(__DEFAULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php")){
+                        include __DEFAULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php";
                     } else {
                         throw new NotFound("Deafult page noy found");
                     }

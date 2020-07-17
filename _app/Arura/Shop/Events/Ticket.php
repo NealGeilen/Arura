@@ -16,13 +16,6 @@ class Ticket extends Modal {
     protected $ticketId;
     protected $LastValidedTimestamp;
 
-    protected static $smarty;
-
-    /**
-     *
-     */
-    const TemplateDir = __RESOURCES__ . "Tickets/";
-
     /**
      * Ticket constructor.
      * @param $hash

@@ -1,0 +1,1 @@
+<h1 align="center" color="#150f5f">{$aWebsite.name}</h1>

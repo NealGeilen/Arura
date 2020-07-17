@@ -32,7 +32,7 @@ class Registration extends Modal {
     /**
      *
      */
-    const TemplateDir = __RESOURCES__ . "Tickets/";
+//    const TemplateDir = __RESOURCES__ . "Tickets/";
 
     /**
      * Registration constructor.
@@ -197,19 +197,37 @@ class Registration extends Modal {
         $oPDF->assign("aWebsite", Application::getAll()["website"]);
         $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
         $oPDF->assign("btwPer", Application::get("plg.shop", "BtwPer"));
-        $oPDF->WriteHTML(file_get_contents(self::TemplateDir . "style.css"), HTMLParserMode::HEADER_CSS);
+        if (is_file(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "style.css")){
+            $oPDF->WriteHTML(file_get_contents(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "style.css"), HTMLParserMode::HEADER_CSS);
+        } else {
+            $oPDF->WriteHTML(file_get_contents(__STANDARD_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "style.css"), HTMLParserMode::HEADER_CSS);
+        }
         $oPDF->assign("aTickets", $this->getPayment()->getMetadata());
         $oPDF->assign("aPayment", $this->getPayment()->__ToArray());
-        $oPDF->SetHTMLFooter(self::TemplateDir. "footer.tpl");
-        $oPDF->setTemplate(self::TemplateDir . "factuur.tpl");
+        if (is_file(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "footer.tpl")){
+            $footer = __CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "footer.tpl";
+        } else {
+            $footer = __STANDARD_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "footer.tpl";
+        }
+        if (is_file(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "main.tpl")){
+            $main = __CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "main.tpl";
+        } else {
+            $main = __STANDARD_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "main.tpl";
+        }
+        $oPDF->SetHTMLFooter($footer);
+        if (is_file(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "factuur.tpl")){
+            $oPDF->setTemplate(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "factuur.tpl");
+        } else {
+            $oPDF->setTemplate(__STANDARD_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "factuur.tpl");
+        }
 
         foreach ($aTickets as $sHash =>$aData){
             $oPDF->AddPage();
             $oPDF->assign("Qr", QR::Create($sHash));
             $oPDF->assign("sHash", $sHash);
             $oPDF->assign("aTicket", $aData);
-            $oPDF->SetHTMLFooter(self::TemplateDir. "footer.tpl");
-            $oPDF->setTemplate(self::TemplateDir. "main.tpl");
+            $oPDF->SetHTMLFooter($footer);
+            $oPDF->setTemplate($main);
         }
         $oPDF->Output(__APP_ROOT__ . "/Tickets/" . $sHash. ".pdf", "F");
         return  __APP_ROOT__ . "/Tickets/" . $sHash. ".pdf";

@@ -37,7 +37,7 @@ class Event Extends Page {
     private $iCapacity;
     private $dEndRegistration;
 
-    public static $MasterPage = "Events/event.tpl";
+    public static $MasterPage;
 
     /**
      * Event constructor.
@@ -50,6 +50,11 @@ class Event Extends Page {
         parent::__construct($iId);
         if (count($this->db->fetchAll("SELECT Event_Id FROM tblEvents WHERE Event_Id = ?", [$this->getId()])) < 0){
             throw new Exception("Event not found", 404);
+        }
+        if (is_file(__CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "event.tpl")){
+            self::$MasterPage = __CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "event.tpl";
+        } else {
+            self::$MasterPage = __STANDARD_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "event.tpl";
         }
     }
 
@@ -103,7 +108,7 @@ class Event Extends Page {
         $smarty = self::getSmarty();
         $smarty->assign("aEvent", $this->__ToArray());
         $smarty->assign('aWebsite', Application::getAll()['website']);
-        $this->setPageContend($smarty->fetch(__WEB_TEMPLATES__ . self::$MasterPage));
+        $this->setPageContend($smarty->fetch(self::$MasterPage));
         parent::showPage();
     }
 
@@ -179,7 +184,11 @@ class Event Extends Page {
                 self::getSmarty()->assign("iTotalAmount", $aCollection["Amount"]);
                 self::getSmarty()->assign("aTickets", $aCollection["Tickets"]);
                 self::getSmarty()->assign("aIssuers", Payment::getIdealIssuers());
-                self::$MasterPage = "Events/checkout.tpl";
+                if (is_file(__CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "checkout.tpl")){
+                    self::$MasterPage = __CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "checkout.tpl";
+                } else {
+                    self::$MasterPage = __STANDARD_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "checkout.tpl";
+                }
                 $this->showPage();
             }
         }
@@ -238,7 +247,11 @@ class Event Extends Page {
                                 $P = new Payment($_GET["i"]);
                                 self::getSmarty()->assign("sStatus", $P->getStatus());
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
-                                self::$MasterPage = "Events/done.tpl";
+                                if (is_file(__CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "done.tpl")){
+                                    self::$MasterPage = __CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "done.tpl";
+                                } else {
+                                    self::$MasterPage = __STANDARD_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "done.tpl";
+                                }
                                 if ($P->getStatus() === "paid"){
                                     $R = Registration::getRegistrationFromPayment($P);
                                     $R ->sendEventDetails();
