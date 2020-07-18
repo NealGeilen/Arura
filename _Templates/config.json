@@ -1,5 +1,5 @@
 {
-  "js" : [
+  "Js" : [
     "assets/vendor/jquery/jquery.min.js",
     "assets/vendor/jquery-ui/jquery-ui.min.js",
     "assets/vendor/bootstrap/js/bootstrap.bundle.min.js",
@@ -25,7 +25,7 @@
     "assets/js/adminlte.js",
     "assets/js/Arura.js"
   ],
-  "css" : [
+  "Css" : [
     "assets/css/adminlte.css",
     "assets/vendor/bootstrap-iconpicker/bootstrap-iconpicker.min.css",
     "assets/vendor/jquery-overlayScrollbars/OverlayScrollbars.min.css",
