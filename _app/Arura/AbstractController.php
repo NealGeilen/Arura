@@ -27,6 +27,7 @@ abstract class AbstractController{
      * @param array $parameters
      */
     protected final function render($i, $parameters = []){
+        dd($_SERVER,$_GET);
         if(is_array($i)){
             echo json_encode($i);
         } else  if (is_file(__ARURA_TEMPLATES__ . $i)){

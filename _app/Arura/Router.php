@@ -25,6 +25,8 @@ class Router{
                 if (!$properties["Right"]) {
                     throw new Exception('No Access', 403);
                 }
+                $_GET["_PAGE"] = ["href" => $href];
+                dd($href);
                 Router::getSmarty()->assign("aPage", [
                     "title" => $properties["Title"],
                     "url" => $href
@@ -39,7 +41,6 @@ class Router{
 
         }
     }
-
     /**
      * @throws Exception
      * @return array

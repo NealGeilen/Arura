@@ -86,6 +86,22 @@ $aNavBarPages =
             "Icon" => null,
             "Function" => "FileManger@connection",
         ],
+        "/gallery" => [
+            "Title" => "Albums",
+            "Right" => (
+            true
+            ),
+            "Icon" => "fas fa-img",
+            "Function" => "Gallery@Home",
+        ],
+        "/gallery/{id}" => [
+            "Title" => "Album",
+            "Right" => (
+            true
+            ),
+            "Icon" => null,
+            "Function" => "Gallery@Gallery",
+        ],
         '/administration' => [
             "Right" =>
                 (
@@ -342,6 +358,8 @@ $errors = new Errors();
 try {
     $router->getRouter()->set404(function () use ($errors){
         $errors->error(new NotFound("Page not found"));
+    });
+    $router->getRouter()->before('GET', '/.*', function() {
     });
     $router->getRouter()->run();
 } catch (Exception $e){
