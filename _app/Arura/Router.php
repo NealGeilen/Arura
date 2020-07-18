@@ -29,6 +29,9 @@ class Router{
     }
 
     public static function getCachedFile($id,$isPageFile = true){
+        if (is_null($id)){
+            return false;
+        }
 
         if (DEV_MODE){
             $aFiles = [];
@@ -95,6 +98,7 @@ class Router{
     public function loadRoutes($array = []){
         foreach ($array as $href => $properties){
             $this->getRouter()->before('GET|POST', $href, function() use ($href, $properties) {
+                $_GET["_URL"] = null;
                 if (!$properties["Right"]) {
                     throw new Exception('No Access', 403);
                 }
