@@ -11,6 +11,7 @@ class Router{
     protected $router;
     protected static $smarty;
     protected static $aResourceFiles = ["JsPage" =>[], "CssPage"=>[]];
+    protected static $aCachedFiles = [];
 
     public function __construct()
     {
@@ -19,14 +20,89 @@ class Router{
         self::setResourceFiles(json_decode(file_get_contents(__ARURA_TEMPLATES__. 'config.json'),true));
     }
 
+    protected static function setCachedFile($id, $data){
+        if (empty(self::$aCachedFiles)){
+            self::loadCachedFiles();
+        }
+        self::$aCachedFiles[$id] = $data;
+        file_put_contents(__WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR . "cached.json", json_encode(self::$aCachedFiles, JSON_PRETTY_PRINT));
+    }
+
+    public static function getCachedFile($id,$isPageFile = true){
+        if (is_null($id)){
+            return false;
+        }
+
+        if (DEV_MODE){
+            $aFiles = [];
+            if ($isPageFile){
+                foreach (self::getResourceFiles()["JsPage"] as $file){
+                    $aFiles["js"][]  = str_replace("\\", "/", str_replace(__ROOT__, "", $file));
+                }
+                foreach (self::getResourceFiles()["CssPage"] as $file){
+                    $aFiles["css"][]  = str_replace("\\", "/", str_replace(__ROOT__, "", $file));
+                }
+            } else {
+                foreach (self::getResourceFiles()["Css"] as $file){
+                    $aFiles["css"][] = "/dashboard/" . $file;
+                }
+                foreach (self::getResourceFiles()["Js"] as $type=>$file){
+                    $aFiles["js"][] = "/dashboard/" . $file;
+                }
+            }
+            return $aFiles;
+        }
+
+
+        if (empty(self::$aCachedFiles)){
+            self::loadCachedFiles();
+        }
+        if (isset(self::$aCachedFiles[$id])){
+            return self::$aCachedFiles[$id];
+        }
+        $group = null;
+        if ($isPageFile){
+            $group = "Page";
+        }
+        $Ch = new Cacher();
+        $Ch->setName(str_random());
+        $Ch->setCachDirectorie("cached/arura");
+
+        foreach (self::getResourceFiles()["Js{$group}"] as $js){
+            if (!is_file($js)){
+                $js = __ARURA__ROOT__ . $js;
+            }
+            $Ch->add(Cacher::Js,$js);
+        }
+        foreach (self::getResourceFiles()["Css{$group}"] as $css){
+            if (!is_file($css)){
+                $css = __ARURA__ROOT__ . $css;
+            }
+            $Ch->add(Cacher::Css,$css);
+        }
+        $aFiles= $Ch->getMinifyedFiles();
+        self::setCachedFile($id, $aFiles);
+        return $aFiles;
+    }
+
+    protected static function loadCachedFiles(){
+        if (!is_file(__WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR . "cached.json")){
+            file_put_contents(__WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR . "cached.json", "[]", JSON_PRETTY_PRINT);
+            self::$aCachedFiles = [];
+        } else {
+            self::$aCachedFiles = json_array_decode(file_get_contents(__WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR . "cached.json"));
+        }
+
+    }
+
     public function loadRoutes($array = []){
         foreach ($array as $href => $properties){
             $this->getRouter()->before('GET|POST', $href, function() use ($href, $properties) {
+                $_GET["_URL"] = null;
                 if (!$properties["Right"]) {
                     throw new Exception('No Access', 403);
                 }
-                $_GET["_PAGE"] = ["href" => $href];
-                dd($href);
+                $_GET["_URL"] = $href;
                 Router::getSmarty()->assign("aPage", [
                     "title" => $properties["Title"],
                     "url" => $href
@@ -39,76 +115,6 @@ class Router{
                 $this->loadRoutes($properties["Children"]);
             }
 
-        }
-    }
-    /**
-     * @throws Exception
-     * @return array
-     */
-    public static function loadResourceOfPageFiles($title = ""){
-        $Ch = new Cacher();
-        $Ch->setName(str_replace(" ", "-", $title));
-        $Ch->setCachDirectorie("cached/arura");
-
-        if (DEBUG_MODE){
-            if (is_file(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.js")){
-                unlink(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.js");
-            }
-            if (is_file(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.css")){
-                unlink(__ROOT__ . DIRECTORY_SEPARATOR . "cached/arura" . DIRECTORY_SEPARATOR .$Ch->getName(). ".min.css");
-            }
-        }
-        foreach (self::getResourceFiles()["JsPage"] as $js){
-            if (!is_file($js)){
-                $js = __ARURA__ROOT__ . $js;
-            }
-            if (is_file($js)){
-                $Ch->add(Cacher::Js,$js);
-            } else {
-                throw new NotFound("'{$js}' not found");
-            }
-        }
-        foreach (self::getResourceFiles()["CssPage"] as $css){
-            if (!is_file($css)){
-                $css = __ARURA__ROOT__ . $css;
-            }
-            $Ch->add(Cacher::Css,$css);
-        }
-        $aFiles= $Ch->getMinifyedFiles();
-        return [
-            "css" =>  [$aFiles["css"]],
-            "js" => [$aFiles["js"]]
-        ];
-    }
-
-    /**
-     * @return array
-     * @throws Exception
-     */
-    public static function loadResourceFiles(){
-        if (DEBUG_MODE){
-            $aFiles = [];
-            foreach (self::getResourceFiles() as $type=>$files){
-                foreach ($files as $file){
-                    $aFiles[$type][] = "/dashboard/" . $file;
-                }
-            }
-            return  $aFiles;
-        } else {
-            $Ch = new Cacher();
-            $Ch->setName("Arura");
-            $Ch->setCachDirectorie("cached");
-            foreach (self::getResourceFiles()["js"] as $js){
-                $Ch->add(Cacher::Js,__ARURA__ROOT__ . $js);
-            }
-            foreach (self::getResourceFiles()["css"] as $js){
-                $Ch->add(Cacher::Css,__ARURA__ROOT__ . $js);
-            }
-            $aFiles= $Ch->getMinifyedFiles();
-            return [
-                "css" =>  [$aFiles["css"]],
-                "js" => [$aFiles["js"]]
-            ];
         }
     }
 

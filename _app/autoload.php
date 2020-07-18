@@ -37,7 +37,7 @@ if (DEV_MODE){
 }
 
 
-define("__ARURA_TEMPLATES__",   __ARURA__ROOT__ .DIRECTORY_SEPARATOR. '_Templates' . DIRECTORY_SEPARATOR);
+define("__ARURA_TEMPLATES__",   __ARURA__ROOT__ . '_Templates' . DIRECTORY_SEPARATOR);
 define('__APP__',               __ARURA__ROOT__ . DIRECTORY_SEPARATOR. '_app'       . DIRECTORY_SEPARATOR);
 define('__DATAFILES__',         __ARURA__ROOT__   . DIRECTORY_SEPARATOR . '_app/Resources/DataFiles'  . DIRECTORY_SEPARATOR);
 define('__DEFAULT_PAGES__',     __ARURA__ROOT__ . DIRECTORY_SEPARATOR .'_DEFAULT_PAGES' . DIRECTORY_SEPARATOR);

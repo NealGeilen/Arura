@@ -210,7 +210,7 @@ $(window).scroll(function(){
     }
 });
 if ($("body").hasClass("layout-fixed")){
-    $("body").overlayScrollbars({ });
+    // $("body").overlayScrollbars({ });
 }
 
 $.each(JSON.parse(FLASHES), function (type, messages) {

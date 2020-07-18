@@ -88,6 +88,7 @@ class Pages extends AbstractController {
                 Sessions::End();
             }
         });
+        exit;
     }
 
     public function Password($hash){

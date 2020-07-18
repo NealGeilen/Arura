@@ -7,7 +7,9 @@
     {foreach $aResourceFiles.arura.css as $file}
         <link rel="stylesheet" href="{$file}">
     {/foreach}
-    {foreach $aResourceFiles.page.css as $file}
-        <link rel="stylesheet" href="{$file}">
-    {/foreach}
+    {if isset($aResourceFiles.page.css)}
+        {foreach $aResourceFiles.page.css as $file}
+            <link rel="stylesheet" href="{$file}">
+        {/foreach}
+    {/if}
 </head>

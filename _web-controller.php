@@ -346,7 +346,6 @@ $aNavBarPages =
             "Right" => !User::isLogged(),
             "Icon" => null
         ]
-
     ];
 
 

@@ -45,7 +45,7 @@ abstract class AbstractController{
             Router::getSmarty()->assign("aArura" ,["dir" => __ARURA__DIR_NAME__, "api" => "api", "version" => $sVersion]);
             Router::getSmarty()->assign("bMobileUser", isUserOnMobile());
             Router::getSmarty()->assign("aWebsite" ,Application::getAll()["website"]);
-            Router::getSmarty()->assign('aResourceFiles', ["page" => Router::loadResourceOfPageFiles($parameters["title"]), "arura" => Router::loadResourceFiles()]);
+            Router::getSmarty()->assign('aResourceFiles', ["page" => Router::getCachedFile($_GET["_URL"]), "arura" => Router::getCachedFile("MAIN", false)]);
             Router::getSmarty()->display(__ARURA_TEMPLATES__. $i);
             exit;
         }
