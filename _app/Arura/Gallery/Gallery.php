@@ -28,31 +28,39 @@ class Gallery extends Modal {
      * @param Gallery $gallery
      * @return Form
      */
-    public static function getForm($isCreatedForm = true, Gallery &$gallery= null) : Form
+    public static function getForm(Gallery &$gallery= null) : Form
     {
         $form = new Form("gallery-form");
         $form->addSubmit("submit", "Opslaan");
-        $form->addCheckbox("Gallery_Public");
-        $form->addText("Gallery_Name");
-        $form->addText("Gallery_Slug");
+        $form->addCheckbox("Gallery_Public", "Openbaar");
+        $form->addText("Gallery_Name", "Naam")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Gallery_Slug", "Slug")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addTextArea("Gallery_Description", "Omschrijving")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         if(!is_null($gallery)){
             //TODO set default values
         }
         if ($form->isSubmitted()){
 
             if (is_null($gallery)){
-                $state = self::Create(
+                $oNewGallery = self::Create(
                     $form->getValues()->Gallery_Name,
                     $form->getValues()->Gallery_Slug,
                     $form->getValues()->Gallery_Description,
-                    $form->getValues()->Gallery_Public
+                    (int)$form->getValues()->Gallery_Public
                 );
             }
 
-            if (false){
+            if ($oNewGallery === false){
                 $form->addError("Opslaan mislukt");
             } else {
-                Flasher::addFlash("Profiel opgeslagen");
+
+                if (is_null($gallery)){
+                    Flasher::addFlash("Album aangemaakt");
+                    header("Location: /dashboard/gallery/{$oNewGallery->getId()}");
+                }
             }
         }
         return $form;
@@ -102,7 +110,7 @@ class Gallery extends Modal {
     public function getImages($needsPublic = true){
         $sWhereSql = null;
         if ($needsPublic){
-            $sWhereSql = " AND WHERE Image_Public = 1";
+            $sWhereSql = " AND Image_Public = 1 ";
         }
         $aImages = [];
         foreach ($this->db->fetchAllColumn("SELECT Image_Id FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id {$sWhereSql} ORDER BY Image_Order", ["Gallery_Id" => $this->getId()])as $id){

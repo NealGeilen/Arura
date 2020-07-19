@@ -94,13 +94,21 @@ $aNavBarPages =
             "Icon" => "fas fa-images",
             "Function" => "Gallery@Home",
         ],
-        "/gallery/{id}" => [
+        "/gallery/([\w\d_-]+)" => [
             "Title" => "Album",
             "Right" => (
             true
             ),
             "Icon" => null,
             "Function" => "Gallery@Gallery",
+        ],
+        "/gallery/([\w\d_-]+)/settings" => [
+            "Title" => "Album",
+            "Right" => (
+            true
+            ),
+            "Icon" => null,
+            "Function" => "Gallery@Settings",
         ],
         '/administration' => [
             "Right" =>

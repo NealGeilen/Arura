@@ -203,10 +203,10 @@ section.content>.container,.content-header>.container{
 .flashes .alert{
     margin-bottom: 5px!important;
 }
-.modal-backdrop{
-    display: none!important;
-    z-index: 0!important;
-}
+/*.modal-backdrop{*/
+/*    display: none!important;*/
+/*    z-index: 0!important;*/
+/*}*/
 
 [data-notify=container]{
     position: fixed!important;

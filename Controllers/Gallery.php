@@ -10,7 +10,8 @@ class Gallery extends AbstractController {
         $smarty->assign("aGalleries", \Arura\Gallery\Gallery::getAllGalleries(false));
 //        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/FileManger/Home.js");
         $this->render("AdminLTE/Pages/Gallery/Home.tpl", [
-            "title" =>"Album's"
+            "title" =>"Album's",
+            "createForm" => \Arura\Gallery\Gallery::getForm()
         ]);
     }
 
@@ -18,6 +19,14 @@ class Gallery extends AbstractController {
         $gallery = new \Arura\Gallery\Gallery($id);
         $this->render("AdminLTE/Pages/Gallery/Gallery.tpl", [
             "title" =>$gallery->getName(),
+            "Gallery" => $gallery
+        ]);
+    }
+
+    public function Settings($id){
+        $gallery = new \Arura\Gallery\Gallery($id);
+        $this->render("AdminLTE/Pages/Gallery/Settings.tpl", [
+            "title" =>"Instellingen: {$gallery->getName()}",
             "Gallery" => $gallery
         ]);
     }

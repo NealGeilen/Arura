@@ -6,7 +6,7 @@
 
 {block contentHeader}
     <div class="btn-group">
-        <button class="btn btn-primary">Nieuw album</button>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#createGallery">Nieuw album</button>
     </div>
 {/block}
 
@@ -26,4 +26,35 @@
             </div>
         {/foreach}
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="createGallery"  role="dialog" >
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                {$createForm->startForm()}
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Album aanmaken</h5>
+                </div>
+                <div class="modal-body">
+                    {$createForm->getControl("Gallery_Name")}
+                    {$createForm->getControl("Gallery_Slug")}
+                    {$createForm->getControl("Gallery_Public")}
+                    {$createForm->getControl("Gallery_Description")}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
+                    {$createForm->getControl("submit")}
+                </div>
+                {$createForm->endForm()}
+            </div>
+        </div>
+    </div>
+{/block}
+
+{block JsPage}
+    <script>
+        {if $createForm->hasErrors()}
+        $("#createGallery").modal("show");
+        {/if}
+    </script>
 {/block}

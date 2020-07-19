@@ -38,6 +38,9 @@ abstract class AbstractController{
             }
             Router::getSmarty()->assign("sRequestUrl", $_GET["_dashboard_"]);
             $sVersion = json_array_decode(file_get_contents(__ARURA__ROOT__ . "composer.json"))["version"];
+            if (!isset($_GET["_URL"])){
+                $_GET["_URL"] = null;
+            }
 
             Router::getSmarty()->assign("Flashes", json_encode(Flasher::getFlashes()));
             Router::getSmarty()->assign("aUser", (User::isLogged()) ? User::activeUser()->__toArray() : null);
