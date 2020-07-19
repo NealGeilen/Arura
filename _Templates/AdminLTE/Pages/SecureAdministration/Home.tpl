@@ -1,5 +1,10 @@
 
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item active">Beveiligde administartie</li>
+{/block}
+
 {block content}
     <div class="row">
         {if $aPermissions.SECURE_ADMINISTRATION_CREATE}

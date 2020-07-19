@@ -1,4 +1,10 @@
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item"><a href="/dashboard/administration">Beveiligde administartie</a></li>
+    <li class="breadcrumb-item active">{$aTable.Table_Name}</li>
+{/block}
+
 {block content}
     <script>
         _TABLE_ID = {$aTable.Table_Id}

@@ -1,4 +1,15 @@
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item active">Albums</li>
+{/block}
+
+{block contentHeader}
+    <div class="btn-group">
+        <button class="btn btn-primary">Nieuw album</button>
+    </div>
+{/block}
+
 {block content}
     <div class="row">
         {foreach $aGalleries as $aGallery}

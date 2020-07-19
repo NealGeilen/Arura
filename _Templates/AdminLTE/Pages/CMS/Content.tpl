@@ -1,4 +1,10 @@
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item"><a href="/dashboard/content/paginas">Pagina's</a></li>
+    <li class="breadcrumb-item active">Content: {$aCmsPage.Page_Title}</li>
+{/block}
+
 {block content}
     <script>
         var _Page_Id = {$aCmsPage.Page_Id}
@@ -19,7 +25,7 @@
                         <a class="btn btn-secondary" href="/{$aArura.dir}/content/paginas">
                             <i class="fas fa-arrow-left"></i>
                         </a>
-                        <a class="btn btn-secondary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen" target="_blank">
+                        <a class="btn btn-secondary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen">
                             <i class="fas fa-cog"></i>
                         </a>
                         <button class="btn btn-primary" onclick="Builder.Structure.save(true)">

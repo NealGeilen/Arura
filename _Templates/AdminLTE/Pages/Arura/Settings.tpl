@@ -1,4 +1,8 @@
 {extends "../../index.tpl"}
+{block breadcrum}
+    <li class="breadcrumb-item active">Instellingen</li>
+{/block}
+
 {block content}
     <div class="row">
         {foreach from=$aSettings key=$Key item=aSettingsGroup}

@@ -91,7 +91,7 @@ $aNavBarPages =
             "Right" => (
             true
             ),
-            "Icon" => "fas fa-img",
+            "Icon" => "fas fa-images",
             "Function" => "Gallery@Home",
         ],
         "/gallery/{id}" => [
@@ -223,7 +223,7 @@ $aNavBarPages =
                                     Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
                                     ),
                                 "Title" => "Evenement aanmaken",
-                                "Icon" => "far fa-calendar-plus",
+                                "Icon" => null,
                                 "Function" => "Shop\Events@Create",
                             ],
                             '/winkel/evenementen/tickets' => [

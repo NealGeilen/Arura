@@ -1,4 +1,9 @@
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item active">Profiel: {$aUser.User_Username}</li>
+{/block}
+
 {block content}
     <div class="row">
         <div class="col-md-6">

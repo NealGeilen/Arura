@@ -1,4 +1,8 @@
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item active">Updaten</li>
+{/block}
 {block content}
     <div class="container">
         <div class="card card-primary arura-updater">

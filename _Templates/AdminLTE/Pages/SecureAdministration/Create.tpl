@@ -1,4 +1,11 @@
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item"><a href="/dashboard/administration">Beveiligde administartie</a></li>
+    <li class="breadcrumb-item active">Administartie aanmaken</li>
+{/block}
+
+
 {block content}
     <div class="card card-primary">
         <div class="card-header">

@@ -1,4 +1,7 @@
 {extends "../../../index.tpl"}
+{block breadcrum}
+    <li class="breadcrumb-item active">Ticket controleren</li>
+{/block}
 {block content}
     <style>
         video{

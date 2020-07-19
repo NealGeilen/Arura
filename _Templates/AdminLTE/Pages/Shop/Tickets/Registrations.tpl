@@ -1,4 +1,8 @@
 {extends "../../../index.tpl"}
+{block breadcrum}
+    <li class="breadcrumb-item"><a href="/dashboard/winkel/evenementen/tickets">Evenementen</a></li>
+    <li class="breadcrumb-item active">Aanmeldingen: {$aEvent.Event_Name}</li>
+{/block}
 {block content}
     <div class="card card-primary">
         <div class="card-header">

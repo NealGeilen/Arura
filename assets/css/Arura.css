@@ -197,7 +197,7 @@ canvas.chartjs-render-monitor{
 .table.dataTable{
     width: 100%!important;
 }
-section.content>.container{
+section.content>.container,.content-header>.container{
     padding: unset!important;
 }
 .flashes .alert{
@@ -226,4 +226,15 @@ section.content>.container{
     right: 0;
     height: 5px;
     background-color: unset;
+}
+.breadcrumb{
+    background-color: unset;
+    margin: 0;
+    padding: unset;
+}
+.breadcrumb-item{
+    margin: 15px 0;
+}
+.content-{
+    margin-top: 25px;
 }

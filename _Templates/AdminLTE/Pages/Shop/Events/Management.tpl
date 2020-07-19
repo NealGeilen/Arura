@@ -1,4 +1,9 @@
 {extends "../../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item active">Evenementen beheer</li>
+{/block}
+
 {block content}
     <div class="card card-primary">
         <div class="card-header">

@@ -1,4 +1,9 @@
 {extends "../../index.tpl"}
+{block breadcrum}
+    <li class="breadcrumb-item"><a href="/dashboard/content/paginas">Pagina's</a></li>
+    <li class="breadcrumb-item active">Instellingen: {$aCmsPage.Page_Title}</li>
+{/block}
+
 {block content}
     <header class="page-header">
         <h3>{$aCmsPage.Page_Title}</h3>
@@ -16,7 +21,7 @@
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     {if !$bMobileUser}
-                        <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/content" target="_blank">
+                        <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/content">
                             <i class="fas fa-pen"></i>
                         </a>
                     {/if}

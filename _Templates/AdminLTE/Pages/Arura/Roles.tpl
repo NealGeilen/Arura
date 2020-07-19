@@ -1,4 +1,9 @@
 {extends "../../index.tpl"}
+{block breadcrum}
+    <li class="breadcrumb-item active">Rollen</li>
+{/block}
+
+
 {block content}
     <div class="card card-primary">
         <header class="card-header">

@@ -15,8 +15,10 @@ class Gallery extends AbstractController {
     }
 
     public function Gallery($id){
+        $gallery = new \Arura\Gallery\Gallery($id);
         $this->render("AdminLTE/Pages/Gallery/Gallery.tpl", [
-            "title" =>"Album"
+            "title" =>$gallery->getName(),
+            "Gallery" => $gallery
         ]);
     }
 

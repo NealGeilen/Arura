@@ -1,4 +1,9 @@
 {extends "../../index.tpl"}
+
+{block breadcrum}
+    <li class="breadcrumb-item active">Menu</li>
+{/block}
+
 {block content}
     <style>
         .dd{

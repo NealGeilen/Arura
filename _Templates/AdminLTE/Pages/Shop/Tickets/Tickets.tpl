@@ -1,4 +1,8 @@
 {extends "../../../index.tpl"}
+{block breadcrum}
+    <li class="breadcrumb-item"><a href="/dashboard/winkel/evenementen/tickets">Evenementen</a></li>
+    <li class="breadcrumb-item active">Tickets: {$aEvent.Event_Name}</li>
+{/block}
 {block content}
     <script>
         aRegistrations = {$aRegistrations};
