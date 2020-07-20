@@ -12,17 +12,34 @@
 
 {block content}
     <div class="row">
-        {foreach $aGalleries as $aGallery}
-            <div class="col-md-3">
-                <a href="/dashboard/gallery/{$aGallery->getId()}">
-                    <div class="card card-secondary">
-                        <div class="card-header">
-                            <h4 class="card-title text-capitalize">{$aGallery->getName()}</h4>
+        {foreach $aGalleries as $Gallery}
+            <div class="col-md-4 col-6">
+
+                <div class="gallery-container" style="background-image: url('{$Gallery->getAnCoverImage(false)->getThumbnail(false)}')">
+                    {if !$Gallery->isPublic()}
+                        <div class="lock">
+                            <i class="fas fa-lock"></i>
                         </div>
-                        <div class="card-body">
+                    {/if}
+                    <h4 class="gallery-name">
+                        {$Gallery->getName()}
+                    </h4>
+                    <div class="gallery-options">
+                        <span class="btn btn-gallery-toolbar mover handle btn-lg"><i class="fas fa-arrows-alt"></i></span>
+                        <div class="gallery-toolbar btn-group">
+                            <button class="btn btn-gallery-toolbar" >
+                                {if $Gallery->isPublic()}
+                                    <i class="fas fa-lock"></i>
+                                {else}
+                                    <i class="fas fa-lock-open"></i>
+                                {/if}
+                            </button>
+                            <a class="btn btn-gallery-toolbar" href="/dashboard/gallery/{$Gallery->getId()}">
+                                <i class="fas fa-pen"></i>
+                            </a>
                         </div>
                     </div>
-                </a>
+                </div>
             </div>
         {/foreach}
     </div>

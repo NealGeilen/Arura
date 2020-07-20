@@ -6,21 +6,23 @@
 {/block}
 
 {block contentHeader}
-    <button class="btn btn-primary" data-toggle="modal" data-target="#uploadImage">Afbeelding uploaden</button>
-    <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}/settings">Instellingen</a>
+    <button class="btn btn-primary" data-toggle="modal" data-target="#uploadImage"><i class="fas fa-upload"></i></button>
+    <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}/settings"><i class="fas fa-cogs"></i></a>
 {/block}
 
 {block content}
-    {foreach $Gallery->getImages(false) as $Image}
-        {include file='./Image.tpl'}
-    {/foreach}
+    <div class="row images">
+        {foreach $Gallery->getImages(false) as $Image}
+            {include file='./Image-card.tpl'}
+        {/foreach}
+    </div>
 
     <!-- Modal -->
     <div class="modal fade" id="uploadImage">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Afbeeldingen uploaden</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -29,8 +31,8 @@
                     <form class="dropzone" id="dp-UploadImage"></form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuleren</button>
+                    <button type="button" class="btn btn-primary upload-images">Toevoegen</button>
                 </div>
             </div>
         </div>

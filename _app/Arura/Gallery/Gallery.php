@@ -22,7 +22,7 @@ class Gallery extends Modal {
     protected $order = 0;
     protected $isPublic = false;
 
-    const __IMAGES__  = __APP_ROOT__ . "Images" . DIRECTORY_SEPARATOR;
+    const __IMAGES__  = __APP_ROOT__ . DIRECTORY_SEPARATOR ."Images" . DIRECTORY_SEPARATOR;
 
     public function __construct(string $id)
     {
@@ -103,17 +103,33 @@ class Gallery extends Modal {
 
     /**
      * @param bool $needsPublic
+     * @return Image|bool
+     * @throws Error
+     */
+    public function getAnCoverImage($needsPublic = true){
+        $aCoverImages = $this->getCoverImages($needsPublic);
+        if (empty($aCoverImages)){
+            $aCoverImages = $this->getImages($needsPublic);
+            if (empty($aCoverImages)){
+                return new Image(null);
+            }
+        }
+        return $aCoverImages[0];
+    }
+
+    /**
+     * @param bool $needsPublic
      * @return Image[]
      * @throws Error
      */
     public function getCoverImages($needsPublic = true){
         $sWhereSql = null;
         if ($needsPublic){
-            $sWhereSql = " AND WHERE Image_Public = 1";
+            $sWhereSql = " AND Image_Public = 1";
         }
         $aImages = [];
-        foreach ($this->db->fetchAllColumn("SELECT Image_Id FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id AND Image_Cover = 1 {$sWhereSql}", ["Gallery_Id" => $this->getId()])as $id){
-            $aImages[] = new self($id);
+        foreach ($this->db->fetchAllColumn("SELECT Image_Id FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id AND Image_Cover = 1 {$sWhereSql} ORDER BY Image_Order", ["Gallery_Id" => $this->getId()])as $id){
+            $aImages[] = new Image($id);
         }
         return $aImages;
     }
@@ -199,12 +215,12 @@ class Gallery extends Modal {
             throw new Error("Upload error");
         }
         $optimizer = OptimizerChainFactory::create();
-        if (DEBUG_MODE){
-            $logger = new Logger("Image-Optimizer");
-            $logger->pushHandler(new StreamHandler(__APP_ROOT__ . 'image.log'));
-            $optimizer->useLogger($logger);
-        }
         $optimizer->optimize(self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".$sExtension");
+
+        copy(self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".$sExtension", self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . "-thump.$sExtension");
+
+        Image::ResizeImg(self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . "-thump.$sExtension", $Image->getType(), 500, 500);
+
         return $Image;
     }
 

@@ -102,6 +102,14 @@ $aNavBarPages =
             "Icon" => null,
             "Function" => "Gallery@Gallery",
         ],
+        "/gallery/image/([\w\d_-]+)" => [
+            "Title" => "Album",
+            "Right" => (
+            true
+            ),
+            "Icon" => null,
+            "Function" => "Gallery@Image",
+        ],
         "/gallery/([\w\d_-]+)/settings" => [
             "Title" => "Album",
             "Right" => (
