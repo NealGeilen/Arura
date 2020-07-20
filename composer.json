@@ -21,6 +21,7 @@
     "php": "^7.1",
     "smarty/smarty": "^3",
     "spatie/image-optimizer": "^1",
+    "monolog/monolog": "2.1.0",
     "mollie/mollie-api-php": "^2",
     "czproject/git-php": "^3",
     "phpmailer/phpmailer": "^6",

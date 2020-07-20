@@ -4,8 +4,10 @@ namespace Arura\Gallery;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Modal;
+use Arura\Pages\Page;
+use Arura\User\User;
 
-class Image extends Modal {
+class Image extends Page {
 
     protected $id = "";
     protected $type = "";
@@ -15,7 +17,7 @@ class Image extends Modal {
     protected $isCover = false;
     protected $gallary;
 
-    public function __construct(string $id)
+    public function __construct($id)
     {
         $this->id = $id;
         parent::__construct();
@@ -84,6 +86,23 @@ class Image extends Modal {
 
     }
 
+    public function getImage(){
+        return "/gallery/image/{$this->getId()}";
+    }
+
+    public static function displayView($sSlug = "", $iRight = null,callable $function = null){
+        parent::displayView($sSlug, true, function ($sUrl){
+            $Image = new self($sUrl);
+            if ($Image->isPublic() || User::isLogged()){
+                $image = file_get_contents(Gallery::__IMAGES__. $Image->getGallery()->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".{$Image->getType()}");
+
+                header('Content-type: image/jpeg;');
+                header("Content-Length: " . strlen($image));
+                echo $image;
+            }
+        });
+    }
+
     /**
      * @return string
      */
@@ -97,6 +116,7 @@ class Image extends Modal {
      */
     public function getType(): string
     {
+        $this->load();
         return $this->type;
     }
 
@@ -115,6 +135,7 @@ class Image extends Modal {
      */
     public function getName(): string
     {
+        $this->load();
         return $this->name;
     }
 
@@ -133,6 +154,7 @@ class Image extends Modal {
      */
     public function getOrder(): int
     {
+        $this->load();
         return $this->order;
     }
 
@@ -151,6 +173,7 @@ class Image extends Modal {
      */
     public function isPublic(): bool
     {
+        $this->load();
         return $this->isPublic;
     }
 
@@ -169,6 +192,7 @@ class Image extends Modal {
      */
     public function isCover(): bool
     {
+        $this->load();
         return $this->isCover;
     }
 
@@ -187,6 +211,7 @@ class Image extends Modal {
      */
     public function getGallery() : Gallery
     {
+        $this->load();
         return $this->gallary;
     }
 

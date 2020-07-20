@@ -7,6 +7,10 @@ use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
 use DateTime;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
+use RuntimeException;
+use Spatie\ImageOptimizer\OptimizerChainFactory;
 
 class Gallery extends Modal {
 
@@ -17,6 +21,8 @@ class Gallery extends Modal {
     protected $createdDate;
     protected $order = 0;
     protected $isPublic = false;
+
+    const __IMAGES__  = __APP_ROOT__ . "Images" . DIRECTORY_SEPARATOR;
 
     public function __construct(string $id)
     {
@@ -30,17 +36,18 @@ class Gallery extends Modal {
      */
     public static function getForm(Gallery &$gallery= null) : Form
     {
-        $form = new Form("gallery-form");
-        $form->addSubmit("submit", "Opslaan");
-        $form->addCheckbox("Gallery_Public", "Openbaar");
+        $form = new Form("gallery-form", Form::OneColumnRender);
         $form->addText("Gallery_Name", "Naam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("Gallery_Slug", "Slug")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addTextArea("Gallery_Description", "Omschrijving")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addCheckbox("Gallery_Public", "Openbaar");
+        $form->addSubmit("submit", "Opslaan");
         if(!is_null($gallery)){
-            //TODO set default values
+            $form->addHidden("Gallery_Id");
+            $form->setDefaults($gallery->__toArray());
         }
         if ($form->isSubmitted()){
 
@@ -51,15 +58,24 @@ class Gallery extends Modal {
                     $form->getValues()->Gallery_Description,
                     (int)$form->getValues()->Gallery_Public
                 );
+            } else{
+                $gallery
+                    ->setIsPublic($form->getValues()->Gallery_Public)
+                    ->setName($form->getValues()->Gallery_Name)
+                    ->setSlug($form->getValues()->Gallery_Slug)
+                    ->setDescription($form->getValues()->Gallery_Description);
+                $gallery->Save();
+                $oNewGallery = $gallery;
             }
 
             if ($oNewGallery === false){
                 $form->addError("Opslaan mislukt");
             } else {
-
                 if (is_null($gallery)){
                     Flasher::addFlash("Album aangemaakt");
                     header("Location: /dashboard/gallery/{$oNewGallery->getId()}");
+                } else {
+                    Flasher::addFlash("{$gallery->getName()} opgeslagen");
                 }
             }
         }
@@ -114,7 +130,7 @@ class Gallery extends Modal {
         }
         $aImages = [];
         foreach ($this->db->fetchAllColumn("SELECT Image_Id FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id {$sWhereSql} ORDER BY Image_Order", ["Gallery_Id" => $this->getId()])as $id){
-            $aImages[] = new self($id);
+            $aImages[] = new Image($id);
         }
         return $aImages;
     }
@@ -137,7 +153,7 @@ class Gallery extends Modal {
             return [
                 "Gallery_Id" => $this->getId(),
                 "Gallery_Name" => $this->getName(),
-                "Gallery_SLug" => $this->getSlug(),
+                "Gallery_Slug" => $this->getSlug(),
                 "Gallery_Description" => $this->getDescription(),
                 "Gallery_Order" => $this->getOrder(),
                 "Gallery_Public" => (int)$this->isPublic(),
@@ -151,6 +167,54 @@ class Gallery extends Modal {
         if ($this->isLoaded){
             $this->db->updateRecord("tblGallery", $this->__toArray(), "Gallery_Id");
         }
+    }
+
+    /**
+     * @return Image|bool
+     * @throws Error
+     */
+    public function Upload(){
+        if (!is_dir(self::__IMAGES__ . $this->getId())){
+            mkdir(self::__IMAGES__ .$this->getId(), 0777, true);
+        }
+        if (isset($_FILES["Image"]["error"])){
+            switch ($_FILES['Image']['error']) {
+                case UPLOAD_ERR_OK:
+                    break;
+                case UPLOAD_ERR_NO_FILE:
+                    throw new RuntimeException('No file sent.');
+                case UPLOAD_ERR_INI_SIZE:
+                case UPLOAD_ERR_FORM_SIZE:
+                    throw new RuntimeException('Exceeded filesize limit.');
+                default:
+                    throw new RuntimeException('Unknown errors.');
+            }
+        }
+        $sLocation = $_FILES["Image"]["tmp_name"];
+        $sName = $_FILES["Image"]["name"];
+        $sExtension = substr($sName, strrpos($sName, '.')+1);
+        $sName = substr($sName, 0, strrpos($sName, ".{$sExtension}"));
+        $Image = Image::Create($this, $sName, $sExtension, $this->getNextOrderImage());
+        if (!move_uploaded_file($sLocation, self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".$sExtension")){
+            throw new Error("Upload error");
+        }
+        $optimizer = OptimizerChainFactory::create();
+        if (DEBUG_MODE){
+            $logger = new Logger("Image-Optimizer");
+            $logger->pushHandler(new StreamHandler(__APP_ROOT__ . 'image.log'));
+            $optimizer->useLogger($logger);
+        }
+        $optimizer->optimize(self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".$sExtension");
+        return $Image;
+    }
+
+    /**
+     * @return int
+     * @throws Error
+     */
+    public function getNextOrderImage(){
+        $aData = $this->db->fetchRow("SELECT MAX(Image_Order) + 1 AS Count FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id", ["Gallery_Id" => $this->getId()]);
+        return (int)$aData["Count"];
     }
 
     /**

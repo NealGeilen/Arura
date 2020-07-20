@@ -96,6 +96,7 @@ startPageLoad();
 $(document).ready(function () {
     endPageLoad();
 });
+Dropzone.autoDiscover = false;
 function addSuccessMessage(sMessage) {
     Dashboard.System.Alerts.Success(sMessage);
 }

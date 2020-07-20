@@ -366,8 +366,6 @@ try {
     $router->getRouter()->set404(function () use ($errors){
         $errors->error(new NotFound("Page not found"));
     });
-    $router->getRouter()->before('GET', '/.*', function() {
-    });
     $router->getRouter()->run();
 } catch (Exception $e){
     $errors->error($e);

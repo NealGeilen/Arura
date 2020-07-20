@@ -7,6 +7,18 @@
 {/block}
 
 {block content}
-
+    <div class="card card-primary">
+        <div class="card-header">
+            <h2 class="card-title">Instellingen</h2>
+            <div class="card-tools">
+                <a class="btn btn-primary" href="/dashboard/gallery/{$Gallery->getId()}">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </div>
+        </div>
+        <div class="card-body">
+            {$editForm}
+        </div>
+    </div>
 
 {/block}
