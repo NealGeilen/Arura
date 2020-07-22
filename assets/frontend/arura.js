@@ -31,6 +31,7 @@ $(document).ready(function () {
     Arura.Event.OrderTicketAmountForm($(".form-event-order"));
     Arura.Event.RegisterEvent($(".event-signup"));
     Arura.Cms.ContactForm();
+    Arura.Gallery.init();
 });
 
 
@@ -363,6 +364,23 @@ Arura = {
                             }
                         }
                     }
+                }
+            });
+        }
+    },
+    Gallery: {
+        init: function () {
+            $(".Gallery").magnificPopup({
+                delegate: 'a',
+                type: 'image',
+                gallery: {
+                    enabled: true,
+
+                    arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
+
+                    tPrev: 'Vorige',
+                    tNext: 'Volgende',
+                    tCounter: '<span class="mfp-counter">%curr% van %total%</span>' // markup of counter
                 }
             });
         }

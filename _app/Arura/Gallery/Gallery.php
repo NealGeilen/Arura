@@ -21,7 +21,7 @@ class Gallery extends Page {
 
     protected $id = "";
     protected $name = "";
-    protected $description = "";
+    protected $Description = "";
     protected $createdDate;
     protected $order = 0;
     protected $isPublic = false;
@@ -40,10 +40,12 @@ class Gallery extends Page {
             if ($Gallery->isPublic() || Restrict::Validation(Rights::GALLERY_MANGER)){
                 self::getSmarty()->assign("Gallery", $Gallery);
                 if (is_file(__CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl")){
-                    self::$MasterPage = __CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
+                    $content = __CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
                 } else {
-                    self::$MasterPage = __STANDARD_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
+                    $content = __STANDARD_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
                 }
+                $Gallery->setTitle($Gallery->getName());
+                $Gallery->setPageContend(self::getSmarty()->fetch($content));
                 $Gallery->showPage();
             }
         });
@@ -340,7 +342,7 @@ class Gallery extends Page {
     public function getDescription(): string
     {
         $this->load();
-        return $this->description;
+        return $this->Description;
     }
 
     /**
@@ -348,7 +350,7 @@ class Gallery extends Page {
      */
     public function setDescription($description): Gallery
     {
-        $this->description = $description;
+        $this->Description = $description;
         return $this;
     }
 
