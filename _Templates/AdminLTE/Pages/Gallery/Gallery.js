@@ -3,7 +3,7 @@ var Gallery = {
     Uploader: function () {
         $("#dp-UploadImage").dropzone({
             paramName:"Image",
-            acceptedFiles: "",
+            acceptedFiles: "image/*",
             addRemoveLinks: true,
             params: {
                 type: "upload"
@@ -11,20 +11,35 @@ var Gallery = {
             autoProcessQueue: false,
             parallelUploads: 200,
             url: window.location.href,
+            timeout: 900000,
             init: function() {
                 var ImageDropzone = this;
                 $(".upload-images").on("click", function () {
-                    ImageDropzone.processQueue();
+                    for (var i = 0; i < ImageDropzone.getAcceptedFiles().length; i++) {
+                        setTimeout(ImageDropzone.processFile(ImageDropzone.getAcceptedFiles()[i]), 1000);
+                    }
                 });
                 this.on("success", function(file, responseText) {
-                    $(".image-alert").remove();
+                    if(ImageDropzone.getQueuedFiles().length === 0 && ImageDropzone.getUploadingFiles().length === 0){
+                        $(".image-alert").remove();
+                        ImageDropzone.removeAllFiles(true) ;
+                    }
+                    console.log(file, responseText);
                     response = JSON.parse(responseText);
                     $(".images").append(response.data);
                 });
+                this.on("sending", function(file, xhr, formData) {
+                    /*Called just before each file is sent*/
+                    xhr.ontimeout = (() => {
+                        /*Execute on case of timeout only*/
+                        console.log('Server Timeout')
+                    });
+                });
                 this.on("complete", function(file) {
-                    console.log(file);
-                    Dashboard.System.Alerts.Success(file.name + " toegevoegd");
-                    ImageDropzone.removeFile(file);
+                    setTimeout(function () {
+                        Dashboard.System.Alerts.Success(file.name + " toegevoegd");
+                        ImageDropzone.removeFile(file);
+                    }, 1000)
                 });
                 this.on("queuecomplete", function(file) {
                     $("#uploadImage").modal("hide");

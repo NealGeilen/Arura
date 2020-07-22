@@ -140,20 +140,19 @@ class Image extends Page {
                         readfile($file);
                         break;
                     case "thump":
-                        $image = file_get_contents(Gallery::__IMAGES__. $Image->getGallery()->getId() . DIRECTORY_SEPARATOR . $Image->getId() . "-thump.{$Image->getType()}");
-
-                        header('Content-type: image/jpeg;');
-                        header("Content-Length: " . strlen($image));
+                        $image = file_get_contents($Image->getThumbnail());//                        dd($image);
+                        header("Content-Type: image/{$Image->getType()};");
+                        header("Content-Length: " . filesize($Image->getThumbnail()));
                         echo $image;
                         break;
                     default:
-                        $image = file_get_contents(Gallery::__IMAGES__. $Image->getGallery()->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".{$Image->getType()}");
-
-                        header('Content-type: image/jpeg;');
-                        header("Content-Length: " . strlen($image));
+                        $image = file_get_contents($Image->getImage());
+                        header("Content-Type: image/{$Image->getType()};");
+                        header("Content-Length: " . filesize($Image->getImage()));
                         echo $image;
                         break;
                 }
+                exit;
             }
         });
     }

@@ -129,9 +129,9 @@ class RequestHandler{
         if (!ResponseHandler::hasError()){
             try{
                 $responseHandler->exitSuccess($callback($this, $responseHandler));
-                if (!empty($this->aTypes) && isset($_POST["type"])){
-                    if (isset($this->aTypes[$_POST["type"]])){
-                        $responseHandler->exitSuccess($this->aTypes[$_POST["type"]]($this->aData));
+                if (!empty($this->aTypes) && isset($_REQUEST["type"])){
+                    if (isset($this->aTypes[$_REQUEST["type"]])){
+                        $responseHandler->exitSuccess($this->aTypes[$_REQUEST["type"]]($this->aData));
                     } else {
                         throw new MethodNotAllowed();
                     }

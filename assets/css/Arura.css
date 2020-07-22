@@ -238,3 +238,6 @@ section.content>.container,.content-header>.container{
 .content-{
     margin-top: 25px;
 }
+.dz-filename{
+    display: none;
+}

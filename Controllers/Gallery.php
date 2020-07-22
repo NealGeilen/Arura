@@ -38,6 +38,7 @@ class Gallery extends AbstractController {
         $gallery = new \Arura\Gallery\Gallery($id);
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($gallery){
             $requestHandler->addType("upload", function () use ($gallery){
+                set_time_limit(0);
                 Router::getSmarty()->assign("Image", $gallery->Upload());
                 return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
             });
