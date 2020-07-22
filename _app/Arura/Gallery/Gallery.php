@@ -6,17 +6,21 @@ use Arura\Exceptions\Error;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
+use Arura\Pages\Page;
+use Arura\Permissions\Restrict;
+use Arura\User\User;
 use DateTime;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Rights;
 use RuntimeException;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
+use Symfony\Component\VarDumper\VarDumper;
 
-class Gallery extends Modal {
+class Gallery extends Page {
 
     protected $id = "";
     protected $name = "";
-    protected $slug ="";
     protected $description = "";
     protected $createdDate;
     protected $order = 0;
@@ -24,10 +28,25 @@ class Gallery extends Modal {
 
     const __IMAGES__  = __APP_ROOT__ . DIRECTORY_SEPARATOR ."Images" . DIRECTORY_SEPARATOR;
 
-    public function __construct(string $id)
+    public function __construct($id)
     {
         $this->id = $id;
         parent::__construct();
+    }
+
+    public static function displayView($sSlug = "", $iRight = null,callable $function = null){
+        parent::displayView($sSlug, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl){
+            $Gallery = new self($sUrl);
+            if ($Gallery->isPublic() || Restrict::Validation(Rights::GALLERY_MANGER)){
+                self::getSmarty()->assign("Gallery", $Gallery);
+                if (is_file(__CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl")){
+                    self::$MasterPage = __CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
+                } else {
+                    self::$MasterPage = __STANDARD_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
+                }
+                $Gallery->showPage();
+            }
+        });
     }
 
     /**
@@ -38,8 +57,6 @@ class Gallery extends Modal {
     {
         $form = new Form("gallery-form", Form::OneColumnRender);
         $form->addText("Gallery_Name", "Naam")
-            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
-        $form->addText("Gallery_Slug", "Slug")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addTextArea("Gallery_Description", "Omschrijving")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
@@ -54,7 +71,6 @@ class Gallery extends Modal {
             if (is_null($gallery)){
                 $oNewGallery = self::Create(
                     $form->getValues()->Gallery_Name,
-                    $form->getValues()->Gallery_Slug,
                     $form->getValues()->Gallery_Description,
                     (int)$form->getValues()->Gallery_Public
                 );
@@ -62,7 +78,6 @@ class Gallery extends Modal {
                 $gallery
                     ->setIsPublic($form->getValues()->Gallery_Public)
                     ->setName($form->getValues()->Gallery_Name)
-                    ->setSlug($form->getValues()->Gallery_Slug)
                     ->setDescription($form->getValues()->Gallery_Description);
                 $gallery->Save();
                 $oNewGallery = $gallery;
@@ -94,7 +109,7 @@ class Gallery extends Modal {
         if ($needsPublic){
             $sWhereSql = "WHERE Gallery_Public = 1";
         }
-        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery " . $sWhereSql);
+        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY Gallery_Order");
         foreach ($aIds as $sId){
             $aGalleries[] = new self($sId);
         }
@@ -159,7 +174,6 @@ class Gallery extends Modal {
             $this->setName($aGallery["Gallery_Name"]);
             $this->setCreatedDate((new DateTime())->setTimestamp($aGallery["Gallery_CreatedDate"]));
             $this->setOrder($aGallery["Gallery_Order"]);
-            $this->setSlug($aGallery["Gallery_Slug"]);
             $this->isLoaded = true;
         }
     }
@@ -169,7 +183,6 @@ class Gallery extends Modal {
             return [
                 "Gallery_Id" => $this->getId(),
                 "Gallery_Name" => $this->getName(),
-                "Gallery_Slug" => $this->getSlug(),
                 "Gallery_Description" => $this->getDescription(),
                 "Gallery_Order" => $this->getOrder(),
                 "Gallery_Public" => (int)$this->isPublic(),
@@ -183,6 +196,32 @@ class Gallery extends Modal {
         if ($this->isLoaded){
             $this->db->updateRecord("tblGallery", $this->__toArray(), "Gallery_Id");
         }
+    }
+
+    public function saveOrder(int $order){
+        if ($order <= $this->getOrder()){
+            //add
+            $aImages = $this->db->fetchAll("SELECT Gallery_Id, Gallery_Order FROM tblGallery WHERE Gallery_Order >= :Order AND Gallery_Id != :Gallery_Id", ["Order" => $order, "Gallery_Id" => $this->getId()]);
+            foreach ($aImages as $aImage){
+                $this->db->updateRecord("tblGallery",[
+                    "Gallery_Id" => $aImage["Gallery_Id"],
+                    "Gallery_Order" => ($aImage["Gallery_Order"] + 1)
+                ], "Gallery_Id");
+            }
+
+        } else {
+            //subtract
+            $aImages = $this->db->fetchAll("SELECT Gallery_Id, Gallery_Order FROM tblGallery WHERE Gallery_Order <= :Order AND Gallery_Id != :Gallery_Id", ["Order" => $order, "Gallery_Id" => $this->getId()]);
+            foreach ($aImages as $aImage){
+
+                $this->db->updateRecord("tblGallery",[
+                    "Gallery_Id" => $aImage["Gallery_Id"],
+                    "Gallery_Order" => ($aImage["Gallery_Order"] - 1)
+                ], "Gallery_Id");
+            }
+        }
+        $this->setOrder($order);
+        return $this->Save();
     }
 
     /**
@@ -234,21 +273,29 @@ class Gallery extends Modal {
     }
 
     /**
+     * @return int
+     * @throws Error
+     */
+    public static function getNextOrderGallery(){
+        $db = new Database();
+        $aData = $db->fetchRow("SELECT MAX(Gallery_Order) + 1 AS Count FROM tblGallery", []);
+        return (int)$aData["Count"];
+    }
+
+    /**
      * @param string $Name
-     * @param string $Slug
      * @param string $Description
      * @param int $Order
      * @return Gallery|bool
      * @throws Error
      */
-    public static function Create(string $Name,string $Slug, $Description = "", $public = 0 , $Order = 0){
+    public static function Create(string $Name, $Description = "", $public = 0){
         $db = new Database();
         $Id = createGuid();
         $db->createRecord("tblGallery",
         [
             "Gallery_Id" => $Id,
-            "Gallery_Slug" => $Slug,
-            "Gallery_Order" => $Order,
+            "Gallery_Order" => self::getNextOrderGallery(),
             "Gallery_Description" => $Description,
             "Gallery_CreatedDate" => time(),
             "Gallery_Public" => $public,
@@ -259,24 +306,6 @@ class Gallery extends Modal {
         }
         return  false;
 
-    }
-
-    /**
-     * @return string
-     */
-    public function getSlug(): string
-    {
-        $this->load();
-        return $this->slug;
-    }
-
-    /**
-     * @param string $slug
-     */
-    public function setSlug(string $slug): Gallery
-    {
-        $this->slug = $slug;
-        return $this;
     }
 
     /**
@@ -317,7 +346,7 @@ class Gallery extends Modal {
     /**
      * @param string $description
      */
-    public function setDescription(string $description): Gallery
+    public function setDescription($description): Gallery
     {
         $this->description = $description;
         return $this;

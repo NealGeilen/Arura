@@ -12,6 +12,13 @@ var Gallery = {
             parallelUploads: 200,
             url: window.location.href,
             timeout: 900000,
+
+            //Messages
+            dictDefaultMessage: "Klik hier of sleep je afbeeldingen hier naar toe.",
+            dictFileTooBig: "Dit bestand is {{filesize}} groot, Het mag niet groter zijn dan {{maxFilesize}}",
+            dictInvalidFileType: "Dit typen bestand wordt niet ondersteund",
+            dictCancelUpload: "Upload annuleren",
+            dictRemoveFile: "Bestand verwijderen",
             init: function() {
                 var ImageDropzone = this;
                 $(".upload-images").on("click", function () {

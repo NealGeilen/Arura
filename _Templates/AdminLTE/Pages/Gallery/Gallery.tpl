@@ -8,6 +8,7 @@
 {block contentHeader}
     <button class="btn btn-primary" data-toggle="modal" data-target="#uploadImage"><i class="fas fa-upload"></i></button>
     <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}/settings"><i class="fas fa-cogs"></i></a>
+    <a href="{$aWebsite.url}/album/{$Gallery->getId()}" target="_blank" class="btn btn-secondary">Weergaven</a>
 {/block}
 
 {block content}

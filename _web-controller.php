@@ -89,7 +89,7 @@ $aNavBarPages =
         "/gallery" => [
             "Title" => "Albums",
             "Right" => (
-            true
+            Restrict::Validation(Rights::GALLERY_MANGER)
             ),
             "Icon" => "fas fa-images",
             "Function" => "Gallery@Home",
@@ -97,7 +97,7 @@ $aNavBarPages =
         "/gallery/([\w\d_-]+)" => [
             "Title" => "Album",
             "Right" => (
-            true
+            Restrict::Validation(Rights::GALLERY_MANGER)
             ),
             "Icon" => null,
             "Function" => "Gallery@Gallery",
@@ -105,7 +105,7 @@ $aNavBarPages =
         "/gallery/image/([\w\d_-]+)" => [
             "Title" => "Album",
             "Right" => (
-            true
+            Restrict::Validation(Rights::GALLERY_MANGER)
             ),
             "Icon" => null,
             "Function" => "Gallery@Image",
@@ -113,7 +113,7 @@ $aNavBarPages =
         "/gallery/([\w\d_-]+)/settings" => [
             "Title" => "Album",
             "Right" => (
-            true
+            Restrict::Validation(Rights::GALLERY_MANGER)
             ),
             "Icon" => null,
             "Function" => "Gallery@Settings",

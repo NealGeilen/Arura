@@ -24,6 +24,8 @@ class Rights{
 
     const ANALYTICS = 50;
 
+    const GALLERY_MANGER = 55;
+
 
 
     static function getConstants() {

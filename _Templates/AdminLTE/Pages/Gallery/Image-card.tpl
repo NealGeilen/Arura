@@ -1,7 +1,7 @@
 
 
 <div class="col-md-3 col-4" data-image-id="{$Image->getId()}">
-    <div class="image-container" style="background-image: url('{$Image->getThumbnail(false)}')">
+    <div class="image-container border" style="background-image: url('{$Image->getThumbnail(false)}')">
         {if !$Image->isPublic()}
             <div class="lock">
                 <i class="fas fa-lock"></i>

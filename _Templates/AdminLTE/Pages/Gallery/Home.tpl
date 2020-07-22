@@ -33,7 +33,6 @@
                 </div>
                 <div class="modal-body">
                     {$createForm->getControl("Gallery_Name")}
-                    {$createForm->getControl("Gallery_Slug")}
                     {$createForm->getControl("Gallery_Public")}
                     {$createForm->getControl("Gallery_Description")}
                 </div>
@@ -49,6 +48,7 @@
 
 {block JsPage}
     <script>
+        Home.init();
         {if $createForm->hasErrors()}
         $("#createGallery").modal("show");
         {/if}

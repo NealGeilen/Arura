@@ -14,8 +14,8 @@ class Gallery extends AbstractController {
         $smarty = Router::getSmarty();
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $requestHandler->addType("order", function ($aData){
-//                $image = new Image($aData["Image_Id"]);
-//                $image->saveOrder($aData["Image_Order"]);
+                $Gallery = new \Arura\Gallery\Gallery($aData["Gallery_Id"]);
+                $Gallery->saveOrder($aData["Gallery_Order"]);
             });
             $requestHandler->addType("public", function ($aData){
                 $Gallery = new \Arura\Gallery\Gallery($aData["Gallery_Id"]);

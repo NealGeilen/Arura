@@ -1,5 +1,5 @@
 <div class="col-md-4 col-6" data-gallery-id="{$Gallery->getId()}">
-    <div class="gallery-container" style="background-image: url('{$Gallery->getAnCoverImage(false)->getThumbnail(false)}')">
+    <div class="gallery-container border" style="background-image: url('{$Gallery->getAnCoverImage(false)->getThumbnail(false)}')">
         {if !$Gallery->isPublic()}
             <div class="lock">
                 <i class="fas fa-lock"></i>
@@ -11,7 +11,7 @@
         <div class="gallery-options">
             <span class="btn btn-gallery-toolbar mover handle btn-lg"><i class="fas fa-arrows-alt"></i></span>
             <div class="gallery-toolbar btn-group">
-                <button class="btn btn-gallery-toolbar" onclick="updatePublic('{$Gallery->getId()}')">
+                <button class="btn btn-gallery-toolbar" onclick="Home.Sortable.updatePublic('{$Gallery->getId()}')">
                     {if $Gallery->isPublic()}
                         <i class="fas fa-lock"></i>
                     {else}

@@ -7,7 +7,9 @@ use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
 use Arura\Pages\Page;
+use Arura\Permissions\Restrict;
 use Arura\User\User;
+use Rights;
 
 class Image extends Page {
 
@@ -99,22 +101,22 @@ class Image extends Page {
     }
 
     public function saveOrder(int $order){
-        if ($order > $this->getOrder()){
-            //subtract
-            $aImages = $this->db->fetchAll("SELECT Image_Id, Image_Order FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id AND Image_Order > :Order", ["Gallery_Id" => $this->getGallery()->getId(), "Order" => $this->getOrder()]);
-            foreach ($aImages as $aImage){
-                $this->db->updateRecord("tblGalleryImage",[
-                    "Image_Id" => $aImage["Image_Id"],
-                    "Image_Order" => ($aImage["Image_Order"] - 1)
-                ], "Image_Id");
-            }
-        } else {
+        if ($order <= $this->getOrder()){
             //add
-            $aImages = $this->db->fetchAll("SELECT Image_Id, Image_Order FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id AND Image_Order < :Order", ["Gallery_Id" => $this->getGallery()->getId(), "Order" => $this->getOrder()]);
+            $aImages = $this->db->fetchAll("SELECT Image_Id, Image_Order FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id AND Image_Order >= :Order AND Image_Id != :Image_Id", ["Gallery_Id" => $this->getGallery()->getId(), "Order" => $order, "Image_Id" => $this->getId()]);
             foreach ($aImages as $aImage){
                 $this->db->updateRecord("tblGalleryImage",[
                     "Image_Id" => $aImage["Image_Id"],
                     "Image_Order" => ($aImage["Image_Order"] + 1)
+                ], "Image_Id");
+            }
+        } else {
+            //subtract
+            $aImages = $this->db->fetchAll("SELECT Image_Id, Image_Order FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id AND Image_Order <= :Order AND Image_Id != :Image_Id", ["Gallery_Id" => $this->getGallery()->getId(), "Order" => $order, "Image_Id" => $this->getId()]);
+            foreach ($aImages as $aImage){
+                $this->db->updateRecord("tblGalleryImage",[
+                    "Image_Id" => $aImage["Image_Id"],
+                    "Image_Order" => ($aImage["Image_Order"] - 1)
                 ], "Image_Id");
             }
         }
@@ -123,9 +125,9 @@ class Image extends Page {
     }
 
     public static function displayView($sSlug = "", $iRight = null,callable $function = null){
-        parent::displayView($sSlug, true, function ($sUrl){
+        parent::displayView($sSlug, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl){
             $Image = new self($sUrl);
-            if ($Image->isPublic() || User::isLogged()){
+            if ($Image->isPublic() || Restrict::Validation(Rights::GALLERY_MANGER)){
                 switch ($_GET["type"]){
                     case "download":
                         $filename = Gallery::__IMAGES__. $Image->getGallery()->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".{$Image->getType()}";
