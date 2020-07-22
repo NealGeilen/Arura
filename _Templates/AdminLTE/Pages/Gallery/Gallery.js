@@ -9,6 +9,7 @@ var Gallery = {
                 type: "upload"
             },
             autoProcessQueue: false,
+            parallelUploads: 200,
             url: window.location.href,
             init: function() {
                 var ImageDropzone = this;
@@ -16,10 +17,13 @@ var Gallery = {
                     ImageDropzone.processQueue();
                 });
                 this.on("success", function(file, responseText) {
+                    $(".image-alert").remove();
                     response = JSON.parse(responseText);
                     $(".images").append(response.data);
                 });
                 this.on("complete", function(file) {
+                    console.log(file);
+                    Dashboard.System.Alerts.Success(file.name + " toegevoegd");
                     ImageDropzone.removeFile(file);
                 });
                 this.on("queuecomplete", function(file) {

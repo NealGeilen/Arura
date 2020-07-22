@@ -8,7 +8,7 @@ var Dashboard = {
                     z_index: 1050,
                     newest_on_top: true,
                     showProgressbar: true,
-                    template: '<div data-notify="container" class="col-md-3 col-6 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
+                    template: '<div data-notify="container" class="alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
                         '<span data-notify="icon" class="text-white"></span> ' +
                         '<span data-notify="title" class="text-bold">{1}: </span>' +
                         '<span data-notify="message">{2}</span>' +

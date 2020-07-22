@@ -12,8 +12,22 @@ class Gallery extends AbstractController {
 
     public function Home(){
         $smarty = Router::getSmarty();
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+            $requestHandler->addType("order", function ($aData){
+//                $image = new Image($aData["Image_Id"]);
+//                $image->saveOrder($aData["Image_Order"]);
+            });
+            $requestHandler->addType("public", function ($aData){
+                $Gallery = new \Arura\Gallery\Gallery($aData["Gallery_Id"]);
+                $Gallery->setIsPublic(!$Gallery->isPublic());
+                $Gallery->Save();
+                Router::getSmarty()->assign("Gallery", $Gallery);
+                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery-card.tpl");
+            });
+        });
         $smarty->assign("aGalleries", \Arura\Gallery\Gallery::getAllGalleries(false));
         Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Home.css");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Home.js");
         $this->render("AdminLTE/Pages/Gallery/Home.tpl", [
             "title" =>"Album's",
             "createForm" => \Arura\Gallery\Gallery::getForm()

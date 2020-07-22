@@ -209,14 +209,14 @@ section.content>.container,.content-header>.container{
 /*}*/
 
 [data-notify=container]{
-    position: fixed!important;
-    top: 30px!important;
-    left: 40%!important;
-    right: 40%!important;
+    /*position: fixed!important;*/
+    /*top: 30px!important;*/
+    /*left: 40%!important;*/
+    /*right: 40%!important;*/
 }
 [data-notify=container] .alert{
-    margin: 0 auto!important;
-    position: relative;
+    /*margin: 0 auto!important;*/
+    /*position: relative;*/
 }
 
 [data-notify=progressbar]{

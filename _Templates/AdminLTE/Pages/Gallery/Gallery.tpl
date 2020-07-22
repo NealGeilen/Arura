@@ -14,6 +14,12 @@
     <div class="row images">
         {foreach $Gallery->getImages(false) as $Image}
             {include file='./Image-card.tpl'}
+            {foreachelse}
+            <div class="col-12 image-alert">
+                <div class="alert alert-info bg-info">
+                    <h5>Geen afbeeldingen in album</h5>
+                </div>
+            </div>
         {/foreach}
     </div>
 
