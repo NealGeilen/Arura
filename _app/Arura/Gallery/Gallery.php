@@ -139,14 +139,18 @@ class Gallery extends Page {
      * @return Image[]
      * @throws Error
      */
-    public function getCoverImages($needsPublic = true){
+    public function getCoverImages($needsPublic = true, $load = false){
         $sWhereSql = null;
         if ($needsPublic){
             $sWhereSql = " AND Image_Public = 1";
         }
         $aImages = [];
         foreach ($this->db->fetchAllColumn("SELECT Image_Id FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id AND Image_Cover = 1 {$sWhereSql} ORDER BY Image_Order", ["Gallery_Id" => $this->getId()])as $id){
-            $aImages[] = new Image($id);
+            $Image = new Image($id);
+            if($load){
+                $Image->load();
+            }
+            $aImages[] = $Image;
         }
         return $aImages;
     }
@@ -156,14 +160,18 @@ class Gallery extends Page {
      * @return Image[]
      * @throws Error
      */
-    public function getImages($needsPublic = true){
+    public function getImages($needsPublic = true, $load = false){
         $sWhereSql = null;
         if ($needsPublic){
             $sWhereSql = " AND Image_Public = 1 ";
         }
         $aImages = [];
         foreach ($this->db->fetchAllColumn("SELECT Image_Id FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id {$sWhereSql} ORDER BY Image_Order", ["Gallery_Id" => $this->getId()])as $id){
-            $aImages[] = new Image($id);
+            $Image = new Image($id);
+            if($load){
+                $Image->load();
+            }
+            $aImages[] = $Image;
         }
         return $aImages;
     }
