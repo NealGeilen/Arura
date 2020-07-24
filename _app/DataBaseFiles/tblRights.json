@@ -87,6 +87,10 @@
     {
       "Right_Id": "50",
       "Right_Name": "ANALYTICS"
+    },
+    {
+      "Right_Id": "55",
+      "Right_Name": "GALLERY_MANGER"
     }
   ]
 }
