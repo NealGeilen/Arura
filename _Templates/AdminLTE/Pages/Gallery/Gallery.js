@@ -22,16 +22,19 @@ var Gallery = {
             init: function() {
                 var ImageDropzone = this;
                 $(".upload-images").on("click", function () {
-                    for (var i = 0; i < ImageDropzone.getAcceptedFiles().length; i++) {
-                        setTimeout(ImageDropzone.processFile(ImageDropzone.getAcceptedFiles()[i]), 1000);
-                    }
+                    uploadNextFile();
                 });
+                function uploadNextFile(){
+                    iAmountFiles = ImageDropzone.getAcceptedFiles().length;
+                    if (iAmountFiles > 0){
+                        ImageDropzone.processFile(ImageDropzone.getAcceptedFiles()[0])
+                    }
+                }
                 this.on("success", function(file, responseText) {
                     if(ImageDropzone.getQueuedFiles().length === 0 && ImageDropzone.getUploadingFiles().length === 0){
-                        $(".image-alert").remove();
                         ImageDropzone.removeAllFiles(true) ;
                     }
-                    console.log(file, responseText);
+                    $(".image-alert").remove();
                     response = JSON.parse(responseText);
                     $(".images").append(response.data);
                 });
@@ -43,10 +46,9 @@ var Gallery = {
                     });
                 });
                 this.on("complete", function(file) {
-                    setTimeout(function () {
-                        Dashboard.System.Alerts.Success(file.name + " toegevoegd");
-                        ImageDropzone.removeFile(file);
-                    }, 1000)
+                    Dashboard.System.Alerts.Success(file.name + " toegevoegd");
+                    ImageDropzone.removeFile(file);
+                    uploadNextFile();
                 });
                 this.on("queuecomplete", function(file) {
                     $("#uploadImage").modal("hide");
