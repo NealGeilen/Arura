@@ -127,7 +127,7 @@ class Image extends Page {
     public static function displayView($sSlug = "", $iRight = null,callable $function = null){
         parent::displayView($sSlug, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl){
             $Image = new self($sUrl);
-            if ($Image->isPublic() || Restrict::Validation(Rights::GALLERY_MANGER)){
+            if (($Image->isPublic() && $Image->getGallery()->isPublic())|| Restrict::Validation(Rights::GALLERY_MANGER)){
                 switch ($_GET["type"]){
                     case "download":
                         $filename = Gallery::__IMAGES__. $Image->getGallery()->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".{$Image->getType()}";

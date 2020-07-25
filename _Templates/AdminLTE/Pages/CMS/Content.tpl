@@ -11,21 +11,24 @@
     </script>
 
     <header class="page-header">
-        <h3>{$aCmsPage.Page_Title}</h3>
-        <h5>
-            <a href="{$aWebsite.url}{$aCmsPage.Page_Url}" target="_blank">{$aWebsite.url}{$aCmsPage.Page_Url}</a>
-        </h5>
+
     </header>
 
     <div class="CMS-overvieuw">
-        <div class="card card-primary card-outline">
+        <div class="card card-primary">
             <div class="card-header">
+                <div class="card-title">
+                    <h3 class="text-capitalize">{$aCmsPage.Page_Title}</h3>
+                    <h5>
+                        <a href="{$aWebsite.url}{$aCmsPage.Page_Url}" target="_blank">{$aWebsite.url}{$aCmsPage.Page_Url}</a>
+                    </h5>
+                </div>
                 <div class="card-tools">
                     <div class="btn-group">
-                        <a class="btn btn-secondary" href="/{$aArura.dir}/content/paginas">
+                        <a class="btn btn-primary" href="/{$aArura.dir}/content/paginas">
                             <i class="fas fa-arrow-left"></i>
                         </a>
-                        <a class="btn btn-secondary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen">
+                        <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen">
                             <i class="fas fa-cog"></i>
                         </a>
                         <button class="btn btn-primary" onclick="Builder.Structure.save(true)">
