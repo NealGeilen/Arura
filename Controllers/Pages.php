@@ -24,6 +24,9 @@ use Rights;
 
 class Pages extends AbstractController {
 
+    /**
+     * @Route("/login")
+     */
     public function Login(){
         if (User::canUserLogin()){
             $form = Password::loginForm();
@@ -41,6 +44,10 @@ class Pages extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/home")
+     * @Right("USER_LOGGED")
+     */
     public function Home(){
         $db = new Database();
         $oSmarty= Router::getSmarty();
@@ -53,11 +60,14 @@ class Pages extends AbstractController {
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Payments/Management.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Pages/Home.js");
-         $this->render("AdminLTE/Pages/Pages/Home.tpl", [
+        $this->render("AdminLTE/Pages/Pages/Home.tpl", [
             "title" => "Home"
         ]);
     }
 
+    /**
+     * @Route("/profile")
+     */
     public function Profile(){
         $this->render("AdminLTE/Pages/Pages/Profile.tpl", [
             "title" => "Profiel",
@@ -65,12 +75,19 @@ class Pages extends AbstractController {
             "PasswordForm" => User::getPasswordForm()
         ]);
     }
-
+    /**
+     * @Route("/logout")
+     * @Right("USER_LOGGED")
+     */
     public function Logout(){
         User::activeUser()->logOutUser();
         $this->redirect("/dashboard");
     }
 
+    /**
+     * @Route("/validate")
+     * @Right("USER_LOGGED")
+     */
     public function Validate(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $db = new Database();
@@ -91,6 +108,9 @@ class Pages extends AbstractController {
         exit;
     }
 
+    /**
+     * @Route("/login/password/{hash}")
+     */
     public function Password($hash){
         if (!Recovery::isTokenValid($hash)){
             if(!User::isLogged()){

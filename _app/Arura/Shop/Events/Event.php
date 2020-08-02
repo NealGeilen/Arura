@@ -226,12 +226,12 @@ class Event Extends Page {
      * @throws SmartyException
      * @throws NotFound
      */
-    public static function displayView($sSlug = "", $iRight = null,callable $function = null){
-        parent::displayView($sSlug, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl){
+    public static function Display($sName = "",  $sType= ""){
+        parent::displayView($sName, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl) use ($sType){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
                 if ($oPage->getIsVisible() && $oPage->getStart()->getTimestamp() > time()){
-                    switch ($_GET["type"]){
+                    switch ($sType){
                         case "checkout":
                             if ($oPage->isOpen()){
                                 $oPage->checkout();
@@ -424,6 +424,14 @@ class Event Extends Page {
      */
     public function getRegisteredAmount(){
         return (int)$this->db->fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
+    }
+
+    /**
+     * @return array
+     * @throws Error
+     */
+    public function getRegisterAmountGroups(){
+        return $this->db->fetchAll("SELECT COUNT(Registration_Id) AS Amount, Registration_Amount AS Type FROM tblEventRegistration WHERE Registration_Event_Id  = :Event_Id GROUP BY Registration_Amount", ["Event_Id" => $this->getId()]);
     }
 
     /**

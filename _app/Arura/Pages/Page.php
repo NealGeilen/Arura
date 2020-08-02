@@ -212,6 +212,10 @@ class Page extends Modal implements PageEnum{
             exit;
 
         }
+        self::pageNotFound();
+    }
+
+    public static function pageNotFound(){
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");

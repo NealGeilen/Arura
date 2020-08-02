@@ -9,6 +9,10 @@ use Arura\Router;
 
 class Analytics extends AbstractController {
 
+    /**
+     * @Route("/analytics")
+     * @Right("ANALYTICS")
+     */
     public function Home(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $startData = $requestHandler->getData()["start"];

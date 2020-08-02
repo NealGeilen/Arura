@@ -13,6 +13,10 @@ use Arura\Shop\Events\Ticket;
 
 class Events extends AbstractController {
 
+    /**
+     * @Route("/winkel/evenementen")
+     * @Right("SHOP_EVENTS_MANAGEMENT")
+     */
     public function Management(){
         $db = new Database();
         Router::getSmarty()->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));
@@ -21,6 +25,10 @@ class Events extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/winkel/evenementen/beheer/{id}/aanpassen")
+     * @Right("SHOP_EVENTS_MANAGEMENT")
+     */
     public function Edit($id){
         $oEvent = new Event($id);
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($oEvent){
@@ -50,6 +58,10 @@ class Events extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/winkel/evenementen/beheer/aanmaken")
+     * @Right("SHOP_EVENTS_MANAGEMENT")
+     */
     public function Create(){
         if (isset($_POST["Event_Name"])){
             unset($_POST["files"]);
@@ -68,6 +80,10 @@ class Events extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/winkel/evenementen/valideren")
+     * @Right("SHOP_EVENTS_VALIDATION")
+     */
     public function Validation(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $oTicket = new Ticket($requestHandler->getData()["Hash"]);

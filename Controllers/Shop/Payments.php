@@ -12,6 +12,11 @@ use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
 
 class Payments extends AbstractController {
+
+    /**
+     * @Route("/winkel/betalingen")
+     * @Right("SHOP_PAYMENTS")
+     */
     public function Management(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $requestHandler->addType("PaymentsPerMonth", function (){

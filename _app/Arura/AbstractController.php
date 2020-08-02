@@ -1,6 +1,8 @@
 <?php
 namespace Arura;
 
+use Arura\Exceptions\Forbidden;
+use Arura\Exceptions\NotFound;
 use Arura\Settings\Application;
 use Arura\User\User;
 use Exception;
@@ -14,12 +16,12 @@ abstract class AbstractController{
 
     public function throwNotFound(){
         header('HTTP/1.1 404 Not Found');
-        throw new Exception("Page not found", 404);
+        throw new NotFound("Page not found");
     }
 
     public function throwAccessDenied(){
         header('HTTP/1.1 403 Access Denied');
-        throw new Exception("Access Denied", 403);
+        throw new Forbidden();
     }
 
     /**
@@ -36,7 +38,6 @@ abstract class AbstractController{
             if (!isset($parameters["sPageSideBar"])){
                 Router::getSmarty()->assign("sPageSideBar", null);
             }
-            Router::getSmarty()->assign("sRequestUrl", $_GET["_dashboard_"]);
             $sVersion = json_array_decode(file_get_contents(__ARURA__ROOT__ . "composer.json"))["version"];
             if (!isset($_GET["_URL"])){
                 $_GET["_URL"] = null;
@@ -58,8 +59,7 @@ abstract class AbstractController{
     }
 
     protected final function redirect($url = ""){
-        header('Location: ' . $url, true,  302);
-        exit();
+        redirect($url);
     }
 
 

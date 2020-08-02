@@ -124,11 +124,11 @@ class Image extends Page {
         return $this->Save();
     }
 
-    public static function displayView($sSlug = "", $iRight = null,callable $function = null){
-        parent::displayView($sSlug, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl){
+    public static function Display($sId, $sType = ""){
+        parent::displayView($sId, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl) use ($sType){
             $Image = new self($sUrl);
             if (($Image->isPublic() && $Image->getGallery()->isPublic())|| Restrict::Validation(Rights::GALLERY_MANGER)){
-                switch ($_GET["type"]){
+                switch ($sType){
                     case "download":
                         $filename = Gallery::__IMAGES__. $Image->getGallery()->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".{$Image->getType()}";
                         $size = getimagesize($filename);

@@ -10,6 +10,10 @@ use Arura\Router;
 
 class Gallery extends AbstractController {
 
+    /**
+     * @Route("/gallery")
+     * @Right("GALLERY_MANGER")
+     */
     public function Home(){
         $smarty = Router::getSmarty();
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
@@ -34,6 +38,10 @@ class Gallery extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/gallery/{id}")
+     * @Right("GALLERY_MANGER")
+     */
     public function Gallery($id){
         $gallery = new \Arura\Gallery\Gallery($id);
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($gallery){
@@ -69,6 +77,10 @@ class Gallery extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/gallery/{id}/settings")
+     * @Right("GALLERY_MANGER")
+     */
     public function Settings($id){
         $gallery = new \Arura\Gallery\Gallery($id);
         $this->render("AdminLTE/Pages/Gallery/Settings.tpl", [
@@ -78,7 +90,10 @@ class Gallery extends AbstractController {
         ]);
     }
 
-
+    /**
+     * @Route("/image/{id}")
+     * @Right("GALLERY_MANGER")
+     */
     public function Image($Image_Id){
         $Image = new Image($Image_Id);
         $Image->load(true);

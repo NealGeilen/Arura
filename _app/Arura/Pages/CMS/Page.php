@@ -347,7 +347,7 @@ class Page extends Pages\Page{
      * @throws SmartyException
      * @throws NotFound
      */
-    public static function displayView($sSlug = "", $iRight = null, callable $function = null){
+    public static function Display($sSlug = ""){
         parent::displayView($sSlug, Rights::CMS_PAGES, function ($sUrl){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);

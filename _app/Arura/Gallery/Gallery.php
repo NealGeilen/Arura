@@ -34,8 +34,8 @@ class Gallery extends Page {
         parent::__construct();
     }
 
-    public static function displayView($sSlug = "", $iRight = null,callable $function = null){
-        parent::displayView($sSlug, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl){
+    public static function Display($sId){
+        parent::displayView($sId, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl){
             $Gallery = new self($sUrl);
             if ($Gallery->isPublic() || Restrict::Validation(Rights::GALLERY_MANGER)){
                 self::getSmarty()->assign("Gallery", $Gallery);

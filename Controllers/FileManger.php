@@ -11,6 +11,11 @@ use Arura\Router;
 
 class FileManger extends AbstractController {
 
+
+    /**
+     * @Route("/files")
+     * @Right("FILES_EDIT")
+     */
     public function Home(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
 
@@ -28,6 +33,10 @@ class FileManger extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/files/connection")
+     * @Right("FILES_EDIT")
+     */
     public function connection(){
         require_once __APP__ . "Elfinder/connector.minimal.php";
     }

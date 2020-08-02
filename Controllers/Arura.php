@@ -17,6 +17,10 @@ use Exception;
 
 class Arura extends AbstractController {
 
+    /**
+     * @Route("/arura/roles")
+     * @Right("ARURA_ROLLES")
+     */
     public function Roles(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $requestHandler->addType("get-roles", function (){
@@ -71,6 +75,10 @@ class Arura extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/arura/users")
+     * @Right("ARURA_USERS")
+     */
     public function Users(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $requestHandler->addType("get-users", function ($aData){
@@ -142,6 +150,10 @@ class Arura extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/arura/settings")
+     * @Right("ARURA_SETTINGS")
+     */
     public function Settings(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $db = new Database();
@@ -168,6 +180,10 @@ class Arura extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/arura/updater")
+     * @Right("ARURA_UPDATER")
+     */
     public function Updater(){
 
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){

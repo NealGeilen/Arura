@@ -13,6 +13,10 @@ use Arura\User\User;
 
 class SecureAdministration extends AbstractController {
 
+    /**
+     * @Route("/administration")
+     * @Right("SECURE_ADMINISTRATION")
+     */
     public function Home(){
         Router::getSmarty()->assign("aTables", SecureAdmin::getAllTablesForUser(User::activeUser()));
         $this->render("AdminLTE/Pages/SecureAdministration/Home.tpl", [
@@ -20,6 +24,10 @@ class SecureAdministration extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/administration/{id}/settings")
+     * @Right("SECURE_ADMINISTRATION")
+     */
     public function Settings($id){
         $oTable = new SecureAdmin((int)$id);
         if ($oTable->isUserOwner(User::activeUser())){
@@ -69,6 +77,10 @@ class SecureAdministration extends AbstractController {
         $this->throwNotFound();
     }
 
+    /**
+     * @Route("/administration/{id}/edit")
+     * @Right("SECURE_ADMINISTRATION")
+     */
     public function Edit($id){
         $oTable = new SecureAdmin((int)$id);
         if ($oTable->hasUserRight(User::activeUser(), SecureAdmin::READ)){
@@ -82,6 +94,10 @@ class SecureAdministration extends AbstractController {
         $this->throwNotFound();
     }
 
+    /**
+     * @Route("/administration/create")
+     * @Right("SECURE_ADMINISTRATION_CREATE")
+     */
     public function Create(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             foreach ($_FILES as $file){
@@ -95,6 +111,10 @@ class SecureAdministration extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/administration/{id}/export")
+     * @Right("SECURE_ADMINISTRATION")
+     */
     public function Export($id){
         $oTable = new SecureAdmin($id);
         if ($oTable->hasUserRight(User::activeUser(), SecureAdmin::EXPORT)){

@@ -8,6 +8,10 @@ use Arura\Shop\Events\Event;
 
 class Tickets extends AbstractController {
 
+    /**
+     * @Route("/winkel/evenementen/tickets")
+     * @Right("SHOP_EVENTS_REGISTRATION")
+     */
     public function Management(){
         $db = new Database();
         $aEventIds = $db->fetchAllColumn("SELECT Event_Id FROM tblEvents");
@@ -28,6 +32,10 @@ class Tickets extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/winkel/evenementen/tickets/{id}")
+     * @Right("SHOP_EVENTS_REGISTRATION")
+     */
     public function Tickets($id){
         $oEvent = new Event((int)$id);
         Router::getSmarty()->assign("aEvent", $oEvent->__ToArray());

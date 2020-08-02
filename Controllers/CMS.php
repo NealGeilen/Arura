@@ -17,6 +17,10 @@ use Arura\Router;
 
 class CMS extends AbstractController {
 
+    /**
+     * @Route("/content/paginas")
+     * @Right("CMS_PAGES")
+     */
     public function Pages(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $requestHandler->addType("get-all-pages", function ($aData){
@@ -40,6 +44,10 @@ class CMS extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/content/menu")
+     * @Right("CMS_MENU")
+     */
     public function Menu(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $requestHandler->addType("get", function (){
@@ -71,6 +79,10 @@ class CMS extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/content/pagina/{id}/content")
+     * @Right("CMS_PAGES")
+     */
     public function Content($id){
         $p = new \Arura\Pages\CMS\Page($id);
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($p){
@@ -96,6 +108,10 @@ class CMS extends AbstractController {
         ]);
     }
 
+    /**
+     * @Route("/content/pagina/{id}/settings")
+     * @Right("CMS_PAGES")
+     */
     public function Settings($id){
         $p = new \Arura\Pages\CMS\Page($id);
         $form = \Arura\Pages\CMS\Page::getForm();
