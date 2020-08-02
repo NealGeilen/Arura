@@ -24,7 +24,7 @@
                         <i class="fas fa-lock-open"></i>
                     {/if}
                 </button>
-                <a class="btn btn-image-toolbar" href="/dashboard/gallery/image/{$Image->getId()}">
+                <a class="btn btn-image-toolbar" href="/dashboard/image/{$Image->getId()}">
                     <i class="fas fa-pen"></i>
                 </a>
                 <button class="btn btn-image-toolbar" onclick="Gallery.Sortable.updateCover('{$Image->getId()}')">

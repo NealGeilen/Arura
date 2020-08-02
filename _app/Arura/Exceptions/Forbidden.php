@@ -1,8 +1,10 @@
 <?php
 namespace Arura\Exceptions;
 
-class Forbidden extends \Exception{
+use Exception;
 
-    protected $message = 'Fobidden';
+class Forbidden extends Exception{
+
+    protected $message = 'Forbidden';
     protected $code = 403;
 }

@@ -366,7 +366,7 @@ class Payment extends Modal {
     public static function CreatePayment($Payment_Id, $fAmount, $PaymentType, $description , $sIssuer = null, $metadata = []) : self{
         $oMollie = self::getMollie();
         $db = new Database();
-        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment.php?id=" . $Payment_Id ;
+        self::$WEBHOOk_URL = Application::get("website", "url") . "/payment/" . $Payment_Id ;
         $payment = $oMollie->payments->create([
             "amount" => [
                 "currency" => "EUR",
