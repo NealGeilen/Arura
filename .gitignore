@@ -1,3 +1,11 @@
 /composer.phar
+/vendor/*
 /composer.lock
-/vendor/
+/templates_c/
+/cached/
+/.idea/
+/files/
+_app/Resources/SecureAdmin/
+*templates_c/
+/_config.php
+/Templates/menu.json
