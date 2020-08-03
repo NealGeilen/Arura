@@ -10,17 +10,22 @@ use Arura\Pages\CMS\Page;
 use Arura\Router;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
-
-
+use Arura\User\User;
 
 
 try {
     $oRouter = new \Bramus\Router\Router();
-
     $aPath = explode("/", $oRouter->getCurrentUri());
     switch ($aPath[1]){
         case "dashboard":
             $oRouter->mount("/dashboard", function () use ($oRouter){
+                $oRouter->get("/", function (){
+                    if (User::isLogged()){
+                        redirect("/dashboard/home");
+                    } else {
+                        redirect("/dashboard/login");
+                    }
+                });
                 Router::DashBoardRouting($oRouter);
             });
             break;

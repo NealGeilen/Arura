@@ -6,7 +6,7 @@
 {block content}
     <div class="row">
         <div class="col-12">
-            <div class="card card-secondary">
+            <div class="card card-primary">
                 <div class="card-header">
                     <h3 class="card-title">Aanmeldingen voor {$aEvent.Event_Name}</h3>
                 </div>
@@ -19,6 +19,7 @@
                             <th>Achternaam</th>
                             <th>E-mailadres</th>
                             <th>Telefoonnummer</th>
+                            <th>Inschrijf datum</th>
                             <th>Aantal</th>
                         </tr>
                         </thead>
@@ -29,6 +30,7 @@
                                 <td>{$aRegistration.Registration_Lastname}</td>
                                 <td>{$aRegistration.Registration_Email}</td>
                                 <td>{$aRegistration.Registration_Tel}</td>
+                                <td>{$aRegistration.Registration_Timestamp|date_format:"%H:%M %d-%m-%Y"}</td>
                                 <td>{$aRegistration.Registration_Amount}</td>
                                 {$iRegistrationAmount = $iRegistrationAmount + $aRegistration.Registration_Amount}
                             </tr>
@@ -36,6 +38,7 @@
                         </tbody>
                         <tfoot>
                         <tr>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>

@@ -14,7 +14,7 @@
             <h3 class="card-title">Aanmeldingen</h3>
         </div>
         <div class="card-body table-responsive">
-            <table class="table registrations-table">
+            <table class="table table-striped registrations-table">
                 <thead>
                 <tr>
                     <th></th>
