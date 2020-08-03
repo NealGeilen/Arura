@@ -127,7 +127,7 @@ class Router{
                                 "Title" => "Evenementen",
                                 "Icon" => "far fa-calendar-alt",
                                 "Children" => [
-                                    '/winkel/evenementen/beheer' => [
+                                    '/winkel/evenementen' => [
                                         "Right" =>
                                             (
                                             Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)

@@ -5,15 +5,9 @@
         </li>
         <li class="nav-item">
             <h2 class="m-0 text-dark">{$title}</h2>
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
-                {block breadcrum}
-                {/block}
-            </ol>
-        </li>
-        <li class="nav-item">
         </li>
     </ul>
+
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">

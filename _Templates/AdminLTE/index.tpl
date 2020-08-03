@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 {include "./Sections/body_head.tpl"}
-<body class="hold-transition layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
+<body class="scrolls hold-transition layout-fixed{if $sPageSideBar != NULL} control-sidebar-push-slide control-sidebar-open{/if}">
 <div class="wrapper">
 
   <!-- Navbar -->
@@ -16,6 +16,11 @@
     <!-- Content Header (Page header) -->
     <div class="content-header">
       <div class="container">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="/dashboard">Dashboard</a></li>
+          {block breadcrum}
+          {/block}
+        </ol>
         {block contentHeader}
         {/block}
       </div><!-- /.container-fluid -->

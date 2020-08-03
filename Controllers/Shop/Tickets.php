@@ -44,12 +44,12 @@ class Tickets extends AbstractController {
             Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Tickets/Tickets.js");
             Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Tickets/Tickets.css");
             $this->render("AdminLTE/Pages/Shop/Tickets/Tickets.tpl", [
-                "title" =>"Tickets evenement"
+                "title" =>"Tickets voor {$oEvent->getName()}"
             ]);
         } else {
             Router::getSmarty()->assign("aRegistrations", $oEvent->getRegistration());
             $this->render("AdminLTE/Pages/Shop/Tickets/Registrations.tpl", [
-                "title" =>"Tickets registarties"
+                "title" =>"Tickets voor {$oEvent->getName()}"
             ]);
         }
     }

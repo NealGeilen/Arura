@@ -250,8 +250,8 @@ $(window).scroll(function(){
         }
     }
 });
-if ($("body").hasClass("layout-fixed")){
-    // $("body").overlayScrollbars({ });
+if ($("body").hasClass("scrolls")){
+
 }
 
 $.each(JSON.parse(FLASHES), function (type, messages) {

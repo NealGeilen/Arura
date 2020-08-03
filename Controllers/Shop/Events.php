@@ -54,7 +54,7 @@ class Events extends AbstractController {
         Router::getSmarty()->assign("sTicketsCrud", $oEvent->getTicketGrud());
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Edit.js");
         $this->render("AdminLTE/Pages/Shop/Events/Edit.tpl", [
-            "title" =>"Evenement aanpassen"
+            "title" =>"{$oEvent->getName()} aanpassen"
         ]);
     }
 
