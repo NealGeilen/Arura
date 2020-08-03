@@ -2,7 +2,7 @@
   "name": "arura/dashboard",
   "description": "Arura",
   "license": "proprietary",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "authors": [
     {
       "name": "Neal Geilen",
@@ -15,7 +15,7 @@
       "_app/Functions.php",
       "_app/Rights.php",
       "_app/autoload.php",
-      "_app/router.php"
+      "_app/Router.php"
     ]
   },
   "require" : {
