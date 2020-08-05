@@ -238,7 +238,7 @@ class Gallery extends Page {
      * @return Image|bool
      * @throws Error
      */
-    public function Upload(){
+    public function Upload($cover = 0){
         if (!is_dir(self::__IMAGES__ . $this->getId())){
             mkdir(self::__IMAGES__ .$this->getId(), 0777, true);
         }
@@ -259,7 +259,7 @@ class Gallery extends Page {
         $sName = $_FILES["Image"]["name"];
         $sExtension = substr($sName, strrpos($sName, '.')+1);
         $sName = substr($sName, 0, strrpos($sName, ".{$sExtension}"));
-        $Image = Image::Create($this, $sName, $sExtension, $this->getNextOrderImage());
+        $Image = Image::Create($this, $sName, $sExtension, $this->getNextOrderImage(), $cover);
         if (!move_uploaded_file($sLocation, self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".$sExtension")){
             throw new Error("Upload error");
         }
@@ -269,6 +269,7 @@ class Gallery extends Page {
         copy(self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".$sExtension", self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . "-thump.$sExtension");
 
         Image::ResizeImg(self::__IMAGES__ . $this->getId() . DIRECTORY_SEPARATOR . $Image->getId() . "-thump.$sExtension", $Image->getType(), 500, 500);
+
 
         return $Image;
     }
@@ -290,6 +291,34 @@ class Gallery extends Page {
         $db = new Database();
         $aData = $db->fetchRow("SELECT MAX(Gallery_Order) + 1 AS Count FROM tblGallery", []);
         return (int)$aData["Count"];
+    }
+
+    public function getDeleteForm() : Form{
+        $this->load();
+        $form = new Form("gallery-delete-form", Form::OneColumnRender);
+        $form->addSubmit("verzend", "Verwijderen");
+
+        if ($form->isSubmitted()){
+
+            if ($this->Delete()){
+                Flasher::addFlash("{$this->getName()} verwijderd");
+                header("Location: /dashboard/gallery/" );
+                exit;
+            } else {
+                Flasher::addFlash("{$this->getName()} verwijderen mislukt", Flasher::Error);
+            }
+
+        }
+        return $form;
+    }
+
+    public function Delete(){
+        $this->db->query("DELETE FROM tblGallery WHERE Gallery_Id = :Id", ["Id" => $this->getId()]);
+        $this->db->query("DELETE FROM tblGalleryImage WHERE Image_Gallery_Id = :Id", ["Id" => $this->getId()]);
+        if ($this->db->isQuerySuccessful()){
+            return deleteItem(self::__IMAGES__ . $this->getId());
+        }
+        return false;
     }
 
     /**

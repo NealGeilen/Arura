@@ -39,7 +39,7 @@ class Gallery extends AbstractController {
     }
 
     /**
-     * @Route("/gallery/{id}")
+     * @Route("/gallery/([^/]+)")
      * @Right("GALLERY_MANGER")
      */
     public function Gallery($id){
@@ -78,7 +78,7 @@ class Gallery extends AbstractController {
     }
 
     /**
-     * @Route("/gallery/{id}/settings")
+     * @Route("/gallery/([^/]+)/settings")
      * @Right("GALLERY_MANGER")
      */
     public function Settings($id){
@@ -86,12 +86,13 @@ class Gallery extends AbstractController {
         $this->render("AdminLTE/Pages/Gallery/Settings.tpl", [
             "title" =>"Instellingen: {$gallery->getName()}",
             "Gallery" => $gallery,
-            "editForm" => \Arura\Gallery\Gallery::getForm($gallery)
+            "editForm" => \Arura\Gallery\Gallery::getForm($gallery),
+            "deleteForm" => $gallery->getDeleteForm()
         ]);
     }
 
     /**
-     * @Route("/image/{id}")
+     * @Route("/image/([^/]+)")
      * @Right("GALLERY_MANGER")
      */
     public function Image($Image_Id){

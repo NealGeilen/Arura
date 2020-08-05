@@ -527,6 +527,9 @@ class Router{
      * @param array $data
      */
     protected function setConfig(array $data){
+        if (!is_dir(__WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR)){
+            mkdir(__WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR);
+        }
         return file_put_contents(self::RoutCache, json_encode($data, JSON_PRETTY_PRINT));
     }
 

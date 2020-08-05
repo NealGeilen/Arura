@@ -1,5 +1,4 @@
 <?php
-Global $oRouter;
 
 use App\Controllers\Errors;
 use Arura\Exceptions\Forbidden;
@@ -8,6 +7,7 @@ use Arura\Gallery\Gallery;
 use Arura\Gallery\Image;
 use Arura\Pages\CMS\Page;
 use Arura\Router;
+use Arura\Settings\Application;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
 use Arura\User\User;
@@ -55,12 +55,14 @@ try {
             });
             break;
         case "api":
-            $oRouter->mount("/api", function () use ($oRouter){
-                dd($oRouter->getCurrentUri());
-            });
+            if (!empty(Application::get("Api", "Token"))) {
+                $oRouter->mount("/api", function () use ($oRouter) {
+                    \Arura\Api\Router::Rout($oRouter);
+                });
+            }
             break;
         case "payment":
-            $oRouter->mount("/payment/{id}", function ($id) use ($oRouter){
+            $oRouter->all("/payment/{id}", function ($id) use ($oRouter){
                 try {
                     $P = new Payment($id);
                     $P->updatePayment();

@@ -4,6 +4,7 @@ namespace Arura\Settings;
 
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 
 class Application{
 
@@ -32,6 +33,9 @@ class Application{
      */
     public static function get($sPlg = "", $sName = ""){
         self::load();
+        if (!isset(self::$aSettingData[$sPlg][$sName])){
+            throw new NotFound("Setting not found {$sPlg}:{$sName}");
+        }
         return self::$aSettingData[$sPlg][$sName];
     }
 

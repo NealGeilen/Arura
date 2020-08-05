@@ -61,14 +61,14 @@ class Database{
     }
 
     /**
-     * @param string $statment
+     * @param string $statement
      * @param array $parameters
      * @return bool|PDOStatement
      * @throws Error
      */
-    public static function ExecQuery($statment = "", array $parameters = []){
+    public static function ExecQuery($statement = "", array $parameters = []){
         $db = new self();
-        return $db -> query($statment, $parameters);
+        return $db -> query($statement, $parameters);
     }
 
     /**
@@ -85,18 +85,17 @@ class Database{
 
 
     /**
-     * @param string $statment
+     * @param string $statement
      * @param array $parameters
      * @return PDOStatement
      * @throws Error
      */
-    public function query($statment = "", array $parameters = []){
+    public function query($statement = "", array $parameters = []){
         $this->queryState = false;
-        $stmt = $this->connect()->prepare($statment);
+        $stmt = $this->connect()->prepare($statement);
         $this -> queryState = $stmt->execute($parameters);
-        $GLOBALS["Querys"][] = ["query"=>$statment,"source"=>debug_backtrace()];
         if (!$this ->queryState){
-            $sError = (json_encode($stmt->errorInfo())) . " " . $statment;
+            $sError = (json_encode($stmt->errorInfo())) . " " . $statement;
             throw new Error($sError);
         }
         return $stmt;
@@ -114,34 +113,34 @@ class Database{
     }
 
     /**
-     * @param string $statment
+     * @param string $statement
      * @param array $parameters
      * @return array
      * @throws Error
      */
-    public function fetchAll($statment = "", array $parameters = []){
-        return $this->query($statment,$parameters)->fetchAll(PDO::FETCH_ASSOC);
+    public function fetchAll($statement = "", array $parameters = []){
+        return $this->query($statement,$parameters)->fetchAll(PDO::FETCH_ASSOC);
     }
 
 
     /**
-     * @param string $statment
+     * @param string $statement
      * @param array $parameters
      * @return array
      * @throws Error
      */
-    public function fetchAllColumn($statment = "", array $parameters = []){
-        return $this->query($statment,$parameters)->fetchAll(PDO::FETCH_COLUMN);
+    public function fetchAllColumn($statement = "", array $parameters = []){
+        return $this->query($statement,$parameters)->fetchAll(PDO::FETCH_COLUMN);
     }
 
     /**
-     * @param string $statment
+     * @param string $statement
      * @param array $parameters
      * @return mixed
      * @throws Error
      */
-    public function fetchRow($statment = "", array $parameters = []){
-        return $this->query($statment,$parameters)->fetch(PDO::FETCH_ASSOC);
+    public function fetchRow($statement = "", array $parameters = []){
+        return $this->query($statement,$parameters)->fetch(PDO::FETCH_ASSOC);
     }
 
     /**

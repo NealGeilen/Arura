@@ -26,7 +26,7 @@ class Events extends AbstractController {
     }
 
     /**
-     * @Route("/winkel/evenementen/beheer/{id}/aanpassen")
+     * @Route("/winkel/evenementen/beheer/([^/]+)/aanpassen")
      * @Right("SHOP_EVENTS_MANAGEMENT")
      */
     public function Edit($id){

@@ -51,8 +51,6 @@ define('__RESOURCES__',         __WEB__ROOT__   . DIRECTORY_SEPARATOR . "_app" .
 define("__STANDARD_MODULES__" , __ARURA_TEMPLATES__ . "Modules" . DIRECTORY_SEPARATOR);
 define("__CUSTOM_MODULES__", __WEB_TEMPLATES__ . "Custom" . DIRECTORY_SEPARATOR. "Modules". DIRECTORY_SEPARATOR);
 Page::$smarty = new Smarty();
-
-$GLOBALS["Querys"] = [];
 session_set_cookie_params(0, "/", "");
 Sessions::Start();
 if ((int)Application::get("arura", "Debug")){

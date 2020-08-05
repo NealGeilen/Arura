@@ -44,7 +44,6 @@ class DataBaseSync extends Modal {
             }
         }
     }
-
     public function getChanges(){
         $Changes = [];
         foreach ($this->aTables as $sTable => $aData){
@@ -67,6 +66,13 @@ class DataBaseSync extends Modal {
                 foreach ($this->getAllColumns($sTable) as $column){
                     if (!isset($this->aTables[$sTable]["columns"][$column["Field"]])){
                         $Changes[] = "Kolom: '{$column["Field"]}' van tabel: '{$sTable}' moet verwijdert worden";
+                    }
+                }
+                if (isset($this->aTables[$sTable]["data"])){
+                    foreach ($this->aTables[$sTable]["data"] as $aRecord){
+                        if (!$this->doesRecordExits($sTable, $aRecord)){
+                            $Changes[] = "Data: " . json_encode($aRecord) . " Bestaat niet in {$sTable}";
+                        }
                     }
                 }
             } else {

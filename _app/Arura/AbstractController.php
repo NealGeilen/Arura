@@ -5,7 +5,6 @@ use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\NotFound;
 use Arura\Settings\Application;
 use Arura\User\User;
-use Exception;
 
 abstract class AbstractController{
 

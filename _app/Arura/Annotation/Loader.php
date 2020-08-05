@@ -12,10 +12,10 @@ class Loader{
      * @author Kevin Sentjens
      */
     const REGEX_BLOCK = '/[*\s]* 
-(?P<annotation_name>[A-Z][\w\\\\\\\\]+) 
+(?P<annotation_name>[A-Z][\w\\\\\\\\\\\\\\\\]+) 
 \("
 (?P<first>
-[\/\w{}]+
+[\/\w{}\[\]\^+\(\)\\\\-]+
 )?
 "
   (?P<value> 

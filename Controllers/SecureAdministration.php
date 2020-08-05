@@ -25,7 +25,7 @@ class SecureAdministration extends AbstractController {
     }
 
     /**
-     * @Route("/administration/{id}/settings")
+     * @Route("/administration/([^/]+)/settings")
      * @Right("SECURE_ADMINISTRATION")
      */
     public function Settings($id){
@@ -78,7 +78,7 @@ class SecureAdministration extends AbstractController {
     }
 
     /**
-     * @Route("/administration/{id}/edit")
+     * @Route("/administration/([^/]+)/edit")
      * @Right("SECURE_ADMINISTRATION")
      */
     public function Edit($id){
@@ -112,7 +112,7 @@ class SecureAdministration extends AbstractController {
     }
 
     /**
-     * @Route("/administration/{id}/export")
+     * @Route("/administration/([^/]+)/export")
      * @Right("SECURE_ADMINISTRATION")
      */
     public function Export($id){

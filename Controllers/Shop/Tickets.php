@@ -33,7 +33,7 @@ class Tickets extends AbstractController {
     }
 
     /**
-     * @Route("/winkel/evenementen/tickets/{id}")
+     * @Route("/winkel/evenementen/tickets/([^/]+)")
      * @Right("SHOP_EVENTS_REGISTRATION")
      */
     public function Tickets($id){

@@ -80,7 +80,7 @@ class Image extends Page {
      * @return Image|bool
      * @throws Error
      */
-    public static function Create(Gallery $Gallery, string $Name,string $Type, $Order = 0){
+    public static function Create(Gallery $Gallery, string $Name,string $Type, $Order = 0, $cover = 0){
         $db = new Database();
         $Id = createGuid();
         $db->createRecord("tblGalleryImage",
@@ -88,7 +88,7 @@ class Image extends Page {
                 "Image_Id" => $Id,
                 "Image_Order" => $Order,
                 "Image_Public" => 1,
-                "Image_Cover" => 0,
+                "Image_Cover" => $cover,
                 "Image_Type" => $Type,
                 "Image_Name" => $Name,
                 "Image_Gallery_Id" => $Gallery->getId()
