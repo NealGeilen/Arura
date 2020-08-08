@@ -1,4 +1,7 @@
 {extends "../../index.tpl"}
+{block breadcrum}
+    <li class="breadcrumb-item active">Gebruikers</li>
+{/block}
 {block content}
     <div class="card card-primary">
         <header class="card-header">
@@ -9,13 +12,10 @@
             </div>
             <h2 class="card-title">Gebruikers</h2>
         </header>
-        <div class="card-body table-responsive" style="display: block;">
-            <table id="users-overview" class="table">
+        <div class="card-body table-responsive">
+            <table class="table Arura-Table">
                 <thead>
                 <tr>
-                    <th>
-                        ID
-                    </th>
                     <th>
                         Gebruikersnaam
                     </th>
@@ -28,42 +28,52 @@
                     <th>
                         Email
                     </th>
-                    <th>
-                        Rollen
-                    </th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
+                {foreach $aUsers as $aUser}
+                    <tr>
+                        <td>{$aUser.User_Username}</td>
+                        <td>{$aUser.User_Firstname}</td>
+                        <td>{$aUser.User_Lastname}</td>
+                        <td>{$aUser.User_Email}</td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-primary" href="/dashboard/arura/user/{$aUser.User_Id}"><i class="fas fa-pen"></i></a>
+                            </div>
+                        </td>
+                    </tr>
+                {/foreach}
                 </tbody>
             </table>
         </div>
     </div>
 
-    <div class="card card-secondary">
-        <header class="card-header">
-            <h2 class="card-title">Sessies</h2>
-        </header>
-        <div class="card-body table-responsive" style="display: block;">
-            <table class="table" id="sessions-overview">
-                <thead>
-                <tr>
-                    <th>
-                        Sessie Id
-                    </th>
-                    <th>
-                        Gebruikersnaam
-                    </th>
-                    <th>
-                        Tijd laatste actie
-                    </th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+{*    <div class="card card-secondary">*}
+{*        <header class="card-header">*}
+{*            <h2 class="card-title">Sessies</h2>*}
+{*        </header>*}
+{*        <div class="card-body table-responsive" style="display: block;">*}
+{*            <table class="table" id="sessions-overview">*}
+{*                <thead>*}
+{*                <tr>*}
+{*                    <th>*}
+{*                        Sessie Id*}
+{*                    </th>*}
+{*                    <th>*}
+{*                        Gebruikersnaam*}
+{*                    </th>*}
+{*                    <th>*}
+{*                        Tijd laatste actie*}
+{*                    </th>*}
+{*                    <th></th>*}
+{*                </tr>*}
+{*                </thead>*}
+{*                <tbody>*}
+{*                </tbody>*}
+{*            </table>*}
+{*        </div>*}
     </div>
     <div class="modal modal-user-create" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">

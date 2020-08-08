@@ -18,135 +18,32 @@ use Exception;
 class Arura extends AbstractController {
 
     /**
-     * @Route("/arura/roles")
-     * @Right("ARURA_ROLLES")
-     */
-    public function Roles(){
-        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
-            $requestHandler->addType("get-roles", function (){
-                $a = [];
-                foreach (Role::getAllRoles() as $oRole){
-                    $a[] = $oRole->__ToArray();
-                }
-                return $a;
-            });
-            $requestHandler->addType("get-avalibel-rights", function ($aData){
-                $role = new Role((int)$aData['Role_Id']);
-                return ($role->getAvailableRights());
-            });
-            $requestHandler->addType("save-role", function ($aData){
-                $role = new Role((int)$aData['Role_Id']);
-                $role->load();
-                $role->setName($aData['Role_Name']);
-                if (!$role->save()){
-                    throw new Exception('',500);
-                } else {
-                    return ($role->__toArray());
-                }
-            });
-            $requestHandler->addType("assign-right", function ($aData){
-                $role = new Role((int)$aData['Role_Id']);
-                $role->assignToRight((int)$aData['Right_Id']);
-            });
-            $requestHandler->addType("remove-right", function ($aData){
-                $role = new Role((int)$aData['Role_Id']);
-                $role->removeFromRight((int)$aData['Right_Id']);
-            });
-            $requestHandler->addType("delete-role", function ($aData){
-                $role = new Role((int)$aData['Role_Id']);
-                return ($role->removeRole());
-            });
-            $requestHandler->addType("create-role", function ($aData){
-                $role = Role::createRole($aData['Role_Name']);
-                if (empty($role)){
-                    throw new Exception('',500);
-                } else {
-                    return ($role->__toArray());
-                }
-            });
-        });
-        $db = new Database();
-        $smarty = Router::getSmarty();
-        $aRights = $db -> fetchAll('SELECT * FROM tblRights ORDER BY Right_ID');
-        $smarty->assign('aRights', $aRights);
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Roles.js");
-        $this->render("AdminLTE/Pages/Arura/Roles.tpl", [
-            "title" =>"Rollen"
-        ]);
-    }
-
-    /**
      * @Route("/arura/users")
      * @Right("ARURA_USERS")
      */
     public function Users(){
-        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
-            $requestHandler->addType("get-users", function ($aData){
-                $UserData = [];
-                foreach (User::getAllUsers() as $User){
-                    $UserData[] = $User->__ToArray();
-                }
-                return $UserData;
-            });
-            $requestHandler->addType("get-sessions", function ($aData){
-                $db = new Database();
-                return ($db ->fetchAll('SELECT S.Session_Id, U.User_Username, FROM_UNIXTIME(S.Session_Last_Active) AS Session_Last_Active FROM tblSessions AS S JOIN tblUsers AS U ON S.Session_User_Id = U.User_Id'));
-            });
-            $requestHandler->addType("get-avalibel-roles", function ($aData){
-                $oUser = new User((int)$aData['User_Id']);
-                return ($oUser->getAvailableRoles());
-            });
-            $requestHandler->addType("save-user", function ($aData){
-                $oUser = new User((int)$aData['User_Id']);
-                $oUser->load(true);
-                $oUser->setEmail($aData['User_Email']);
-                $oUser->setFirstname($aData['User_Firstname']);
-                $oUser->setLastname($aData['User_Lastname']);
-                $oUser->setUsername($aData['User_Username']);
-
-                if ($aData['User_Password_1'] === $aData['User_Password_2'] && !empty($aData['User_Password_1'])){
-                    $oUser->setPassword(Password::Create($aData['User_Password_1']));
-                }
-                $oUser->save();
-
-                return ($aData);
-            });
-            $requestHandler->addType("assign-role", function ($aData){
-                $oUser = new User((int)$aData['User_Id']);
-                $oUser->assignToRole((int)$aData['Role_Id']);
-            });
-            $requestHandler->addType("remove-role", function ($aData){
-                $oUser = new User((int)$aData['User_Id']);
-                $oUser->removeFromRole((int)$aData['Role_Id']);
-            });
-            $requestHandler->addType("delete-user", function ($aData){
-                $oUser = new User((int)$aData['User_Id']);
-                $oUser->removeUser();
-            });
-            $requestHandler->addType("delete-session", function ($aData){
-                $db = new Database();
-                $db -> query('DELETE FROM tblSessions WHERE Session_Id = :Session_Id',
-                    [
-                        'Session_Id' => $aData['Session_Id']
-                    ]);
-            });
-            $requestHandler->addType("create-user", function ($aData){
-                $pw1= $aData['User_Password_1'];
-                $pw2 = $aData['User_Password_2'];
-                if ($pw2 !== $pw1){
-                    throw new NotAcceptable();
-                }
-                $pw = Password::Create($pw1);
-                $oUser = User::createUser($aData['User_Username'], $aData['User_Firstname'], $aData['User_Lastname'],$aData['User_Email'],$pw);
-                return (['User' => $oUser->__toArray(),'Roles'=>$oUser->getAvailableRoles()]);
-            });
-        });
         $db= new Database();
         Router::getSmarty() -> assign('aUsers', $db ->fetchAll('SELECT * FROM tblUsers'));
         Router::getSmarty() -> assign('aSessions', $db ->fetchAll('SELECT * FROM tblSessions'));
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Users.js");
         $this->render("AdminLTE/Pages/Arura/Users.tpl", [
             "title" =>"Gebruikers"
+        ]);
+    }
+
+    /**
+     * @Route("/arura/user/{id}")
+     * @Right("ARURA_USERS")
+     */
+    public function UserDetails($id){
+        $oUser= new User($id);
+
+        $this->render("AdminLTE/Pages/Arura/Users/info.tpl", [
+            "User" => $oUser,
+            "title" =>"Gebruiker: ".$oUser->getUsername(),
+            "editForm" => User::getProfileForm($oUser),
+            "passwordForm" => User::getPasswordForm($oUser),
+            "roleForm" => User::getRoleForm($oUser)
         ]);
     }
 

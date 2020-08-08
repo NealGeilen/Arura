@@ -12,8 +12,9 @@
   "autoload": {
     "psr-4": {"Arura\\": "_app/Arura","App\\Controllers\\": "Controllers"},
     "files": [
-      "_app/Functions.php",
       "_app/Rights.php",
+      "_app/Roles.php",
+      "_app/Functions.php",
       "_app/autoload.php",
       "_app/Router.php"
     ]

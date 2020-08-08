@@ -171,7 +171,6 @@ class Router{
                     "Right" =>
                         (
                             Restrict::Validation(Rights::ARURA_USERS) ||
-                            Restrict::Validation(Rights::ARURA_ROLLES) ||
                             Restrict::Validation(Rights::ARURA_SETTINGS) ||
                             Restrict::Validation(Rights::ARURA_UPDATER)
                         ),
@@ -187,15 +186,6 @@ class Router{
                                 "Title" => "Gebruikers",
                                 "Icon" => "fas fa-users",
                                 "Function" => "Arura@Users",
-                            ],
-                            '/arura/roles' => [
-                                "Right" =>
-                                    (
-                                    Restrict::Validation(Rights::ARURA_ROLLES)
-                                    ),
-                                "Title" => "Rollen",
-                                "Function" => "Arura@Roles",
-                                "Icon" => "fas fa-key",
                             ],
                             '/arura/settings' => [
                                 "Right" =>

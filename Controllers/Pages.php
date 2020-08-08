@@ -21,6 +21,7 @@ use Arura\User\Recovery;
 use Arura\User\User;
 use Exception;
 use Rights;
+use Roles;
 
 class Pages extends AbstractController {
 
@@ -71,8 +72,10 @@ class Pages extends AbstractController {
     public function Profile(){
         $this->render("AdminLTE/Pages/Pages/Profile.tpl", [
             "title" => "Profiel",
-            "form" => User::getProfileForm(),
-            "PasswordForm" => User::getPasswordForm()
+            "roles" => User::activeUser()->getRoles(),
+            "allRoles" => Roles::ROLES,
+            "form" => User::getProfileForm(User::activeUser()),
+            "PasswordForm" => User::getPasswordForm(User::activeUser())
         ]);
     }
     /**

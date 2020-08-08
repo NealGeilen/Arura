@@ -1,7 +1,6 @@
 <?php
 class Rights{
     const ARURA_USERS = 1;
-    const ARURA_ROLLES = 2;
     const ARURA_SETTINGS = 3;
     const ARURA_UPDATER = 4;
 

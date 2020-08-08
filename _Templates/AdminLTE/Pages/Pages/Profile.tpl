@@ -31,8 +31,6 @@
                     {$form->endForm()}
                 </div>
             </div>
-        </div>
-        <div class="col-md-6">
             <div class="card card-secondary">
                 <header class="card-header">
                     <h2 class="card-title">Wachtwoord</h2>
@@ -49,6 +47,22 @@
                     </div>
                     {$PasswordForm->getControl("submit")}
                     {$PasswordForm->endForm()}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card card-secondary">
+                <header class="card-header">
+                    <h2 class="card-title">Rechten</h2>
+                </header>
+                <div class="card-body">
+                    <ul class="list-group">
+                    {foreach $roles as $role}
+                        <li class="list-group-item"><span class="text-success"><i class="fas fa-check"></i></span> {$allRoles[$role].Name}</li>
+                        {foreachelse}
+                        <li class="list-group-item"><span class="text-success">Op het moment heb je geen rechte op deze omgeving</li>
+                    {/foreach}
+                    </ul>
                 </div>
             </div>
         </div>

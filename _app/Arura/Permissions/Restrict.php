@@ -23,6 +23,6 @@ class Restrict{
      * @return bool
      */
     public static function hasUserRight(User $oUser, $iRight = 0){
-        return  $oUser->hasRight(new Right($iRight));
+        return  $oUser->hasRight($iRight);
     }
 }

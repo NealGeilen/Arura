@@ -1,7 +1,7 @@
-$(document).ready(function() {
-    Users.Users.setTable();
-    Users.Sessions.setTable();
-} );
+// $(document).ready(function() {
+//     Users.Users.setTable();
+//     Users.Sessions.setTable();
+// } );
 var Users = {
     Users: {
         oTable: null,

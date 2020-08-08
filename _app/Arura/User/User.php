@@ -3,12 +3,10 @@
 namespace Arura\User;
 use Arura\Database;
 use Arura\Exceptions\Error;
-use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
-use Arura\Permissions\Right;
-use Arura\Permissions\Role;
 use Arura\Sessions;
+use Roles;
 
 class User
 {
@@ -70,13 +68,6 @@ class User
             $this->setEmail($aUser['User_Email']);
             $this->setPassword($aUser['User_Password']);
             $this -> isLoaded = true;
-
-            //load addigned roles from user to roles propertie
-            $a = $this -> db-> fetchAllColumn('SELECT UserRole_Role_Id FROM '.self::$tblUserRoles.' WHERE UserRole_User_Id = :User_Id ',
-                ['User_Id' =>$this -> getId()]);
-            foreach ($a as $iRoleId){
-                $this -> roles[$iRoleId] = new Role($iRoleId);
-            }
         }
     }
 
@@ -242,19 +233,23 @@ class User
         return $b;
     }
 
-    /**
-     * Has user this right
-     * @param Right $oRight
-     * @return bool
-     */
-    public function hasRight(Right $oRight){
-        $this->load();
-        foreach ($this -> roles as $Role){
-            if ($Role->hasRight($oRight)){
-                return true;
+    public function getRoles(){
+        return $this->db->fetchAllColumn("SELECT Role_Id FROM tblUserRole WHERE Role_User_Id = :User_Id", ["User_Id" => $this->getId()]);
+    }
+
+
+    public function hasRight($iRight){
+        $valid = false;
+        foreach ($this->getRoles() as $iRole){
+            if (!$valid){
+
+                $valid = in_array($iRight, Roles::ROLES[(int)$iRole]["Rights"]);
+            }
+            if ($valid){
+                return $valid;
             }
         }
-        return false;
+        return $valid;
     }
 
     /**
@@ -305,18 +300,13 @@ class User
      */
     public function __toArray(){
         $this->load(true);
-        $a = [
+        return [
             "User_Firstname" => $this->getFirstname(),
             "User_Id" => $this->getId(),
             "User_Lastname" => $this->getLastname(),
             "User_Username" => $this->getUsername(),
             "User_Email" => $this->getEmail()
         ];
-        $a['Roles'] = [];
-        foreach ($this->getRoles() as $Role){
-            $a['Roles'][$Role->getId()] = ['Role_Name' => $Role->getName(),'Role_Id' => $Role->getId()];
-        }
-        return $a;
     }
 
     /**
@@ -347,11 +337,32 @@ class User
         return false;
     }
 
+    public static function getRoleForm(self $user){
+        $form = new Form("role-form", Form::OneColumnRender);
+        $aRoleIds = $user->getRoles();
+        foreach (Roles::ROLES as $iId => $aData){
+            $form->addCheckbox($iId, $aData["Name"])->setDefaultValue(in_array($iId, $aRoleIds));
+        }
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSubmitted()){
+            $db = new Database();
+            foreach ($form->getValues("array") as $id => $value){
+                if ($value){
+                    if (count($db->fetchAll("SELECT * FROM tblUserRole WHERE Role_User_Id = :User_Id AND Role_Id = :Role_Id", ["User_Id" => $user->getId(), "Role_Id" => $id])) === 0){
+                        $db->createRecord("tblUserRole", ["Role_User_Id" => $user->getId(), "Role_Id" => $id]);
+                    }
+                    //add record
+                } else {
+                    $db->query("DELETE FROM tblUserRole WHERE Role_User_Id = :User_Id AND Role_Id = :Role_Id", ["User_Id" => $user->getId(), "Role_Id" => $id]);
+                }
+            }
+        }
+        return $form;
+    }
 
 
-    public static function getPasswordForm(){
+    public static function getPasswordForm(self $user){
         $form = new Form("password-form");
-        $user = self::activeUser();
         $form->addPassword("password_1", "Wachtwoord")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addPassword("password_2", "Wachtwoord herhalen")
@@ -377,9 +388,8 @@ class User
     /**
      * @return Form
      */
-    public static function getProfileForm(){
+    public static function getProfileForm(self $user){
         $form = new Form("profile-form");
-        $user = self::activeUser();
         $form->addText("User_Username", "Gebruikersnaam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht")
             ->setDefaultValue($user->getUsername());
@@ -516,14 +526,5 @@ class User
     public function setPassword($password)
     {
         $this->password = $password;
-    }
-
-    /**
-     * @return array
-     */
-    public function getRoles()
-    {
-        $this->load();
-        return $this->roles;
     }
 }
