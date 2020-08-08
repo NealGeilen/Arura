@@ -5,8 +5,25 @@
 {/block}
 
 {block contentHeader}
-    <div class="btn-group">
-        <button class="btn btn-primary" data-toggle="modal" data-target="#createGallery">Nieuw album</button>
+    <div class="row">
+        <div class="col-md-4">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#createGallery">Nieuw album</button>
+        </div>
+        <div class="col-md-4">
+            <form method="post">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Zoeken" name="search" value="{$sSearch}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-outline-primary" id="button-addon2"><i class="fas fa-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
+            <div class="float-right">
+                {include file='./../../pagination.tpl'}
+            </div>
+        </div>
     </div>
 {/block}
 
@@ -17,7 +34,7 @@
             {foreachelse}
             <div class="col-12 image-alert">
                 <div class="alert alert-info bg-info">
-                    <h5>Geen album's aanwezig</h5>
+                    <h5>Geen album's gevonden</h5>
                 </div>
             </div>
         {/foreach}

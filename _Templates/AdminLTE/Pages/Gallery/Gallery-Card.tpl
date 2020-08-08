@@ -9,7 +9,6 @@
             {$Gallery->getName()}
         </h4>
         <div class="gallery-options">
-            <span class="btn btn-gallery-toolbar mover handle btn-lg"><i class="fas fa-arrows-alt"></i></span>
             <div class="gallery-toolbar btn-group">
                 <button class="btn btn-gallery-toolbar" onclick="Home.Sortable.updatePublic('{$Gallery->getId()}')">
                     {if $Gallery->isPublic()}

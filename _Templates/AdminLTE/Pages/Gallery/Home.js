@@ -1,6 +1,6 @@
 var Home = {
     init: function () {
-        this.Sortable.init();
+        // this.Sortable.init();
     },
     Sortable: {
         init: function () {

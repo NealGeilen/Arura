@@ -100,22 +100,56 @@ class Gallery extends Page {
     }
 
     /**
-     * @param bool $isPublic
+     * @param bool $needsPublic
+     * @param int $iLimit
+     * @param int $iOffset
      * @return Gallery[]
      * @throws Error
      */
-    public static function getAllGalleries($needsPublic = true){
+    public static function getAllGalleries(bool $needsPublic = true,int $iLimit = 0,int $iOffset = 0,string $search = ""){
         $db = new Database();
         $aGalleries = [];
         $sWhereSql = null;
         if ($needsPublic){
-            $sWhereSql = "WHERE Gallery_Public = 1";
+            $sWhereSql = " AND Gallery_Public = 1";
         }
-        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY Gallery_Order");
+        if ($search != ""){
+            $search = "%" . $search ."%";
+            if (!$needsPublic){
+                $sWhereSql = "WHERE ";
+            } else {
+                $sWhereSql .= " AND";
+            }
+            $sWhereSql .= " Gallery_Id LIKE :search OR Gallery_Name LIKE :search OR Gallery_Description LIKE :search";
+        }
+        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY Gallery_CreatedDate DESC LIMIT {$iLimit} OFFSET {$iOffset}", ["search" => $search]);
         foreach ($aIds as $sId){
             $aGalleries[] = new self($sId);
         }
         return $aGalleries;
+    }
+
+    /**
+     * @param bool $needsPublic
+     * @return int
+     * @throws Error
+     */
+    public static function getGalleriesCount($needsPublic = true, $search = ""){
+        $db = new Database();
+        $sWhereSql = null;
+        if ($needsPublic){
+            $sWhereSql = " AND Gallery_Public = 1";
+        }
+        if ($search != ""){
+            $search = "%" . $search ."%";
+            if (!$needsPublic){
+                $sWhereSql = "WHERE ";
+            } else {
+                $sWhereSql .= " AND";
+            }
+            $sWhereSql .= " Gallery_Id LIKE :search OR Gallery_Name LIKE :search OR Gallery_Description LIKE :search";
+        }
+        return (int)$db->fetchRow("SELECT COUNT(Gallery_Id) AS Amount FROM tblGallery {$sWhereSql}", ["search" => $search])["Amount"];
     }
 
     /**
@@ -183,7 +217,6 @@ class Gallery extends Page {
             $this->setIsPublic($aGallery["Gallery_Public"]);
             $this->setName($aGallery["Gallery_Name"]);
             $this->setCreatedDate((new DateTime())->setTimestamp($aGallery["Gallery_CreatedDate"]));
-            $this->setOrder($aGallery["Gallery_Order"]);
             $this->isLoaded = true;
         }
     }
@@ -194,7 +227,6 @@ class Gallery extends Page {
                 "Gallery_Id" => $this->getId(),
                 "Gallery_Name" => $this->getName(),
                 "Gallery_Description" => $this->getDescription(),
-                "Gallery_Order" => $this->getOrder(),
                 "Gallery_Public" => (int)$this->isPublic(),
                 "Gallery_CreatedDate" => $this->getCreatedDate()->getTimestamp()
             ];
@@ -206,32 +238,6 @@ class Gallery extends Page {
         if ($this->isLoaded){
             $this->db->updateRecord("tblGallery", $this->__toArray(), "Gallery_Id");
         }
-    }
-
-    public function saveOrder(int $order){
-        if ($order <= $this->getOrder()){
-            //add
-            $aImages = $this->db->fetchAll("SELECT Gallery_Id, Gallery_Order FROM tblGallery WHERE Gallery_Order >= :Order AND Gallery_Id != :Gallery_Id", ["Order" => $order, "Gallery_Id" => $this->getId()]);
-            foreach ($aImages as $aImage){
-                $this->db->updateRecord("tblGallery",[
-                    "Gallery_Id" => $aImage["Gallery_Id"],
-                    "Gallery_Order" => ($aImage["Gallery_Order"] + 1)
-                ], "Gallery_Id");
-            }
-
-        } else {
-            //subtract
-            $aImages = $this->db->fetchAll("SELECT Gallery_Id, Gallery_Order FROM tblGallery WHERE Gallery_Order <= :Order AND Gallery_Id != :Gallery_Id", ["Order" => $order, "Gallery_Id" => $this->getId()]);
-            foreach ($aImages as $aImage){
-
-                $this->db->updateRecord("tblGallery",[
-                    "Gallery_Id" => $aImage["Gallery_Id"],
-                    "Gallery_Order" => ($aImage["Gallery_Order"] - 1)
-                ], "Gallery_Id");
-            }
-        }
-        $this->setOrder($order);
-        return $this->Save();
     }
 
     /**
@@ -283,16 +289,6 @@ class Gallery extends Page {
         return (int)$aData["Count"];
     }
 
-    /**
-     * @return int
-     * @throws Error
-     */
-    public static function getNextOrderGallery(){
-        $db = new Database();
-        $aData = $db->fetchRow("SELECT MAX(Gallery_Order) + 1 AS Count FROM tblGallery", []);
-        return (int)$aData["Count"];
-    }
-
     public function getDeleteForm() : Form{
         $this->load();
         $form = new Form("gallery-delete-form", Form::OneColumnRender);
@@ -324,7 +320,7 @@ class Gallery extends Page {
     /**
      * @param string $Name
      * @param string $Description
-     * @param int $Order
+     * @param int $public
      * @return Gallery|bool
      * @throws Error
      */
@@ -334,7 +330,6 @@ class Gallery extends Page {
         $db->createRecord("tblGallery",
         [
             "Gallery_Id" => $Id,
-            "Gallery_Order" => self::getNextOrderGallery(),
             "Gallery_Description" => $Description,
             "Gallery_CreatedDate" => time(),
             "Gallery_Public" => $public,
@@ -406,24 +401,6 @@ class Gallery extends Page {
     public function setCreatedDate(DateTime $createdDate): Gallery
     {
         $this->createdDate = $createdDate;
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOrder(): int
-    {
-        $this->load();
-        return $this->order;
-    }
-
-    /**
-     * @param int $order
-     */
-    public function setOrder(int $order): Gallery
-    {
-        $this->order = $order;
         return $this;
     }
 

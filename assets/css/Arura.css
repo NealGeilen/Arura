@@ -199,6 +199,7 @@ canvas.chartjs-render-monitor{
 }
 section.content>.container,.content-header>.container{
     padding: unset!important;
+    position: relative;
 }
 .flashes .alert{
     margin-bottom: 5px!important;
@@ -240,4 +241,12 @@ section.content>.container,.content-header>.container{
 }
 .dz-filename{
     display: none;
+}
+.right-contentHeader{
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+ul.pagination{
+    margin: unset;
 }
