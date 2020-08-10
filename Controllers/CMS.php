@@ -109,7 +109,7 @@ class CMS extends AbstractController {
     }
 
     /**
-     * @Route("/content/pagina/([^/]+)/settings")
+     * @Route("/content/pagina/([^/]+)/instellingen")
      * @Right("CMS_PAGES")
      */
     public function Settings($id){

@@ -63,6 +63,7 @@ var Gallery = {
     Sortable: {
         init: function () {
             $(".images").sortable({
+                axis: "y",
                 containment: ".content-wrapper",
                 cursor: "move",
                 handle: ".handle",

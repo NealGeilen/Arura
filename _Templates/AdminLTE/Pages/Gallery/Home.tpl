@@ -10,19 +10,15 @@
             <button class="btn btn-primary" data-toggle="modal" data-target="#createGallery">Nieuw album</button>
         </div>
         <div class="col-md-4">
-            <form method="post">
+            <form>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Zoeken" name="search" value="{$sSearch}">
+                    <input type="text" class="form-control" placeholder="Zoeken" name="q" value="{if isset($smarty.get.q)}{$smarty.get.q}{/if}">
+                    <input type="hidden" name="p" value="1">
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-outline-primary" id="button-addon2"><i class="fas fa-search"></i></button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </form>
-        </div>
-        <div class="col-md-4">
-            <div class="float-right">
-                {include file='./../../pagination.tpl'}
-            </div>
         </div>
     </div>
 {/block}
@@ -39,6 +35,7 @@
             </div>
         {/foreach}
     </div>
+    {include file='./../../pagination.tpl'}
 
     <!-- Modal -->
     <div class="modal fade" id="createGallery"  role="dialog" >

@@ -17,10 +17,6 @@ class Gallery extends AbstractController {
     public function Home(){
         $smarty = Router::getSmarty();
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
-            $requestHandler->addType("order", function ($aData){
-                $Gallery = new \Arura\Gallery\Gallery($aData["Gallery_Id"]);
-                $Gallery->saveOrder($aData["Gallery_Order"]);
-            });
             $requestHandler->addType("public", function ($aData){
                 $Gallery = new \Arura\Gallery\Gallery($aData["Gallery_Id"]);
                 $Gallery->setIsPublic(!$Gallery->isPublic());
@@ -29,14 +25,13 @@ class Gallery extends AbstractController {
                 return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery-card.tpl");
             });
         });
-        $iPage = (isset($_GET["page"]) ? (int)$_GET["page"] : 1);
+        $iPage = (isset($_GET["p"]) ? (int)$_GET["p"] : 1);
         $iAmount = 12;
-        $Galleries = \Arura\Gallery\Gallery::getAllGalleries(false, $iAmount, ($iPage-1)*$iAmount, (isset($_POST["search"]) ? $_POST["search"]:""));
-        $iPages = ceil((\Arura\Gallery\Gallery::getGalleriesCount(false, (isset($_POST["search"]) ? $_POST["search"]:"")) / $iAmount));
+        $Galleries = \Arura\Gallery\Gallery::getAllGalleries(false, $iAmount, ($iPage-1)*$iAmount, (isset($_GET["q"]) ? $_GET["q"]:""));
+        $iPages = ceil((\Arura\Gallery\Gallery::getGalleriesCount(false, (isset($_GET["q"]) ? $_GET["q"]:"")) / $iAmount));
         $smarty->assign("aGalleries", $Galleries);
         $smarty->assign("iCurrentPage", $iPage);
         $smarty->assign("iAmountPages", $iPages);
-        $smarty->assign("sSearch", (isset($_POST["search"]) ? $_POST["search"]:""));
         Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Home.css");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Home.js");
         $this->render("AdminLTE/Pages/Gallery/Home.tpl", [
@@ -56,6 +51,10 @@ class Gallery extends AbstractController {
                 set_time_limit(0);
                 Router::getSmarty()->assign("Image", $gallery->Upload());
                 return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
+            });
+            $requestHandler->addType("order", function ($aData) use ($gallery){
+                $img = new Image($aData["Image_Id"]);
+                $img->saveOrder($aData["Image_Order"]);
             });
             $requestHandler->addType("public", function ($aData){
                 $image = new Image($aData["Image_Id"]);

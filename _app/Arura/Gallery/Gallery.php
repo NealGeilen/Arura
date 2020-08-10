@@ -111,7 +111,7 @@ class Gallery extends Page {
         $aGalleries = [];
         $sWhereSql = null;
         if ($needsPublic){
-            $sWhereSql = " AND Gallery_Public = 1";
+            $sWhereSql = "WHERE Gallery_Public = 1";
         }
         if ($search != ""){
             $search = "%" . $search ."%";
@@ -138,7 +138,7 @@ class Gallery extends Page {
         $db = new Database();
         $sWhereSql = null;
         if ($needsPublic){
-            $sWhereSql = " AND Gallery_Public = 1";
+            $sWhereSql = "WHERE Gallery_Public = 1";
         }
         if ($search != ""){
             $search = "%" . $search ."%";
@@ -328,13 +328,13 @@ class Gallery extends Page {
         $db = new Database();
         $Id = createGuid();
         $db->createRecord("tblGallery",
-        [
-            "Gallery_Id" => $Id,
-            "Gallery_Description" => $Description,
-            "Gallery_CreatedDate" => time(),
-            "Gallery_Public" => $public,
-            "Gallery_Name" => $Name
-        ]);
+            [
+                "Gallery_Id" => $Id,
+                "Gallery_Description" => $Description,
+                "Gallery_CreatedDate" => time(),
+                "Gallery_Public" => $public,
+                "Gallery_Name" => $Name
+            ]);
         if ($db->isQuerySuccessful()){
             return new self($Id);
         }

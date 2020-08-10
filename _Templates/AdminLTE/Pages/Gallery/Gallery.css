@@ -1,70 +1,15 @@
-.image-container{
-    border-radius: 5px;
-    height: 200px;
-    width: 100%;
-    background: center center/cover no-repeat white;
-    margin-bottom: 15px;
-    position: relative;
-}
-.image-toolbar{
-    bottom: 5px;
-    width: 220px;
+.btn.mover{
+    position: absolute;
     left: 0;
-    right: 0;
-    margin-left: auto;
-    margin-right: auto;
-    position: absolute;
-}
-.image-options{
-    border-radius: 5px;
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    background: rgba(0,0,0,0.6);
-}
-
-.image-container:hover .image-options{
-    display: block;
-}
-.image-container:hover .lock{
-    display: none;
-}
-.btn-image-toolbar{
-    color: white;
-    width: 50px;
-}
-.btn-image-toolbar:hover{
-    color: gray;
-    border-color: gray;
-}
-.mover.btn-image-toolbar{
-    width: 60px;
-    left: 0;
-    right: 0;
-    top: 50px;
-    margin: auto;
-    position: absolute;
-    cursor: move;
-}
-
-.image-container .lock, .image-container .cover{
-    border-radius: 5px;
-    position: absolute;
     top: 0;
-    padding: 15px;
-    color: white;
-    background: rgba(0,0,0,0.4);
+    bottom: 0;
+    z-index: 600;
+    cursor: ns-resize;
 }
-.image-container .lock{
-    right: 0;
+.btn.mover .item{
+position: relative;
+    top: 50px;
 }
-.image-container .cover{
-    left: 0;
-}
-
-
-.sortable-placeholder{
-    border-radius: 5px;
-    background: rgba(0,0,0,0.4);
+.card-body>.row{
+    margin-left: 20px;
 }
