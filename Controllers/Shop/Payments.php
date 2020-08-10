@@ -9,7 +9,9 @@ use Arura\Database;
 use Arura\Permissions\Right;
 use Arura\Router;
 use Arura\Shop\Events\Event;
+use Arura\Shop\Events\Ticket;
 use Arura\Shop\Payment;
+use Arura\User\Logger;
 
 class Payments extends AbstractController {
 
@@ -26,6 +28,7 @@ class Payments extends AbstractController {
                 return Payment::getIssuersData();
             });
         });
+        Logger::Create(Logger::READ, Payment::class);
         $oSmarty = Router::getSmarty();
         $db = new Database();
         $oSmarty->assign("sPaymentDate", Payment::getMollie(true)->settlements->open()->settledAt);

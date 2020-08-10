@@ -346,6 +346,7 @@ class User
         $form->addSubmit("submit", "Opslaan");
         if ($form->isSubmitted()){
             $db = new Database();
+            Logger::Create(Logger::UPDATE, User::class, $user->getUsername());
             foreach ($form->getValues("array") as $id => $value){
                 if ($value){
                     if (count($db->fetchAll("SELECT * FROM tblUserRole WHERE Role_User_Id = :User_Id AND Role_Id = :Role_Id", ["User_Id" => $user->getId(), "Role_Id" => $id])) === 0){
@@ -376,6 +377,8 @@ class User
                 if (!$user->save()){
                     $form->addError("Opslaan mislukt");
                 } else {
+                    $user->load(true);
+                    Logger::Create(Logger::UPDATE, User::class, $user->getUsername());
                     Flasher::addFlash("Wachtwoord aangepast");
                 }
 
@@ -416,6 +419,7 @@ class User
             if (!$user->save()){
                 $form->addError("Opslaan mislukt");
             } else {
+                Logger::Create(Logger::UPDATE, User::class, $user->getUsername());
                 Flasher::addFlash("Profiel opgeslagen");
             }
         }

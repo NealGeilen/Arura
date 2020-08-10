@@ -8,6 +8,7 @@ use Arura\Database;
 use Arura\Flasher;
 use Arura\Permissions\Right;
 use Arura\Router;
+use Arura\User\Logger;
 
 class FileManger extends AbstractController {
 
@@ -26,6 +27,7 @@ class FileManger extends AbstractController {
                 return $Manger->loadDir($sDir, $aData['itemType']);
             });
         });
+        Logger::Create(Logger::UPDATE, \Arura\FileManger\FileManger::class);
         Flasher::addFlash("Bestanden hier geplaatst zijn openbaar.", Flasher::Info);
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/FileManger/Home.js");
         $this->render("AdminLTE/Pages/FileManger/Home.tpl", [

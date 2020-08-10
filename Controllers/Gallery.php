@@ -7,6 +7,8 @@ use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
 use Arura\Gallery\Image;
 use Arura\Router;
+use Arura\SecureAdmin\SecureAdmin;
+use Arura\User\Logger;
 
 class Gallery extends AbstractController {
 
@@ -21,6 +23,7 @@ class Gallery extends AbstractController {
                 $Gallery = new \Arura\Gallery\Gallery($aData["Gallery_Id"]);
                 $Gallery->setIsPublic(!$Gallery->isPublic());
                 $Gallery->Save();
+                Logger::Create(Logger::UPDATE, \Arura\Gallery\Gallery::class, $Gallery->getName());
                 Router::getSmarty()->assign("Gallery", $Gallery);
                 return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery-card.tpl");
             });
@@ -49,7 +52,9 @@ class Gallery extends AbstractController {
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($gallery){
             $requestHandler->addType("upload", function () use ($gallery){
                 set_time_limit(0);
-                Router::getSmarty()->assign("Image", $gallery->Upload());
+                $image = $gallery->Upload();
+                Router::getSmarty()->assign("Image", $image);
+                Logger::Create(Logger::CREATE, Image::class, $image->getName());
                 return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
             });
             $requestHandler->addType("order", function ($aData) use ($gallery){
@@ -60,6 +65,7 @@ class Gallery extends AbstractController {
                 $image = new Image($aData["Image_Id"]);
                 $image->setIsPublic(!$image->isPublic());
                 $image->Save();
+                Logger::Create(Logger::UPDATE, Image::class, $image->getName());
                 Router::getSmarty()->assign("Image", $image);
                 return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
             });
@@ -67,10 +73,12 @@ class Gallery extends AbstractController {
                 $image = new Image($aData["Image_Id"]);
                 $image->setIsCover(!$image->isCover());
                 $image->Save();
+                Logger::Create(Logger::UPDATE, Image::class, $image->getName());
                 Router::getSmarty()->assign("Image", $image);
                 return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
             });
         });
+        Logger::Create(Logger::READ, \Arura\Gallery\Gallery::class, $gallery->getName());
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery.js");
         Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery.css");
         $this->render("AdminLTE/Pages/Gallery/Gallery.tpl", [
@@ -85,6 +93,7 @@ class Gallery extends AbstractController {
      */
     public function Settings($id){
         $gallery = new \Arura\Gallery\Gallery($id);
+        Logger::Create(Logger::READ, \Arura\Gallery\Gallery::class, $gallery->getName());
         $this->render("AdminLTE/Pages/Gallery/Settings.tpl", [
             "title" =>"Instellingen: {$gallery->getName()}",
             "Gallery" => $gallery,
@@ -100,6 +109,7 @@ class Gallery extends AbstractController {
     public function Image($Image_Id){
         $Image = new Image($Image_Id);
         $Image->load(true);
+        Logger::Create(Logger::READ, Image::class, $Image->getId());
         $this->render("AdminLTE/Pages/Gallery/Image.tpl", [
             "title" =>$Image->getName(),
             "Image" => $Image

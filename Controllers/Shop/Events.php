@@ -10,6 +10,7 @@ use Arura\Permissions\Right;
 use Arura\Router;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Events\Ticket;
+use Arura\User\Logger;
 
 class Events extends AbstractController {
 
@@ -32,19 +33,22 @@ class Events extends AbstractController {
     public function Edit($id){
         $oEvent = new Event($id);
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($oEvent){
-            $requestHandler->addType("save-event", function ($aData){
+            $requestHandler->addType("save-event", function ($aData) use ($oEvent){
                 $db = new Database();
                 $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
                 $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
                 $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
                 $db->updateRecord("tblEvents", $aData, "Event_Id");
+                Logger::Create(Logger::UPDATE, Event::class, $oEvent->getName());
             });
             $requestHandler->addType("delete-event", function ($aData) use ($oEvent){
                 if (!$oEvent->delete()){
                     throw new Error();
                 }
+                Logger::Create(Logger::DELETE, Event::class, $oEvent->getName());
             });
         });
+        Logger::Create(Logger::READ, Event::class, $oEvent->getName());
         $db = new Database();
         Router::getSmarty()->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
         Router::getSmarty()->assign("aEvent", $oEvent->__ToArray());
@@ -71,6 +75,7 @@ class Events extends AbstractController {
             $_POST["Event_IsActive"] = 0;
             $_POST["Event_IsVisible"] = 0;
             $e = Event::Create($_POST);
+            Logger::Create(Logger::CREATE, Event::class, $e->getName());
             header("Location: /dashboard/winkel/evenementen/beheer/" . $e->getId() . "/aanpassen");
         }
         $db = new Database();
@@ -87,6 +92,7 @@ class Events extends AbstractController {
     public function Validation(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $oTicket = new Ticket($requestHandler->getData()["Hash"]);
+            Logger::Create(Logger::UPDATE, Ticket::class, "Validate: {$oTicket->getTicketId()}");
             return $oTicket->Validate();
         });
         Router::addSourceScriptJs("assets/vendor/Instascan/instascan.min.js");

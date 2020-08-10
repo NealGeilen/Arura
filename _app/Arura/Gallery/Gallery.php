@@ -5,17 +5,13 @@ use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Flasher;
 use Arura\Form;
-use Arura\Modal;
 use Arura\Pages\Page;
 use Arura\Permissions\Restrict;
-use Arura\User\User;
+use Arura\User\Logger;
 use DateTime;
-use Monolog\Handler\StreamHandler;
-use Monolog\Logger;
 use Rights;
 use RuntimeException;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
-use Symfony\Component\VarDumper\VarDumper;
 
 class Gallery extends Page {
 
@@ -76,12 +72,14 @@ class Gallery extends Page {
                     $form->getValues()->Gallery_Description,
                     (int)$form->getValues()->Gallery_Public
                 );
+                Logger::Create(Logger::CREATE, self::class, $oNewGallery->getName());
             } else{
                 $gallery
                     ->setIsPublic($form->getValues()->Gallery_Public)
                     ->setName($form->getValues()->Gallery_Name)
                     ->setDescription($form->getValues()->Gallery_Description);
                 $gallery->Save();
+                Logger::Create(Logger::UPDATE, self::class, $gallery->getName());
                 $oNewGallery = $gallery;
             }
 
@@ -297,6 +295,7 @@ class Gallery extends Page {
         if ($form->isSubmitted()){
 
             if ($this->Delete()){
+                Logger::Create(Logger::DELETE, self::class, $this->getName());
                 Flasher::addFlash("{$this->getName()} verwijderd");
                 header("Location: /dashboard/gallery/" );
                 exit;

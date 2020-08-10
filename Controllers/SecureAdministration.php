@@ -9,6 +9,7 @@ use Arura\Exceptions\Error;
 use Arura\Flasher;
 use Arura\Router;
 use Arura\SecureAdmin\SecureAdmin;
+use Arura\User\Logger;
 use Arura\User\User;
 
 class SecureAdministration extends AbstractController {

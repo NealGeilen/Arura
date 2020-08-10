@@ -8,6 +8,7 @@ use Arura\Form;
 use Arura\Modal;
 use Arura\Pages\Page;
 use Arura\Permissions\Restrict;
+use Arura\User\Logger;
 use Arura\User\User;
 use Rights;
 
@@ -177,6 +178,7 @@ class Image extends Page {
                 ->setIsCover($form->getValues()->Image_Cover)
                 ->setName($form->getValues()->Image_Name)
                 ->Save();
+            Logger::Create(Logger::UPDATE, self::class, $form->getValues()->Image_Name);
             Flasher::addFlash("{$this->getName()} opgeslagen");
         }
         return $form;
@@ -193,6 +195,7 @@ class Image extends Page {
 
             if ($this->Delete()){
                 Flasher::addFlash("{$this->getName()} verwijderd");
+                Logger::Create(Logger::DELETE, self::class, $this->getName());
                 header("Location: /dashboard/gallery/{$this->getGallery()->getId()}" );
                 exit;
             } else {

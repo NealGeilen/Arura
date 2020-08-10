@@ -250,3 +250,19 @@ section.content>.container,.content-header>.container{
 ul.pagination{
     margin: unset;
 }
+.nav-tabs .nav-link:not(.active){
+    color: lightslategrey;
+    border: lightslategrey 1px solid;
+}
+.nav-tabs{
+    /*background-color: ;*/
+    padding: 10px 0;
+    border: unset;
+}
+.nav-tabs .nav-link{
+    border-radius: 5px;
+    margin-right: 5px;
+}
+.wrapper{
+    background-color: #f4f6f9;
+}

@@ -9,10 +9,13 @@ use Arura\Exceptions\NotAcceptable;
 use Arura\Git;
 use Arura\Permissions\Role;
 use Arura\Router;
+use Arura\Settings\Application;
 use Arura\Updater\DataBaseSync;
 use Arura\Updater\Updater;
+use Arura\User\Logger;
 use Arura\User\Password;
 use Arura\User\User;
+use Composer\Composer;
 use Exception;
 
 class Arura extends AbstractController {
@@ -37,13 +40,14 @@ class Arura extends AbstractController {
      */
     public function UserDetails($id){
         $oUser= new User($id);
-
+        Logger::Create(Logger::READ, User::class, $oUser->getUsername());
         $this->render("AdminLTE/Pages/Arura/Users/info.tpl", [
             "User" => $oUser,
             "title" =>"Gebruiker: ".$oUser->getUsername(),
             "editForm" => User::getProfileForm($oUser),
             "passwordForm" => User::getPasswordForm($oUser),
-            "roleForm" => User::getRoleForm($oUser)
+            "roleForm" => User::getRoleForm($oUser),
+            "Logs" => Logger::getLogsUser($oUser)
         ]);
     }
 
@@ -54,6 +58,8 @@ class Arura extends AbstractController {
     public function Settings(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
             $db = new Database();
+            Logger::Create(Logger::UPDATE, Application::class, $requestHandler->getData()[0]["plg"]);
+
             foreach ($requestHandler->getData() as $aSetting){
                 $db -> query('UPDATE tblSettings SET Setting_Value = ? WHERE Setting_plg = ? AND Setting_Name = ?',
                     [
@@ -89,9 +95,11 @@ class Arura extends AbstractController {
                 return $updater->getPackagesNeededUpdate();
             });
             $requestHandler->addType("update-package", function ($data)  use ($updater){
+                Logger::Create(Logger::UPDATE, Composer::class, $data["name"]);
                 return $updater->updatePackage($data["name"]);
             });
             $requestHandler->addType("update-all-packages", function ()  use ($updater){
+                Logger::Create(Logger::UPDATE, Composer::class, "All");
                 return $updater->updateAllPackages();
             });
         });
@@ -106,6 +114,7 @@ class Arura extends AbstractController {
             if (isset($_POST["gitpull"])){
                 $repo->Reset(true);
                 $repo->pull();
+                Logger::Create(Logger::UPDATE, Git::class);
                 $repo = new Git(__WEB__ROOT__);
             }
 
@@ -120,6 +129,7 @@ class Arura extends AbstractController {
 
         if (isset($_POST["reload"])){
             $DB->Reload();
+            Logger::Create(Logger::UPDATE, DataBaseSync::class);
         }
 
         $smarty->assign("bGit", $repo->isGit());

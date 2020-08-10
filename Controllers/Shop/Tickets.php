@@ -5,6 +5,8 @@ use Arura\Database;
 use Arura\Permissions\Right;
 use Arura\Router;
 use Arura\Shop\Events\Event;
+use Arura\Shop\Events\Ticket;
+use Arura\User\Logger;
 
 class Tickets extends AbstractController {
 
@@ -39,6 +41,8 @@ class Tickets extends AbstractController {
     public function Tickets($id){
         $oEvent = new Event((int)$id);
         Router::getSmarty()->assign("aEvent", $oEvent->__ToArray());
+        Logger::Create(Logger::READ, Ticket::class, $oEvent->getName());
+
         if($oEvent->hasEventTickets()){
             Router::getSmarty()->assign("aRegistrations", json_encode($oEvent->getRegistration()));
             Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Tickets/Tickets.js");

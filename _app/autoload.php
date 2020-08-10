@@ -8,6 +8,8 @@ define("__ARURA__DIR_NAME__", "dashboard");
 define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
 define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
 
+date_default_timezone_set("Europe/Amsterdam");
+
 
 if (is_file(__ROOT__ . "/_config.php")){
     require_once __ROOT__ . "/_config.php";

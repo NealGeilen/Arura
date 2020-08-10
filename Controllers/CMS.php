@@ -14,6 +14,7 @@ use Arura\Pages\CMS\Sitemap;
 use Arura\Pages\Page;
 use Arura\Permissions\Right;
 use Arura\Router;
+use Arura\User\Logger;
 
 class CMS extends AbstractController {
 
@@ -90,6 +91,7 @@ class CMS extends AbstractController {
                 return $p->getPageStructure();
             });
             $requestHandler->addType("Save-Page-Content", function ($aData) use ($p){
+                Logger::Create(Logger::UPDATE, \Arura\Pages\CMS\Page::class, $p->getTitle());
                 return $p->SavePageContents($aData["Data"]);
             });
             $requestHandler->addType("Create-Block", function ($aData) use ($p){
@@ -99,6 +101,7 @@ class CMS extends AbstractController {
                 return Group::Create($p->getId())->get();
             });
         });
+        Logger::Create(Logger::READ, \Arura\Pages\CMS\Page::class, $p->getTitle());
         Router::getSmarty() -> assign('aCmsPage', $p->__toArray());
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Content.js");
         Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Content.css");
@@ -119,6 +122,7 @@ class CMS extends AbstractController {
             ->addRule(Form::INTEGER);
         $form->setDefaults($p->__toArray());
         if ($form->isSubmitted()){
+            Logger::Create(Logger::UPDATE, \Arura\Pages\CMS\Page::class, $p->getTitle());
             $p->set($form->getValues('array'));
             $p->load(true);
             Flasher::addFlash("Pagina {$p->getTitle()} opgeslagen");
