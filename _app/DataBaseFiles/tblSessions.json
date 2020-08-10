@@ -1,1 +1,32 @@
-{"columns":{"Session_Id":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""},"Session_User_Id":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""},"Session_Last_Active":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""}}}
+{
+  "columns": {
+    "Session_Id": {
+      "Type": "varchar(255)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Session_Ip": {
+      "Type": "varchar(100)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Session_User_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Session_Last_Active": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    }
+  }
+}

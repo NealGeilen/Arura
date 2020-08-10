@@ -262,8 +262,9 @@ class User
             [
                 'Session_User_Id' => $this->getId()
             ]);
-        $this->db->query('INSERT INTO ' . self::$tblSessions . ' SET Session_Id = :Session_Id, Session_User_Id = :Session_User_Id, Session_Last_Active = :Session_Last_Active',
+        $this->db->query('INSERT INTO tblSessions SET Session_Id = :Session_Id, Session_User_Id = :Session_User_Id, Session_Last_Active = :Session_Last_Active, Session_Ip = :Session_Ip',
             [
+                'Session_Ip' => $_SERVER["REMOTE_ADDR"],
                 'Session_User_Id' => $this->getId(),
                 'Session_Id' => Sessions::getSessionId(),
                 'Session_Last_Active' => time()

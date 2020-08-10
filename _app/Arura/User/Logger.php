@@ -80,6 +80,12 @@ class Logger{
                     "Name" => "Afbeelding"
                 ];
                 break;
+            case "Arura\Updater\DataBaseSync":
+                return [
+                    "Icon" => "fas fa-database",
+                    "Name" => "Database"
+                ];
+                break;
             default:
                 return [
                     "Icon" => "fas fa-box",

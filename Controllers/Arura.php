@@ -27,7 +27,7 @@ class Arura extends AbstractController {
     public function Users(){
         $db= new Database();
         Router::getSmarty() -> assign('aUsers', $db ->fetchAll('SELECT * FROM tblUsers'));
-        Router::getSmarty() -> assign('aSessions', $db ->fetchAll('SELECT * FROM tblSessions'));
+        Router::getSmarty() -> assign('aSessions', $db ->fetchAll('SELECT * FROM tblSessions JOIN tblUsers ON User_Id = Session_User_Id'));
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Users.js");
         $this->render("AdminLTE/Pages/Arura/Users.tpl", [
             "title" =>"Gebruikers"
@@ -41,13 +41,15 @@ class Arura extends AbstractController {
     public function UserDetails($id){
         $oUser= new User($id);
         Logger::Create(Logger::READ, User::class, $oUser->getUsername());
+        $db = new Database();
         $this->render("AdminLTE/Pages/Arura/Users/info.tpl", [
             "User" => $oUser,
             "title" =>"Gebruiker: ".$oUser->getUsername(),
             "editForm" => User::getProfileForm($oUser),
             "passwordForm" => User::getPasswordForm($oUser),
             "roleForm" => User::getRoleForm($oUser),
-            "Logs" => Logger::getLogsUser($oUser)
+            "Logs" => Logger::getLogsUser($oUser),
+            "aSessions" => $db->fetchAll("SELECT * FROM tblSessions WHERE Session_User_Id = :User_Id", ["User_Id" => $oUser->getId()])
         ]);
     }
 

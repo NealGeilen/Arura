@@ -17,6 +17,9 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#logger" role="tab" aria-controls="contact" aria-selected="false">Acties</a>
         </li>
+        <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#sessions" role="tab" aria-controls="contact" aria-selected="false">Sessies</a>
+        </li>
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="gegevens" role="tabpanel" aria-labelledby="home-tab">
@@ -37,6 +40,36 @@
             <div class="card card-secondary">
                 <div class="card-body">
                     {$roleForm}
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="sessions" role="tabpanel" aria-labelledby="contact-tab">
+            <div class="card card-secondary">
+                <div class="card-body table-responsive">
+                    <table class="table Arura-Table">
+                        <thead>
+                        <tr>
+                            <th>
+                                Session id
+                            </th>
+                            <th>
+                                Ip address
+                            </th>
+                            <th>
+                                Tijd laatste actie
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {foreach $aSessions as $aSession}
+                            <tr>
+                                <td>{$aSession.Session_Id}</td>
+                                <td>{$aSession.Session_Ip}</td>
+                                <td>{$aSession.Session_Last_Active|date_format:"%H:%M %d-%m-%Y"}</td>
+                            </tr>
+                        {/foreach}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

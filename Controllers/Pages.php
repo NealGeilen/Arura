@@ -29,6 +29,9 @@ class Pages extends AbstractController {
      * @Route("/login")
      */
     public function Login(){
+        if (User::isLogged()){
+            $this->redirect("/dashboard/home");
+        }
         if (User::canUserLogin()){
             $form = Password::loginForm();
             $this->addParameter('loginForm', $form);
@@ -106,7 +109,9 @@ class Pages extends AbstractController {
             } else {
                 User::activeUser()->logOutUser();
                 Sessions::End();
+                throw new Exception('expelled',403);
             }
+            $db->query("DELETE FROM tblSessions WHERE (Session_Last_Active + 1800) < FROM_UNIXTIME(NOW())");
         });
         exit;
     }
