@@ -24,7 +24,7 @@ class DataBaseSync extends Modal {
      * DataBaseSync constructor.
      * @param string $sDataFilesDir
      */
-    public function __construct($sDataFilesDir = "")
+    public function __construct($sDataFilesDir = __DATAFILES__)
     {
         parent::__construct();
         $this->sDataFilesDir = $sDataFilesDir;
