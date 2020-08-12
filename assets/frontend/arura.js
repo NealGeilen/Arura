@@ -36,7 +36,7 @@ $(document).ready(function () {
 
 
 Arura = {
-    API_DIR : "/api/",
+    API_DIR : "/json/",
     xhr : function(options){
         Arura.System.StartPageLoad();
         var settings = $.extend({
@@ -375,9 +375,7 @@ Arura = {
                 type: 'image',
                 gallery: {
                     enabled: true,
-
                     arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
-
                     tPrev: 'Vorige',
                     tNext: 'Volgende',
                     tCounter: '<span class="mfp-counter">%curr% van %total%</span>' // markup of counter

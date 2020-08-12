@@ -9,6 +9,9 @@ class Logger{
     const READ = 1;
     const DELETE = 2;
     const UPDATE = 3;
+    const VALIDATE = 4;
+    const LOGIN = 5;
+    const LOGOUT = 6;
 
     public static function getLog(string $id){
         $db = new Database();
@@ -86,6 +89,24 @@ class Logger{
                     "Name" => "Database"
                 ];
                 break;
+            case "Arura\Shop\Events\Event":
+                return [
+                    "Icon" => "fas fa-calendar-week",
+                    "Name" => "Evenement"
+                ];
+                break;
+            case"Arura\Shop\Events\Ticket":
+                return [
+                    "Icon" => "fas fa-ticket-alt",
+                    "Name" => "Registartie"
+                ];
+                break;
+            case "Arura\FileManger\FileManger":
+                return [
+                    "Icon" => "fas fa-file-alt",
+                    "Name" => "Bestand"
+                ];
+                break;
             default:
                 return [
                     "Icon" => "fas fa-box",
@@ -93,30 +114,47 @@ class Logger{
                 ];
                 break;
         }
-        return null;
     }
 
     public static function getStatus(int $status){
         switch ($status){
-            case 1:
+            case self::READ:
                 return [
                     "Color" => "bg-primary",
                     "Name" => "Gelezen"
                 ];
                 break;
-            case 0:
+            case self::CREATE:
                 return [
                     "Color" => "bg-success",
                     "Name" => "Aangemaakt"
                 ];
                 break;
-            case 2:
+            case self::DELETE:
                 return [
                     "Color" => "bg-danger",
                     "Name" => "Verwijdert"
                 ];
                 break;
-            case 3:
+            case self::UPDATE:
+                return [
+                    "Color" => "bg-warning",
+                    "Name" => "Aangepast"
+                ];
+                break;
+            case self::LOGIN:
+                return [
+                    "Color" => "bg-info",
+                    "Name" => "Ingeloged"
+                ];
+                break;
+            case self::LOGOUT:
+                return [
+                    "Color" => "bg-warning",
+                    "Name" => "Uitgeloged"
+                ];
+                break;
+            case self::VALIDATE:
                 return [
                     "Color" => "bg-warning",
                     "Name" => "Aangepast"

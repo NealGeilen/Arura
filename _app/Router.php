@@ -15,8 +15,15 @@ use Arura\User\User;
 
 try {
     $oRouter = new \Bramus\Router\Router();
-    $aPath = explode("/", $oRouter->getCurrentUri());
+    $aUrl = parse_url($_SERVER["REQUEST_URI"]);
+    $aPath = explode("/", $aUrl["path"]);
     switch ($aPath[1]){
+        case "json":
+            if (file_exists(__ROOT__ . $aUrl["path"])){
+                include __ROOT__ . $aUrl["path"];
+                exit;
+            }
+            break;
         case "dashboard":
             $oRouter->mount("/dashboard", function () use ($oRouter){
                 $oRouter->get("/", function (){
