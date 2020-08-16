@@ -111,7 +111,7 @@ class Pages extends AbstractController {
                 Sessions::End();
                 throw new Exception('expelled',403);
             }
-            $db->query("DELETE FROM tblSessions WHERE (Session_Last_Active + 1800) < FROM_UNIXTIME(NOW())");
+            $db->query("DELETE FROM tblSessions WHERE (Session_Last_Active + 1800) < UNIX_TIMESTAMP()");
         });
         exit;
     }

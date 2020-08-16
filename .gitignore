@@ -6,6 +6,6 @@
 /.idea/
 /files/
 _app/Resources/SecureAdmin/
-*templates_c/
+templates_c/*
 /_config.php
 /Templates/menu.json

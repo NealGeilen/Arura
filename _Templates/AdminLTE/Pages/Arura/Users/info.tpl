@@ -84,11 +84,7 @@
                             <i class="{$Log.Entity.Icon} {$Log.Status.Color}"></i>
                             <div class="timeline-item">
                                 <span class="time"><i class="fas fa-clock"></i> {$Log.Logger_Time|date_format:"%H:%M:%S"}</span>
-                                <h3 class="timeline-header"><b>{$Log.Status.Name}</b> </h3>
-
-                                <div class="timeline-body">
-                                    {$Log.Entity.Name} {$Log.Logger_Name} {*<a class="btn btn-danger btn-sm float-md-right text-white"><i class="far fa-trash-alt"></i></a>*}
-                                </div>
+                                <h3 class="timeline-header"><b>{$Log.Entity.Name}</b><br/> {$Log.Status.Name}, {$Log.Logger_Name}</h3>
                             </div>
                         </div>
                     {/foreach}

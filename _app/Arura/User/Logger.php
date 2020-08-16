@@ -71,6 +71,24 @@ class Logger{
                     "Name" => "Pagina"
                 ];
                 break;
+            case "Arura\Git":
+                return [
+                    "Icon" => "fas fa-file-code",
+                    "Name" => "Frontend git"
+                ];
+                break;
+            case "Arura\Shop\Payment":
+                return [
+                    "Icon" => "fas fa-money-bill",
+                    "Name" => "Betalingen"
+                ];
+                break;
+            case "Composer\Composer":
+                return [
+                    "Icon" => "fas fa-toolbox",
+                    "Name" => "Arura system"
+                ];
+                break;
             case "Arura\Gallery\Gallery":
                 return [
                     "Icon" => "fas fa-images",
@@ -105,6 +123,12 @@ class Logger{
                 return [
                     "Icon" => "fas fa-file-alt",
                     "Name" => "Bestand"
+                ];
+                break;
+            case "Arura\Settings\Application":
+                return [
+                    "Icon" => "fas fa-cogs",
+                    "Name" => "Applicatie instellingen"
                 ];
                 break;
             default:

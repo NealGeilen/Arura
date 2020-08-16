@@ -271,7 +271,7 @@ class User
             ]);
         if ($this->db->isQuerySuccessful()){
             $_SESSION['User_Id'] = $this->getId();
-            Logger::Create(Logger::LOGIN, self::class, $this->getFirstname() ." " .  $this->getLastname());
+            Logger::Create(Logger::LOGIN, self::class, $_SERVER["REMOTE_ADDR"]);
         }
         return $this->db->isQuerySuccessful();
     }
@@ -293,7 +293,7 @@ class User
         if ($this->db->isQuerySuccessful() && $aSessionData['Session_Id'] === Sessions::getSessionId()){
             Sessions::end();
         }
-        Logger::Create(Logger::LOGOUT, self::class, $this->getFirstname() ." " .  $this->getLastname());
+        Logger::Create(Logger::LOGOUT, self::class, $_SERVER["REMOTE_ADDR"]);
         return $this->db->isQuerySuccessful();
     }
 
