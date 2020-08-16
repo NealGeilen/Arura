@@ -6,7 +6,7 @@
             <div class="col-md-3 col-sm-6 col-12">
                 <div class="mb-3">
                     <a href="{$Image->getImage(false)}">
-                        <img src="{$Image->getThumbnail(false)}">
+                        <img class="lozad" data-src="{$Image->getThumbnail(false)}" alt="{$Image->getName()}">
                     </a>
                 </div>
             </div>
