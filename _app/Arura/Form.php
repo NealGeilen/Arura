@@ -31,19 +31,19 @@ class Form extends \Nette\Forms\Form{
         return "</form>";
     }
 
-    public function getControl($name){
+    public function getControl($name,string $cssClass = null){
         if (isset($this->components[$name])){
             $item = $this->components[$name];
             $control = $item->getControl();
             switch ($control->getAttribute("type")){
                 case "submit":
-                    $control->setAttribute("class", "btn btn-primary");
+                    $control->setAttribute("class", "btn btn-primary {$cssClass}");
                     break;
                 case "reset":
-                    $control->setAttribute("class", "btn btn-secondary");
+                    $control->setAttribute("class", "btn btn-secondary {$cssClass}");
                     break;
                 default:
-                    $control->setAttribute("class", "form-control");
+                    $control->setAttribute("class", "form-control {$cssClass}");
                     break;
             }
             return "<div class='form-group'>{$item->getLabel()}{$control}</div>";

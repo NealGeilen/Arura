@@ -8,10 +8,13 @@ use Arura\Crud\Fields\Field;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\NotFound;
+use Arura\Flasher;
+use Arura\Form;
 use Arura\Pages\Page;
 use Arura\Shop\Payment;
 use Arura\Database;
 use Arura\Settings\Application;
+use Arura\User\Logger;
 use Arura\User\User;
 use DateTime;
 use Exception;
@@ -219,6 +222,78 @@ class Event Extends Page {
     }
 
     /**
+     * @param Event|null $oEvent
+     * @return Form
+     */
+    public static function getForm(self $oEvent = null){
+        $form = new Form("event-form", Form::OneColumnRender);
+        $form->addText("Event_Name", "Naam")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Event_Slug", "Slug")
+            ->addFilter(function ($value){
+                dd($value);
+                return str_replace([".", ";", "/", " ", ","], "-",strtolower($value));
+            })
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Event_Start_Timestamp", "Start datum")->setHtmlType("datetime-local")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Event_End_Timestamp", "Eind datum")->setHtmlType("datetime-local")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Event_Registration_End_Timestamp", "Eind datum registartie")->setHtmlType("datetime-local")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Event_Banner", "Banner")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addText("Event_Location", "Locatie")
+        ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addTextArea("Event_Description", "Omschrijving")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addCheckbox("Event_IsActive", "Actief");
+        $form->addCheckbox("Event_IsVisible", "Openbaar");
+        $form->addInteger("Event_Capacity", "Capaciteit");
+        $aUsers = [];
+        foreach (User::getAllUsers() as $oUser){
+            $aUsers[$oUser->getId()] = "{$oUser->getFirstname()} {$oUser->getLastname()} | {$oUser->getEmail()}";
+        }
+        $form->addSelect("Event_Organizer_User_Id", "Organizator", $aUsers)
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("submit", "Opslaan");
+
+        if(!is_null($oEvent)){
+            $form->addHidden("Event_Id");
+            $aEvent = $oEvent->__ToArray();
+            $aEvent["Event_Start_Timestamp"]= $oEvent->getStart()->format("Y-m-d\TH:i");
+            $aEvent["Event_End_Timestamp"]= $oEvent->getEnd()->format("Y-m-d\TH:i");
+            $aEvent["Event_Registration_End_Timestamp"]= $oEvent->getEndRegistration()->format("Y-m-d\TH:i");
+            $form->setDefaults($aEvent);
+        }
+        if ($form->isSubmitted()){
+            $aData = $form->getValues("array");
+            if (is_null($oEvent)){
+                $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
+                $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
+                $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
+                $aData["Event_IsActive"] = (int)$aData["Event_IsActive"];
+                $aData["Event_IsVisible"] = (int)$aData["Event_IsVisible"];
+                $oEvent = self::Create($aData);
+                Logger::Create(Logger::CREATE, Event::class, $oEvent->getName());
+                Flasher::addFlash("Evenement {$oEvent->getName()} aangemaakt");
+                redirect("/dashboard/winkel/evenementen/" . $oEvent->getId());
+            } else{
+                $db = new Database();
+                $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
+                $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
+                $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
+                $db->updateRecord("tblEvents", $aData, "Event_Id");
+                $oEvent->load(true);
+                Flasher::addFlash("Evenement {$oEvent->getName()} aangepast");
+                Logger::Create(Logger::UPDATE, Event::class, $oEvent->getName());
+            }
+        }
+        return $form;
+    }
+
+
+    /**
      * @param string $sSlug
      * @param null $iRight
      * @param callable|null $function
@@ -357,11 +432,11 @@ class Event Extends Page {
         $Crud->setCanDelete($Open);
         $Crud->setCanEdit($Open);
         $Crud->setCanInsert($Open);
-        $Crud->setCssId("tickets");
+        $Crud->setCssId("tickets-tabe");
         $Crud->addDefaultValue("Ticket_Event_Id", $this->getId());
         $Crud->addField(new Field("text", "Ticket_Name", "Naam"));
         $Crud->addField(new Field("text", "Ticket_Description", "Omschrijving"));
-        $Crud->addField(new Field("number", "Ticket_Capacity", "Capacity"));
+        $Crud->addField(new Field("number", "Ticket_Capacity", "Capaciteit"));
         $Currancy = new Field("number", "Ticket_Price", "Prijs");
         $Currancy->addAttribute("step", "0.01");
         $Crud->addField($Currancy);

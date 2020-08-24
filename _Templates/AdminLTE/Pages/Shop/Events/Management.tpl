@@ -1,13 +1,13 @@
 {extends "../../../index.tpl"}
 
 {block breadcrum}
-    <li class="breadcrumb-item active">Evenementen beheer</li>
+    <li class="breadcrumb-item active">Evenementen</li>
 {/block}
 
 {block content}
     <div class="card card-primary">
         <div class="card-header">
-            <h2 class="card-title">Bestaande evenementen</h2>
+            <h2 class="card-title">Evenementen</h2>
             <div class="card-tools">
                 <button class="btn btn-primary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
             </div>
@@ -20,9 +20,11 @@
                     <th>Slug</th>
                     <th>Tijd</th>
                     <th>
+                        {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
                         <div class="btn-group">
-                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/beheer/aanmaken"><i class="fas fa-plus"></i></a>
+                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/aanmaken"><i class="fas fa-plus"></i></a>
                         </div>
+                        {/if}
                     </th>
                 </tr>
                 </thead>
@@ -33,7 +35,7 @@
                         <td>{$aEvent.Event_Slug}</td>
                         <td>{$aEvent.Event_Start_Timestamp|date_format:"%H:%M %d-%m-%y"} t/m {$aEvent.Event_End_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
                         <td class="btn-group btn-group">
-                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/beheer/{$aEvent.Event_Id}/aanpassen"><i class="fas fa-pen"></i></a>
+                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenement/{$aEvent.Event_Id}"><i class="fas fa-pen"></i></a>
                         </td>
                     </tr>
                 {/foreach}

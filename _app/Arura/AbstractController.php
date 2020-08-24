@@ -8,6 +8,21 @@ use Arura\User\User;
 
 abstract class AbstractController{
 
+    private $aTabs;
+
+    public function addTab(string $key, callable $callback){
+        $this->aTabs[$key] = $callback;
+    }
+
+    public function displayTab(){
+        if (isset($_GET["t"])){
+            if (!empty($_GET["t"]) && isset($this->aTabs[$_GET["t"]])){
+                call_user_func($this->aTabs[$_GET["t"]]);
+                exit;
+            }
+        }
+    }
+
     protected final function isXmlHttpRequest()
     {
         return isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest';

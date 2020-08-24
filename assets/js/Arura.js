@@ -131,6 +131,7 @@ var Dashboard = {
         $.ajax(settings);
     }
 }
+urlParams = new URLSearchParams(window.location.search)
 
 startPageLoad();
 $(document).ready(function () {
@@ -177,8 +178,6 @@ $("select[value]").each(function() {
         $(this).val($(this).attr("value"));
     }
 });
-$("select.form-control option:first").attr('selected','selected');
-
 
 $("textarea.richtext").ready(function () {
     $.each($("textarea.richtext"), function (i ,oElement) {
@@ -250,9 +249,6 @@ $(window).scroll(function(){
         }
     }
 });
-if ($("body").hasClass("scrolls")){
-
-}
 
 $.each(JSON.parse(FLASHES), function (type, messages) {
     Dashboard.System.Alerts[(type.charAt(0).toUpperCase() + type.slice(1))](messages);
@@ -278,3 +274,21 @@ $(".table.Arura-Table .btn-delete").on("click", function () {
         }
     })
 });
+
+
+$(".nav-tabs[role=tablist]").find(".nav-link").on("click", function (){
+    if ($(this).has("[data-toggle=tab]")){
+        if (urlParams.has("t")){
+            startPageLoad();
+            location.replace(location.pathname + $(this).attr("href"))
+        }
+    }
+});
+
+if (location.hash !== ""){
+    console.log(location.hash);
+    $(location.hash).parents(".tab-content").find(".tab-pane.active").removeClass("active").removeClass("show");
+    $(location.hash + ".tab-pane").addClass("active").addClass("show");
+    $("[href='"+location.hash+"']").parents(".nav-tabs").find(".active").removeClass("active")
+    $("[href='"+location.hash+"']").addClass("active");
+}

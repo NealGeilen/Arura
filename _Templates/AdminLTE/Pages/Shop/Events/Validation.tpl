@@ -1,8 +1,32 @@
 {extends "../../../index.tpl"}
 {block breadcrum}
-    <li class="breadcrumb-item active">Ticket controleren</li>
+    <li class="breadcrumb-item"><a href="/dashboard/winkel/evenementen">Evenementen</a></li>
+    <li class="breadcrumb-item active">{$aEvent.Event_Name}</li>
 {/block}
 {block content}
+    <ul class="nav nav-tabs" role="tablist">
+        {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#gegevens" role="tab">Gegevens</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tickets-tabe" role="tab">Tickets</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#delete-event-tap" role="tab">Verwijderen</a>
+            </li>
+        {/if}
+        {if $aPermissions.SHOP_EVENTS_REGISTRATION}
+            <li class="nav-item">
+                <a class="nav-link" href="?t=registrations" role="tab">Aanmeldingen</a>
+            </li>
+        {/if}
+        {if $aPermissions.SHOP_EVENTS_VALIDATION}
+            <li class="nav-item">
+                <a class="nav-link active" href="?t=validation">Valideren</a>
+            </li>
+        {/if}
+    </ul>
     <style>
         video{
             width: 60%!important;

@@ -122,39 +122,10 @@ class Router{
                             '/winkel/evenementen' => [
                                 "Right" =>
                                     (
-                                    Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
+                                    Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)||Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
                                     ),
                                 "Title" => "Evenementen",
-                                "Icon" => "far fa-calendar-alt",
-                                "Children" => [
-                                    '/winkel/evenementen' => [
-                                        "Right" =>
-                                            (
-                                            Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)
-                                            ),
-                                        "Title" => "Beheer",
-                                        "Icon" => "fas fa-calendar-day",
-                                        "Function" => "Shop\Events@Management",
-                                    ],
-                                    '/winkel/evenementen/tickets' => [
-                                        "Right" =>
-                                            (
-                                            Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
-                                            ),
-                                        "Title" => "Inschrijvingen",
-                                        "Icon" => "fas fa-ticket-alt",
-                                        "Function" => "Shop\Tickets@Management"
-                                    ],
-                                    '/winkel/evenementen/valideren' => [
-                                        "Right" =>
-                                            (
-                                            Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
-                                            ),
-                                        "Function" => "Shop\Events@Validation",
-                                        "Title" => "Ticket controleren",
-                                        "Icon" => "fas fa-qrcode",
-                                    ],
-                                ]
+                                "Icon" => "far fa-calendar-alt"
                             ]
                         ]
                 ],

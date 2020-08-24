@@ -175,8 +175,8 @@ class User
     }
 
     /**
-     * Get al avalibel users of system
-     * @return array
+     * @return self[]
+     * @throws Error
      */
     public static function getAllUsers(){
         $db = new Database();
