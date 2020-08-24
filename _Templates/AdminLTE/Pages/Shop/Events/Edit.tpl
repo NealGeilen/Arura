@@ -6,7 +6,6 @@
 {/block}
 
 {block content}
-    {$aPermissions|var_dump}
     <ul class="nav nav-tabs" role="tablist">
         {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
             <li class="nav-item">
