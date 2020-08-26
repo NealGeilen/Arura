@@ -24,8 +24,8 @@ class Events extends AbstractController {
         if (!(Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION) || Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION) || Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT))){
             throw new Forbidden();
         }
-        $db = new Database();
-        Router::getSmarty()->assign("aEvents", $db->fetchAll("SELECT * FROM tblEvents"));
+        Router::getSmarty()->assign("Events", Event::getEvents());
+
         $this->render("AdminLTE/Pages/Shop/Events/Management.tpl", [
             "title" =>"Evenementen"
         ]);

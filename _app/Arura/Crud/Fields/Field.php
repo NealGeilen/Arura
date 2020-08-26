@@ -56,7 +56,7 @@ class Field{
                 break;
         }
         foreach ($this->attributes as $key => $value){
-            $field->setHtmlAttribute($key, ((!($value)) ? $value: true));
+            $field->setHtmlAttribute($key, (!is_null($value) ? $value: true));
         }
 
         if (!isset($this->attributes["placeholder"])){

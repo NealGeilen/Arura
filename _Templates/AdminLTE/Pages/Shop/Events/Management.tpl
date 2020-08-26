@@ -13,12 +13,13 @@
             </div>
         </div>
         <div class="card-body table-responsive">
-            <table class="table Arura-Table">
+            <table class="table Arura-Table table-striped table-hover">
                 <thead>
                 <tr>
                     <th>Naam</th>
                     <th>Slug</th>
                     <th>Tijd</th>
+                    <th>Aanmeldingen</th>
                     <th>
                         {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
                         <div class="btn-group">
@@ -29,13 +30,14 @@
                 </tr>
                 </thead>
                 <tbody>
-                {foreach from=$aEvents key=$iKey item=aEvent}
+                {foreach from=$Events key=$iKey item=Event}
                     <tr>
-                        <td>{$aEvent.Event_Name}</td>
-                        <td>{$aEvent.Event_Slug}</td>
-                        <td>{$aEvent.Event_Start_Timestamp|date_format:"%H:%M %d-%m-%y"} t/m {$aEvent.Event_End_Timestamp|date_format:"%H:%M %d-%m-%y"}</td>
+                        <td>{$Event->getName()}</td>
+                        <td>{$Event->getSlug()}</td>
+                        <td data-order="{$Event->getStart()->format("U")}">{$Event->getStart()->format("U")|date_format:"%H:%M %d-%m-%y"} t/m {$Event->getEnd()->format("U")|date_format:"%H:%M %d-%m-%y"}</td>
+                        <td>{$Event->getAmountSignIns()}</td>
                         <td class="btn-group btn-group">
-                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenement/{$aEvent.Event_Id}"><i class="fas fa-pen"></i></a>
+                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenement/{$Event->getId()}"><i class="fas fa-info"></i></a>
                         </td>
                     </tr>
                 {/foreach}

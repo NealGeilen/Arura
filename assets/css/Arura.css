@@ -266,3 +266,17 @@ ul.pagination{
 .wrapper{
     background-color: #f4f6f9;
 }
+
+@media (max-width: 768px) {
+    .nav-tabs .nav-item {
+        width: 50%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .nav-tabs .nav-item .nav-link{
+
+    }
+    .nav-tabs{
+        width: 100%;
+    }
+}

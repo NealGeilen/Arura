@@ -19,12 +19,12 @@ class Table {
      * Css classes list for table
      * @var array
      */
-    protected $aCssTableClasses = ["table", "table-striped", "table-light"];
+    protected $aCssTableClasses = ["table", "table-striped", "table-hover", "Arura-Table"];
     /**
      * Css classes list for table thead
      * @var array
      */
-    protected $aCssTheadClasses = ["thead-light"];
+    protected $aCssTheadClasses = [];
 
     /**
      * Visable name of button for edit;

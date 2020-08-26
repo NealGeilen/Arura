@@ -72,6 +72,19 @@ class Event Extends Page {
     }
 
     /**
+     * @return Event[]
+     * @throws Error
+     */
+    public static function getEvents(){
+        $db = new Database();
+        $aEvents = [];
+        foreach ($db->fetchAllColumn("SELECT Event_Id FROM tblEvents") as $iEventId){
+            $aEvents[] = new self($iEventId);
+        }
+        return $aEvents;
+    }
+
+    /**
      * Set values on properties
      * @param bool $force
      * @throws Error
@@ -121,6 +134,14 @@ class Event Extends Page {
      */
     public function isOpen(){
         return ($this->getIsActive() && $this->getIsVisible());
+    }
+
+    public function getAmountSignIns(){
+        if ($this->hasEventTickets()){
+            return (int)$this->db->fetchRow("SELECT COUNT(OrderedTicket_Hash) AS Amount FROM tblEventOrderedTickets JOIN tblEventRegistration ON Registration_Id = OrderedTicket_Registration_Id WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
+        } else {
+            return (int)$this->db -> fetchRow("SELECT SUM(Registration_Amount) AS Amount FROM tblEventRegistration AS Amount WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()])["Amount"];
+        }
     }
 
 
@@ -230,10 +251,6 @@ class Event Extends Page {
         $form->addText("Event_Name", "Naam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("Event_Slug", "Slug")
-            ->addFilter(function ($value){
-                dd($value);
-                return str_replace([".", ";", "/", " ", ","], "-",strtolower($value));
-            })
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("Event_Start_Timestamp", "Start datum")->setHtmlType("datetime-local")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
@@ -268,21 +285,20 @@ class Event Extends Page {
         }
         if ($form->isSubmitted()){
             $aData = $form->getValues("array");
+            $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
+            $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
+            $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
+            $aData["Event_IsActive"] = (int)$aData["Event_IsActive"];
+            $aData["Event_IsVisible"] = (int)$aData["Event_IsVisible"];
+            $aData["Event_Slug"] = str_replace([".", ";", "/", " ", ",", ":", "&", "?"], "-",strtolower(trim($aData["Event_Slug"])));
+
             if (is_null($oEvent)){
-                $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
-                $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
-                $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
-                $aData["Event_IsActive"] = (int)$aData["Event_IsActive"];
-                $aData["Event_IsVisible"] = (int)$aData["Event_IsVisible"];
                 $oEvent = self::Create($aData);
                 Logger::Create(Logger::CREATE, Event::class, $oEvent->getName());
                 Flasher::addFlash("Evenement {$oEvent->getName()} aangemaakt");
                 redirect("/dashboard/winkel/evenementen/" . $oEvent->getId());
             } else{
                 $db = new Database();
-                $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
-                $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
-                $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
                 $db->updateRecord("tblEvents", $aData, "Event_Id");
                 $oEvent->load(true);
                 Flasher::addFlash("Evenement {$oEvent->getName()} aangepast");
@@ -438,9 +454,11 @@ class Event Extends Page {
         $Crud->addField(new Field("text", "Ticket_Description", "Omschrijving"));
         $Crud->addField(new Field("number", "Ticket_Capacity", "Capaciteit"));
         $Currancy = new Field("number", "Ticket_Price", "Prijs");
-        $Currancy->addAttribute("step", "0.01");
+        $Currancy->addAttribute("step", "any");
+        $Currancy->addAttribute("min", "1");
         $Crud->addField($Currancy);
         $Crud->setPageUrl($_SERVER["REDIRECT_URL"]);
+
         return $Crud;
 
     }

@@ -43,6 +43,11 @@ class Form extends \Nette\Forms\Form{
                     $control->setAttribute("class", "btn btn-secondary {$cssClass}");
                     break;
                 default:
+                    switch ($control->getName()){
+                        case "select":
+                            $control->setAttribute("value", $item->value);
+                            break;
+                    }
                     $control->setAttribute("class", "form-control {$cssClass}");
                     break;
             }
