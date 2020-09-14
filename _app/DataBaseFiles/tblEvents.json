@@ -49,6 +49,13 @@
       "Default": null,
       "Extra": ""
     },
+    "Event_Cancel_Reason": {
+      "Type": "longtext",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
     "Event_Description": {
       "Type": "longtext",
       "Null": "NO",

@@ -13,10 +13,11 @@
             </div>
         </div>
         <div class="card-body table-responsive">
-            <table class="table Arura-Table table-striped table-hover">
+            <table class="table Arura-Table table-hover">
                 <thead>
                 <tr>
                     <th>Naam</th>
+                    <th>Status</th>
                     <th>Slug</th>
                     <th>Tijd</th>
                     <th>Aanmeldingen</th>
@@ -31,13 +32,20 @@
                 </thead>
                 <tbody>
                 {foreach from=$Events key=$iKey item=Event}
-                    <tr>
+                    <tr {if !$Event->canEdit() || $Event->isCanceled()}disabled{/if}>
                         <td>{$Event->getName()}</td>
+                        <td><span class="badge badge-info">{$Event->getStatus()}</span></td>
                         <td>{$Event->getSlug()}</td>
                         <td data-order="{$Event->getStart()->format("U")}">{$Event->getStart()->format("U")|date_format:"%H:%M %d-%m-%y"} t/m {$Event->getEnd()->format("U")|date_format:"%H:%M %d-%m-%y"}</td>
                         <td>{$Event->getAmountSignIns()}</td>
                         <td class="btn-group btn-group">
-                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenement/{$Event->getId()}"><i class="fas fa-info"></i></a>
+                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenement/{$Event->getId()}">
+                                {if !$Event->canEdit() || $Event->isCanceled()}
+                                    <i class="fas fa-eye"></i>
+                                    {else}
+                                    <i class="fas fa-info"></i>
+                                {/if}
+                            </a>
                         </td>
                     </tr>
                 {/foreach}

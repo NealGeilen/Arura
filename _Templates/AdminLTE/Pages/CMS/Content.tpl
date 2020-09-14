@@ -10,10 +10,6 @@
         var _Page_Id = {$aCmsPage.Page_Id}
     </script>
 
-    <header class="page-header">
-
-    </header>
-
     <div class="CMS-overvieuw">
         <div class="card card-primary">
             <div class="card-header">

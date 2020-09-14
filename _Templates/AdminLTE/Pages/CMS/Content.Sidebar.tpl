@@ -1,8 +1,8 @@
 <ul class="nav nav-tabs">
-    <li class="active">
-        <a href="#block-tab" data-toggle="tab" class="text-center" aria-expanded="true"><i class="fas fa-square"></i> Block</a>
+    <li class="nav-item">
+        <a href="#block-tab" data-toggle="tab" class="text-center active" aria-expanded="true"><i class="fas fa-square"></i> Block</a>
     </li>
-    <li class="">
+    <li class="nav-item">
         <a href="#group-tab" data-toggle="tab" class="text-center" aria-expanded="false"><i class="far fa-object-group"></i> Groep</a>
     </li>
 </ul>

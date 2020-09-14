@@ -15,10 +15,6 @@ function serializeArray(oForm) {
     });
     return aList;
 }
-jQuery.validator.addMethod("greaterThanZero", function(value, element) {
-    console.log(value, element);
-    // return this.optional(element) || (parseFloat(value) > 0);
-}, "Aantal moet meer zijn dan 0");
 $.validator.setDefaults({
     ignore: []
 });

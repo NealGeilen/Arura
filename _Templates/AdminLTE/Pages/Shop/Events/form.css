@@ -1,0 +1,162 @@
+.Field-Item{
+    /*background: lightgrey;*/
+    position: relative;
+    padding: unset;
+}
+.Field-Item .Field-Item-Content{
+    background: white;
+    border: 3px solid transparent;
+    min-height: 100px;
+    position: relative;
+    padding: 16px;
+    border-radius: 5px;
+    width: 100%;
+    /*background: lightgrey;*/
+}
+.Field-Item .form-control{
+    border-radius: 5px;
+    border: lightgrey 2px solid;
+}
+.Field-Item.active .Field-Item-Content{
+    -moz-border-radius-topleft: unset;
+    border-top-left-radius: unset;
+    border: 3px solid var(--primary);
+    /*background: gray;*/
+}
+.Field-Item.active .Field-Item-Content.active{
+    z-index: 2100;
+}
+.Field-Item.active .Field-Item-Control{
+    display: block!important;
+}
+.Field-Item .Field-Item-Control{
+    z-index: 1000;
+    position: absolute;
+    display: none;
+    top: 0px;
+    left: -30px;
+}
+.Field-Item.active .Field-Item-Width-Control{
+    display: block!important;
+}
+.Field-Item .Field-Item-Width-Control{
+    display: none!important;
+    position: absolute;
+    top: 20px;
+    right: -12px;
+    cursor: e-resize;
+    height: unset;
+    width: unset;
+    z-index: 100;
+}
+.Block-Placeholder{
+    background: var(--secondary);
+    min-height: 80px;
+}
+.Field-Item-Field{
+    width: 100%;
+    /*margin-top: 5px;*/
+    /*margin-bottom: 3px;*/
+}
+Input.Field-Item-Field{
+    padding: 5px;
+    border-radius: 5px;
+    border: unset;
+    text-align: center;
+}
+Button.Field-Item-Field{
+    width: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+/**
+Active group
+ */
+.CMS-Group.active .CMS-Group-Control{
+    display: inline-flex!important;
+}
+.content-body{
+    /*padding: unset;*/
+}
+.CMS-overvieuw{
+    position: relative;
+    padding:  5px;
+}
+.block-editor-background{
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0,0,0,0.8);
+    z-index: 1500;
+    display: none;
+}
+.block-editor-background.active{
+    display: block;
+}
+.block-editor-background .btn-group-vertical{
+    position: absolute;
+    right: 0;
+    top: 100px;
+    font-size: 24px;
+    margin: 15px;
+    z-index: 2100;
+    opacity: unset;
+}
+.Field-Placeholder{
+    background: var(--secondary);
+    min-height: 100px;
+    border-radius: 5px;
+}
+.Block-Editor{
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.3);
+    z-index: 2200;
+}
+img.Field-Item-Field{
+    width: auto;
+    max-width: 100%;
+    margin: 0 auto;
+    display: block;
+}
+img.Field-Item-Field:after{
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 24px;
+    text-align: center;
+    display: block;
+    content: '\f03e';
+    color: #abb4be;
+    /*position: absolute;*/
+    /*right: 45%;*/
+    /*left: 45%;*/
+    /*top: 30%;*/
+    width: 10%;
+    min-height: 80px;
+    margin: 0 auto;
+}
+.Block-Editor .btn-group{
+    /*position: absolute;*/
+    /*top: 30%;*/
+    /*left: 40%;*/
+    /*z-index: 2100;*/
+    /*right: 40%;*/
+}
+.ContentType-Selector{
+    cursor: move;
+}
+.btn-group-toggle input[type=radio]{
+    display: none;
+}
+.btn-group-toggle label{
+    width: 100%;
+    text-align: center;
+}

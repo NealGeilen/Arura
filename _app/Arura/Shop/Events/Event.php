@@ -10,6 +10,7 @@ use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
+use Arura\Mailer\Mailer;
 use Arura\Pages\Page;
 use Arura\Shop\Payment;
 use Arura\Database;
@@ -39,6 +40,7 @@ class Event Extends Page {
     private $bIsVisible;
     private $iCapacity;
     private $dEndRegistration;
+    private $sCancelReason;
 
     public static $MasterPage;
 
@@ -75,10 +77,14 @@ class Event Extends Page {
      * @return Event[]
      * @throws Error
      */
-    public static function getEvents(){
+    public static function getEvents(int  $limit = null){
         $db = new Database();
         $aEvents = [];
-        foreach ($db->fetchAllColumn("SELECT Event_Id FROM tblEvents") as $iEventId){
+        $sWhere ="";
+        if (!is_null($limit)){
+            $sWhere .= " LIMIT {$limit}";
+        }
+        foreach ($db->fetchAllColumn("SELECT Event_Id FROM tblEvents ORDER BY Event_Start_Timestamp {$sWhere}") as $iEventId){
             $aEvents[] = new self($iEventId);
         }
         return $aEvents;
@@ -112,6 +118,7 @@ class Event Extends Page {
             $this->setIsActive((boolean)$aEvent["Event_IsActive"]);
             $this->setIsVisible((boolean)$aEvent["Event_IsVisible"]);
             $this->setSlug($aEvent["Event_Slug"]);
+            $this->setCancelReason($aEvent["Event_Cancel_Reason"]);
         }
     }
 
@@ -123,6 +130,7 @@ class Event Extends Page {
     {
         $smarty = self::getSmarty();
         $smarty->assign("aEvent", $this->__ToArray());
+        $smarty->assign("Event", $this);
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $this->setPageContend($smarty->fetch(self::$MasterPage));
         parent::showPage();
@@ -243,6 +251,36 @@ class Event Extends Page {
     }
 
     /**
+     * @return Form
+     * @throws Error
+     */
+    public function getCancelForm(){
+        $form = new Form("event-cancel-form", Form::OneColumnRender);
+        $form->addTextArea("Event_CancelReason", "Annuleer reden")
+            ->setDefaultValue($this->getCancelReason())
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("submit", "Opslaan");
+
+        if (!$this->canEdit() || $this->isCanceled()){
+            foreach ($form->getComponents() as $component){
+                $component->setDisabled();
+            }
+        }
+
+        if ($form->isSubmitted()){
+
+            $aData = $form->getValues("array");
+            if ($this->cancel($aData["Event_CancelReason"])){
+                Logger::Create(Logger::UPDATE, self::class, "Geannuleerd: {$aData["Event_CancelReason"]}");
+                Flasher::addFlash("{$this->getName()} is geannuleerd");
+            } else {
+                Flasher::addFlash("Annuleren is mislukt");
+            }
+        }
+        return $form;
+    }
+
+    /**
      * @param Event|null $oEvent
      * @return Form
      */
@@ -277,6 +315,11 @@ class Event Extends Page {
 
         if(!is_null($oEvent)){
             $form->addHidden("Event_Id");
+            if (!$oEvent->canEdit() || $oEvent->isCanceled()){
+                foreach ($form->getComponents() as $component){
+                    $component->setDisabled();
+                }
+            }
             $aEvent = $oEvent->__ToArray();
             $aEvent["Event_Start_Timestamp"]= $oEvent->getStart()->format("Y-m-d\TH:i");
             $aEvent["Event_End_Timestamp"]= $oEvent->getEnd()->format("Y-m-d\TH:i");
@@ -284,6 +327,20 @@ class Event Extends Page {
             $form->setDefaults($aEvent);
         }
         if ($form->isSubmitted()){
+            $aData = $form->getValues("array");
+            if (isset($aData["Event_Slug"])){
+                $db = new Database();
+                $sWhere = "";
+                if (!is_null($oEvent)){
+                    $sWhere = "AND Event_Id != {$oEvent->getId()}";
+                }
+                $aResults = $db->fetchAll("SELECT * FROM tblEvents WHERE Event_Slug = :Slug {$sWhere}", ["Slug"=>$aData["Event_Slug"]]);
+                if (!empty($aResults)){
+                    $form->getComponent("Event_Slug")->addError("Slug bestaat al");
+                }
+            }
+        }
+        if ($form->isSuccess()){
             $aData = $form->getValues("array");
             $aData["Event_Start_Timestamp"] = strtotime($aData["Event_Start_Timestamp"]);
             $aData["Event_End_Timestamp"] = strtotime($aData["Event_End_Timestamp"]);
@@ -298,11 +355,14 @@ class Event Extends Page {
                 Flasher::addFlash("Evenement {$oEvent->getName()} aangemaakt");
                 redirect("/dashboard/winkel/evenementen/" . $oEvent->getId());
             } else{
-                $db = new Database();
-                $db->updateRecord("tblEvents", $aData, "Event_Id");
-                $oEvent->load(true);
-                Flasher::addFlash("Evenement {$oEvent->getName()} aangepast");
-                Logger::Create(Logger::UPDATE, Event::class, $oEvent->getName());
+                if (!$oEvent->isCanceled() || $oEvent->canEdit()){
+                    $db = new Database();
+                    $db->updateRecord("tblEvents", $aData, "Event_Id");
+                    $oEvent->load(true);
+                    Flasher::addFlash("Evenement {$oEvent->getName()} aangepast");
+                    Logger::Create(Logger::UPDATE, Event::class, $oEvent->getName());
+                }
+
             }
         }
         return $form;
@@ -321,20 +381,20 @@ class Event Extends Page {
         parent::displayView($sName, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl) use ($sType){
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
-                if ($oPage->getIsVisible() && $oPage->getStart()->getTimestamp() > time()){
+                if ($oPage->getIsVisible()){
                     switch ($sType){
                         case "checkout":
-                            if ($oPage->isOpen()){
+                            if ($oPage->isOpen() && !$oPage->isCanceled()){
                                 $oPage->checkout();
                             }
                             break;
                         case "payment":
-                            if ($oPage->isOpen()){
+                            if ($oPage->isOpen() && !$oPage->isCanceled()){
                                 $oPage->payment();
                             }
                             break;
                         case "done":
-                            if ($oPage->isOpen() && isset($_GET["i"])){
+                            if ($oPage->isOpen() && isset($_GET["i"]) && !$oPage->isCanceled()){
                                 $P = new Payment($_GET["i"]);
                                 self::getSmarty()->assign("sStatus", $P->getStatus());
                                 $oPage->setTitle("Voltooid | ". $oPage->getName());
@@ -354,7 +414,7 @@ class Event Extends Page {
                             Request::handleXmlHttpRequest(function (RequestHandler $requestHandler){
                                 $requestHandler->addType("register-event", function ($aData){
                                     $oEvent = new Event((int)$aData["id"]);
-                                    if (!$oEvent->hasEventTickets()){
+                                    if (!$oEvent->hasEventTickets() || !$oEvent->isCanceled()){
                                         $R = Registration::NewRegistration($oEvent, $aData["firstname"], $aData["lastname"], $aData["email"], $aData["tel"], $aData["amount"]);
                                         $R->sendEventDetails();
                                     } else {
@@ -380,6 +440,20 @@ class Event Extends Page {
         });
     }
 
+    public function getStatus(){
+        if ($this->isCanceled()){
+            return "Geannuleerd";
+        }
+        if (!$this->canEdit()){
+            return "Afgelopen";
+        }
+        return "Nog " . (new DateTime())->diff($this->getStart())->format("%a") . " dagen";
+    }
+
+    public function canEdit(){
+        return $this->getStart()->getTimestamp() > time();
+    }
+
     /**
      * @return bool
      * @throws Error
@@ -392,6 +466,24 @@ class Event Extends Page {
         } else {
             return false;
         }
+    }
+
+    public function cancel(string $sReason){
+        $this->load();
+        if (!$this->isCanceled() && is_file(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . "event-cancel.html")){
+            $this->setCancelReason($sReason);
+            foreach ($this->getRegistration() as $aRegistration){
+                $oMailer = new Mailer();
+                $oMailer->addReplyTo($this->getOrganizer()->getEmail());
+                $oMailer->addBCC($aRegistration["Registration_Email"], "{$aRegistration["Registration_Firstname"]} {$aRegistration["Registration_Lastname"]}");
+                Mailer::getSmarty()->assign("aEvent", $this->__ToArray());
+                Mailer::getSmarty()->assign("aRegistration", $aRegistration);
+                $oMailer->setBody(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . "event-cancel.html");
+                $oMailer->send();
+            }
+            return $this->save();
+        }
+        return false;
     }
 
     /**
@@ -433,7 +525,8 @@ class Event Extends Page {
             "Event_IsVisible" => (int)$this->getIsVisible(),
             "Event_Capacity" => $this->getCapacity(),
             "Event_Slug" => $this->getSlug(),
-            "Event_Registration_End_Timestamp" => $this->getEndRegistration()->getTimestamp()
+            "Event_Registration_End_Timestamp" => $this->getEndRegistration()->getTimestamp(),
+            "Event_Cancel_Reason" => $this->getCancelReason()
         ];
     }
 
@@ -756,5 +849,25 @@ class Event Extends Page {
     public function setEndRegistration(DateTime $dEndRegistration): void
     {
         $this->dEndRegistration = $dEndRegistration;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCancelReason()
+    {
+        return $this->sCancelReason;
+    }
+
+    /**
+     * @param mixed $sCancelReason
+     */
+    public function setCancelReason($sCancelReason): void
+    {
+        $this->sCancelReason = $sCancelReason;
+    }
+
+    public function isCanceled(){
+        return !empty($this->getCancelReason());
     }
 }

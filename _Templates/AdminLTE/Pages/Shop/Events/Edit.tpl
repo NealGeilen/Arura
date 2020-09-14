@@ -2,33 +2,12 @@
 
 {block breadcrum}
     <li class="breadcrumb-item"><a href="/dashboard/winkel/evenementen">Evenementen</a></li>
-    <li class="breadcrumb-item active">{$aEvent.Event_Name}</li>
+    <li class="breadcrumb-item active">{$Event->getName()}</li>
 {/block}
 
 {block content}
-    <ul class="nav nav-tabs" role="tablist">
-        {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
-            <li class="nav-item">
-                <a class="nav-link active" data-toggle="tab" href="#gegevens" role="tab">Gegevens</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#tickets-tabe" role="tab">Tickets</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" data-toggle="tab" href="#delete-event-tap" role="tab">Verwijderen</a>
-            </li>
-        {/if}
-        {if $aPermissions.SHOP_EVENTS_REGISTRATION}
-        <li class="nav-item">
-            <a class="nav-link" href="?t=registrations" role="tab">Aanmeldingen</a>
-        </li>
-        {/if}
-        {if $aPermissions.SHOP_EVENTS_VALIDATION}
-        <li class="nav-item">
-            <a class="nav-link" href="?t=validation">Valideren</a>
-        </li>
-        {/if}
-    </ul>
+    {assign var="tabsType" value="tabs"}
+    {include file="./tabs.tpl"}
     <div class="tab-content">
         {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
             <div class="tab-pane fade show active" id="gegevens" role="tabpanel" aria-labelledby="home-tab">
@@ -83,26 +62,50 @@
             <div class="tab-pane fade" id="tickets-tabe" role="tabpanel" aria-labelledby="home-tab">
             <div class="card" id="tickets">
                 <div class="card-body table-responsive" id="tickets">
-                    {$sTicketsCrud}
+                    {$Event->getTicketGrud()}
                 </div>
             </div>
         </div>
             <div class="tab-pane fade" id="delete-event-tap" role="tabpanel" aria-labelledby="home-tab">
                 <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Verwijderen</h2>
+                    </div>
                     <div class="card-body">
-                        {if $bHasEventTicketsSold}
-                            <div class="alert alert-info">
-                                Een evenement kan niet verwijdert worden wanneer er inschrijvingen zijn.
+                        {if $Event->hasEventRegistrations()}
+                            <div class="callout callout-warning">
+                                <p>Een evenement kan niet verwijdert worden wanneer er inschrijvingen zijn.</p>
                             </div>
                         {else}
                             <form id="delete-event" method="post">
-                                <input type="hidden" name="Event_Id" value="{$aEvent.Event_Id}" required>
+                                <input type="hidden" name="Event_Id" value="{$Event->getId()}" required>
                                 <input type="hidden" name="type" value="delete-event" required>
-                                Verwijder {$aEvent.Event_Name}
+                                <b>Verwijder {$Event->getName()}</b>
                                 <button type="submit" class="btn btn-danger">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </form>
+                        {/if}
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Annuleren <span class="badge badge-beta">Beta</span></h2>
+                    </div>
+                    <div class="card-body">
+                        {if $Event->isCanceled()}
+                            <div class="callout callout-success">
+                                <p><b>Evenement geannuleerd</b></p>
+                                <p>{$Event->getCancelReason()}</p>
+                            </div>
+                        {else}
+                            <div class="callout callout-info">
+                                <p>Evenement wordt geannuleerd daarbij blijft de pagina toegankelijk voor iedereen. Echter wordt de inschrijving stop gezet en allen reeds ingeschreven op de hoogste gesteld over de mail van de annulering.</p>
+                            </div>
+                            {$CancelForm->StartForm()}
+                            {$CancelForm->getControl("Event_CancelReason", "richtext")}
+                            {$CancelForm->getControl("submit")}
+                            {$CancelForm->EndForm()}
                         {/if}
                     </div>
                 </div>

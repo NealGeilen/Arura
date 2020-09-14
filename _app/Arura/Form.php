@@ -3,6 +3,7 @@ namespace Arura;
 
 use Arura\Exceptions\Error;
 use Nette\Forms\Controls\Checkbox;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Form extends \Nette\Forms\Form{
 
@@ -51,7 +52,11 @@ class Form extends \Nette\Forms\Form{
                     $control->setAttribute("class", "form-control {$cssClass}");
                     break;
             }
-            return "<div class='form-group'>{$item->getLabel()}{$control}</div>";
+            $sErrors = "";
+            foreach ($item->errors as $sError){
+                $sErrors .= "<span class='text-danger'>{$sError }</span>". "<br/>";
+            }
+            return "<div class='form-group'>{$item->getLabel()}{$control}{$sErrors}</div>";
         } else {
             throw new Error("Control not found", 500);
         }

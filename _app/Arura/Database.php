@@ -2,6 +2,7 @@
 namespace Arura;
 
 use Arura\Exceptions\Error;
+use Arura\Settings\Application;
 use PDO;
 use PDOStatement;
 
@@ -95,7 +96,7 @@ class Database{
         $stmt = $this->connect()->prepare($statement);
         $this -> queryState = $stmt->execute($parameters);
         if (!$this ->queryState){
-            $sError = (json_encode($stmt->errorInfo())) . " " . $statement;
+            $sError = json_encode($stmt->errorInfo()) . " " . $statement;
             throw new Error($sError);
         }
         return $stmt;

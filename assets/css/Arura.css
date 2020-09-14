@@ -81,10 +81,19 @@ Templates
 }
 
 .control-sidebar .nav.nav-tabs li{
-    padding: 4px;
+    margin:  15px 5px;
+}
+.control-sidebar .nav.nav-tabs li a{
+    padding: 5px 15px;
     background: #343a40;
-    margin: 4px;
-    border-radius: 5px;
+    border-bottom: dashed #C2C7D0 3px;
+}
+.control-sidebar .nav.nav-tabs li a.active{
+    color: white;
+    border-bottom: solid white 3px;
+}
+.control-sidebar .nav-tabs{
+    padding: unset;
 }
 .login-page{
     background: center center/cover no-repeat;
@@ -279,4 +288,13 @@ ul.pagination{
     .nav-tabs{
         width: 100%;
     }
+}
+.badge-beta{
+    background-color: purple;
+    color: white;
+    text-transform: uppercase;
+}
+.Arura-Table tr[disabled]{
+    background-color: rgba(0,0,0,0.1)!important;
+    color: gray;
 }

@@ -11,6 +11,7 @@ use Arura\Permissions\Restrict;
 use Arura\Permissions\Right;
 use Arura\Router;
 use Arura\Shop\Events\Event;
+use Arura\Shop\Events\Form;
 use Arura\Shop\Events\Ticket;
 use Arura\User\Logger;
 use Rights;
@@ -44,7 +45,7 @@ class Events extends AbstractController {
         }
         if (Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)){
             $this->addTab("registrations", function () use ($oEvent){
-                Router::getSmarty()->assign("aEvent", $oEvent->__ToArray());
+                Router::getSmarty()->assign("Event", $oEvent);
                 if($oEvent->hasEventTickets()){
                     Router::getSmarty()->assign("aRegistrations", json_encode($oEvent->getRegistration()));
                     Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Tickets/Tickets.js");
@@ -60,14 +61,14 @@ class Events extends AbstractController {
                 }
             });
         }
-        if (Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)){
+        if (Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION) && $oEvent->hasEventTickets()){
             $this->addTab("validation", function () use ($oEvent){
                 Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
                     $oTicket = new Ticket($requestHandler->getData()["Hash"]);
                     Logger::Create(Logger::VALIDATE, Ticket::class, "Validate: {$oTicket->getTicketId()}");
                     return $oTicket->Validate();
                 });
-                Router::getSmarty()->assign("aEvent", $oEvent->__ToArray());
+                Router::getSmarty()->assign("Event", $oEvent);
                 Router::addSourceScriptJs("assets/vendor/Instascan/instascan.min.js");
                 Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Validation.js");
                 $this->render("AdminLTE/Pages/Shop/Events/Validation.tpl", [
@@ -75,6 +76,29 @@ class Events extends AbstractController {
                 ]);
             });
         }
+//        if (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)){
+//            $this->addTab("form", function () use ($oEvent){
+//                Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($oEvent){
+//                    $oForm = new Form($oEvent);
+//                    $requestHandler->addType("get-structure", function ($aData) use ($oEvent, $oForm){
+//                        return $oForm->getAllFields();
+//                    });
+//                    $requestHandler->addType("set-size", function ($aData) use ($oEvent, $oForm){
+//                        return $oForm->update($aData["Field_Id"], $aData["Field_Size"], "Field_Size");
+//                    });
+//                    $requestHandler->addType("order", function ($aData) use ($oEvent, $oForm){
+//                        return $oForm->order($aData["Field_Id"], $aData["Field_Order"]);
+//                    });
+//                });
+//                Router::getSmarty()->assign("Event", $oEvent);
+//                Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.js");
+//                Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.css");
+//                $this->render("AdminLTE/Pages/Shop/Events/form.tpl", [
+//                    "title" =>"Formulier registatie van {$oEvent->getName()}",
+//                    "sPageSideBar" => Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form-sidebar.tpl")
+//                ]);
+//            });
+//        }
         $this->displayTab();
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($oEvent){
             $requestHandler->addType("delete-event", function ($aData) use ($oEvent){
@@ -87,15 +111,11 @@ class Events extends AbstractController {
         });
         Logger::Create(Logger::READ, Event::class, $oEvent->getName());
         $db = new Database();
-        Router::getSmarty()->assign("aUsers", $db->fetchAll("SELECT * FROM tblUsers"));
-        Router::getSmarty()->assign("aEvent", $oEvent->__ToArray());
-        Router::getSmarty()->assign("bTickets", $oEvent->hasEventTickets());
+        Router::getSmarty()->assign("Event", $oEvent);
         Router::getSmarty()->assign("eventForm", Event::getForm($oEvent));
-        $bTicketsSold = $oEvent->hasEventRegistrations();
-        Router::getSmarty()->assign("bHasEventTicketsSold", $bTicketsSold);
-        Router::getSmarty()->assign("sTicketsCrud", $oEvent->getTicketGrud());
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Edit.js");
         $this->render("AdminLTE/Pages/Shop/Events/Edit.tpl", [
+            "CancelForm" => $oEvent->getCancelForm(),
             "title" =>"{$oEvent->getName()} aanpassen"
         ]);
     }
