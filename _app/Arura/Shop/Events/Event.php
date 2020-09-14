@@ -77,14 +77,19 @@ class Event Extends Page {
      * @return Event[]
      * @throws Error
      */
-    public static function getEvents(int  $limit = null){
+    public static function getEvents(int  $limit = null, $isOver = false){
         $db = new Database();
         $aEvents = [];
-        $sWhere ="";
-        if (!is_null($limit)){
-            $sWhere .= " LIMIT {$limit}";
+        $sLimit ="";
+        $sWhere = "";
+        if ($isOver){
+            $sWhere .= " WHERE Event_Start_Timestamp > UNIX_TIMESTAMP() ";
         }
-        foreach ($db->fetchAllColumn("SELECT Event_Id FROM tblEvents ORDER BY Event_Start_Timestamp {$sWhere}") as $iEventId){
+        if (!is_null($limit)){
+            $sLimit .= " LIMIT {$limit}";
+        }
+
+        foreach ($db->fetchAllColumn("SELECT Event_Id FROM tblEvents {$sWhere} ORDER BY Event_Start_Timestamp {$sLimit}") as $iEventId){
             $aEvents[] = new self($iEventId);
         }
         return $aEvents;
