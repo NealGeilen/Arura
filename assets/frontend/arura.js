@@ -366,8 +366,6 @@ Arura = {
     },
     Gallery: {
         init: function () {
-            const observer = lozad(); // lazy loads elements with default selector as '.lozad'
-            observer.observe();
             $(".Gallery").magnificPopup({
                 delegate: 'a',
                 type: 'image',

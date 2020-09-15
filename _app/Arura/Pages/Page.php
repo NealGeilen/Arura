@@ -23,7 +23,6 @@ class Page extends Modal implements PageEnum{
        "js" => [
            "cookieconsent-1.2.3/cookieconsent.min.js",
            "Magnific-Popup-1.1.0/jquery.magnific-popup.min.js",
-           "lozed-1.15/lozad.min.js",
            "arura.js",
            "Modals.js"
        ],
