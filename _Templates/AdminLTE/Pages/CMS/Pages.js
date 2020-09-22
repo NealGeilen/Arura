@@ -36,9 +36,15 @@ Pages = {
                 },
                 {
                     "render": function ( data, type, row ) {
-                        return (data === "1") ? "Ja" : "Nee";
+                        return (data === "1") ? '<span class="badge badge-success"><i class="fas fa-check"></i></span>' : '<span class="badge badge-danger"><i class="fas fa-times"></i></span>';
                     },
                     "targets": 2
+                },
+                {
+                    "render": function ( data, type, row ) {
+                        return "<a href='"+data+"' target='_blank'>"+data+"</a>"
+                    },
+                    "targets": 1
                 },
             ],
             rowId: "Page_Id",

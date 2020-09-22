@@ -62,6 +62,7 @@ class Pages extends AbstractController {
         $oSmarty->assign("iUserCount", (Restrict::Validation(Rights::ARURA_USERS) ? $db->fetchRow("SELECT COUNT(Session_Id) AS ROW_COUNT FROM tblSessions")["ROW_COUNT"] : null));
         $oSmarty->assign("aSecureTables", (Restrict::Validation(Rights::SECURE_ADMINISTRATION) ? SecureAdmin::getAllTablesForUser(User::activeUser()) : null));
         $oSmarty->assign("Events", (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ? Event::getEvents(3, true) : null));
+        $oSmarty->assign("Galleries", (Restrict::Validation(Rights::GALLERY_MANGER) ? \Arura\Gallery\Gallery::getAllGalleries(true, 3) : null));
 
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Payments/Management.js");

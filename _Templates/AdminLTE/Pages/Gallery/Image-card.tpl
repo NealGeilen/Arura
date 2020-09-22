@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-2 col-md-2">
                     <a href="{$Image->getImage(false)}" target="_blank">
-                        <img src="{$Image->getThumbnail(false)}" style="max-width: 100%; height: 100px; display: block; margin: 0 auto">
+                        <img loading="lazy" alt="{$Image->getName()}" src="{$Image->getThumbnail(false)}" style="max-width: 100%; height: 100px; display: block; margin: 0 auto">
                     </a>
                 </div>
                 <div class="col-10 col-md-6">

@@ -16,11 +16,12 @@ class Reports{
      * @throws Google_Exception
      * @throws NotFound
      */
-    protected static function Report($dimension, $metric){
+    protected static function Report($dimension, $metric,string $filter = ""){
         $Report = new ReportRequest();
         $date = new Google_Service_AnalyticsReporting_Dimension();
         $date->setName($dimension);
         $Report->addDimensions($date);
+        $Report->setFilterExpressions($filter);
         $sessions = new Google_Service_AnalyticsReporting_Metric();
         $sessions->setExpression($metric);
         $sessions->setAlias($metric);
@@ -167,6 +168,17 @@ class Reports{
         }
 
         return $aData;
+    }
+
+    public static function getPageViews(int $iLastDays,string $sPath) : int
+    {
+        $Report = self::Report("ga:pagePath", "ga:pageviews", "ga:pagePath==" . $sPath);
+        $Report->setDataRange("{$iLastDays}daysAgo", "Today");
+        $aData = $Report->getReport();
+        if (isset($aData["rows"]["metrics"][0])){
+            return $aData["rows"]["metrics"][0];
+        }
+        return 0;
     }
 
 

@@ -6,9 +6,25 @@
 {/block}
 
 {block contentHeader}
-    <button class="btn btn-primary" data-toggle="modal" data-target="#uploadImage"><i class="fas fa-upload"></i></button>
-    <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}/settings"><i class="fas fa-cogs"></i></a>
-    <a href="{$aWebsite.url}/album/{$Gallery->getId()}" target="_blank" class="btn btn-secondary"><i class="fas fa-eye"></i></a>
+    <div class="row">
+        <div class="col-md-4">
+            <button class="btn btn-primary" data-toggle="modal" data-target="#uploadImage"><i class="fas fa-upload"></i></button>
+            <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}/settings"><i class="fas fa-cogs"></i></a>
+            <a href="{$aWebsite.url}/album/{$Gallery->getId()}" target="_blank" class="btn btn-secondary"><i class="fas fa-eye"></i></a>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <div class="info-box">
+                <span class="info-box-icon bg-info"><i class="fas fa-chart-line"></i></span>
+
+                <div class="info-box-content">
+                    <span class="info-box-text">Weergaven afgelopen 25 dagen</span>
+                    <span class="info-box-number">{$iPageViews}</span>
+                </div>
+                <!-- /.info-box-content -->
+            </div>
+        </div>
+    </div>
 {/block}
 
 {block content}

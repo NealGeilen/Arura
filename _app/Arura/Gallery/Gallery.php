@@ -104,7 +104,7 @@ class Gallery extends Page {
      * @return Gallery[]
      * @throws Error
      */
-    public static function getAllGalleries(bool $needsPublic = true,int $iLimit = 0,int $iOffset = 0,string $search = ""){
+    public static function getAllGalleries(bool $needsPublic = true,int $iLimit = 0,int $iOffset = 0,string $search = "",string $orderBy = "Gallery_CreatedDate"){
         $db = new Database();
         $aGalleries = [];
         $sWhereSql = null;
@@ -120,11 +120,15 @@ class Gallery extends Page {
             }
             $sWhereSql .= " Gallery_Id LIKE :search OR Gallery_Name LIKE :search OR Gallery_Description LIKE :search";
         }
-        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY Gallery_CreatedDate DESC LIMIT {$iLimit} OFFSET {$iOffset}", ["search" => $search]);
+        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY {$orderBy} DESC LIMIT {$iLimit} OFFSET {$iOffset}", ["search" => $search]);
         foreach ($aIds as $sId){
             $aGalleries[] = new self($sId);
         }
         return $aGalleries;
+    }
+
+    public function getImageAmount(){
+        return (int)$this->db->fetchRow("SELECT COUNT(*) AS Amount FROM tblGalleryImage WHERE Image_Gallery_Id = :Gallery_Id", ["Gallery_Id" => $this->getId()])["Amount"];
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Shop;
 use Arura\AbstractController;
+use Arura\Analytics\Reports;
 use Arura\Client\Request;
 use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
@@ -40,6 +41,7 @@ class Events extends AbstractController {
             throw new Forbidden();
         }
         $oEvent = new Event($id);
+        Router::getSmarty()->assign("iPageViews", Reports::getPageViews(25,"/event/{$oEvent->getSlug()}"));
         if (!Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) && !isset($_GET["t"])){
             $this->redirect("/dashboard/winkel/evenement/{$oEvent->getId()}?t=registrations");
         }

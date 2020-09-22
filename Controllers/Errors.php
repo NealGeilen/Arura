@@ -9,6 +9,11 @@ class Errors extends AbstractController {
 
 
     public function error(Exception $exception){
+        switch ($exception->getCode()){
+            case 403:
+                $this->redirect("/dashboard/login");
+                break;
+        }
         $this->render("Errors/index.tpl",[
             "title" => "error",
             "exception" => $exception,

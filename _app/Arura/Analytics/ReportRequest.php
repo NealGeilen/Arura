@@ -15,6 +15,7 @@ class ReportRequest extends Analytics {
 
     protected $metrics = [];
     protected $dimensions = [];
+    protected $filterExpressions = "";
     protected $reportRequest;
 
     /**
@@ -44,6 +45,7 @@ class ReportRequest extends Analytics {
         $this->getReportRequest()->setPageSize("10000");
         $this->getReportRequest()->setDimensions($this->getDimensions());
         $this->getReportRequest()->setMetrics($this->getMetrics());
+        $this->getReportRequest()->setFiltersExpression($this->getFilterExpressions());
 
         $body = new Google_Service_AnalyticsReporting_GetReportsRequest();
         $body->setReportRequests(array($this->getReportRequest()));
@@ -124,5 +126,21 @@ class ReportRequest extends Analytics {
     protected function setReportRequest(Google_Service_AnalyticsReporting_ReportRequest $reportRequest): void
     {
         $this->reportRequest = $reportRequest;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFilterExpressions(): string
+    {
+        return $this->filterExpressions;
+    }
+
+    /**
+     * @param string $filterExpressions
+     */
+    public function setFilterExpressions(string $filterExpressions): void
+    {
+        $this->filterExpressions = $filterExpressions;
     }
 }

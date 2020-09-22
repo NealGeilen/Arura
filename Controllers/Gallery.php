@@ -83,7 +83,8 @@ class Gallery extends AbstractController {
         Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery.css");
         $this->render("AdminLTE/Pages/Gallery/Gallery.tpl", [
             "title" =>$gallery->getName(),
-            "Gallery" => $gallery
+            "Gallery" => $gallery,
+            "iPageViews" => Reports::getPageViews(25, "/album/{$gallery->getId()}")
         ]);
     }
 
