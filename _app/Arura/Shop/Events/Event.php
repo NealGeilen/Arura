@@ -827,6 +827,7 @@ class Event Extends Page {
      */
     public function getSlug()
     {
+        $this->load();
         return $this->sSlug;
     }
 
