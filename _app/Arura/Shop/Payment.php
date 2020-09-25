@@ -1,7 +1,6 @@
 <?php
 namespace Arura\Shop;
 
-use Arura\Chart;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Modal;
@@ -372,7 +371,7 @@ class Payment extends Modal {
                 "currency" => "EUR",
                 "value" => strval(number_format((float)$fAmount, 2, '.', '')) // You must send the correct number of decimals, thus we enforce the use of strings
             ],
-            "metadata" => $metadata,
+            "metadata" => $metadata, 
             "method" => $PaymentType,
             "description" => $description,
             "redirectUrl" => self::$REDIRECT_URL,
