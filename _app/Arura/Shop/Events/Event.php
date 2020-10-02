@@ -532,6 +532,7 @@ class Event Extends Page {
             "Event_Organizer_User_Id" => $this->getOrganizer()->getId(),
             "Event_IsActive" => (int)$this->getIsActive(),
             "Event_IsVisible" => (int)$this->getIsVisible(),
+            "Event_IsPublic" => (int)$this->IsPublic(),
             "Event_Capacity" => $this->getCapacity(),
             "Event_Slug" => $this->getSlug(),
             "Event_Registration_End_Timestamp" => $this->getEndRegistration()->getTimestamp(),
@@ -887,7 +888,7 @@ class Event Extends Page {
     public function IsPublic() : bool
     {
         $this->load();
-        return $this->bIsPublic;
+        return (bool)$this->bIsPublic;
     }
 
     /**
