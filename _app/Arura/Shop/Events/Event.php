@@ -886,6 +886,7 @@ class Event Extends Page {
      */
     public function IsPublic() : bool
     {
+        $this->load();
         return $this->bIsPublic;
     }
 
