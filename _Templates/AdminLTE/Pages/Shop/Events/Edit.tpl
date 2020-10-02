@@ -49,8 +49,13 @@
                                 {$eventForm->getControl("Event_Organizer_User_Id")}
                             </div>
                             <div class="col-12">
-                                {$eventForm->getControl("Event_IsActive")}
-                                {$eventForm->getControl("Event_IsVisible")}
+                                {$eventForm->getControl("Event_IsActive")} <small>Inschrijving mogelijk.</small>
+                            </div>
+                            <div class="col-12">
+                                {$eventForm->getControl("Event_IsVisible")} <small>Evenement is te zien in overzicht op website</small>
+                            </div>
+                            <div class="col-12">
+                                {$eventForm->getControl("Event_IsPublic")} <small>Evenement url bereikbaar.</small>
                             </div>
                         </div>
                         {$eventForm->getControl("submit")}
@@ -101,6 +106,7 @@
                         {else}
                             <div class="callout callout-info">
                                 <p>Evenement wordt geannuleerd daarbij blijft de pagina toegankelijk voor iedereen. Echter wordt de inschrijving stop gezet en allen reeds ingeschreven op de hoogste gesteld over de mail van de annulering.</p>
+                                <p><b>Geschreven tekst wordt publiekelijk vermeld.</b></p>
                             </div>
                             {$CancelForm->StartForm()}
                             {$CancelForm->getControl("Event_CancelReason", "richtext")}

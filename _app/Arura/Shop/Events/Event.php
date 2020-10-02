@@ -38,6 +38,7 @@ class Event Extends Page {
     private $oOrganizer;
     private $bIsActive;
     private $bIsVisible;
+    private $bIsPublic;
     private $iCapacity;
     private $dEndRegistration;
     private $sCancelReason;
@@ -70,7 +71,7 @@ class Event Extends Page {
     public static function getAllEvents() : array
     {
         $db = new Database();
-        return $db -> fetchAll("SELECT * FROM tblEvents WHERE Event_IsVisible = 1 AND Event_Start_Timestamp > UNIX_TIMESTAMP() ORDER BY  Event_Start_Timestamp");
+        return $db -> fetchAll("SELECT * FROM tblEvents WHERE Event_IsVisible = 1 AND Event_IsPublic = 1 AND Event_Start_Timestamp > UNIX_TIMESTAMP() ORDER BY  Event_Start_Timestamp");
     }
 
     /**
@@ -122,6 +123,7 @@ class Event Extends Page {
             $this->setCapacity((int)$aEvent["Event_Capacity"]);
             $this->setIsActive((boolean)$aEvent["Event_IsActive"]);
             $this->setIsVisible((boolean)$aEvent["Event_IsVisible"]);
+            $this->setIsPublic((boolean)$aEvent["Event_IsPublic"]);
             $this->setSlug($aEvent["Event_Slug"]);
             $this->setCancelReason($aEvent["Event_Cancel_Reason"]);
         }
@@ -146,7 +148,7 @@ class Event Extends Page {
      * @throws Error
      */
     public function isOpen(){
-        return ($this->getIsActive() && $this->getIsVisible());
+        return ($this->getIsActive() && $this->IsPublic());
     }
 
     public function getAmountSignIns(){
@@ -293,7 +295,7 @@ class Event Extends Page {
         $form = new Form("event-form", Form::OneColumnRender);
         $form->addText("Event_Name", "Naam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
-        $form->addText("Event_Slug", "Slug")
+        $form->addText("Event_Slug", "Url")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("Event_Start_Timestamp", "Start datum")->setHtmlType("datetime-local")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
@@ -308,7 +310,8 @@ class Event Extends Page {
         $form->addTextArea("Event_Description", "Omschrijving")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addCheckbox("Event_IsActive", "Actief");
-        $form->addCheckbox("Event_IsVisible", "Openbaar");
+        $form->addCheckbox("Event_IsPublic", "Openbaar");
+        $form->addCheckbox("Event_IsVisible", "Zichtbaar");
         $form->addInteger("Event_Capacity", "Capaciteit");
         $aUsers = [];
         foreach (User::getAllUsers() as $oUser){
@@ -352,6 +355,7 @@ class Event Extends Page {
             $aData["Event_Registration_End_Timestamp"] = strtotime($aData["Event_Registration_End_Timestamp"]);
             $aData["Event_IsActive"] = (int)$aData["Event_IsActive"];
             $aData["Event_IsVisible"] = (int)$aData["Event_IsVisible"];
+            $aData["Event_IsPublic"] = (int)$aData["Event_IsPublic"];
             $aData["Event_Slug"] = str_replace([".", ";", "/", " ", ",", ":", "&", "?"], "-",strtolower(trim($aData["Event_Slug"])));
 
             if (is_null($oEvent)){
@@ -875,5 +879,23 @@ class Event Extends Page {
 
     public function isCanceled(){
         return !empty($this->getCancelReason());
+    }
+
+    /**
+     * @return bool
+     */
+    public function IsPublic() : bool
+    {
+        return $this->bIsPublic;
+    }
+
+    /**
+     * @param bool $bIsPublic
+     * @return Event
+     */
+    public function setIsPublic(bool $bIsPublic)
+    {
+        $this->bIsPublic = $bIsPublic;
+        return $this;
     }
 }

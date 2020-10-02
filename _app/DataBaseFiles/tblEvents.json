@@ -84,6 +84,13 @@
       "Default": null,
       "Extra": ""
     },
+    "Event_IsPublic": {
+      "Type": "tinyint(1)",
+      "Null": "NO",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
     "Event_Capacity": {
       "Type": "int(100)",
       "Null": "NO",

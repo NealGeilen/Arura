@@ -53,8 +53,13 @@
                     {$eventForm->getControl("Event_Organizer_User_Id")}
                 </div>
                 <div class="col-12">
-                    {$eventForm->getControl("Event_IsActive")}
-                    {$eventForm->getControl("Event_IsVisible")}
+                    {$eventForm->getControl("Event_IsActive")} <small>Inschrijving mogelijk.</small>
+                </div>
+                <div class="col-12">
+                    {$eventForm->getControl("Event_IsVisible")} <small>Evenement is te zien in overzicht op website</small>
+                </div>
+                <div class="col-12">
+                    {$eventForm->getControl("Event_IsPublic")} <small>Evenement url bereikbaar.</small>
                 </div>
             </div>
             {$eventForm->getControl("submit")}

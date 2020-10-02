@@ -36,25 +36,27 @@ class Form extends \Nette\Forms\Form{
         if (isset($this->components[$name])){
             $item = $this->components[$name];
             $control = $item->getControl();
-            switch ($control->getAttribute("type")){
+            $sType = $item->getOptions()["type"];
+            $sErrors = "";
+            foreach ($item->errors as $sError){
+                $sErrors .= "<span class='text-danger'>{$sError }</span>". "<br/>";
+            }
+            switch ($sType){
+                case "button":
                 case "submit":
                     $control->setAttribute("class", "btn btn-primary {$cssClass}");
                     break;
                 case "reset":
                     $control->setAttribute("class", "btn btn-secondary {$cssClass}");
                     break;
+                case "checkbox":
+                    return (string)$control . $sErrors;
+                    break;
+                case "select":
+                    $control->setAttribute("value", $item->value);
                 default:
-                    switch ($control->getName()){
-                        case "select":
-                            $control->setAttribute("value", $item->value);
-                            break;
-                    }
                     $control->setAttribute("class", "form-control {$cssClass}");
                     break;
-            }
-            $sErrors = "";
-            foreach ($item->errors as $sError){
-                $sErrors .= "<span class='text-danger'>{$sError }</span>". "<br/>";
             }
             return "<div class='form-group'>{$item->getLabel()}{$control}{$sErrors}</div>";
         } else {
