@@ -12,23 +12,7 @@
                     <h2 class="card-title">Gegevens</h2>
                 </header>
                 <div class="card-body">
-                    {$form->startForm()}
-                    <div class="row">
-                        <div class="col-md-6">
-                            {$form->getControl("User_Username")}
-                        </div>
-                        <div class="col-md-6">
-                            {$form->getControl("User_Email")}
-                        </div>
-                        <div class="col-md-6">
-                            {$form->getControl("User_Firstname")}
-                        </div>
-                        <div class="col-md-6">
-                            {$form->getControl("User_Lastname")}
-                        </div>
-                    </div>
-                    {$form->getControl("submit")}
-                    {$form->endForm()}
+                    {$form}
                 </div>
             </div>
             <div class="card card-secondary">

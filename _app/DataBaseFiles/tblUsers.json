@@ -41,6 +41,20 @@
       "Key": "",
       "Default": null,
       "Extra": ""
+    },
+    "User_Api_Token": {
+      "Type": "varchar(100)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "User_IsActive": {
+      "Type": "tinyint(1)",
+      "Null": "NO",
+      "Key": "",
+      "Default": 1,
+      "Extra": ""
     }
   }
 }

@@ -5,7 +5,9 @@ use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Flasher;
 use Arura\Form;
+use Arura\Permissions\Restrict;
 use Arura\Sessions;
+use Rights;
 use Roles;
 
 class User
@@ -42,6 +44,8 @@ class User
     protected $email;
     protected $password;
     protected $roles = [];
+    protected $apiToken = "";
+    protected $isActive = false;
 
     /**
      * User constructor.
@@ -67,6 +71,8 @@ class User
             $this->setLastname($aUser['User_Lastname']);
             $this->setEmail($aUser['User_Email']);
             $this->setPassword($aUser['User_Password']);
+            $this->setApiToken($aUser["User_Api_Token"]);
+            $this->setIsActive((bool)$aUser["User_IsActive"]);
             $this -> isLoaded = true;
         }
     }
@@ -82,7 +88,9 @@ class User
                 "User_Lastname" => $this->lastname,
                 "User_Username" => $this->username,
                 "User_Email" => $this->email,
-                "User_Password" => $this -> password
+                "User_Password" => $this -> password,
+                "User_IsActive" => (int) $this->isActive,
+                "User_Api_Token" => $this->apiToken
             ], "User_Id");
             return $this -> db -> isQuerySuccessful();
         } else {
@@ -308,7 +316,9 @@ class User
             "User_Id" => $this->getId(),
             "User_Lastname" => $this->getLastname(),
             "User_Username" => $this->getUsername(),
-            "User_Email" => $this->getEmail()
+            "User_Email" => $this->getEmail(),
+            "User_Api_Token" => $this->getApiToken(),
+            "User_IsActive" => $this->isActive()
         ];
     }
 
@@ -408,6 +418,13 @@ class User
         $form->addText("User_Lastname", "Achternaam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht")
             ->setDefaultValue($user->getLastname());
+        if (Restrict::Validation(Rights::ARURA_USERS)){
+            $form->addCheckbox("User_IsActive", "Account actief")
+                ->setDefaultValue($user->isActive());
+            $form->addText("User_Api_Token", "API Token")
+                ->setDefaultValue($user->getApiToken());
+        }
+
         $form->addSubmit("submit", "Opslaan");
         if ($form->isSubmitted()){
 
@@ -417,6 +434,10 @@ class User
                 $user->setUsername($form->getValues()->User_Username);
                 $user->setFirstname($form->getValues()->User_Firstname);
                 $user->setLastname($form->getValues()->User_Lastname);
+                if (Restrict::Validation(Rights::ARURA_USERS)){
+                    $user->setApiToken($form->getValues()->User_Api_Token);
+                    $user->setIsActive($form->getValues()->User_IsActive);
+                }
             }
 
             if (!$user->save()){
@@ -534,4 +555,43 @@ class User
     {
         $this->password = $password;
     }
+
+    /**
+     * @return string|null
+     */
+    public function getApiToken()
+    {
+        $this->load();
+        return $this->apiToken;
+    }
+
+    /**
+     * @param string $apiToken
+     * @return User
+     */
+    public function setApiToken($apiToken): User
+    {
+        $this->apiToken = $apiToken;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isActive(): bool
+    {
+        $this->load();
+        return $this->isActive;
+    }
+
+    /**
+     * @param bool $isActive
+     * @return User
+     */
+    public function setIsActive(bool $isActive): User
+    {
+        $this->isActive = $isActive;
+        return $this;
+    }
+
 }

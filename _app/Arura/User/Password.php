@@ -33,7 +33,9 @@ class Password{
             $user = User::getUserOnEmail($form->getValues()->mail);
             if ($user === false){
                 $form->addError("E-mailadres niet beschikbaar");
-            } else {
+            } elseif (!$user->isActive()){
+                $form->addError("Account is gedeactiveerd");
+            }else {
                 if(Password::Verify($form->getValues()->password, $user->getPassword())){
                     $user->logInUser();
                 } else{
