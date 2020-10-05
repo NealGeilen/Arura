@@ -181,12 +181,6 @@
       "Setting_Required": "0",
       "Setting_Type": "text",
       "Setting_Plg": "analytics google"
-    },
-    {
-      "Setting_Name": "Token",
-      "Setting_Required": "0",
-      "Setting_Type": "text",
-      "Setting_Plg": "Api"
     }
   ]
 }

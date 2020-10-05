@@ -8,6 +8,15 @@
         </li>
     </ul>
 
+    {if $smarty.now|date_format:"%Y-%m-%d" < $aWebsite.Launchdate}
+        <div class="ml-2 d-block w-25">
+            <div class="alert alert-info">
+                <span><b>{$aWebsite.Launchdate|date_format:"%d-%m-%Y"}</b></span>
+                <span>Website Launch</span>
+            </div>
+        </div>
+    {/if}
+
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
         <li class="nav-item dropdown">

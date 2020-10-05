@@ -55,17 +55,14 @@ class Pages extends AbstractController {
     public function Home(){
         $db = new Database();
         $oSmarty= Router::getSmarty();
-        if (Restrict::Validation(Rights::ARURA_USERS)){
-            $oSmarty->assign("iUserCount", $db->fetchRow("SELECT COUNT(Session_Id) AS ROW_COUNT FROM tblSessions")["ROW_COUNT"]);
-        }
-        $oSmarty->assign("iPageCount", (Restrict::Validation(Rights::CMS_PAGES) ? $db->fetchRow("SELECT COUNT(Page_Id) AS ROW_COUNT FROM tblCmsPages WHERE Page_Visible = 1")["ROW_COUNT"] : null));
-        $oSmarty->assign("iUserCount", (Restrict::Validation(Rights::ARURA_USERS) ? $db->fetchRow("SELECT COUNT(Session_Id) AS ROW_COUNT FROM tblSessions")["ROW_COUNT"] : null));
-        $oSmarty->assign("aSecureTables", (Restrict::Validation(Rights::SECURE_ADMINISTRATION) ? SecureAdmin::getAllTablesForUser(User::activeUser()) : null));
+//        $oSmarty->assign("iPageCount", (Restrict::Validation(Rights::CMS_PAGES) ? $db->fetchRow("SELECT COUNT(Page_Id) AS ROW_COUNT FROM tblCmsPages WHERE Page_Visible = 1")["ROW_COUNT"] : null));
+//        $oSmarty->assign("iUserCount", (Restrict::Validation(Rights::ARURA_USERS) ? $db->fetchRow("SELECT COUNT(Session_Id) AS ROW_COUNT FROM tblSessions")["ROW_COUNT"] : null));
+//        $oSmarty->assign("aSecureTables", (Restrict::Validation(Rights::SECURE_ADMINISTRATION) ? SecureAdmin::getAllTablesForUser(User::activeUser()) : null));
         $oSmarty->assign("Events", (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ? Event::getEvents(3, true) : null));
         $oSmarty->assign("Galleries", (Restrict::Validation(Rights::GALLERY_MANGER) ? \Arura\Gallery\Gallery::getAllGalleries(true, 3) : null));
-
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Payments/Management.js");
+        $oSmarty->assign("JSONUserActions", (Restrict::Validation(Rights::ARURA_USERS) ? json_encode($db->fetchAll("SELECT COUNT(Logger_Id) AS Amount, FROM_UNIXTIME(Logger_Time, '%d-%m-%Y') AS Date FROM tblUserLogger WHERE Logger_Time >= (UNIX_TIMESTAMP() - 7 * 84500) GROUP BY FROM_UNIXTIME(Logger_Time, '%M %d %Y') ORDER BY Logger_Time")) : null));
+        $oSmarty->assign("JSONEventRegistrations", (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ? json_encode($db->fetchAll("SELECT COUNT(Registration_Id) AS Amount, FROM_UNIXTIME(Registration_Timestamp, '%d-%m-%Y') AS Date FROM tblEventRegistration WHERE Registration_Timestamp >= (UNIX_TIMESTAMP() - 7 * 84500) GROUP BY FROM_UNIXTIME(Registration_Timestamp, '%M %d %Y') ORDER BY Registration_Timestamp")) : null));
+        $oSmarty->assign("JSONPayments", (Restrict::Validation(Rights::SHOP_PAYMENTS) ? json_encode($db->fetchAll("SELECT COUNT(Payment_Id) AS Amount, FROM_UNIXTIME(Payment_Timestamp, '%d-%m-%Y') AS Date FROM tblPayments WHERE Payment_Timestamp >= (UNIX_TIMESTAMP() - 7 * 84500) GROUP BY FROM_UNIXTIME(Payment_Timestamp, '%M %d %Y') ORDER BY Payment_Timestamp")) : null));
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Pages/Home.js");
         $this->render("AdminLTE/Pages/Pages/Home.tpl", [
             "title" => "Home"
