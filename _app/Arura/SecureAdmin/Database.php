@@ -1,5 +1,9 @@
 <?php
 namespace Arura\SecureAdmin;
+use Error;
+use PDOStatement;
+use Symfony\Component\VarDumper\VarDumper;
+
 class Database extends \Arura\Database {
 
     protected $sKey;
@@ -44,7 +48,7 @@ class Database extends \Arura\Database {
      * @param string $sTable
      * @param array $aData
      * @param string $sPrimaryKey
-     * @return \PDOStatement
+     * @return PDOStatement
      * @throws \Arura\Exceptions\Error
      */
     public function updateRecord($sTable = "", $aData = [], $sPrimaryKey = "")
@@ -111,6 +115,9 @@ class Database extends \Arura\Database {
      * @return false|string
      */
     protected function decrypt($sData = ""){
+        if ($sData === null || $sData === ""){
+            return null;
+        }
         $c = base64_decode($sData);
         $ivlen = openssl_cipher_iv_length($cipher="AES-128-CBC");
         $iv = substr($c, 0, $ivlen);
@@ -122,7 +129,7 @@ class Database extends \Arura\Database {
         {
             return $original_plaintext;
         } else {
-            throw new \Error();
+            throw new Error();
         }
     }
 

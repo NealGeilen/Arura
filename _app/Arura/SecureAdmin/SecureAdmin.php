@@ -4,6 +4,7 @@ use Arura\Exceptions\Forbidden;
 use Arura\Modal;
 use Arura\Permissions\Restrict;
 use Arura\User\User;
+use Exception;
 
 class SecureAdmin extends Modal {
 
@@ -28,7 +29,7 @@ class SecureAdmin extends Modal {
         if (self::doesTableExits($id)){
             $this->setId($id);
         } else {
-            throw new \Exception("Not found", 404);
+            throw new Exception("Not found", 404);
         }
     }
 
@@ -157,7 +158,7 @@ class SecureAdmin extends Modal {
             ]);
             return $this->db->isQuerySuccessful();
         }
-        false;
+        return false;
     }
 
     public function setUserRights(User $user, $iRights){

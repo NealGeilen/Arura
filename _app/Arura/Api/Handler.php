@@ -3,6 +3,7 @@ namespace Arura\Api;
 
 use Arura\Exceptions\NotAcceptable;
 use Arura\Settings\Application;
+use Arura\User\User;
 use Exception;
 
 class Handler{
@@ -23,8 +24,7 @@ class Handler{
     public static function Create(array $requiredFields, callable $callback){
         $Handler = new self();
         $Handler->requiredFields = array_merge($Handler->requiredFields, $requiredFields);
-        $Handler->setCallback($callback);
-        $Handler->run();
+        $Handler->setCallback($callback)->run();
         return $Handler;
     }
 
@@ -35,7 +35,6 @@ class Handler{
         } catch (Exception $e){
             $this->setException($e);
         }
-
         if ($this->getException() === null){
             echo json_encode(["data" => $this->getResponse(), "code" => 200, "Message" => "success"]);
         } else {
@@ -44,26 +43,23 @@ class Handler{
     }
 
     public function validateFields(){
-
-        if (!isset($_REQUEST["Token"])){
-            header('HTTP/1.1 404 Not Found');
-            exit;
-        }
-
-        if ($_REQUEST["Token"] !== Application::get("Api", "Token")){
-            header('HTTP/1.1 404 Not Found');
-            exit;
-        }
-
-        foreach ($this->getRequiredFields() as $sField){
-            if (!isset($_REQUEST[$sField])){
-                throw new NotAcceptable("{$sField} is required");
-            } elseif (empty($_REQUEST[$sField]) && !is_numeric($_REQUEST[$sField])) {
-                throw new NotAcceptable("{$sField} needs to have a value. given value '{$_REQUEST[$sField]}'");
+        if (isset($_REQUEST["Token"]) && isset($_REQUEST["User"])){
+            $User = User::getUserOnEmail($_REQUEST["User"]);
+            if ($User !== false){
+                if ($User->getApiToken() === $_REQUEST["Token"]){
+                    foreach ($this->getRequiredFields() as $sField){
+                        if (!isset($_REQUEST[$sField])){
+                            throw new NotAcceptable("{$sField} is required");
+                        } elseif (empty($_REQUEST[$sField]) && !is_numeric($_REQUEST[$sField])) {
+                            throw new NotAcceptable("{$sField} needs to have a value. given value '{$_REQUEST[$sField]}'");
+                        }
+                    }
+                    return true;
+                }
             }
         }
-
-
+        header('HTTP/1.1 404 Not Found');
+        exit;
     }
 
     /**

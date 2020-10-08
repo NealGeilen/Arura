@@ -55,7 +55,7 @@ MainLineChart = {
                             if (index >= 0){
                                 aData[i] = response.data.rows.metrics[index];
                             } else {
-                                aData[i] = null;
+                                aData[i] = 0;
                             }
                         });
                         chart.data.datasets.push({

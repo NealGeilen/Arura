@@ -62,11 +62,9 @@ try {
             });
             break;
         case "api":
-            if (!empty(Application::get("Api", "Token"))) {
-                $oRouter->mount("/api", function () use ($oRouter) {
-                    \Arura\Api\Router::Rout($oRouter);
-                });
-            }
+            $oRouter->mount("/api", function () use ($oRouter) {
+                \Arura\Api\Router::Rout($oRouter);
+            });
             break;
         case "payment":
             $oRouter->all("/payment/{id}", function ($id) use ($oRouter){
