@@ -30,7 +30,6 @@ class SecureAdministration extends AbstractController {
      * @Right("SECURE_ADMINISTRATION")
      */
     public function Settings($id){
-        dd($id);
         $oTable = new SecureAdmin((int)$id);
         if ($oTable->isUserOwner(User::activeUser())){
             Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){

@@ -35,7 +35,7 @@ class SecureAdmin extends Modal {
 
     public function load($force = false){
         if (!$this->isLoaded || $force) {
-            $aTable = $this -> db -> fetchRow("SELECT * FROM  tblSecureAdministration WHERE Table_Id", [$this -> getId()]);
+            $aTable = $this -> db -> fetchRow("SELECT * FROM  tblSecureAdministration WHERE Table_Id = ?", [$this -> getId()]);
             $this->name = $aTable["Table_Name"];
             $this->key = $aTable["Table_Key"];
             $this->owner = new User($aTable["Table_Owner_User_Id"]);
