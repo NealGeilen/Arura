@@ -404,47 +404,51 @@ class User
     /**
      * @return Form
      */
-    public static function getProfileForm(self $user){
+    public static function getProfileForm(self $user= null){
         $form = new Form("profile-form");
         $form->addText("User_Username", "Gebruikersnaam")
-            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
-            ->setDefaultValue($user->getUsername());
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addEmail("User_Email", "E-mailadres")
-            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
-            ->setDefaultValue($user->getEmail());
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("User_Firstname", "Voornaam")
-            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
-            ->setDefaultValue($user->getFirstname());
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("User_Lastname", "Achternaam")
-            ->addRule(Form::REQUIRED, "Dit veld is verplicht")
-            ->setDefaultValue($user->getLastname());
-        if (Restrict::Validation(Rights::ARURA_USERS)){
-            $form->addCheckbox("User_IsActive", "Account actief")
-                ->setDefaultValue($user->isActive());
-            $form->addText("User_Api_Token", "API Token")
-                ->setDefaultValue($user->getApiToken());
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        if (Restrict::Validation(Rights::ARURA_USERS) && !is_null($user)){
+            $form->addCheckbox("User_IsActive", "Account actief");
+            $form->addText("User_Api_Token", "API Token");
+        }
+        if (!is_null($user)){
+            $form->setDefaults($user->__ToArray());
         }
 
         $form->addSubmit("submit", "Opslaan");
         if ($form->isSubmitted()){
 
-            $user->load(true);
-            if ($form->getValues()->User_Email) {
-                $user->setEmail($form->getValues()->User_Email);
-                $user->setUsername($form->getValues()->User_Username);
-                $user->setFirstname($form->getValues()->User_Firstname);
-                $user->setLastname($form->getValues()->User_Lastname);
-                if (Restrict::Validation(Rights::ARURA_USERS)){
-                    $user->setApiToken($form->getValues()->User_Api_Token);
-                    $user->setIsActive($form->getValues()->User_IsActive);
-                }
-            }
-
-            if (!$user->save()){
-                $form->addError("Opslaan mislukt");
+            if (is_null($user)){
+               $user = User::createUser($form->getValues()->User_Username, $form->getValues()->User_Firstname, $form->getValues()->User_Lastname, $form->getValues()->User_Email, "");
+               $user->setIsActive(false)->save();
+               Logger::Create(Logger::CREATE, User::class, $form->getValues()->User_Username);
+               Flasher::addFlash("Gebruiker aangemaakt");
             } else {
-                Logger::Create(Logger::UPDATE, User::class, $user->getUsername());
-                Flasher::addFlash("Profiel opgeslagen");
+                $user->load(true);
+                if ($form->getValues()->User_Email) {
+                    $user->setEmail($form->getValues()->User_Email);
+                    $user->setUsername($form->getValues()->User_Username);
+                    $user->setFirstname($form->getValues()->User_Firstname);
+                    $user->setLastname($form->getValues()->User_Lastname);
+                    if (Restrict::Validation(Rights::ARURA_USERS)){
+                        $user->setApiToken($form->getValues()->User_Api_Token);
+                        $user->setIsActive($form->getValues()->User_IsActive);
+                    }
+                }
+
+                if (!$user->save()){
+                    $form->addError("Opslaan mislukt");
+                } else {
+                    Logger::Create(Logger::UPDATE, User::class, $user->getUsername());
+                    Flasher::addFlash("Profiel opgeslagen");
+                }
             }
         }
         return $form;

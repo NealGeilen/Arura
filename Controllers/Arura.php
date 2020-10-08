@@ -35,6 +35,21 @@ class Arura extends AbstractController {
     }
 
     /**
+     * @Route("/arura/users/create")
+     * @Right("ARURA_USERS")
+     */
+    public function UserCreate(){
+        $form = User::getProfileForm();
+        if ($form->isValid()){
+            $this->redirect("/dashboard/arura/users");
+        }
+        $this->render("AdminLTE/Pages/Arura/Users/Create.tpl" , [
+            "title" =>"Gebruiker aanmaken",
+            "form" => $form
+        ]);
+    }
+
+    /**
      * @Route("/arura/user/{id}")
      * @Right("ARURA_USERS")
      */
