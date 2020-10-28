@@ -80,7 +80,7 @@ class Arura extends AbstractController {
             foreach ($requestHandler->getData() as $aSetting){
                 $db -> query('UPDATE tblSettings SET Setting_Value = ? WHERE Setting_plg = ? AND Setting_Name = ?',
                     [
-                        htmlentities($aSetting['value']),
+                        $aSetting['value'],
                         htmlentities($aSetting['plg']),
                         htmlentities($aSetting['name'])
                     ]

@@ -181,6 +181,18 @@
       "Setting_Required": "0",
       "Setting_Type": "text",
       "Setting_Plg": "analytics google"
+    },
+    {
+      "Setting_Name": "Color",
+      "Setting_Required": "0",
+      "Setting_Type": "text",
+      "Setting_Plg": "QR-Code"
+    },
+    {
+      "Setting_Name": "Logo",
+      "Setting_Required": "0",
+      "Setting_Type": "file",
+      "Setting_Plg": "QR-Code"
     }
   ]
 }

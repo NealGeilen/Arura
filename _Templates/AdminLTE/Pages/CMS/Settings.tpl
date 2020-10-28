@@ -8,7 +8,7 @@
     <header class="page-header">
     </header>
 
-    <section class="card card-primary">
+    <div class="card card-primary">
         <div class="card-header">
             <div class="card-title">
                 <h3>{$aCmsPage.Page_Title}</h3>
@@ -32,5 +32,10 @@
         <div class="card-body">
             {$form}
         </div>
-    </section>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            {$CmsPage->getDeleteForm()}
+        </div>
+    </div>
     {/block}

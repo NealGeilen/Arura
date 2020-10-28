@@ -2,6 +2,7 @@
 namespace Arura\Permissions;
 
 use Arura\User\User;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Restrict{
 
@@ -14,7 +15,6 @@ class Restrict{
             return self::hasUserRight(User::activeUser(), $iRight);
         }
         return false;
-
     }
 
     /**

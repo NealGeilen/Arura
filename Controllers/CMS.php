@@ -24,9 +24,6 @@ class CMS extends AbstractController {
      */
     public function Pages(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
-            $requestHandler->addType("get-all-pages", function ($aData){
-                return \Arura\Pages\CMS\Page::getAllPages();
-            });
             $requestHandler->addType("delete-page", function ($aData){
                 $p = new \Arura\Pages\CMS\Page($aData["Page_Id"]);
                 return $p->delete();
@@ -37,11 +34,11 @@ class CMS extends AbstractController {
             \Arura\Pages\CMS\Page::Create($form->getValues('array'));
             Flasher::addFlash("Pagina aangemaakt");
         }
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Pages.js");
         $this->render("AdminLTE/Pages/CMS/Pages.tpl", [
             "title" =>"Pagina's",
             "createForm" => (string)$form,
-            "createFormError" =>$form->hasErrors()
+            "createFormError" =>$form->hasErrors(),
+            "Pages" => \Arura\Pages\CMS\Page::getAllPages()
         ]);
     }
 
@@ -130,7 +127,8 @@ class CMS extends AbstractController {
         $this->render("AdminLTE/Pages/CMS/Settings.tpl", [
             "title" =>"Pagina instellingen",
             "form" => (string) $form,
-            "aCmsPage" => $p->__toArray()
+            "aCmsPage" => $p->__toArray(),
+            "CmsPage" => $p
         ]);
     }
 

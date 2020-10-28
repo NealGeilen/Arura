@@ -9,6 +9,7 @@ use Arura\Permissions\Restrict;
 use Arura\Sessions;
 use Rights;
 use Roles;
+use Symfony\Component\VarDumper\VarDumper;
 
 class User
 {
@@ -17,6 +18,7 @@ class User
      */
     protected $db;
     protected static $activeUser = null;
+    protected static $aRoles = [];
 
     /**
      * Validators
@@ -242,7 +244,10 @@ class User
     }
 
     public function getRoles(){
-        return $this->db->fetchAllColumn("SELECT Role_Id FROM tblUserRole WHERE Role_User_Id = :User_Id", ["User_Id" => $this->getId()]);
+        if (self::$aRoles === []){
+            self::$aRoles = $this->db->fetchAllColumn("SELECT Role_Id FROM tblUserRole WHERE Role_User_Id = :User_Id", ["User_Id" => $this->getId()]);
+        }
+        return self::$aRoles;
     }
 
 
@@ -250,7 +255,6 @@ class User
         $valid = false;
         foreach ($this->getRoles() as $iRole){
             if (!$valid){
-
                 $valid = in_array($iRight, Roles::ROLES[(int)$iRole]["Rights"]);
             }
             if ($valid){

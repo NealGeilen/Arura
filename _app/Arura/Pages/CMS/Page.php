@@ -7,6 +7,7 @@ use Arura\Exceptions\NotFound;
 use Arura\Form;
 use Arura\Pages;
 use Arura\Permissions\Restrict;
+use Arura\User\Logger;
 use Exception;
 use Rights;
 use SmartyException;
@@ -116,6 +117,20 @@ class Page extends Pages\Page{
         ];
     }
 
+    public function getDeleteForm(){
+        $form = new Form("Delete-Form-{$this->getId()}");
+        $form->addHidden("Id", $this->getId())
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("delete", 'Verwijderen');
+        if ($form->isSuccess()){
+            if ($this->delete()){
+                Logger::Create(Logger::DELETE, self::class, $this->getTitle());
+                redirect("/dashboard/content/paginas");
+            }
+        }
+        return $form;
+    }
+
     /**
      * @return bool
      * @throws Error
@@ -130,12 +145,16 @@ class Page extends Pages\Page{
     }
 
     /**
-     * @return array
+     * @return Page[]
      * @throws Error
      */
     public static function getAllPages(){
         $db = new Database();
-        return $db->fetchAll('SELECT * FROM tblCmsPages');
+        $aPages = [];
+        foreach ($db->fetchAll('SELECT Page_Id FROM tblCmsPages') as $aPage){
+            $aPages[] = new self($aPage["Page_Id"]);
+        }
+        return  $aPages;
     }
 
     /**

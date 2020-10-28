@@ -16,7 +16,7 @@
             <h2 class="card-title">Pagina's</h2>
         </header>
         <div class="card-body table-responsive" style="display: block;">
-            <table class="table pages-overvieuw">
+            <table class="table Arura-Table">
                 <thead>
                 <tr>
                     <th>Titel</th>
@@ -26,6 +26,33 @@
                 </tr>
                 </thead>
                 <tbody>
+                {foreach $Pages as $aCMSPage}
+                    <tr>
+                        <td>{$aCMSPage->getTitle()}</td>
+                        <td><a href="{$aCMSPage->getUrl()}" target="_blank">{$aCMSPage->getUrl()}</a></td>
+                        <td>
+                            {if $aCMSPage->getVisible()}
+                                <div class="badge badge-success">
+                                    <i class="fas fa-check"></i>
+                                </div>
+                                {else}
+                                <div class="badge badge-danger">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            {/if}
+                        </td>
+                        <td>
+                            <div class="btn-group">
+                                <a class="btn btn-secondary" href="/dashboard/content/pagina/{$aCMSPage->getId()}/instellingen" >
+                                    <i class="fas fa-cog"></i>
+                                </a>
+                                <a href="/dashboard/content/pagina/{$aCMSPage->getId()}/content" class="btn btn-primary">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {/foreach}
                 </tbody>
             </table>
         </div>
@@ -33,17 +60,7 @@
 
     <div style="display: none">
         <div class="template-pages-btns">
-            <div class="btn-group">
-                <a class="btn btn-secondary" href="" page="instellingen">
-                    <i class="fas fa-cog"></i>
-                </a>
-                <a href="" class="btn btn-primary" page="content">
-                    <i class="fas fa-pen"></i>
-                </a>
-                <button type="button" class="btn btn-danger" onclick="Pages.Delete($(this))" >
-                    <i class="far fa-trash-alt"></i>
-                </button>
-            </div>
+
         </div>
     </div>
 
