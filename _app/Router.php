@@ -6,6 +6,7 @@ use Arura\Exceptions\Unauthorized;
 use Arura\Gallery\Gallery;
 use Arura\Gallery\Image;
 use Arura\Pages\CMS\Page;
+use Arura\Pages\CMS\ShortUrl;
 use Arura\Router;
 use Arura\Settings\Application;
 use Arura\Shop\Events\Event;
@@ -76,6 +77,11 @@ try {
                 }
             });
             break;
+        case "r":
+            $oRouter->all("/r/{id}", function ($id){
+                ShortUrl::Display($id);
+            });
+            break;
         default:
             $oRouter->mount("/", function () use ($oRouter){
                 Page::Display($oRouter->getCurrentUri());
@@ -96,5 +102,6 @@ try {
                 break;
         }
     }
+    \Arura\Pages\Page::pageNotFound();
 }
 

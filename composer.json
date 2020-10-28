@@ -30,6 +30,7 @@
     "html2text/html2text": "^4",
     "google/apiclient": "^2",
     "endroid/qr-code": "^3.9",
+    "theiconic/php-ga-measurement-protocol": "^2.0",
     "mpdf/mpdf": "^8.0",
     "nette/forms": "^3",
     "nealg/cacher" :  "^1",
