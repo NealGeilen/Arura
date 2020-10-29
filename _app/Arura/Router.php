@@ -81,6 +81,23 @@ class Router{
                     "Icon" => "fas fa-folder",
                     "Function" => "FileManger@Home",
                 ],
+                "/redirects" => [
+                    "Title" => "Omleidingen",
+                    "Right" => (
+                    Restrict::Validation(Rights::REDIRECTS)
+                    ),
+                    "Icon" =>"fas fa-directions",
+                    "Children" => [
+                        '/redirects/shorten' => [
+                            "Right" =>
+                                (
+                                Restrict::Validation(Rights::REDIRECTS)
+                                ),
+                            "Title" => "Url verkleinen",
+                            "Icon" => "fas fa-text-width",
+                        ],
+                    ]
+                ],
                 "/gallery" => [
                     "Title" => "Albums",
                     "Right" => (

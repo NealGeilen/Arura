@@ -3,7 +3,6 @@ namespace Arura\Analytics;
 
 use Arura\Exceptions\NotFound;
 use Exception;
-use Google_Exception;
 use Google_Service_AnalyticsReporting_Dimension;
 use Google_Service_AnalyticsReporting_Metric;
 
@@ -37,8 +36,8 @@ class Reports{
      * @throws Google_Exception
      * @throws Exception
      */
-    public static function VistorsPerCountry($startDate,$endDate){
-        $Report = self::Report("ga:countryIsoCode", "ga:sessions");
+    public static function VistorsPerCountry($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:countryIsoCode", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -51,8 +50,8 @@ class Reports{
      * @throws Google_Exception
      * @throws Exception
      */
-    public static function VistorsPerCity($startDate,$endDate){
-        $Report = self::Report("ga:city", "ga:sessions");
+    public static function VistorsPerCity($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:city", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -65,8 +64,8 @@ class Reports{
      * @throws Google_Exception
      * @throws Exception
      */
-    public static function VistorsPerProvince($startDate,$endDate){
-        $Report = self::Report("ga:region", "ga:sessions");
+    public static function VistorsPerProvince($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:region", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -80,8 +79,8 @@ class Reports{
      * @throws NotFound
      * @throws Exception
      */
-    public static function SocialMediaVisitors($startDate,$endDate){
-        $Report = self::Report("ga:sourceMedium", "ga:sessions");
+    public static function SocialMediaVisitors($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:sourceMedium", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -94,8 +93,8 @@ class Reports{
      * @throws NotFound
      * @throws Exception
      */
-    public static function ExitPages($startDate,$endDate){
-        $Report = self::Report("ga:exitPagePath", "ga:sessions");
+    public static function ExitPages($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:exitPagePath", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -108,8 +107,8 @@ class Reports{
      * @throws NotFound
      * @throws Exception
      */
-    public static function PageViews($startDate,$endDate){
-        $Report = self::Report("ga:pagePath", "ga:pageviews");
+    public static function PageViews($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:pagePath", "ga:pageviews", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -122,8 +121,8 @@ class Reports{
      * @throws NotFound
      * @throws Exception
      */
-    public static function ReadTimePage($startDate,$endDate){
-        $Report = self::Report("ga:pageTitle", "ga:avgTimeOnPage");
+    public static function ReadTimePage($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:pageTitle", "ga:avgTimeOnPage", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -136,8 +135,8 @@ class Reports{
      * @throws NotFound
      * @throws Exception
      */
-    public static function UserAge($startDate,$endDate){
-        $Report = self::Report("ga:userAgeBracket", "ga:sessions");
+    public static function UserAge($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:userAgeBracket", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
@@ -150,14 +149,14 @@ class Reports{
      * @throws NotFound
      * @throws Exception
      */
-    public static function Devices($startDate,$endDate){
-        $Report = self::Report("ga:deviceCategory", "ga:sessions");
+    public static function Devices($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:deviceCategory", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         return $Report->getReport();
     }
 
-    public static function Visitors($startDate,$endDate){
-        $Report = self::Report("ga:date", "ga:sessions");
+    public static function Visitors($startDate,$endDate, $filter = ""){
+        $Report = self::Report("ga:date", "ga:sessions", $filter);
         $Report->setDataRange($startDate, $endDate);
         $aData = $Report->getReport();
 

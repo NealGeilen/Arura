@@ -10,6 +10,7 @@ class Roles{
     const SYSTEM_ADMIN = 7;
     const GALLERY = 8;
     const ANALYTICS = 9;
+    const REDIRECTS = 10;
 
     const ROLES = [
         self::CONTENT_MANGER => [
@@ -51,6 +52,10 @@ class Roles{
         self::ANALYTICS => [
             "Name" => "Analytics",
             "Rights" => [Rights::ANALYTICS]
+        ],
+        self::REDIRECTS => [
+            "Name" => "Url omleidingen",
+            "Rights" => [Rights::REDIRECTS]
         ]
     ];
 }

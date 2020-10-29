@@ -1,0 +1,18 @@
+{
+  "columns": {
+    "Url_Token": {
+      "Type": "varchar(100)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": null,
+      "Extra": ""
+    },
+    "Url_Direction": {
+      "Type": "varchar(255)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    }
+  }
+}

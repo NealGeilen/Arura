@@ -5,6 +5,7 @@ use Arura\Exceptions\Error;
 use Arura\Settings\Application;
 use PDO;
 use PDOStatement;
+use Symfony\Component\VarDumper\VarDumper;
 
 class Database{
 
@@ -57,7 +58,6 @@ class Database{
         }
 
         $this->database = $database;
-
 
     }
 

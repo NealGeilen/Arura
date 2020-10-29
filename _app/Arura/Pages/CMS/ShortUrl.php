@@ -7,22 +7,34 @@ use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
+use Arura\Modal;
 use Arura\Settings\Application;
 use Arura\User\Logger;
+use Exception;
 use TheIconic\Tracking\GoogleAnalytics\Analytics;
 
-class ShortUrl{
+class ShortUrl extends Modal {
 
     protected $token;
     protected $direction;
 
-    protected $isLoaded = false;
-    protected $db;
-
     public function __construct(string $token)
     {
+        parent::__construct();
         $this->setToken($token);
-        $this->db=new Database();
+    }
+
+    /**
+     * @return ShortUrl[]
+     * @throws Error
+     */
+    public static function getAllUrls(){
+        $db = new Database();
+        $aList = [];
+        foreach ($db->fetchAllColumn("SELECT Url_Token FROM tblShortUrl WHERE Url_Direction != '' ") as $sToken){
+            $aList[] = new self($sToken);
+        }
+        return $aList;
     }
 
     /**
@@ -61,14 +73,32 @@ class ShortUrl{
         $Url = new ShortUrl($sToken);
         $Url->load();
         $tag = Application::get("analytics google", "Tag");
-        if (!empty($tag)){
-            $analytics = new Analytics(true);
-            $analytics
-                ->setProtocolVersion('1')
-                ->setTrackingId(Application::get("analytics google", "Tag"))
-                ->setDocumentPath("/r/{$Url->getToken()}")
-                ->setIpOverride($_SERVER["REMOTE_ADDR"])
-                ->sendPageview();
+        try {
+            if (isset($_COOKIE["_gid"])){
+                $ClientId = $_COOKIE["_gid"];
+            } else {
+                $ClientId = str_random(10);
+            }
+            if (!empty($tag)){
+                $analytics = new Analytics((bool)Application::get("website", "HTTPS"));
+                $result = $analytics
+                    ->setProtocolVersion('1')
+                    ->setTrackingId(Application::get("analytics google", "Tag"))
+                    ->setClientId($ClientId)
+                    ->setDocumentPath("/r/{$Url->getToken()}")
+                    ->setIpOverride($_SERVER["REMOTE_ADDR"])
+                    ->sendPageview();
+            }
+        } catch (Exception $e){
+            if (Application::get("arura", "Debug")){
+                dd($e);
+            }
+        }
+        if (empty($Url->getDirection())){
+            $oPage = new \Arura\Pages\Page();
+            $oPage->setPageContend("<section><h1 class='text-center'>Deze url is niet meer geldig</h1></section>");
+            $oPage->setTitle("Onderhoud");
+            $oPage->showPage();
         }
         redirect($Url->getDirection());
     }
@@ -94,12 +124,9 @@ class ShortUrl{
         $token = getHash("tblShortUrl", "Url_Token", 10);
         $result = $db->createRecord("tblShortUrl", [
             "Url_Token" => $token,
-            "Url_Direction" => $$destination
+            "Url_Direction" => $destination
         ]);
-        if ($result){
-            return new self($token);
-        }
-        return false;
+        return new self($token);
     }
 
     /**
@@ -141,7 +168,8 @@ class ShortUrl{
 
     public static function getShortUrlForm(ShortUrl $shortUrl = null){
         $form = new Form("shorturl-form");
-        $form->addText("Url_Direction");
+        $form->addText("Url_Direction", "Doel")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
 
         if (!is_null($shortUrl)){
             $form->setDefaults($shortUrl->__ToArray());
@@ -163,6 +191,16 @@ class ShortUrl{
                     Flasher::addFlash("Profiel opgeslagen");
                 }
             }
+        }
+        return $form;
+    }
+
+    public function Delete(){
+        $this->load();
+        $this->setDirection(null);
+        if ($this->save()){
+            Flasher::addFlash("Url verwijderd");
+            Logger::Create(Logger::DELETE, self::class, $this->getToken());
         }
     }
 
