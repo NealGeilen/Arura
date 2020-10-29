@@ -244,10 +244,7 @@ class User
     }
 
     public function getRoles(){
-        if (self::$aRoles === []){
-            self::$aRoles = $this->db->fetchAllColumn("SELECT Role_Id FROM tblUserRole WHERE Role_User_Id = :User_Id", ["User_Id" => $this->getId()]);
-        }
-        return self::$aRoles;
+        return $this->db->fetchAllColumn("SELECT Role_Id FROM tblUserRole WHERE Role_User_Id = :User_Id", ["User_Id" => $this->getId()]);
     }
 
 
