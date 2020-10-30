@@ -175,7 +175,7 @@ class ShortUrl extends Modal {
 
     public static function getShortUrlForm(ShortUrl $shortUrl = null){
         $form = new Form("shorturl-form");
-        $form->addText("Url_Direction", "Doel")
+        $form->addText("Url_Direction", "Doel")->setHtmlType("url")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
 
         if (!is_null($shortUrl)){
