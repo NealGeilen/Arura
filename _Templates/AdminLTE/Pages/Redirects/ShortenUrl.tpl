@@ -38,6 +38,9 @@
                                 <a class="btn btn-primary text-white" href="/dashboard/redirects/shorten/{$Url->getToken()}/analytics">
                                     <i class="fas fa-chart-line"></i>
                                 </a>
+                                <a class="btn btn-secondary" href="/dashboard/redirects/shorten/{$Url->getToken()}/edit">
+                                    <i class="fas fa-pen"></i>
+                                </a>
                                 <button class="btn btn-secondary" onclick="showQRCode('{$Url->getToken()}')">
                                     <i class="fas fa-qrcode"></i>
                                 </button>

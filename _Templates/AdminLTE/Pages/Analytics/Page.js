@@ -149,26 +149,28 @@ let Analytics = {
             table: null,
             set: function (data) {
                 $(".devices-chart").parents(".card").find(".overlay").remove();
-                this.object = new Chart($(".devices-chart")[0], {
-                    type: 'pie',
-                    data: {
-                        datasets: [{
-                            backgroundColor: Analytics.Colors,
-                            data: data.rows.metrics
-                        }],
-                        labels: data.rows.dimensions
-                    },
-                    options: {
-                        legend:{
-                            position: "bottom",
-                            align: "start",
-                            labels:{
-                                fontColor: "#fff"
-                            }
+                if(typeof data.rows !== "undefined"){
+                    this.object = new Chart($(".devices-chart")[0], {
+                        type: 'pie',
+                        data: {
+                            datasets: [{
+                                backgroundColor: Analytics.Colors,
+                                data: data.rows.metrics
+                            }],
+                            labels: data.rows.dimensions
+                        },
+                        options: {
+                            legend:{
+                                position: "bottom",
+                                align: "start",
+                                labels:{
+                                    fontColor: "#fff"
+                                }
 
+                            }
                         }
-                    }
-                });
+                    });
+                }
             },
             destroy: function () {
                 if (this.object !== null){
@@ -181,38 +183,40 @@ let Analytics = {
             tbale: null,
             set: function (data) {
                 $(".media-chart").parents(".card").find(".overlay").remove();
-                this.object = new Chart($(".media-chart")[0], {
-                    type: 'bar',
-                    data: {
-                        datasets: [{
-                            data: data.rows.metrics,
-                            backgroundColor: Analytics.Colors,
-                        }],
-                        labels: data.rows.dimensions
-                    },
-                    options: {
-                        legend: {
-                            display: false,
-                        },
-                        scales: {
-                            xAxes: [{
-                                gridLines: {
-                                    display: false
-                                },
-                                ticks: {
-                                    fontColor: "#fff"
-                                }
+                if(typeof data.rows !== "undefined"){
+                    this.object = new Chart($(".media-chart")[0], {
+                        type: 'bar',
+                        data: {
+                            datasets: [{
+                                data: data.rows.metrics,
+                                backgroundColor: Analytics.Colors,
                             }],
-                            yAxes: [{
-                                ticks: {
-                                    fontColor: "#fff",
-                                    min: 0,
-                                    stepSize: 5
-                                }
-                            }]
+                            labels: data.rows.dimensions
+                        },
+                        options: {
+                            legend: {
+                                display: false,
+                            },
+                            scales: {
+                                xAxes: [{
+                                    gridLines: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        fontColor: "#fff"
+                                    }
+                                }],
+                                yAxes: [{
+                                    ticks: {
+                                        fontColor: "#fff",
+                                        min: 0,
+                                        stepSize: 5
+                                    }
+                                }]
+                            }
                         }
-                    }
-                });
+                    });
+                }
             },
             destroy: function () {
                 if (this.object !== null){

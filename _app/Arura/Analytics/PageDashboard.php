@@ -24,9 +24,6 @@ class PageDashboard {
             $requestHandler->addType("Devices", function () use ($startData, $endData){
                 return Reports::Devices($startData,$endData, "ga:pagePath==" . self::$href);
             });
-            $requestHandler->addType("ReadTime", function () use ($startData, $endData){
-                return Reports::ReadTimePage($startData,$endData, "ga:pagePath==" . self::$href);
-            });
             $requestHandler->addType("MediaVisitors", function () use ($startData, $endData){
                 return Reports::SocialMediaVisitors($startData,$endData, "ga:pagePath==" . self::$href);
             });

@@ -81,12 +81,19 @@ class ShortUrl extends Modal {
             }
             if (!empty($tag)){
                 $analytics = new Analytics((bool)Application::get("website", "HTTPS"));
+                if (isset($_SERVER["HTTP_REFERER"])){
+                    $sSource = $_SERVER["HTTP_REFERER"];
+                } else {
+                    $sSource = "(direct) / (none)";
+                }
                 $result = $analytics
                     ->setProtocolVersion('1')
                     ->setTrackingId(Application::get("analytics google", "Tag"))
                     ->setClientId($ClientId)
                     ->setDocumentPath("/r/{$Url->getToken()}")
                     ->setIpOverride($_SERVER["REMOTE_ADDR"])
+                    ->setUserAgentOverride($_SERVER["HTTP_USER_AGENT"])
+                    ->setDocumentReferrer($sSource)
                     ->sendPageview();
             }
         } catch (Exception $e){
@@ -188,7 +195,7 @@ class ShortUrl extends Modal {
                     $form->addError("Opslaan mislukt");
                 } else {
                     Logger::Create(Logger::UPDATE, self::class, $shortUrl->getToken());
-                    Flasher::addFlash("Profiel opgeslagen");
+                    Flasher::addFlash("Url opgeslagen");
                 }
             }
         }

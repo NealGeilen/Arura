@@ -32,8 +32,8 @@ class Redirects extends AbstractController{
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Redirects/ShortenUrl.js");
         $this->render("AdminLTE/Pages/Redirects/ShortenUrl.tpl", [
             "title" =>"Url verkleinen",
-            "Urls" => ShortUrl::getAllUrls(),
-            "createForm" => ShortUrl::getShortUrlForm()
+            "createForm" => ShortUrl::getShortUrlForm(),
+            "Urls" => ShortUrl::getAllUrls()
         ]);
     }
 
@@ -41,13 +41,27 @@ class Redirects extends AbstractController{
      * @Route("/redirects/shorten/([^/]+)/analytics")
      * @Right("REDIRECTS")
      */
-    public function ShortenUrl($id){
+    public function ShortenUrlAnalytics($id){
         $Url = new ShortUrl($id);
         $Url->load();
         $this->render("AdminLTE/Pages/Redirects/ShortenUrlAnalytics.tpl", [
             "title" =>"Url verkleinen",
             "Url" => $Url,
             "Dashboard" => PageDashboard::getDashboard("/r/{$Url->getToken()}")
+        ]);
+    }
+
+    /**
+     * @Route("/redirects/shorten/([^/]+)/edit")
+     * @Right("REDIRECTS")
+     */
+    public function ShortenUrlEdit($id){
+        $Url = new ShortUrl($id);
+        $Url->load();
+        $this->render("AdminLTE/Pages/Redirects/ShortenUrlEdit.tpl", [
+            "title" =>"Url verkleinen",
+            "Url" => $Url,
+            "form" => ShortUrl::getShortUrlForm($Url)
         ]);
     }
 
