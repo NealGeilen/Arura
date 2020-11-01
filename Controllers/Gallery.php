@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 use Arura\AbstractController;
+use Arura\Analytics\PageDashboard;
 use Arura\Analytics\Reports;
 use Arura\Client\Request;
 use Arura\Client\RequestHandler;
@@ -100,6 +101,19 @@ class Gallery extends AbstractController {
             "Gallery" => $gallery,
             "editForm" => \Arura\Gallery\Gallery::getForm($gallery),
             "deleteForm" => $gallery->getDeleteForm()
+        ]);
+    }
+
+    /**
+     * @Route("/gallery/([^/]+)/analytics")
+     * @Right("GALLERY_MANGER")
+     */
+    public function Analytics($id){
+        $gallery = new \Arura\Gallery\Gallery($id);
+        $this->render("AdminLTE/Pages/Gallery/Analytics.tpl", [
+            "title" =>"Analytics: {$gallery->getName()}",
+            "Gallery" => $gallery,
+            "Dashboard" => PageDashboard::getDashboard("/album/{$gallery->getId()}")
         ]);
     }
 

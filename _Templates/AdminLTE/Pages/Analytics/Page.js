@@ -67,9 +67,13 @@ let Analytics = {
                 aData = [];
                 $.each(Analytics.Dates, function (i, Date){
                     var strDate = Date.getDate().pad(2) + "-" +(Date.getMonth()+1).pad(2) +"-"+ Date.getFullYear();
-                    var index = data.rows.dimensions.indexOf(strDate);
-                    if (index >= 0){
-                        aData[i] = data.rows.metrics[index];
+                    if (typeof data.rows != "undefined"){
+                        index = data.rows.dimensions.indexOf(strDate);
+                        if (index >= 0){
+                            aData[i] = data.rows.metrics[index];
+                        } else {
+                            aData[i] = 0;
+                        }
                     } else {
                         aData[i] = 0;
                     }
@@ -148,8 +152,8 @@ let Analytics = {
             object : null,
             table: null,
             set: function (data) {
-                $(".devices-chart").parents(".card").find(".overlay").remove();
                 if(typeof data.rows !== "undefined"){
+                    $(".devices-chart").parents(".card").find(".overlay").remove();
                     this.object = new Chart($(".devices-chart")[0], {
                         type: 'pie',
                         data: {
@@ -170,6 +174,8 @@ let Analytics = {
                             }
                         }
                     });
+                } else {
+                    $(".devices-chart").parents(".card").remove();
                 }
             },
             destroy: function () {
@@ -182,8 +188,8 @@ let Analytics = {
             object : null,
             tbale: null,
             set: function (data) {
-                $(".media-chart").parents(".card").find(".overlay").remove();
                 if(typeof data.rows !== "undefined"){
+                    $(".media-chart").parents(".card").find(".overlay").remove();
                     this.object = new Chart($(".media-chart")[0], {
                         type: 'bar',
                         data: {
@@ -216,6 +222,8 @@ let Analytics = {
                             }
                         }
                     });
+                } else {
+                    $(".media-chart").parents(".card").remove();
                 }
             },
             destroy: function () {

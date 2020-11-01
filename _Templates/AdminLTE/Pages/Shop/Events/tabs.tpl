@@ -50,13 +50,16 @@
 {*        <li class="nav-item">*}
 {*            <a class="nav-link{if $tabsType=== "form"} active{/if}"  href="?t=form" role="tab">Registartie formulier <span class="badge badge-beta">Beta</span></a>*}
 {*        </li>*}
+        <li class="nav-item">
+            <a class="nav-link{if $tabsType=== "analytics"} active{/if}" href="?t=analytics" role="tab">Analytics</a>
+        </li>
     {/if}
     {if $aPermissions.SHOP_EVENTS_REGISTRATION}
         <li class="nav-item">
             <a class="nav-link{if $tabsType=== "tickets"} active{/if}" href="?t=registrations" role="tab">Aanmeldingen</a>
         </li>
     {/if}
-    {if $aPermissions.SHOP_EVENTS_VALIDATION && $Event->hasEventTickets() && !$Event->isCanceld()}
+    {if $aPermissions.SHOP_EVENTS_VALIDATION && $Event->hasEventTickets() && !$Event->isCanceled()}
         <li class="nav-item">
             <a class="nav-link{if $tabsType=== "validate"} active{/if}" href="?t=validation">Valideren</a>
         </li>

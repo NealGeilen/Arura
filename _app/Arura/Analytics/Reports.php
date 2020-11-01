@@ -160,10 +160,12 @@ class Reports{
         $Report->setDataRange($startDate, $endDate);
         $aData = $Report->getReport();
 
-        foreach ($aData["rows"]["dimensions"] as $i => $data){
-            $data = substr_replace($data, "-", 4, 0);
-            $data = substr_replace($data, "-", 7, 0);
-            $aData["rows"]["dimensions"][$i] = (date("d-m-Y",strtotime($data)));
+        if (isset($aData["rows"])){
+            foreach ($aData["rows"]["dimensions"] as $i => $data){
+                $data = substr_replace($data, "-", 4, 0);
+                $data = substr_replace($data, "-", 7, 0);
+                $aData["rows"]["dimensions"][$i] = (date("d-m-Y",strtotime($data)));
+            }
         }
 
         return $aData;

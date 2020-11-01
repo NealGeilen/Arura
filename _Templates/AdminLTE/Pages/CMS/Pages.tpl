@@ -46,6 +46,9 @@
                                 <a class="btn btn-secondary" href="/dashboard/content/pagina/{$aCMSPage->getId()}/instellingen" >
                                     <i class="fas fa-cog"></i>
                                 </a>
+                                <a href="/dashboard/content/pagina/{$aCMSPage->getId()}/analytics" class="btn btn-secondary">
+                                    <i class="fas fa-chart-line"></i>
+                                </a>
                                 <a href="/dashboard/content/pagina/{$aCMSPage->getId()}/content" class="btn btn-primary">
                                     <i class="fas fa-pen"></i>
                                 </a>

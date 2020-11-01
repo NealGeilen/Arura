@@ -27,6 +27,9 @@
                         <a class="btn btn-primary" href="/{$aArura.dir}/content/pagina/{$aCmsPage.Page_Id}/instellingen">
                             <i class="fas fa-cog"></i>
                         </a>
+                        <a href="/dashboard/content/pagina/{$aCmsPage.Page_Id}/analytics" class="btn btn-primary">
+                            <i class="fas fa-chart-line"></i>
+                        </a>
                         <button class="btn btn-primary" onclick="Builder.Structure.save(true)">
                             <i class="fas fa-save"></i>
                         </button>

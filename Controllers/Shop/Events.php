@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers\Shop;
 use Arura\AbstractController;
+use Arura\Analytics\PageDashboard;
 use Arura\Analytics\Reports;
 use Arura\Client\Request;
 use Arura\Client\RequestHandler;
@@ -75,6 +76,15 @@ class Events extends AbstractController {
                 Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Validation.js");
                 $this->render("AdminLTE/Pages/Shop/Events/Validation.tpl", [
                     "title" =>"Ticket controleren van {$oEvent->getName()}"
+                ]);
+            });
+        }
+        if (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)){
+            $this->addTab("analytics", function () use ($oEvent){
+                $this->render("AdminLTE/Pages/Shop/Events/Analytics.tpl", [
+                    "title" =>"Analytics: {$oEvent->getName()}",
+                    "Event" => $oEvent,
+                    "Dashboard" => PageDashboard::getDashboard("/event/".$oEvent->getSlug())
                 ]);
             });
         }

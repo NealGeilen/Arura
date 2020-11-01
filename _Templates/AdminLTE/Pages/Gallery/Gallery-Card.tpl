@@ -27,6 +27,9 @@
                         <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}">
                             <i class="fas fa-images"></i>
                         </a>
+                        <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}/analytics">
+                            <i class="fas fa-chart-line"></i>
+                        </a>
                         <a class="btn btn-secondary" href="/dashboard/gallery/{$Gallery->getId()}/settings">
                             <i class="fas fa-cogs"></i>
                         </a>

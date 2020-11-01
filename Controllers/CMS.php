@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 use Arura\AbstractController;
+use Arura\Analytics\PageDashboard;
 use Arura\Client\Request;
 use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
@@ -128,6 +129,19 @@ class CMS extends AbstractController {
             "title" =>"Pagina instellingen",
             "form" => (string) $form,
             "aCmsPage" => $p->__toArray(),
+            "CmsPage" => $p
+        ]);
+    }
+
+    /**
+     * @Route("/content/pagina/([^/]+)/analytics")
+     * @Right("CMS_PAGES")
+     */
+    public function Analytics($id){
+        $p = new \Arura\Pages\CMS\Page($id);
+        $this->render("AdminLTE/Pages/CMS/Analytics.tpl", [
+            "title" =>"Pagina instellingen",
+            "Dashboard" => PageDashboard::getDashboard($p->getUrl()),
             "CmsPage" => $p
         ]);
     }
