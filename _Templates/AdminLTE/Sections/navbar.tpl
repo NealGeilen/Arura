@@ -23,6 +23,7 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {$aUser.User_Username} <i class="fas fa-user"></i></a>
             <div class="dropdown-menu dropdown-menu-right">
                 <a class="dropdown-item" href="/{$aArura.dir}/profile">Profiel</a>
+                <a class="dropdown-item" href="/{$aArura.dir}/activities">Activiteiten <span class="badge badge-info">Nieuw!</span></a>
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="/{$aArura.dir}/logout" >Uitloggen</a>
             </div>

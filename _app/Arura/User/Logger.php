@@ -95,6 +95,12 @@ class Logger{
                     "Name" => "Album"
                 ];
                 break;
+            case "Arura\Pages\CMS\ShortUrl":
+                return [
+                    "Icon" => "fas fa-text-width",
+                    "Name" => "Url verkleind"
+                ];
+                break;
             case "Arura\Gallery\Image":
                 return [
                     "Icon" => "fas fa-image",

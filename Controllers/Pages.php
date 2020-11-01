@@ -16,6 +16,7 @@ use Arura\SecureAdmin\SecureAdmin;
 use Arura\Sessions;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
+use Arura\User\Logger;
 use Arura\User\Password;
 use Arura\User\Recovery;
 use Arura\User\User;
@@ -79,6 +80,16 @@ class Pages extends AbstractController {
             "allRoles" => Roles::ROLES,
             "form" => User::getProfileForm(User::activeUser()),
             "PasswordForm" => User::getPasswordForm(User::activeUser())
+        ]);
+    }
+
+    /**
+     * @Route("/activities")
+     */
+    public function Activities(){
+        $this->render("AdminLTE/Pages/Pages/Activities.tpl", [
+            "title" => "Activiteiten",
+            "Logs" => Logger::getLogsUser(User::activeUser()),
         ]);
     }
     /**
