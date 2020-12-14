@@ -14,6 +14,7 @@ class Errors extends AbstractController {
                 $this->redirect("/dashboard/login");
                 break;
         }
+        http_response_code($exception->getCode());
         $this->render("Errors/index.tpl",[
             "title" => "error",
             "exception" => $exception,

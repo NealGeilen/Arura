@@ -45,7 +45,6 @@ class Handler{
                 $_GET['PluginData']['Addon']
             );
         } catch (Exception $e){
-            var_dump($e);
         }
     }
 

@@ -63,6 +63,12 @@ class Router{
                                 "Icon" => "fas fa-file",
                                 "Function" => "CMS@Pages"
                             ],
+                            "/content/addons" => [
+                                "Right" => Restrict::Validation(Rights::CMS_MENU),
+                                "Title" => "Addons",
+                                "Icon" => "fas fa-th",
+                                "Function" => "CMS@Addons"
+                            ],
                             "/content/menu" => [
                                 "Right" => Restrict::Validation(Rights::CMS_MENU),
                                 "Title" => "Menu",

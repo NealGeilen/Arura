@@ -9,6 +9,7 @@ use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Flasher;
 use Arura\Form;
+use Arura\Pages\CMS\Addon;
 use Arura\Pages\CMS\ContentBlock;
 use Arura\Pages\CMS\Group;
 use Arura\Pages\CMS\Sitemap;
@@ -144,6 +145,78 @@ class CMS extends AbstractController {
             "Dashboard" => PageDashboard::getDashboard($p->getUrl()),
             "CmsPage" => $p
         ]);
+    }
+
+    /**
+     * @Route("/content/addons")
+     * @Right("CMS_PAGES")
+     */
+    public function Addons(){
+        $this->render("AdminLTE/Pages/CMS/Addons/index.tpl",
+            [
+                "Addons" => Addon::getAllAddons(false),
+                "title" => "Content blocks"
+            ]);
+    }
+
+    /**
+     * @Route("/content/addons/create")
+     * @Right("CMS_PAGES")
+     */
+    public function AddonCreate(){
+        $this->render("AdminLTE/Pages/CMS/Addons/create.tpl",
+            [
+                "Form" => Addon::getForm(),
+                "title" => "Nieuwe addon"
+            ]);
+    }
+
+    /**
+     * @Route("/content/addon/([^/]+)/settings")
+     * @Right("CMS_PAGES")
+     */
+    public function AddonSettings($id){
+        $aAddon = Addon::getAddon($id);
+        $this->render("AdminLTE/Pages/CMS/Addons/settings.tpl",
+            [
+                "Addon" => $aAddon,
+                "Form" => Addon::getForm($aAddon),
+                "title" => "{$aAddon["Addon_Name"]} instellingen"
+            ]);
+    }
+
+    /**
+     * @Route("/content/addon/([^/]+)/layout")
+     * @Right("CMS_PAGES")
+     */
+    public function AddonLayout($id){
+        $aAddon = Addon::getAddon($id);
+        /**
+         * Add js source code editors
+         */
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/lib/codemirror.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/php/php.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/xml/xml.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/css/css.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/htmlmixed/htmlmixed.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/javascript/javascript.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/clike/clike.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/smarty/smarty.js");
+
+        /**
+         * Add styling source code editors
+         */
+        Router::addSourceScriptCss(__ARURA__ROOT__ . "assets/vendor/codemirror/lib/codemirror.css");
+        Router::addSourceScriptCss(__ARURA__ROOT__ . "assets/vendor/codemirror/theme/monokai.css");
+        /**
+         * Custom page assets
+         */
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Addons/layout.js");
+        $this->render("AdminLTE/Pages/CMS/Addons/layout.tpl",
+            [
+                "Addon" => $aAddon,
+                "title" => "{$aAddon["Addon_Name"]} indeling"
+            ]);
     }
 
 }

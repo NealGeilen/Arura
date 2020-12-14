@@ -191,7 +191,7 @@ class Page extends Modal implements PageEnum{
                     if (is_file(__DEFAULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php")){
                         include __DEFAULT_PAGES__ . self::DEFAULT_PAGES[$sSlug] . DIRECTORY_SEPARATOR . self::DEFAULT_PAGES[$sSlug] . ".php";
                     } else {
-                        throw new NotFound("Deafult page noy found");
+                        throw new NotFound("default page not found");
                     }
                 } else {
                     $function($sSlug);
@@ -221,6 +221,7 @@ class Page extends Modal implements PageEnum{
         $oPage->setDescription("Deze pagina bestaat niet");
         $oPage->setPageContend(__WEB_TEMPLATES__ . "Errors/404.php");
         $oPage->showPage();
+        http_response_code(404);
         exit;
     }
 

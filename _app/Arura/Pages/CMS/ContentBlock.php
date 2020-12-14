@@ -5,6 +5,7 @@ namespace Arura\Pages\CMS;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Modal;
+use Symfony\Component\VarDumper\Cloner\Data;
 
 class ContentBlock extends Modal{
 
