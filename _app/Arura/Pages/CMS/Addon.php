@@ -56,9 +56,11 @@ class Addon {
     const TemplateFile = "index.tpl";
 
 
-    const DataFileTemplate = ["Assets"=>[], "Fields"=>[]];
+    const DataFileTemplate = ["Assets"=>[]];
     const AssetType_CDN = "cdn";
     const AssetType_LOCAL = "local";
+    const FileType_JS = "js";
+    const FileType_CSS = "css";
 
     /**
      * Addon constructor.
@@ -114,28 +116,35 @@ class Addon {
      * @return array
      * @throws Error
      */
-    public static function getAllAddons(bool $NeedsActive = true){
+    public static function getAllAddons(bool $NeedsActive = true, bool $inObjects = false){
         $db = new Database();
         $aAddons = $db->fetchAll('SELECT * FROM tblCmsAddons'.($NeedsActive ? ' WHERE Addon_Active = 1' : null));
         $aList = [];
-        foreach ($aAddons as $ikey =>$aAddon){
-            $aList[(int)$aAddon['Addon_Id']] = $aAddon;
-            $aList[(int)$aAddon['Addon_Id']]['AddonSettings'] = $db->fetchAll('SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Addon_Id = ? ORDER BY AddonSetting_Position ASC',
-                [
-                    (int)$aAddon['Addon_Id']
-                ]);
+
+        if ($inObjects){
+
+            //TODO cast to objects
+
+        } else {
+            foreach ($aAddons as $ikey =>$aAddon){
+                $aList[(int)$aAddon['Addon_Id']] = $aAddon;
+                $aList[(int)$aAddon['Addon_Id']]['AddonSettings'] = $db->fetchAll('SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Addon_Id = ? ORDER BY AddonSetting_Position ASC',
+                    [
+                        (int)$aAddon['Addon_Id']
+                    ]);
+            }
         }
         return$aList;
     }
 
     /**
      * @param array $aAddon
-     * @return int
+     * @return Addon
      * @throws Error
      */
     public static function create(array $aAddon){
         $db = new Database();
-        return $db->createRecord("tblCmsAddons", [
+        $id =  $db->createRecord("tblCmsAddons", [
             "Addon_Name" => (string)$aAddon["Addon_Name"],
             "Addon_Type" => (string)$aAddon["Addon_Type"],
             "Addon_FileName" => "",
@@ -143,6 +152,7 @@ class Addon {
             "Addon_Multipel_Values" => (int)$aAddon["Addon_Multipel_Values"],
             "Addon_Custom" => 0
         ]);
+        return new self($id);
     }
 
     /**
@@ -176,8 +186,7 @@ class Addon {
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSelect("Addon_Type", "Typen")
             ->setItems([
-                "Widget",
-                "Plugin"
+                "Widget" =>"Widget"
             ])
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addCheckbox("Addon_Active", "Actief");
@@ -194,9 +203,12 @@ class Addon {
 
         if ($form->isSubmitted()){
             if (is_null($aAddon)){
-                self::create($form->getValues("array"));
-                Logger::Create(Logger::CREATE, Addon::class,  $form->getValues("array")["Addon_Name"]);
-                Flasher::addFlash("Addon aangemaakt");
+                $Addon = self::create($form->getValues("array"));
+                Logger::Create(Logger::CREATE, Addon::class,  $Addon->getName());
+                Flasher::addFlash("Addon {$Addon->getName()} aangemaakt");
+                $Addon->createDir();
+                $Addon->writePhpFile("<?php");
+                $Addon->writeTemplateFile("");
                 redirect("/dashboard/content/addons");
             } else {
 
@@ -331,11 +343,11 @@ class Addon {
      */
     public function getDir():string
     {
-        if (is_dir(self::__ADDON_DIR__ . $this->getId())){
-            return self::__ADDON_DIR__ . $this->getId() . DIRECTORY_SEPARATOR;
+        if (is_dir(self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR .  $this->getId())){
+            return self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR .  $this->getId() . DIRECTORY_SEPARATOR;
         }
-        if (is_dir(self::__ADDON_DIR__ . ucfirst($this->getName()))){
-            return self::__ADDON_DIR__ . ucfirst($this->getName()) . DIRECTORY_SEPARATOR;
+        if (is_dir(self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR. ucfirst($this->getName()))){
+            return self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR. ucfirst($this->getName()) .  DIRECTORY_SEPARATOR;
         }
         throw new NotFound("Addon dir not found for: {$this->getId()}");
     }
@@ -374,17 +386,14 @@ class Addon {
      */
     public function writeDataFile(array $data):bool
     {
-        if ($this->hasDataFile()){
-            return (bool)file_put_contents($this->getDir() . self::AddonDataFile, json_encode($data, JSON_PRETTY_PRINT));
-        }
-        return false;
+        return (bool)file_put_contents($this->getDir() . self::AddonDataFile, json_encode($data));
     }
 
     /**
      * @return bool|array
      * @throws NotFound
      */
-    public function readDataFile():bool|array
+    public function readDataFile()
     {
         if ($this->hasDataFile()){
             return json_decode(file_get_contents($this->getDir() . self::AddonDataFile), true);
@@ -399,22 +408,19 @@ class Addon {
      */
     public function writePhpFile(string $content):bool
     {
-        if ($this->hasPhpFile()){
-            return (bool)file_put_contents($this->getDir() .self::PhpFile, $content);
-        }
-        return false;
+        return (bool)file_put_contents($this->getDir() .self::PhpFile, $content);
     }
 
     /**
      * @return bool|string
      * @throws NotFound
      */
-    public function readPhpFile():bool|string
+    public function readPhpFile()
     {
         if ($this->hasPhpFile()){
             return file_get_contents($this->getDir() . self::PhpFile);
         }
-        return false;
+//        return false;
     }
 
     /**
@@ -424,17 +430,14 @@ class Addon {
      */
     public function writeTemplateFile(string $content):bool
     {
-        if ($this->hasTemplateFile()){
-            return (bool)file_put_contents($this->getDir() .self::TemplateFile, $content);
-        }
-        return false;
+        return (bool)file_put_contents($this->getDir() .self::TemplateFile, $content);
     }
 
     /**
      * @return bool|string
      * @throws NotFound
      */
-    public function readTemplateFile():bool|string
+    public function readTemplateFile()
     {
         if ($this->hasTemplateFile()){
             return file_get_contents($this->getDir() . self::TemplateFile);
@@ -448,7 +451,7 @@ class Addon {
      */
     public function createDir():bool
     {
-        if ((bool)mkdir(self::__ADDON_DIR__ . $this->getId())){
+        if ((bool)mkdir(self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR.$this->getId())){
            return  $this->writeDataFile(self::DataFileTemplate);
         }
         return false;
@@ -461,14 +464,48 @@ class Addon {
      * @return bool
      * @throws NotFound
      */
-    public function addAsset(string $type, string $name,string $src):bool
+    public function addAsset(string $type, string $fileType,string $src):bool
     {
         if ($this->hasDataFile()){
             $Data = $this->readDataFile();
-            $Data["Assets"][] = ["type"=> $type, "name" => $name, "src" => $src];
+            if ($type === self::AssetType_LOCAL){
+                if (is_file($this->getDir() . $src. "." . $fileType)){
+                    return false;
+                }
+                file_put_contents($this->getDir() . $src. "." . $fileType, "");
+            }
+            $Data["Assets"][] = ["type"=> $type, "fileType" => $fileType, "src" => $src];
             return $this->writeDataFile($Data);
         }
         return false;
+    }
+
+
+    public function addAssetsForm(){
+        $form = new Form("AddAsset", Form::OneColumnRender);
+        $form->addText("src", "Naam of url")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSelect("type", "Soort")
+            ->setItems([
+                self::AssetType_LOCAL => "Lokaal",
+                self::AssetType_CDN => "CDN"
+            ])
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSelect("file", "Bestands soort")
+            ->setItems([
+                self::FileType_JS => "Javascript",
+                self::FileType_CSS => "Css"
+            ])
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSuccess()){
+            $response = $form->getValues("array");
+            if ($this->addAsset($response["type"], $response["file"], $response["src"])){
+                Flasher::addFlash("Asset toegevoegd");
+            }
+
+        }
+        return $form;
     }
 
     /**
@@ -482,14 +519,60 @@ class Addon {
             $Data = $this->readDataFile();
             if (isset($Data["Assets"][$index])){
                 $Asset = $Data["Assets"][$index];
-                if ($Asset["type"] === self::AssetType_LOCAL){
-                    unlink($this->getDir() . $Asset["src"]);
-                }
                 unset($Data["Assets"][$index]);
+                if ($Asset["type"] === self::AssetType_LOCAL){
+                    unlink($this->getDir() . $Asset["src"]. "." . $Asset["fileType"]);
+                }
                 return $this->writeDataFile($Data);
             }
         }
         return false;
+    }
+
+    public function RemoveAssetForm(int $index):Form
+    {
+        $form = new Form("Remove-Asset-{$index}", Form::OneColumnRender);
+        $form->addHidden("index", $index);
+        $form->addSubmit("submit", "Verwijderen");
+        if ($form->isSuccess()){
+            if ($this->removeAsset($form->getValues()->index)){
+                Flasher::addFlash("Asset verwijderd");
+            }
+        }
+        return $form;
+    }
+
+
+    public function EditAssetForm(int $index){
+        $form = new Form("Assets-Editor-$index", Form::OneColumnRender);
+        $Asset = $this->getAsset($index);
+        $form->addHidden("index", $index);
+        $form->addSelect("type", "Soort")
+            ->setItems([
+                self::AssetType_LOCAL => "Lokaal",
+                self::AssetType_CDN => "CDN"
+            ])
+            ->setDefaultValue($Asset["type"])
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSelect("file", "Bestands soort")
+            ->setItems([
+                self::FileType_JS => "Javascript",
+                self::FileType_CSS => "Css"
+            ])
+            ->setDefaultValue($Asset["fileType"]);
+        if ($Asset["type"] === self::AssetType_LOCAL){
+            $form->addTextArea("Editor", "")
+                ->setHtmlAttribute("class", "{$Asset["fileType"]}-editor")
+                ->setDefaultValue($this->getContentsAsset($index));
+        }
+
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSuccess()){
+            var_dump($form->getValues());
+//            $this->writeTemplateFile($form->getValues()->Editor);
+//            Flasher::addFlash("Template opgeslagen");
+        }
+        return $form;
     }
 
     /**
@@ -497,7 +580,7 @@ class Addon {
      * @return bool|string
      * @throws NotFound
      */
-    public function getContentsAsset(int $index):bool|string
+    public function getContentsAsset(int $index)
     {
         if ($this->hasDataFile()){
             $Data = $this->readDataFile();
@@ -505,10 +588,10 @@ class Addon {
                 $Asset = $Data["Assets"][$index];
                 switch ($Asset["type"]){
                     case self::AssetType_LOCAL:
-                        return file_get_contents($this->getDir() . $Asset["src"]);
+                        return file_get_contents($this->getDir() . $Asset["src"] . "." . $Asset["fileType"]);
                         break;
                     case self::AssetType_CDN:
-                        return false;
+                        return file_get_contents($Asset["src"]);
                         break;
                 }
             }
@@ -527,24 +610,54 @@ class Addon {
         return false;
     }
 
+    public function getAsset(int $index){
+        $Assets = $this->getAssets();
+        if (isset($Assets[$index])){
+            return $Assets[$index];
+        }
+        return false;
+    }
+
     /**
      * @param string $tag
      * @param string $type
      * @param int $position
-     * @return bool
+     * @return int
      * @throws NotFound
      */
     public function addField(string $tag, string $type,int $position):bool
     {
-        if ($this->hasDataFile()){
-            $Data = $this->readDataFile();
-            if (isset($Data["Fields"][$tag])){
-                return false;
+        $id = $this->db->createRecord("tblCmsAddonSettings",[
+            "AddonSetting_Addon_Id" => $this->getId(),
+            "AddonSetting_Type" => $type,
+            "AddonSetting_Position" => $position,
+            "AddonSetting_Tag" => $tag
+        ]);
+        return $id;
+    }
+
+    public function addFieldForm(){
+        $form = new Form("AddForm", Form::OneColumnRender);
+        $form->addText("tag", "Tag")
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSelect("type", "Soort")
+            ->setItems([
+                "TextArea" => "Tekst styling",
+                "Picture" => "Afbeelding",
+                "Icon" => "Icoon",
+                "Number" => "Nummer",
+                "Text" => "Tekst",
+                "Iframe" => "Iframe"
+            ])
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSuccess()){
+            $response = $form->getValues("array");
+            if ($this->addField($response["tag"], $response["type"], count($this->getFields()))){
+                Flasher::addFlash("Veld toegevoegd");
             }
-            $Data["Fields"][$tag] = ["type"=> $type, "tag" => $tag, "position" => $position];
-            return $this->writeDataFile($Data);
         }
-        return false;
+        return $form;
     }
 
     /**
@@ -554,28 +667,99 @@ class Addon {
      */
     public function removeField(string $tag):bool
     {
-        if ($this->hasDataFile()){
-            $Data = $this->readDataFile();
-            if (isset($Data["Fields"][$tag])){
-                unset($Data["Fields"][$tag]);
-                return $this->writeDataFile($Data);
-            }
-        }
-        return false;
+        $this->db->query("DELETE FROM tblCmsAddonSettings WHERE AddonSetting_Tag = :Tag AND AddonSetting_Addon_Id = :Addon_Id",[
+            "Tag" => $tag,
+            "Addon_Id" => $this->getId()
+        ]);
+        return $this->db->isQuerySuccessful();
     }
 
     /**
-     * @return false|mixed
+     * @param string $tag
+     * @return array
      * @throws NotFound
      */
-    public function getFields(){
-        if ($this->hasDataFile()){
-            return $this->readDataFile()["Fields"];
+    public function getField(string $tag){
+        $field = $this->db->fetchRow("SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Tag = :Tag AND AddonSetting_Addon_Id = :Addon_Id",[
+            "Tag" => $tag,
+            "Addon_Id" => $this->getId()
+        ]);
+        if (empty($field)){
+            throw new NotFound("Field/Setting not found");
         }
-        return false;
+        return  $field;
     }
 
-    //TODO Fields change position;
+    /**
+     * @return array
+     * @throws Error
+     */
+    public function getFields(){
+        return $this->db->fetchAll("SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Addon_Id = :Addon_Id ORDER BY AddonSetting_Position",[
+            "Addon_Id" => $this->getId()
+        ]);
+    }
+
+
+    public function saveOrder(string $tag, int $position){
+        $Field = $this->getField($tag);
+        if ($position <= $Field["AddonSetting_Position"]){
+            //add
+            $aFields = $this->db->fetchAll("SELECT AddonSetting_Id, AddonSetting_Position FROM tblCmsAddonSettings WHERE tblCmsAddonSettings.AddonSetting_Position >= :Position AND AddonSetting_Id != :Setting_Id", ["Position" => $position, "Setting_Id" => $this->getId()]);
+            foreach ($aFields as $aField){
+                $this->db->updateRecord("tblCmsAddonSettings",[
+                    "AddonSetting_Id" => $aField["AddonSetting_Id"],
+                    "AddonSetting_Position" => ($aField["AddonSetting_Position"] + 1)
+                ], "AddonSetting_Id");
+            }
+        } else {
+            //subtract
+            $aFields = $this->db->fetchAll("SELECT AddonSetting_Id, AddonSetting_Position FROM tblCmsAddonSettings WHERE tblCmsAddonSettings.AddonSetting_Position <= :Position AND AddonSetting_Id != :Setting_Id", ["Position" => $position, "Setting_Id" => $this->getId()]);
+            foreach ($aFields as $aField){
+                $this->db->updateRecord("tblCmsAddonSettings",[
+                    "AddonSetting_Id" => $aField["AddonSetting_Id"],
+                    "AddonSetting_Position" => ($aField["AddonSetting_Position"] - 1)
+                ], "AddonSetting_Id");
+            }
+        }
+        $this->db->query("UPDATE tblCmsAddonSettings SET AddonSetting_Position = :Position WHERE AddonSetting_Tag = :Tag AND AddonSetting_Addon_Id = :Addon_Id",
+        [
+            "Position" => $position,
+            "Tag" => $tag,
+            "Addon_Id" => $this->getId()
+        ]);
+        return $this->db->isQuerySuccessful();
+    }
+
+
+    public function getPhpForm():Form
+    {
+        $form = new Form("PHP-Editor", Form::OneColumnRender);
+        $form->addTextArea("Editor", "Php bestand bewerken")
+            ->setHtmlAttribute("class", "php-editor")
+            ->setDefaultValue($this->readPhpFile());
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSuccess()){
+            $this->writePhpFile($form->getValues()->Editor);
+            Flasher::addFlash("Php bestand opgeslagen");
+        }
+        return $form;
+    }
+
+
+    public function getTemplateForm():Form
+    {
+        $form = new Form("Template-Editor", Form::OneColumnRender);
+        $form->addTextArea("Editor", "Template bewerken")
+            ->setHtmlAttribute("class", "template-editor")
+            ->setDefaultValue($this->readTemplateFile());
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSuccess()){
+            $this->writeTemplateFile($form->getValues()->Editor);
+            Flasher::addFlash("Template opgeslagen");
+        }
+        return $form;
+    }
 
 
 

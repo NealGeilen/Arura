@@ -155,7 +155,7 @@ class CMS extends AbstractController {
         $this->render("AdminLTE/Pages/CMS/Addons/index.tpl",
             [
                 "Addons" => Addon::getAllAddons(false),
-                "title" => "Content blocks"
+                "title" => "Addons"
             ]);
     }
 
@@ -190,7 +190,7 @@ class CMS extends AbstractController {
      * @Right("CMS_PAGES")
      */
     public function AddonLayout($id){
-        $aAddon = Addon::getAddon($id);
+        $Addon = new Addon($id);
         /**
          * Add js source code editors
          */
@@ -202,6 +202,8 @@ class CMS extends AbstractController {
         Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/javascript/javascript.js");
         Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/clike/clike.js");
         Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/smarty/smarty.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/css/css.js");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/codemirror/mode/javascript/javascript.js");
 
         /**
          * Add styling source code editors
@@ -214,8 +216,10 @@ class CMS extends AbstractController {
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Addons/layout.js");
         $this->render("AdminLTE/Pages/CMS/Addons/layout.tpl",
             [
-                "Addon" => $aAddon,
-                "title" => "{$aAddon["Addon_Name"]} indeling"
+                "Addon" => $Addon,
+                "AssetAddForm" => $Addon->addAssetsForm(),
+                "FieldAddForm" => $Addon->addFieldForm(),
+                "title" => "{$Addon->getName()} indeling"
             ]);
     }
 

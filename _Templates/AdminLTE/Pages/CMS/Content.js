@@ -93,7 +93,6 @@ var Builder = {
                     return oPicker.find('i').attr('class');
                 }
             },
-
             Number: {
                 Name : "Nummer",
                 oTemplate: $('<input>').addClass('form-control'),

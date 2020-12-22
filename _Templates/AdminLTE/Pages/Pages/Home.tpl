@@ -20,7 +20,7 @@
     <div class="row">
         {if !empty($Events)}
             <div class="col-12 col-md-6">
-                <div class="card card-secondary">
+                <div class="card card-secondary bg-secondary">
                     <div class="card-header">
                         <h2 class="card-title">Evenementen</h2>
                         <div class="card-tools">
@@ -56,7 +56,7 @@
         {/if}
         {if !empty($Galleries)}
             <div class="col-12 col-md-6">
-                <div class="card card-secondary">
+                <div class="card card-secondary bg-secondary">
                     <div class="card-header">
                         <h2 class="card-title">Albums</h2>
                         <div class="card-tools">
