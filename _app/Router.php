@@ -102,6 +102,9 @@ try {
                 break;
         }
     }
+    if ((int)Application::get("arura", "Debug")){
+        dd($e);
+    }
     \Arura\Pages\Page::pageNotFound();
 }
 
