@@ -9,10 +9,13 @@ class Sessions{
      *
      */
     public static function Start(){
+        var_dump(session_name());
         if (session_status() === PHP_SESSION_NONE){
-            ini_set('session.use_strict_mode', 1);
-            session_id();
             session_start();
+            if (ini_get("session.use_strict_mode") != 1){
+                ini_set('session.use_strict_mode', 1);
+            }
+            session_id();
         }
     }
 
