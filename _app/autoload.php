@@ -16,13 +16,6 @@ if (!defined("__ROOT__")){
 
 date_default_timezone_set("Europe/Amsterdam");
 
-
-if (is_file(__ROOT__ . "/_config.php")){
-    require_once __ROOT__ . "/_config.php";
-} else {
-    throw new Error("Config file not defined");
-}
-
 if (!defined("DEV_MODE")){
     define("DEV_MODE", false);
 }
