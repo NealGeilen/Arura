@@ -102,6 +102,7 @@ try {
                 break;
         }
     }
+    dd($e);
     \Arura\Pages\Page::pageNotFound();
 }
 

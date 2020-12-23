@@ -13,11 +13,9 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#assets-tabe" role="tab">Assets</a>
         </li>
-        {if $Addon->hasPhpFile()}
             <li class="nav-item" id="php-tab">
                 <a class="nav-link" data-toggle="tab" href="#php-tabe" role="tab">Php editor</a>
             </li>
-        {/if}
         {if $Addon->hasTemplateFile()}
             <li class="nav-item" id="html-tab">
                 <a class="nav-link" data-toggle="tab" href="#html-tabe" role="tab">Html editor</a>
@@ -120,15 +118,18 @@
                 </div>
             </div>
         </div>
-        {if $Addon->hasPhpFile()}
             <div class="tab-pane fade" id="php-tabe" role="tabpanel" aria-labelledby="home-tab">
                 <div class="card bg-secondary">
                     <div class="card-body">
+                        {if !$Addon->hasPhpFile()}
+                            <div class="alert alert-info">
+                                Nog geen php bestand beschikbaar, Sla op om een te maken
+                            </div>
+                        {/if}
                         {$Addon->getPhpForm()}
                     </div>
                 </div>
             </div>
-        {/if}
         {if $Addon->hasTemplateFile()}
             <div class="tab-pane fade" id="html-tabe" role="tabpanel" aria-labelledby="home-tab">
                 <div class="card bg-secondary">

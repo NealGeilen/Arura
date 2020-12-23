@@ -2,7 +2,7 @@
 
 {block breadcrum}
     <li class="breadcrumb-item"><a href="/dashboard/content/addons">Addons</a></li>
-    <li class="breadcrumb-item active">{$Addon.Addon_Name} Instellingen</li>
+    <li class="breadcrumb-item active">{$Addon->getName()} Instellingen</li>
 {/block}
 
 {block content}
@@ -12,6 +12,7 @@
         </header>
         <div class="card-body" style="display: block;">
             {$Form}
+            {$Addon->DeleteForm()}
         </div>
     </div>
 {/block}

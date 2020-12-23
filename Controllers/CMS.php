@@ -16,7 +16,9 @@ use Arura\Pages\CMS\Sitemap;
 use Arura\Pages\Page;
 use Arura\Permissions\Right;
 use Arura\Router;
+use Arura\SecureAdmin\SecureAdmin;
 use Arura\User\Logger;
+use Arura\User\User;
 
 class CMS extends AbstractController {
 
@@ -152,10 +154,20 @@ class CMS extends AbstractController {
      * @Right("CMS_PAGES")
      */
     public function Addons(){
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+            foreach ($_FILES as $file){
+                if ($file["type"] === "application/x-zip-compressed"){
+                    if (!Addon::Import($file["tmp_name"])){
+                        http_response_code(400);
+                    }
+                }
+            }
+        });
         $this->render("AdminLTE/Pages/CMS/Addons/index.tpl",
             [
                 "Addons" => Addon::getAllAddons(false),
-                "title" => "Addons"
+                "title" => "Addons",
+//                "ImportForm" => Addon::ImportForm()
             ]);
     }
 
@@ -176,12 +188,12 @@ class CMS extends AbstractController {
      * @Right("CMS_PAGES")
      */
     public function AddonSettings($id){
-        $aAddon = Addon::getAddon($id);
+        $Addon = new Addon($id);
         $this->render("AdminLTE/Pages/CMS/Addons/settings.tpl",
             [
-                "Addon" => $aAddon,
-                "Form" => Addon::getForm($aAddon),
-                "title" => "{$aAddon["Addon_Name"]} instellingen"
+                "Addon" => $Addon,
+                "Form" => Addon::getForm($Addon),
+                "title" => "{$Addon->getName()} instellingen"
             ]);
     }
 

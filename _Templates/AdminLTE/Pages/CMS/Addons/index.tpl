@@ -10,6 +10,9 @@
             <div class="card-tools">
                 <div class="btn-group">
                     <a href="/dashboard/content/addons/create" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#ImportAddon">
+                        <i class="fas fa-file-import"></i>
+                    </button>
                 </div>
 
             </div>
@@ -85,16 +88,14 @@
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="createModal" role="dialog">
+    <div class="modal fade" id="ImportAddon"  role="dialog" >
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Pagina aanmaken</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <h5 class="modal-title">Addon importeren</h5>
                 </div>
                 <div class="modal-body">
+                    <form action="/dashboard/content/addons" id="file-upload" class="dropzone"></form>
                 </div>
             </div>
         </div>
@@ -103,5 +104,8 @@
 
 {block JsPage}
     <script>
+        $(".dropzone").dropzone({
+
+        });
     </script>
 {/block}

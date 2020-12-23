@@ -84,13 +84,17 @@ class Addon {
         if (!$this->isLoaded || $force) {
             //load user properties from database
             $aAddon = self::getAddon($this->getId());
-            $this
-                ->setActive((bool)$aAddon["Addon_Active"])
-                ->setMultipleValues((bool)$aAddon["Addon_Multipel_Values"])
-                ->setName($aAddon["Addon_Name"])
-                ->setType($aAddon["Addon_Type"])
-                ->setFileName($aAddon["Addon_FileName"])
-                ->isLoaded = true;
+            if ($aAddon){
+                $this
+                    ->setActive((bool)$aAddon["Addon_Active"])
+                    ->setMultipleValues((bool)$aAddon["Addon_Multipel_Values"])
+                    ->setName($aAddon["Addon_Name"])
+                    ->setType($aAddon["Addon_Type"])
+                    ->setFileName($aAddon["Addon_FileName"])
+                    ->isLoaded = true;
+            } else {
+                throw new NotFound("Addon not found");
+            }
         }
     }
 
@@ -110,7 +114,7 @@ class Addon {
                 $iAddonId
             ]);
         if (empty($aAddon)){
-            throw new NotFound("Addon {$iAddonId} not found");
+            return false;
         }
 
         return $aAddon;
@@ -184,7 +188,7 @@ class Addon {
      * @return Form
      * @throws Error
      */
-    public static function getForm(Array $aAddon = null){
+    public static function getForm(Addon $Addon = null){
         $form = new Form("Addon-Form", Form::OneColumnRender);
         $form->addText("Addon_Name", "Naam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
@@ -199,22 +203,23 @@ class Addon {
         $form->addSubmit("submit", "Opslaan");
 
 
-        if (!is_null($aAddon)){
+        if (!is_null($Addon)){
             $form->addHidden("Addon_Id");
-            $form->setDefaults($aAddon);
+            $form->setDefaults([
+                "Addon_Name" => $Addon->getName(),
+                "Addon_Type" => $Addon->getType(),
+                "Addon_Active" => $Addon->isActive(),
+                "Addon_Multipel_Values" => $Addon->isMultipleValues()
+            ]);
         }
 
 
         if ($form->isSubmitted()){
-            if (is_null($aAddon)){
+            if (is_null($Addon)){
                 $Addon = self::create($form->getValues("array"));
                 Logger::Create(Logger::CREATE, Addon::class,  $Addon->getName());
                 Flasher::addFlash("Addon {$Addon->getName()} aangemaakt");
                 $Addon->createDir();
-                $Addon->writePhpFile('<?php
-                \Arura\Pages\CMS\Handler::sandbox(function (Smarty $smarty) use ($content, $ContentBlock){
-                
-                });');
                 $Addon->writeTemplateFile("");
                 redirect("/dashboard/content/addons");
             } else {
@@ -352,9 +357,6 @@ class Addon {
     {
         if (is_dir(self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR .  $this->getId())){
             return self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR .  $this->getId() . DIRECTORY_SEPARATOR;
-        }
-        if (is_dir(self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR. ucfirst($this->getName()))){
-            return self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR. ucfirst($this->getName()) .  DIRECTORY_SEPARATOR;
         }
         throw new NotFound("Addon dir not found for: {$this->getId()}");
     }
@@ -800,10 +802,20 @@ class Addon {
 
     public function getPhpForm():Form
     {
+        if ($this->hasPhpFile()){
+            $contents = $this->readPhpFile();
+        } else {
+            $contents = '<?php
+                \Arura\Pages\CMS\Handler::sandbox(function (Smarty $smarty) use ($content, $ContentBlock){
+                
+                });';
+        }
+
+
         $form = new Form("PHP-Editor", Form::OneColumnRender);
         $form->addTextArea("Editor", "Php bestand bewerken")
             ->setHtmlAttribute("class", "php-editor")
-            ->setDefaultValue($this->readPhpFile());
+            ->setDefaultValue($contents);
         $form->addSubmit("submit", "Opslaan");
         if ($form->isSuccess()){
             $this->writePhpFile($form->getValues()->Editor);
@@ -872,17 +884,10 @@ class Addon {
 
         $zip = new ZipArchive();
         if ($zip->open($zipTempDir,  ZipArchive::CREATE)) {
-            foreach ($this->getAssets() as $asset){
-                $zip->addFile($this->getDir() . $asset["src"] . "." .$asset["fileType"], $asset["src"] . "." .$asset["fileType"]);
-            }
-            if ($this->hasPhpFile()){
-                $zip->addFile($this->getDir() . self::PhpFile, self::PhpFile);
-            }
-            if ($this->hasTemplateFile()){
-                $zip->addFile($this->getDir() . self::TemplateFile, self::TemplateFile);
-            }
-            if ($this->hasDataFile()){
-                $zip->addFile($this->getDir() . self::AddonDataFile, self::AddonDataFile);
+            foreach (scandir($this->getDir()) as $file){
+                if (strlen($file) > 3 && is_file($this->getDir() . $file)){
+                    $zip->addFile($this->getDir() . $file, $file);
+                }
             }
             $zip->close();
             header("Content-disposition: attachment; filename={$this->getName()}-Addon.zip");
@@ -890,6 +895,52 @@ class Addon {
             readfile($zipTempDir);
         }
     }
+
+    public static function Import(string $file){
+        $Zip = new ZipArchive();
+        $Zip->open($file);
+        $contents = $Zip->getFromName(self::AddonDataFile);
+        if ($contents){
+            $Data = json_array_decode($contents);
+
+            $Addon = self::create([
+                "Addon_Name" => $Data["Name"],
+                "Addon_Type" => $Data["Type"],
+                "Addon_Active" => (int)$Data["Active"],
+                "Addon_Multipel_Values" => (int)$Data["Multiple"],
+                "Addon_Custom" => (int)$Data["isCustom"]
+            ]);
+
+            foreach ($Data["Fields"] as  $Field){
+                $Addon->addField($Field["AddonSetting_Tag"], $Field["AddonSetting_Type"],$Field["AddonSetting_Position"]);
+            }
+            $Addon->createDir();
+            $Zip->extractTo($Addon->getDir());
+            $Zip->close();
+            unlink($file);
+        }
+        return false;
+    }
+
+    public function DeleteForm(){
+        $form = new Form("Delete-Addon");
+        $form->addHidden("id", $this->getId());
+        $form->addSubmit("submit", "Verwijderen");
+
+        if ($form->isSuccess()){
+            deleteItem($this->getDir());
+            $this->db->query("DELETE FROM tblCmsAddonSettings WHERE AddonSetting_Addon_Id = :Id", ["Id" => $this->getId()]);
+            $this->db->query("DELETE FROM tblCmsContentBlocks WHERE Content_Addon_Id = :Id", ["Id" => $this->getId()]);
+            $this->db->query("DELETE FROM tblCmsAddons WHERE Addon_Id = :Id",["Id" => $this->getId()]);
+
+            Flasher::addFlash("Verwijderen gelukt");
+            redirect("/dashboard/content/addons");
+
+
+        }
+        return$form;
+    }
+
 
 
 
