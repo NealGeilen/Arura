@@ -5,8 +5,14 @@ use Arura\Sessions;
 use Arura\Settings\Application;
 
 define("__ARURA__DIR_NAME__", "dashboard");
-define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
-define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
+if (!defined("__ROOT__")){
+    define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
+    define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
+} else {
+    define('__WEB__ROOT__',         __ROOT__);
+}
+
+
 
 date_default_timezone_set("Europe/Amsterdam");
 
