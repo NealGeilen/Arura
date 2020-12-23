@@ -4,7 +4,16 @@ use Arura\Pages\Page;
 use Arura\Sessions;
 use Arura\Settings\Application;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
+
+if (isset($_SERVER["PHPRC"])){
+    if (is_file($_SERVER["PHPRC"] . "_config.php")){
+        require_once $_SERVER["PHPRC"] . "_config.php";
+    }
+} else{
+    require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
+}
+
+
 define("__ARURA__DIR_NAME__", "dashboard");
 define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
 define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
