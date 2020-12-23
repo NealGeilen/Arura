@@ -34,32 +34,39 @@
                     <button class="btn btn-secondary mb-2" data-toggle="modal" data-target="#FieldAddForm">
                         <i class="fas fa-plus"></i>
                     </button>
-                    {foreach $Addon->getFields() as $index => $Field}
-                        <div class="rounded w-100 p-2 mb-2 bg-secondary">
-                            <div class="row">
-                                <div class="col-3">
-                                    {$Field.AddonSetting_Tag}
-{*                                    {$Asset.fileType|upper}*}
+                    <div class="fields">
+                        {foreach $Addon->getFields() as $index => $Field}
+                            <div class="rounded w-100 p-2 mb-2 bg-secondary" field-id="{$Field.AddonSetting_Id}">
+                                <div class="row">
+                                    <div class="col-3">
+                                        <div class="btn btn-primary handle">
+                                            <i class="fas fa-arrows-alt"></i>
+                                        </div>
+                                        {$Field.AddonSetting_Tag}
+                                        {*                                    {$Asset.fileType|upper}*}
+                                    </div>
+                                    <div class="col-3">
+                                        {$Field.AddonSetting_Type}
+                                        {*                                    {$Asset.type|upper}*}
+                                    </div>
+                                    <div class="col-4">
+                                        {*                                    {$Asset.src}*}
+                                    </div>
+                                    <div class="col-2">
+                                        <button class="btn btn-primary edit float-right" type="button" data-toggle="collapse" data-target="#edit-bar-{$index}" aria-expanded="false">
+                                            <i class="fas fa-pen"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="col-3">
-                                    {$Field.AddonSetting_Type}
-{*                                    {$Asset.type|upper}*}
-                                </div>
-                                <div class="col-4">
-{*                                    {$Asset.src}*}
-                                </div>
-                                <div class="col-2">
-                                    <button class="btn btn-primary edit float-right" type="button" data-toggle="collapse" data-target="#edit-bar-{$index}" aria-expanded="false">
-                                        <i class="fas fa-pen"></i>
-                                    </button>
+                                <div class="collapse" id="edit-bar-{$index}">
+                                    <div class="rounded p-3 bg-white mt-2">
+                                        {$Addon->EditFieldForm($Field.AddonSetting_Id)}
+                                        {$Addon->RemoveFieldForm($Field.AddonSetting_Id)}
+                                    </div>
                                 </div>
                             </div>
-                            <div class="collapse" id="edit-bar-{$index}">
-                                <div class="rounded p-3 bg-white mt-2">
-                                </div>
-                            </div>
-                        </div>
-                    {/foreach}
+                        {/foreach}
+                    </div>
 {*                    {$Addon->getFields()|var_dump}*}
                 </div>
             </div>

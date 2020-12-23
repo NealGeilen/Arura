@@ -59,4 +59,31 @@ $(document).ready(function (){
     });
 
 
+    $(".fields").sortable({
+        axis: "y",
+        containment: ".card",
+        cursor: "move",
+        handle: ".handle",
+        placeholder: "sortable-placeholder",
+        revert: true,
+        start: function (event, ui) {
+            $(ui.placeholder).css("height", ($(ui.helper).height()-15)).css("width", $(ui.helper).width())
+        },
+        update: function (event, ui) {
+            item = $(ui.item);
+            Dashboard.Xhr({
+                data: {
+                    type: "order",
+                    Id: item.attr("field-id"),
+                    Position: item.index()
+                },
+                success: function () {
+                    Dashboard.System.PageLoad.End();
+                    Dashboard.System.Alerts.Success("Positie gewijzigd")
+                }
+            })
+        }
+    })
+
+
 })

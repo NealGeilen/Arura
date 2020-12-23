@@ -38,7 +38,7 @@ class Page extends Modal implements PageEnum{
     /**
      * @var
      */
-    public static $pageJsCssFiles;
+    public static $pageJsCssFiles = ["css"=> [], "js" => []];
 
     /**
      *
@@ -146,9 +146,9 @@ class Page extends Modal implements PageEnum{
             $C->setName("site");
             $C->setCachDirectorie("cached");
             $aFiles= $C->getMinifyedFiles();
-            return [
-                "css" =>  [$aFiles["css"]],
-                "js" => [$aFiles["js"]]
+            return             [
+                "css" =>  array_merge([$aFiles["css"]], self::$pageJsCssFiles["css"]),
+                "js" => array_merge([$aFiles["js"]], self::$pageJsCssFiles["js"])
             ];
         }
     }
@@ -162,7 +162,6 @@ class Page extends Modal implements PageEnum{
     public function showPage(){
         $this->forceHTTPS();
         $smarty = self::getSmarty();
-
         $smarty->assign('aResourceFiles', $this->loadResourceFiles());
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('sPageTitle', $this->getTitle());

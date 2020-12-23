@@ -329,10 +329,8 @@ class Page extends Pages\Page{
                                 $aContentBlock['Template'] = "<i class='".$aContentBlock['Content_Value']."'></i>";
                                 break;
                             case 'widget':
-                                $_GET['PluginData'] = ['Addon' => $aAddon,'Content' => $aContentBlock['Content_Value'], 'Smarty' => self::$smarty];
-                                self::getSmarty()->assign('aContentBlock', $aContentBlock);
-                                $aContentBlock['Template'] = include (self::PluginPathStandard . $aAddon['Addon_Name'] . '/'. $aAddon['Addon_FileName']);
-                                unset($_GET['PluginData']);
+                                $Addon = new Addon($aAddon["Addon_Id"]);
+                                $aContentBlock['Template'] = $Addon->Display($aContentBlock['Content_Value'], $aContentBlock,self::getSmarty());
                                 break;
                         }
                     }

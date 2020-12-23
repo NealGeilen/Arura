@@ -191,6 +191,13 @@ class CMS extends AbstractController {
      */
     public function AddonLayout($id){
         $Addon = new Addon($id);
+
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($Addon){
+            $requestHandler->addType("order", function ($aData) use ($Addon){
+                $Addon->saveOrder($aData["Id"], $aData["Position"]);
+            });
+        });
+
         /**
          * Add js source code editors
          */
@@ -221,6 +228,15 @@ class CMS extends AbstractController {
                 "FieldAddForm" => $Addon->addFieldForm(),
                 "title" => "{$Addon->getName()} indeling"
             ]);
+    }
+
+    /**
+     * @Route("/content/addon/([^/]+)/export")
+     * @Right("CMS_PAGES")
+     */
+    public function AddonExport($id){
+        $Addon = new Addon($id);
+        $Addon->Export();
     }
 
 }

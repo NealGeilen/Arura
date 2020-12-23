@@ -216,7 +216,9 @@ var Builder = {
                $.each(aStructure, function (iPosition, aGroup) {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
+                console.log(Addons);
                 $.each(aAddons, function(iKey,aAddon){
+                    console.log(aAddon);
                     sItem = "<div class='col-6'><label class=\"btn btn-secondary\"><input type=\"radio\" name=\"Content_Type\" value='"+ aAddon.Addon_Type+ "' content-addon-id='"+ aAddon.Addon_Id+"'>"+ aAddon.Addon_Name + "</label></div>";
                     $('[addon-types='+aAddon.Addon_Type+']').append(sItem);
                 });

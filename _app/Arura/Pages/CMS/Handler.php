@@ -15,9 +15,9 @@ class Handler{
      * @param $sFile
      * @return bool
      */
-    public function addCssFile($sFile){
-        if (!in_array($sFile, Page::$pageJsCssFiles['Css'])){
-            Page::$pageJsCssFiles['Css'][] = $sFile;
+    public static function addCssFile($sFile){
+        if (!in_array($sFile, Page::$pageJsCssFiles['css'])){
+            Page::$pageJsCssFiles['css'][] = $sFile;
             return true;
         }
         return false;
@@ -27,9 +27,9 @@ class Handler{
      * @param $sFile
      * @return bool
      */
-    public function addJsFile($sFile){
-        if (!in_array($sFile, Page::$pageJsCssFiles['Js'])){
-            Page::$pageJsCssFiles['Js'][] = $sFile;
+    public static function addJsFile($sFile){
+        if (!in_array($sFile, Page::$pageJsCssFiles['js'])){
+            Page::$pageJsCssFiles['js'][] = $sFile;
             return true;
         }
         return false;
@@ -38,12 +38,9 @@ class Handler{
     /**
      * @param callable $callback
      */
-    public function sandbox(callable $callback){
+    public static function sandbox(callable $callback){
         try{
-            $callback(
-                $_GET['PluginData']['Content'],
-                $_GET['PluginData']['Addon']
-            );
+            $callback(Page::getSmarty());
         } catch (Exception $e){
         }
     }

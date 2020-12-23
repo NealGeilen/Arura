@@ -68,9 +68,13 @@
                                 <a class="btn btn-secondary" href="/dashboard/content/addon/{$Addon.Addon_Id}/settings">
                                     <i class="fas fa-cog"></i>
                                 </a>
+                                <a  class="btn btn-secondary" href="/dashboard/content/addon/{$Addon.Addon_Id}/export" target="_blank">
+                                    <i class="fas fa-file-export"></i>
+                                </a>
                                 <a  class="btn btn-primary" href="/dashboard/content/addon/{$Addon.Addon_Id}/layout">
                                     <i class="fas fa-pen"></i>
                                 </a>
+
                             </div>
                         </td>
 

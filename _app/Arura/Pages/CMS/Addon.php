@@ -9,6 +9,10 @@ use Arura\Form;
 use Arura\Permissions\Restrict;
 use Arura\User\Logger;
 use Arura\User\User;
+use Cacher\Cacher;
+use Smarty;
+use Symfony\Component\VarDumper\VarDumper;
+use ZipArchive;
 
 /**
  * Class Addon
@@ -186,7 +190,7 @@ class Addon {
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSelect("Addon_Type", "Typen")
             ->setItems([
-                "Widget" =>"Widget"
+                "widget" =>"Widget"
             ])
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addCheckbox("Addon_Active", "Actief");
@@ -207,7 +211,10 @@ class Addon {
                 Logger::Create(Logger::CREATE, Addon::class,  $Addon->getName());
                 Flasher::addFlash("Addon {$Addon->getName()} aangemaakt");
                 $Addon->createDir();
-                $Addon->writePhpFile("<?php");
+                $Addon->writePhpFile('<?php
+                \Arura\Pages\CMS\Handler::sandbox(function (Smarty $smarty) use ($content, $ContentBlock){
+                
+                });');
                 $Addon->writeTemplateFile("");
                 redirect("/dashboard/content/addons");
             } else {
@@ -420,7 +427,7 @@ class Addon {
         if ($this->hasPhpFile()){
             return file_get_contents($this->getDir() . self::PhpFile);
         }
-//        return false;
+        return false;
     }
 
     /**
@@ -502,6 +509,7 @@ class Addon {
             $response = $form->getValues("array");
             if ($this->addAsset($response["type"], $response["file"], $response["src"])){
                 Flasher::addFlash("Asset toegevoegd");
+                redirect("/dashboard/content/addon/{$this->getId()}/layout#assets-tabe");
             }
 
         }
@@ -537,6 +545,7 @@ class Addon {
         if ($form->isSuccess()){
             if ($this->removeAsset($form->getValues()->index)){
                 Flasher::addFlash("Asset verwijderd");
+                redirect("/dashboard/content/addon/{$this->getId()}/layout#assets-tabe");
             }
         }
         return $form;
@@ -568,11 +577,23 @@ class Addon {
 
         $form->addSubmit("submit", "Opslaan");
         if ($form->isSuccess()){
-            var_dump($form->getValues());
-//            $this->writeTemplateFile($form->getValues()->Editor);
-//            Flasher::addFlash("Template opgeslagen");
+            $response = $form->getValues("array");
+            $Asset["fileType"] = $response["file"];
+            $Asset["type"] = $response["type"];
+            $this->saveAsset($index, $Asset);
+            if ($Asset["type"] === self::AssetType_LOCAL){
+                file_put_contents($this->getDir() . $Asset["src"] . "." . $Asset["fileType"], $response["Editor"]);
+            }
+            Flasher::addFlash("Asset opgeslagen");
+            redirect("/dashboard/content/addon/{$this->getId()}/layout#assets-tabe");
         }
         return $form;
+    }
+
+    public function saveAsset(int $index, array $data){
+        $File = $this->readDataFile();
+        $File["Assets"][$index] = $data;
+        return $this->writeDataFile($File);
     }
 
     /**
@@ -655,6 +676,55 @@ class Addon {
             $response = $form->getValues("array");
             if ($this->addField($response["tag"], $response["type"], count($this->getFields()))){
                 Flasher::addFlash("Veld toegevoegd");
+                redirect("/dashboard/content/addon/{$this->getId()}/layout#fields-tabe");
+            }
+        }
+        return $form;
+    }
+
+    /**
+     * @param int $id
+     * @return Form
+     * @throws NotFound
+     */
+    public function EditFieldForm(int $id){
+        $form = new Form("EditFieldForm-{$id}", Form::OneColumnRender);
+        $Field = $this->getField($id);
+        $form->addHidden("AddonSetting_Id", $id);
+        $form->addText("AddonSetting_Tag", "Tag")
+            ->setDefaultValue($Field["AddonSetting_Tag"])
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSelect("AddonSetting_Type", "Soort")
+            ->setItems([
+                "TextArea" => "Tekst styling",
+                "Picture" => "Afbeelding",
+                "Icon" => "Icoon",
+                "Number" => "Nummer",
+                "Text" => "Tekst",
+                "Iframe" => "Iframe"
+            ])
+            ->setDefaultValue($Field["AddonSetting_Type"])
+            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        $form->addSubmit("submit", "Opslaan");
+        if ($form->isSuccess()){
+            $response = $form->getValues("array");
+            if ($this->saveField($id, $response)){
+                Flasher::addFlash("Veld Opgeslagen");
+                redirect("/dashboard/content/addon/{$this->getId()}/layout#fields-tabe");
+            }
+        }
+        return $form;
+    }
+
+    public function RemoveFieldForm(int $id):Form
+    {
+        $form = new Form("Remove-Field-{$id}", Form::OneColumnRender);
+        $form->addHidden("id", $id);
+        $form->addSubmit("submit", "Verwijderen");
+        if ($form->isSuccess()){
+            if ($this->removeField($form->getValues()->id)){
+                Flasher::addFlash("Veld verwijderd");
+                redirect("/dashboard/content/addon/{$this->getId()}/layout#fields-tabe");
             }
         }
         return $form;
@@ -665,13 +735,16 @@ class Addon {
      * @return bool
      * @throws NotFound
      */
-    public function removeField(string $tag):bool
+    public function removeField(int $id):bool
     {
-        $this->db->query("DELETE FROM tblCmsAddonSettings WHERE AddonSetting_Tag = :Tag AND AddonSetting_Addon_Id = :Addon_Id",[
-            "Tag" => $tag,
-            "Addon_Id" => $this->getId()
+        $this->db->query("DELETE FROM tblCmsAddonSettings WHERE AddonSetting_Id = :Id",[
+            "Id" => $id,
         ]);
         return $this->db->isQuerySuccessful();
+    }
+
+    public function saveField(int $id,array $values){
+        return$this->db->updateRecord("tblCmsAddonSettings",array_merge(["AddonSetting_Id" => $id], $values), "AddonSetting_Id");
     }
 
     /**
@@ -679,10 +752,9 @@ class Addon {
      * @return array
      * @throws NotFound
      */
-    public function getField(string $tag){
-        $field = $this->db->fetchRow("SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Tag = :Tag AND AddonSetting_Addon_Id = :Addon_Id",[
-            "Tag" => $tag,
-            "Addon_Id" => $this->getId()
+    public function getField(int $id){
+        $field = $this->db->fetchRow("SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Id = :Id",[
+            "Id" => $id,
         ]);
         if (empty($field)){
             throw new NotFound("Field/Setting not found");
@@ -701,8 +773,8 @@ class Addon {
     }
 
 
-    public function saveOrder(string $tag, int $position){
-        $Field = $this->getField($tag);
+    public function saveOrder(int $id, int $position){
+            $Field = $this->getField($id);
         if ($position <= $Field["AddonSetting_Position"]){
             //add
             $aFields = $this->db->fetchAll("SELECT AddonSetting_Id, AddonSetting_Position FROM tblCmsAddonSettings WHERE tblCmsAddonSettings.AddonSetting_Position >= :Position AND AddonSetting_Id != :Setting_Id", ["Position" => $position, "Setting_Id" => $this->getId()]);
@@ -722,13 +794,7 @@ class Addon {
                 ], "AddonSetting_Id");
             }
         }
-        $this->db->query("UPDATE tblCmsAddonSettings SET AddonSetting_Position = :Position WHERE AddonSetting_Tag = :Tag AND AddonSetting_Addon_Id = :Addon_Id",
-        [
-            "Position" => $position,
-            "Tag" => $tag,
-            "Addon_Id" => $this->getId()
-        ]);
-        return $this->db->isQuerySuccessful();
+        return $this->saveField($id, ["AddonSetting_Position" => $position]);
     }
 
 
@@ -742,6 +808,7 @@ class Addon {
         if ($form->isSuccess()){
             $this->writePhpFile($form->getValues()->Editor);
             Flasher::addFlash("Php bestand opgeslagen");
+            redirect("/dashboard/content/addon/{$this->getId()}/layout#php-tabe");
         }
         return $form;
     }
@@ -757,8 +824,71 @@ class Addon {
         if ($form->isSuccess()){
             $this->writeTemplateFile($form->getValues()->Editor);
             Flasher::addFlash("Template opgeslagen");
+            redirect("/dashboard/content/addon/{$this->getId()}/layout#html-tabe");
         }
         return $form;
+    }
+
+
+    public function Display($content, array $ContentBlock, Smarty $smarty){
+        $smarty->assign("Content", $content);
+        $smarty->assign("Block", $ContentBlock);
+        if ($this->hasPhpFile()){
+            require_once $this->getDir() . self::PhpFile;
+        }
+        $Assets = $this->getAssets();
+        if (count($Assets)){
+            $Cacher = new Cacher();
+            foreach ($Assets as $index => $Asset){
+                $Cacher->add($Asset["fileType"], $this->getContentsAsset($index));
+            }
+            $Cacher->setName($this->getId());
+            $Cacher->setCachDirectorie("cached/addon");
+            $aFiles= $Cacher->getMinifyedFiles();
+
+            if (isset($aFiles["css"])){
+                Handler::addCssFile($aFiles["css"]);
+            }
+
+            if (isset($aFiles["js"])){
+                Handler::addJsFile($aFiles["js"]);
+            }
+        }
+        return $smarty->fetch($this->getDir() . self::TemplateFile);
+    }
+
+
+    public function Export(){
+        $zipTempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $this->getId() . "-Addon.zip";
+        $aFields = $this->getFields();
+        $File = $this->readDataFile();
+        $File["Fields"] = $aFields;
+        $File["Name"] = $this->getName();
+        $File["Multiple"] = $this->isMultipleValues();
+        $File["Active"] = $this->isActive();
+        $File["Type"] = $this->getType();
+        $File["isCustom"] = false;
+        $this->writeDataFile($File);
+
+        $zip = new ZipArchive();
+        if ($zip->open($zipTempDir,  ZipArchive::CREATE)) {
+            foreach ($this->getAssets() as $asset){
+                $zip->addFile($this->getDir() . $asset["src"] . "." .$asset["fileType"], $asset["src"] . "." .$asset["fileType"]);
+            }
+            if ($this->hasPhpFile()){
+                $zip->addFile($this->getDir() . self::PhpFile, self::PhpFile);
+            }
+            if ($this->hasTemplateFile()){
+                $zip->addFile($this->getDir() . self::TemplateFile, self::TemplateFile);
+            }
+            if ($this->hasDataFile()){
+                $zip->addFile($this->getDir() . self::AddonDataFile, self::AddonDataFile);
+            }
+            $zip->close();
+            header("Content-disposition: attachment; filename={$this->getName()}-Addon.zip");
+            header('Content-type: application/zip');
+            readfile($zipTempDir);
+        }
     }
 
 
