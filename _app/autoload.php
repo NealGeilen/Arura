@@ -4,24 +4,14 @@ use Arura\Pages\Page;
 use Arura\Sessions;
 use Arura\Settings\Application;
 
+require_once $_SERVER['DOCUMENT_ROOT'] . "/_config.php";
 define("__ARURA__DIR_NAME__", "dashboard");
-if (!defined("__ROOT__")){
-    define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
-    define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
-} else {
-    define('__WEB__ROOT__',         __ROOT__);
-}
+define('__ROOT__',              $_SERVER['DOCUMENT_ROOT']);
+define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
 
 
 
 date_default_timezone_set("Europe/Amsterdam");
-
-
-if (is_file(__ROOT__ . "/_config.php")){
-    require_once __ROOT__ . "/_config.php";
-} else {
-    throw new Error("Config file not defined");
-}
 
 if (!defined("DEV_MODE")){
     define("DEV_MODE", false);
@@ -59,7 +49,6 @@ define('__RESOURCES__',         __WEB__ROOT__   . DIRECTORY_SEPARATOR . "_app" .
 define("__STANDARD_MODULES__" , __ARURA_TEMPLATES__ . "Modules" . DIRECTORY_SEPARATOR);
 define("__CUSTOM_MODULES__", __WEB_TEMPLATES__ . "Custom" . DIRECTORY_SEPARATOR. "Modules". DIRECTORY_SEPARATOR);
 Page::$smarty = new Smarty();
-//session_set_cookie_params(0, "/", "");
 Sessions::Start();
 if ((int)Application::get("arura", "Debug")){
     ini_set('display_errors', 1);
