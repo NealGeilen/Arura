@@ -119,7 +119,6 @@ class Addon {
                     ->setMultipleValues((bool)$aAddon["Addon_Multipel_Values"])
                     ->setName($aAddon["Addon_Name"])
                     ->setType($aAddon["Addon_Type"])
-                    ->setFileName($aAddon["Addon_FileName"])
                     ->isLoaded = true;
             } else {
                 throw new NotFound("Addon not found");
@@ -291,25 +290,6 @@ class Addon {
     public function setName(string $name): Addon
     {
         $this->name = $name;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getFileName(): string
-    {
-        $this->load();
-        return $this->fileName;
-    }
-
-    /**
-     * @param string $fileName
-     * @return Addon
-     */
-    public function setFileName(string $fileName): Addon
-    {
-        $this->fileName = $fileName;
         return $this;
     }
 
