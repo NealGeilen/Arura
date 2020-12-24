@@ -7,11 +7,13 @@
 
 {block content}
     <ul class="nav nav-tabs" role="tablist">
+        {if $Addon->isWidget()}
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#fields-tabe" role="tab">Velden</a>
+            </li>
+        {/if}
         <li class="nav-item">
-            <a class="nav-link active" data-toggle="tab" href="#fields-tabe" role="tab">Velden</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" data-toggle="tab" href="#assets-tabe" role="tab">Assets</a>
+            <a class="nav-link {if !$Addon->isWidget()}active{/if}" data-toggle="tab" href="#assets-tabe" role="tab">Assets</a>
         </li>
             <li class="nav-item" id="php-tab">
                 <a class="nav-link" data-toggle="tab" href="#php-tabe" role="tab">Php editor</a>
@@ -26,6 +28,7 @@
 
 
     <div class="tab-content">
+        {if $Addon->isWidget()}
         <div class="tab-pane fade show active" id="fields-tabe" role="tabpanel" aria-labelledby="home-tab">
             <div class="card bg-primary">
                 <div class="card-body">
@@ -69,7 +72,8 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="assets-tabe" role="tabpanel" aria-labelledby="home-tab">
+        {/if}
+        <div class="tab-pane fade{if !$Addon->isWidget()} show active{/if}" id="assets-tabe" role="tabpanel" aria-labelledby="home-tab">
             <div class="card bg-secondary">
                 <div class="card-body">
                     <button class="btn btn-primary mb-2" data-toggle="modal" data-target="#AssetAddForm">

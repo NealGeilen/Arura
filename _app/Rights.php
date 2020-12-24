@@ -6,6 +6,7 @@ class Rights{
 
     const CMS_PAGES = 10;
     const CMS_MENU = 11;
+    const CMS_ADDONS = 12;
 
     const SHOP_PAYMENTS = 20;
     const SHOP_PRODUCTS_MANAGEMENT = 21;

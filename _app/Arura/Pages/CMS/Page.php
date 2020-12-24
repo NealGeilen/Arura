@@ -301,38 +301,31 @@ class Page extends Pages\Page{
                     if (empty($aContentBlock['Content_Value'])){
                         continue;
                     }
-                    $aAddon = Addon::getAddon((int)$aContentBlock['Content_Addon_Id']);
-                    if (!empty($aAddon['Addon_Custom'])){
-                        $_GET['PluginData'] = ['Addon' => $aAddon,'Content' => $aContentBlock['Content_Value'], 'Smarty' => self::$smarty];
-                        self::getSmarty()->assign('aContentBlock', $aContentBlock);
-                        $aContentBlock['Template'] = include (self::PluginPathCustom . $aAddon['Addon_Name'] . '/'. $aAddon['Addon_FileName']);
-                        unset($_GET['PluginData']);
-                    } else {
-                        switch ($aContentBlock['Content_Type']){
-                            case 'TextArea':
-                                $aContentBlock['Template'] = $aContentBlock['Content_Value'];
-                                break;
-                            case 'Picture':
-                                $aContentBlock['Template'] = "<img src='/files/" . $aContentBlock['Content_Value']."'>";
-                                break;
-                            case "Filler":
-                                $aContentBlock['Template'] = "<div class='filler'></div>";
-                                break;
-                            case "Iframe":
-                                $aContentBlock['Template'] = "<iframe style='height: 100%; width: 100%' src='".$aContentBlock['Content_Value']."'></iframe>";
-                                break;
-                            case "Tekst":
-                            case "Number":
-                                $aContentBlock['Template'] = "<p>".$aContentBlock['Content_Value']."</p>";
-                                break;
-                            case "Icon":
-                                $aContentBlock['Template'] = "<i class='".$aContentBlock['Content_Value']."'></i>";
-                                break;
-                            case 'widget':
-                                $Addon = new Addon($aAddon["Addon_Id"]);
-                                $aContentBlock['Template'] = $Addon->Display($aContentBlock['Content_Value'], $aContentBlock,self::getSmarty());
-                                break;
-                        }
+                    switch ($aContentBlock['Content_Type']){
+                        case 'TextArea':
+                            $aContentBlock['Template'] = $aContentBlock['Content_Value'];
+                            break;
+                        case 'Picture':
+                            $aContentBlock['Template'] = "<img src='/files/" . $aContentBlock['Content_Value']."'>";
+                            break;
+                        case "Filler":
+                            $aContentBlock['Template'] = "<div class='filler'></div>";
+                            break;
+                        case "Iframe":
+                            $aContentBlock['Template'] = "<iframe style='height: 100%; width: 100%' src='".$aContentBlock['Content_Value']."'></iframe>";
+                            break;
+                        case "Tekst":
+                        case "Number":
+                            $aContentBlock['Template'] = "<p>".$aContentBlock['Content_Value']."</p>";
+                            break;
+                        case "Icon":
+                            $aContentBlock['Template'] = "<i class='".$aContentBlock['Content_Value']."'></i>";
+                            break;
+                        case "custom":
+                        case 'widget':
+                            $Addon = new Addon($aContentBlock["Content_Addon_Id"]);
+                            $aContentBlock['Template'] = $Addon->Display($aContentBlock['Content_Value'], $aContentBlock,self::getSmarty());
+                            break;
                     }
                     if (!empty($aContentBlock["Template"])){
                         $aBlocks[(int)$aContentBlock['Content_Position']] = $aContentBlock;

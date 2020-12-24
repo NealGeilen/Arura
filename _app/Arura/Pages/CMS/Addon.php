@@ -10,7 +10,9 @@ use Arura\Permissions\Restrict;
 use Arura\User\Logger;
 use Arura\User\User;
 use Cacher\Cacher;
+use PDOStatement;
 use Smarty;
+use SmartyException;
 use Symfony\Component\VarDumper\VarDumper;
 use ZipArchive;
 
@@ -54,16 +56,43 @@ class Addon {
      */
     private $db;
 
+    /**
+     *
+     */
     const __ADDON_DIR__ = __ROOT__ . DIRECTORY_SEPARATOR . "_Addons" . DIRECTORY_SEPARATOR;
+    /**
+     *
+     */
     const AddonDataFile = "AddonDataFile.json";
+    /**
+     *
+     */
     const PhpFile = "index.php";
+    /**
+     *
+     */
     const TemplateFile = "index.tpl";
 
 
+    /**
+     *
+     */
     const DataFileTemplate = ["Assets"=>[]];
+    /**
+     *
+     */
     const AssetType_CDN = "cdn";
+    /**
+     *
+     */
     const AssetType_LOCAL = "local";
+    /**
+     *
+     */
     const FileType_JS = "js";
+    /**
+     *
+     */
     const FileType_CSS = "css";
 
     /**
@@ -158,7 +187,6 @@ class Addon {
             "Addon_FileName" => "",
             "Addon_Active" => (int)$aAddon["Addon_Active"],
             "Addon_Multipel_Values" => (int)$aAddon["Addon_Multipel_Values"],
-            "Addon_Custom" => 0
         ]);
         return new self($id);
     }
@@ -171,14 +199,7 @@ class Addon {
      */
     public static function save(int $id, array $aAddon){
         $db = new Database();
-        $db->updateRecord("tblCmsAddons", [
-            "Addon_Name" => (string)$aAddon["Addon_Name"],
-            "Addon_Type" => (string)$aAddon["Addon_Type"],
-            "Addon_FileName" => "",
-            "Addon_Active" => (int)$aAddon["Addon_Active"],
-            "Addon_Multipel_Values" => (int)$aAddon["Addon_Multipel_Values"],
-            "Addon_Custom" => 0
-        ]);
+        $db->updateRecord("tblCmsAddons",$aAddon);
         return  $db->isQuerySuccessful();
     }
 
@@ -192,11 +213,14 @@ class Addon {
         $form = new Form("Addon-Form", Form::OneColumnRender);
         $form->addText("Addon_Name", "Naam")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
-        $form->addSelect("Addon_Type", "Typen")
-            ->setItems([
-                "widget" =>"Widget"
-            ])
-            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        if (is_null($Addon)){
+            $form->addSelect("Addon_Type", "Typen")
+                ->setItems([
+                    "widget" =>"Widget",
+                    "custom" => "Custom"
+                ])
+                ->addRule(Form::REQUIRED, "Dit veld is verplicht");
+        }
         $form->addCheckbox("Addon_Active", "Actief");
         $form->addCheckbox("Addon_Multipel_Values", "Meerderen velden");
 
@@ -204,10 +228,9 @@ class Addon {
 
 
         if (!is_null($Addon)){
-            $form->addHidden("Addon_Id");
+            $form->addHidden("Addon_Id",$Addon->getId());
             $form->setDefaults([
                 "Addon_Name" => $Addon->getName(),
-                "Addon_Type" => $Addon->getType(),
                 "Addon_Active" => $Addon->isActive(),
                 "Addon_Multipel_Values" => $Addon->isMultipleValues()
             ]);
@@ -454,6 +477,20 @@ class Addon {
         return false;
     }
 
+
+    /**
+     * @return bool
+     */
+    public function isCustom(){
+        return $this->getType() === "custom";
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWidget(){
+        return $this->getType() === "widget";
+    }
     /**
      * @return bool
      * @throws NotFound
@@ -490,6 +527,10 @@ class Addon {
     }
 
 
+    /**
+     * @return Form
+     * @throws NotFound
+     */
     public function addAssetsForm(){
         $form = new Form("AddAsset", Form::OneColumnRender);
         $form->addText("src", "Naam of url")
@@ -539,6 +580,11 @@ class Addon {
         return false;
     }
 
+    /**
+     * @param int $index
+     * @return Form
+     * @throws NotFound
+     */
     public function RemoveAssetForm(int $index):Form
     {
         $form = new Form("Remove-Asset-{$index}", Form::OneColumnRender);
@@ -554,6 +600,11 @@ class Addon {
     }
 
 
+    /**
+     * @param int $index
+     * @return Form
+     * @throws NotFound
+     */
     public function EditAssetForm(int $index){
         $form = new Form("Assets-Editor-$index", Form::OneColumnRender);
         $Asset = $this->getAsset($index);
@@ -592,6 +643,12 @@ class Addon {
         return $form;
     }
 
+    /**
+     * @param int $index
+     * @param array $data
+     * @return bool
+     * @throws NotFound
+     */
     public function saveAsset(int $index, array $data){
         $File = $this->readDataFile();
         $File["Assets"][$index] = $data;
@@ -633,6 +690,11 @@ class Addon {
         return false;
     }
 
+    /**
+     * @param int $index
+     * @return false|mixed
+     * @throws NotFound
+     */
     public function getAsset(int $index){
         $Assets = $this->getAssets();
         if (isset($Assets[$index])){
@@ -659,6 +721,11 @@ class Addon {
         return $id;
     }
 
+    /**
+     * @return Form
+     * @throws Error
+     * @throws NotFound
+     */
     public function addFieldForm(){
         $form = new Form("AddForm", Form::OneColumnRender);
         $form->addText("tag", "Tag")
@@ -718,6 +785,11 @@ class Addon {
         return $form;
     }
 
+    /**
+     * @param int $id
+     * @return Form
+     * @throws NotFound
+     */
     public function RemoveFieldForm(int $id):Form
     {
         $form = new Form("Remove-Field-{$id}", Form::OneColumnRender);
@@ -745,7 +817,13 @@ class Addon {
         return $this->db->isQuerySuccessful();
     }
 
-    public function saveField(int $id,array $values){
+    /**
+     * @param int $id
+     * @param array $values
+     * @return PDOStatement
+     * @throws Error
+     */
+    public function saveField(int $id, array $values){
         return$this->db->updateRecord("tblCmsAddonSettings",array_merge(["AddonSetting_Id" => $id], $values), "AddonSetting_Id");
     }
 
@@ -775,6 +853,13 @@ class Addon {
     }
 
 
+    /**
+     * @param int $id
+     * @param int $position
+     * @return PDOStatement
+     * @throws Error
+     * @throws NotFound
+     */
     public function saveOrder(int $id, int $position){
             $Field = $this->getField($id);
         if ($position <= $Field["AddonSetting_Position"]){
@@ -800,15 +885,18 @@ class Addon {
     }
 
 
+    /**
+     * @return Form
+     * @throws NotFound
+     */
     public function getPhpForm():Form
     {
         if ($this->hasPhpFile()){
             $contents = $this->readPhpFile();
         } else {
             $contents = '<?php
-                \Arura\Pages\CMS\Handler::sandbox(function (Smarty $smarty) use ($content, $ContentBlock){
-                
-                });';
+\Arura\Pages\CMS\Handler::sandbox(function (Smarty $smarty) use ($content, $ContentBlock){
+});';
         }
 
 
@@ -826,6 +914,10 @@ class Addon {
     }
 
 
+    /**
+     * @return Form
+     * @throws NotFound
+     */
     public function getTemplateForm():Form
     {
         $form = new Form("Template-Editor", Form::OneColumnRender);
@@ -842,6 +934,14 @@ class Addon {
     }
 
 
+    /**
+     * @param $content
+     * @param array $ContentBlock
+     * @param Smarty $smarty
+     * @return false|string
+     * @throws NotFound
+     * @throws SmartyException
+     */
     public function Display($content, array $ContentBlock, Smarty $smarty){
         $smarty->assign("Content", $content);
         $smarty->assign("Block", $ContentBlock);
@@ -870,6 +970,10 @@ class Addon {
     }
 
 
+    /**
+     * @throws Error
+     * @throws NotFound
+     */
     public function Export(){
         $zipTempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $this->getId() . "-Addon.zip";
         $aFields = $this->getFields();
@@ -879,7 +983,6 @@ class Addon {
         $File["Multiple"] = $this->isMultipleValues();
         $File["Active"] = $this->isActive();
         $File["Type"] = $this->getType();
-        $File["isCustom"] = false;
         $this->writeDataFile($File);
 
         $zip = new ZipArchive();
@@ -896,6 +999,12 @@ class Addon {
         }
     }
 
+    /**
+     * @param string $file
+     * @return false
+     * @throws Error
+     * @throws NotFound
+     */
     public static function Import(string $file){
         $Zip = new ZipArchive();
         $Zip->open($file);
@@ -908,7 +1017,6 @@ class Addon {
                 "Addon_Type" => $Data["Type"],
                 "Addon_Active" => (int)$Data["Active"],
                 "Addon_Multipel_Values" => (int)$Data["Multiple"],
-                "Addon_Custom" => (int)$Data["isCustom"]
             ]);
 
             foreach ($Data["Fields"] as  $Field){
@@ -922,6 +1030,11 @@ class Addon {
         return false;
     }
 
+    /**
+     * @return Form
+     * @throws Error
+     * @throws NotFound
+     */
     public function DeleteForm(){
         $form = new Form("Delete-Addon");
         $form->addHidden("id", $this->getId());

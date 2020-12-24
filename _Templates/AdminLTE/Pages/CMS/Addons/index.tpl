@@ -25,7 +25,7 @@
                     <th>Naam</th>
                     <th>Actief</th>
                     <th>Meerderen velden</th>
-                    <th>Custom</th>
+                    <th>Soort</th>
                     <th>Acties</th>
                 </tr>
                 </thead>
@@ -56,15 +56,7 @@
                             {/if}
                         </td>
                         <td>
-                            {if $Addon.Addon_Custom}
-                                <div class="badge badge-success">
-                                    <i class="fas fa-check"></i>
-                                </div>
-                            {else}
-                                <div class="badge badge-danger">
-                                    <i class="fas fa-times"></i>
-                                </div>
-                            {/if}
+                            {$Addon.Addon_Type|ucfirst}
                         </td>
                         <td>
                             <div class="btn-group">

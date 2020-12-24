@@ -11,6 +11,7 @@ class Roles{
     const GALLERY = 8;
     const ANALYTICS = 9;
     const REDIRECTS = 10;
+    const ADDONS = 11;
 
     const ROLES = [
         self::CONTENT_MANGER => [
@@ -56,6 +57,10 @@ class Roles{
         self::REDIRECTS => [
             "Name" => "Url omleidingen",
             "Rights" => [Rights::REDIRECTS]
+        ],
+        self::ADDONS => [
+            "Name" => "Addons",
+            "Rights" => [Rights::CMS_ADDONS]
         ]
     ];
 }

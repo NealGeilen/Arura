@@ -596,7 +596,7 @@ var Sidebar = {
                     $(".type").text(aData.Content_Type);
                 }
 
-                if (parseInt(aData.Content_Addon_Id) === 0 || (parseInt(Addons[aData.Content_Addon_Id].Addon_Custom) === 1 || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0)){
+                if (parseInt(aData.Content_Addon_Id) === 0 || (parseInt(Addons[aData.Content_Addon_Id].Addon_Type) === "custom" || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0)){
                     $('.block-settings-items-control').hide();
                 } else {
                     $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');

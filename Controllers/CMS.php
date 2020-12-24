@@ -151,7 +151,7 @@ class CMS extends AbstractController {
 
     /**
      * @Route("/content/addons")
-     * @Right("CMS_PAGES")
+     * @Right("CMS_ADDONS")
      */
     public function Addons(){
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
@@ -173,7 +173,7 @@ class CMS extends AbstractController {
 
     /**
      * @Route("/content/addons/create")
-     * @Right("CMS_PAGES")
+     * @Right("CMS_ADDONS")
      */
     public function AddonCreate(){
         $this->render("AdminLTE/Pages/CMS/Addons/create.tpl",
@@ -185,7 +185,7 @@ class CMS extends AbstractController {
 
     /**
      * @Route("/content/addon/([^/]+)/settings")
-     * @Right("CMS_PAGES")
+     * @Right("CMS_ADDONS")
      */
     public function AddonSettings($id){
         $Addon = new Addon($id);
@@ -199,7 +199,7 @@ class CMS extends AbstractController {
 
     /**
      * @Route("/content/addon/([^/]+)/layout")
-     * @Right("CMS_PAGES")
+     * @Right("CMS_ADDONS")
      */
     public function AddonLayout($id){
         $Addon = new Addon($id);
@@ -244,7 +244,7 @@ class CMS extends AbstractController {
 
     /**
      * @Route("/content/addon/([^/]+)/export")
-     * @Right("CMS_PAGES")
+     * @Right("CMS_ADDONS")
      */
     public function AddonExport($id){
         $Addon = new Addon($id);
