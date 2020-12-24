@@ -184,7 +184,6 @@ class Addon {
         $id =  $db->createRecord("tblCmsAddons", [
             "Addon_Name" => (string)$aAddon["Addon_Name"],
             "Addon_Type" => (string)$aAddon["Addon_Type"],
-            "Addon_FileName" => "",
             "Addon_Active" => (int)$aAddon["Addon_Active"],
             "Addon_Multipel_Values" => (int)$aAddon["Addon_Multipel_Values"],
         ]);
