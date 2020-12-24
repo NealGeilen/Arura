@@ -64,7 +64,7 @@ class Router{
                                 "Function" => "CMS@Pages"
                             ],
                             "/content/addons" => [
-                                "Right" => Restrict::Validation(Rights::CMS_MENU),
+                                "Right" => Restrict::Validation(Rights::CMS_ADDONS),
                                 "Title" => "Addons",
                                 "Icon" => "fas fa-th",
                                 "Function" => "CMS@Addons"

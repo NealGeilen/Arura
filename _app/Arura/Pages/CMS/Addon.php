@@ -1045,7 +1045,7 @@ class Addon {
             $this->db->query("DELETE FROM tblCmsAddonSettings WHERE AddonSetting_Addon_Id = :Id", ["Id" => $this->getId()]);
             $this->db->query("DELETE FROM tblCmsContentBlocks WHERE Content_Addon_Id = :Id", ["Id" => $this->getId()]);
             $this->db->query("DELETE FROM tblCmsAddons WHERE Addon_Id = :Id",["Id" => $this->getId()]);
-
+            Logger::Create(Logger::DELETE, Addon::class,  $this->getName());
             Flasher::addFlash("Verwijderen gelukt");
             redirect("/dashboard/content/addons");
 
