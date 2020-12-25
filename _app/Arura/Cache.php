@@ -169,7 +169,7 @@ class Cache{
             if (isset(self::$Types[$File["extension"]])){
 //                session_cache_limiter('');
                 $seconds_to_cache = 84600 *7;
-                header("Cache-Control: public, max-age={$seconds_to_cache}, immutable");
+                header("Cache-Control: public, max-age={$seconds_to_cache}");
                 header("Content-Type: ".self::$Types[$File["extension"]]);
                 header("Content-Length: " . filesize(__ROOT__ . $rout));
                 header("Content-Disposition: attachment; filename={$File["basename"]}");
