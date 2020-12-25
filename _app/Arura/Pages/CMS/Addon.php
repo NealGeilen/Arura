@@ -6,14 +6,12 @@ use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
-use Arura\Permissions\Restrict;
 use Arura\User\Logger;
 use Arura\User\User;
 use Cacher\Cacher;
 use PDOStatement;
 use Smarty;
 use SmartyException;
-use Symfony\Component\VarDumper\VarDumper;
 use ZipArchive;
 
 /**

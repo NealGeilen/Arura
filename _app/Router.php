@@ -1,6 +1,7 @@
 <?php
 
 use App\Controllers\Errors;
+use Arura\Cache;
 use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\Unauthorized;
 use Arura\Gallery\Gallery;
@@ -84,6 +85,7 @@ try {
             break;
         default:
             $oRouter->mount("/", function () use ($oRouter){
+                Cache::Display($oRouter->getCurrentUri());
                 Page::Display($oRouter->getCurrentUri());
             });
             break;

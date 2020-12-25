@@ -146,10 +146,12 @@ class Page extends Modal implements PageEnum{
             $C->setName("site");
             $C->setCachDirectorie("cached");
             $aFiles= $C->getMinifyedFiles();
-            return             [
+            $Assets = [
                 "css" =>  array_merge([$aFiles["css"]], self::$pageJsCssFiles["css"]),
                 "js" => array_merge([$aFiles["js"]], self::$pageJsCssFiles["js"])
             ];
+
+            return  $Assets;
         }
     }
 

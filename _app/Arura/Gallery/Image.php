@@ -143,13 +143,17 @@ class Image extends Page {
                         readfile($file);
                         break;
                     case "thump":
-                        $image = file_get_contents($Image->getThumbnail());//                        dd($image);
+                        $image = file_get_contents($Image->getThumbnail());//
+                        header("Content-Disposition: attachment; filename={$Image->getName()}.{$Image->getType()}");
+                        header('Content-Transfer-Encoding: base64');
                         header("Content-Type: image/{$Image->getType()};");
                         header("Content-Length: " . filesize($Image->getThumbnail()));
                         echo $image;
                         break;
                     default:
                         $image = file_get_contents($Image->getImage());
+                        header("Content-Disposition: attachment; filename={$Image->getName()}.{$Image->getType()}");
+                        header('Content-Transfer-Encoding: base64');
                         header("Content-Type: image/{$Image->getType()};");
                         header("Content-Length: " . filesize($Image->getImage()));
                         echo $image;
