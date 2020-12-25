@@ -167,15 +167,21 @@ class Cache{
         if (is_file(__ROOT__ . $rout)){
             $File = pathinfo(__ROOT__ . $rout);
             if (isset(self::$Types[$File["extension"]])){
+                header("Last-Modified: ".gmdate("D, d M Y H:i:s")." GMT");
+                header("Pragma: public");
+                header("Expires: 0");
+                header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
+                header("Cache-Control: public");
+
 //                session_cache_limiter('');
                 $seconds_to_cache = 84600 *7;
-                header("Cache-Control: public, max-age={$seconds_to_cache}");
+                header("Cache-Control: max-age={$seconds_to_cache}");
                 header("Content-Type: ".self::$Types[$File["extension"]]);
                 header("Content-Length: " . filesize(__ROOT__ . $rout));
                 header("Content-Disposition: attachment; filename={$File["basename"]}");
 //                header('Content-Transfer-Encoding: base64');
                 header("Expires: " . gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT");
-                header("Pragma: cache");
+//                header("Pragma: cache");
                 http_response_code(200);
                 readfile(__ROOT__ . $rout);
                 exit;
