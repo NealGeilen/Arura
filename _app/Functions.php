@@ -1,6 +1,7 @@
 <?php
 
 use Arura\Database;
+use Arura\Settings\Application;
 
 /**
  * @return bool
@@ -163,6 +164,14 @@ function postToUrl($url = "", $postParams = []){
     curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt( $ch, CURLOPT_HEADER, 0);
     curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
-
     return curl_exec( $ch );
+}
+
+
+function NotifyNeal(string $message, int $priority = 0){
+
+
+
+
+
 }
