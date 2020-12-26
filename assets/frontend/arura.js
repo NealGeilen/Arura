@@ -15,9 +15,6 @@ function serializeArray(oForm) {
     });
     return aList;
 }
-$.validator.setDefaults({
-    ignore: []
-});
 
 
 $(document).ready(function () {
