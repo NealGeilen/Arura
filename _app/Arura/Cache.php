@@ -37,7 +37,27 @@ class Cache{
         if (is_file(__ROOT__ . $rout)){
             $File = pathinfo(__ROOT__ . $rout);
             if (isset(self::$Types[$File["extension"]])){
-                $seconds_to_cache = 84600 *7;
+                $day = 84600;
+
+                $a = explode("/", self::$Types[$File["extension"]],2);
+
+                switch ($a[0]){
+                    case "image":
+                    case "font":
+                        $seconds_to_cache = $day * 365;
+                        break;
+                    case "text":
+                        $seconds_to_cache = $day * 7;
+                        break;
+                    case "application":
+                        $seconds_to_cache = $day * 14;
+                        break;
+                    default:
+                        $seconds_to_cache = $day *5;
+                        break;
+                }
+
+
                 header("Cache-Control: must-revalidate,max-age={$seconds_to_cache}");
                 header("Content-Type: ".self::$Types[$File["extension"]]);
                 header("Content-Length: " . filesize(__ROOT__ . $rout));
