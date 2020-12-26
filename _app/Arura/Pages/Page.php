@@ -169,6 +169,7 @@ class Page extends Modal implements PageEnum{
         $smarty->assign('content', $this->getPageContent());
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
+        http_response_code(200);
         exit;
     }
 

@@ -4,6 +4,9 @@ namespace Arura;
 class Cache{
 
     public static $Types = array(
+        "woff" => "font/woff",
+        "woff2" => "font/woff2",
+        "ttf" => "font/ttf",
         'otf'   => "font/otf",
         'css'   => 'text/css',
         'svg'   => "image/svg+xml",
