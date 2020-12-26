@@ -4,8 +4,9 @@ namespace Arura;
 class Cache{
 
     public static $Types = array(
-        'otf' => "font/otf",
-        'css'     => 'text/css',
+        'otf'   => "font/otf",
+        'css'   => 'text/css',
+        'svg'   => "image/svg+xml",
     'csv'     => 'text/csv',
     'gif'     => 'image/gif',
     'htm'     => 'text/html',
@@ -28,7 +29,8 @@ class Cache{
     'xhtml'   => 'application/xhtml+xml',
     'xls'     => 'application/vnd.ms-excel',
     'xml'     => 'application/xml',
-    'zip'     => 'application/zip'
+    'zip'     => 'application/zip',
+
   );
 
     public static function Display(string $rout){
