@@ -207,7 +207,7 @@ class Page extends Modal implements PageEnum{
             $oPage::$MasterPage = "Launchpage.tpl";
             $oPage->setTitle("Home");
             $oPage->setDescription("De website wordt binnen kort gelanceerd");
-            $oPage->showPage(304);
+            $oPage->showPage();
             exit;
 
         }

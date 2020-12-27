@@ -542,6 +542,7 @@ class Router{
                     $aOptions[$option->getName()] = $option->getValue();
                 }
                 Router::getSmarty()->assign("aPage",$aOptions);
+                http_response_code(200);
             });
             $this->getRouter()->all($sHref, "{$aRoute["class"]}@{$aRoute["method"]}");
         }

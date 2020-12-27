@@ -64,6 +64,7 @@ abstract class AbstractController{
             Router::getSmarty()->assign("aWebsite" ,Application::getAll()["website"]);
             Router::getSmarty()->assign('aResourceFiles', ["page" => Router::getCachedFile($_GET["_URL"]), "arura" => Router::getCachedFile("MAIN", false)]);
             Router::getSmarty()->display(__ARURA_TEMPLATES__. $i);
+            http_response_code(200);
             exit;
         }
     }
