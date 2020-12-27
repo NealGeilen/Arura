@@ -344,9 +344,9 @@ class Page extends Pages\Page{
      * @throws Error
      * @throws SmartyException
      */
-    public function showPage(){
+    public function showPage($httpResponseCode= 200){
         $this->buildPageContent();
-        parent::showPage();
+        parent::showPage($httpResponseCode);
     }
 
     /**
@@ -362,7 +362,7 @@ class Page extends Pages\Page{
             if (self::urlExists($sUrl)){
                 $oPage = self::fromUrl($sUrl);
                 if ($oPage->getVisible() || Restrict::Validation(Rights::CMS_PAGES)){
-                    $oPage->showPage();
+                    $oPage->showPage(200);
                     exit;
                 }
             }

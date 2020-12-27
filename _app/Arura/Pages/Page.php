@@ -157,7 +157,7 @@ class Page extends Modal implements PageEnum{
      * @throws SmartyException
      * @throws Exception
      */
-    public function showPage(){
+    public function showPage($httpResponseCode = 200){
         $this->forceHTTPS();
         $smarty = self::getSmarty();
         $smarty->assign('aResourceFiles', $this->loadResourceFiles());
@@ -169,7 +169,7 @@ class Page extends Modal implements PageEnum{
         $smarty->assign('content', $this->getPageContent());
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
-        http_response_code(200);
+        http_response_code($httpResponseCode);
         exit;
     }
 
@@ -198,7 +198,7 @@ class Page extends Modal implements PageEnum{
                 $oPage = new self();
                 $oPage->setPageContend("<section><h1 class='text-center'>Website is op het moment in onderhoud, Probeer later opnieuw!</h1></section>");
                 $oPage->setTitle("Onderhoud");
-                $oPage->showPage();
+                $oPage->showPage(503);
                 exit;
             }
         } else {
@@ -207,7 +207,7 @@ class Page extends Modal implements PageEnum{
             $oPage::$MasterPage = "Launchpage.tpl";
             $oPage->setTitle("Home");
             $oPage->setDescription("De website wordt binnen kort gelanceerd");
-            $oPage->showPage();
+            $oPage->showPage(304);
             exit;
 
         }
@@ -220,8 +220,7 @@ class Page extends Modal implements PageEnum{
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");
         $oPage->setPageContend(__WEB_TEMPLATES__ . "Errors/404.php");
-        $oPage->showPage();
-        http_response_code(404);
+        $oPage->showPage(404);
         exit;
     }
 

@@ -133,14 +133,14 @@ class Event Extends Page {
      * @throws SmartyException
      * @throws Error
      */
-    public function showPage()
+    public function showPage($httpResponseCode = 200)
     {
         $smarty = self::getSmarty();
         $smarty->assign("aEvent", $this->__ToArray());
         $smarty->assign("Event", $this);
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $this->setPageContend($smarty->fetch(self::$MasterPage));
-        parent::showPage();
+        parent::showPage($httpResponseCode);
     }
 
     /**

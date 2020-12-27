@@ -105,7 +105,7 @@ class ShortUrl extends Modal {
             $oPage = new \Arura\Pages\Page();
             $oPage->setPageContend("<section><h1 class='text-center'>Deze url is niet meer geldig</h1></section>");
             $oPage->setTitle("Onderhoud");
-            $oPage->showPage();
+            $oPage->showPage(404);
         }
         redirect($Url->getDirection());
     }

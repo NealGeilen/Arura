@@ -56,9 +56,6 @@ class Pages extends AbstractController {
     public function Home(){
         $db = new Database();
         $oSmarty= Router::getSmarty();
-//        $oSmarty->assign("iPageCount", (Restrict::Validation(Rights::CMS_PAGES) ? $db->fetchRow("SELECT COUNT(Page_Id) AS ROW_COUNT FROM tblCmsPages WHERE Page_Visible = 1")["ROW_COUNT"] : null));
-//        $oSmarty->assign("iUserCount", (Restrict::Validation(Rights::ARURA_USERS) ? $db->fetchRow("SELECT COUNT(Session_Id) AS ROW_COUNT FROM tblSessions")["ROW_COUNT"] : null));
-//        $oSmarty->assign("aSecureTables", (Restrict::Validation(Rights::SECURE_ADMINISTRATION) ? SecureAdmin::getAllTablesForUser(User::activeUser()) : null));
         $oSmarty->assign("Events", (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ? Event::getEvents(3, true) : null));
         $oSmarty->assign("Galleries", (Restrict::Validation(Rights::GALLERY_MANGER) ? \Arura\Gallery\Gallery::getAllGalleries(true, 3) : null));
         $oSmarty->assign("JSONUserActions", (Restrict::Validation(Rights::ARURA_USERS) ? json_encode($db->fetchAll("SELECT COUNT(Logger_Id) AS Amount, FROM_UNIXTIME(Logger_Time, '%d-%m-%Y') AS Date FROM tblUserLogger WHERE Logger_Time >= (UNIX_TIMESTAMP() - 7 * 84500) GROUP BY FROM_UNIXTIME(Logger_Time, '%M %d %Y') ORDER BY Logger_Time")) : null));
