@@ -65,6 +65,9 @@ abstract class AbstractController{
             Router::getSmarty()->assign('aResourceFiles', ["page" => Router::getCachedFile($_GET["_URL"]), "arura" => Router::getCachedFile("MAIN", false)]);
             Router::getSmarty()->display(__ARURA_TEMPLATES__. $i);
             http_response_code(200);
+            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
             exit;
         }
     }
