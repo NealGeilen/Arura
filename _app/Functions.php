@@ -167,10 +167,19 @@ function postToUrl($url = "", $postParams = []){
     return curl_exec( $ch );
 }
 
-
-function NotifyNeal(string $message, int $priority = 0){
-
-
+/**
+ * @param string $message
+ * @param int $priority
+ * @return bool
+ * @throws \Arura\Exceptions\Error
+ */
+function NotifyNeal(string $message, int $priority = 0):bool
+{
+    return (bool)postToUrl("https://cronjobs.nealgeilen.nl/notify/me", [
+        "title" => "Melding van: " . Application::get("website", "name"),
+        "message" => $message,
+        "priority" => $priority
+    ]);
 
 
 
