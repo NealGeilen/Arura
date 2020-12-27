@@ -180,7 +180,6 @@ class User
      */
 
     public static function isLogged(){
-        Sessions::start();
         return isset($_SESSION['User_Id']);
     }
 
