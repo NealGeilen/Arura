@@ -56,7 +56,9 @@ abstract class AbstractController{
             if (!isset($_GET["_URL"])){
                 $_GET["_URL"] = null;
             }
-
+            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
+            header("Cache-Control: post-check=0, pre-check=0", false);
+            header("Pragma: no-cache");
             Router::getSmarty()->assign("Flashes", json_encode(Flasher::getFlashes()));
             Router::getSmarty()->assign("aUser", (User::isLogged()) ? User::activeUser()->__toArray() : null);
             Router::getSmarty()->assign("aArura" ,["dir" => __ARURA__DIR_NAME__, "api" => "api", "version" => $sVersion]);
@@ -65,9 +67,7 @@ abstract class AbstractController{
             Router::getSmarty()->assign('aResourceFiles', ["page" => Router::getCachedFile($_GET["_URL"]), "arura" => Router::getCachedFile("MAIN", false)]);
             Router::getSmarty()->display(__ARURA_TEMPLATES__. $i);
             http_response_code(200);
-            header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
-            header("Cache-Control: post-check=0, pre-check=0", false);
-            header("Pragma: no-cache");
+
             exit;
         }
     }
