@@ -7,6 +7,7 @@ use Arura\Client\ResponseHandler;
 use Arura\Database;
 use Arura\Exceptions\NotAcceptable;
 use Arura\Git;
+use Arura\Pages\Page;
 use Arura\Permissions\Role;
 use Arura\Router;
 use Arura\Settings\Application;
@@ -131,12 +132,14 @@ class Arura extends AbstractController {
             if (isset($_POST["gitpull"])){
                 $repo->Reset(true);
                 $repo->pull();
+                Page::getCacher()->Minify();
                 Logger::Create(Logger::UPDATE, Git::class);
                 $repo = new Git(__WEB__ROOT__);
             }
 
             if (isset($_POST["gitreset"])){
                 $repo->Reset(true);
+                Page::getCacher()->Minify();
                 $repo = new Git(__WEB__ROOT__);
             }
             $smarty->assign("Status", $repo->getStatus());

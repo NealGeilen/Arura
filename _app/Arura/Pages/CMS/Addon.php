@@ -496,6 +496,8 @@ class Addon {
                     return false;
                 }
                 file_put_contents($this->getDir() . $src. "." . $fileType, "");
+            } else {
+                $this->getCacher()->Minify();
             }
             $Data["Assets"][] = ["type"=> $type, "fileType" => $fileType, "src" => $src];
             return $this->writeDataFile($Data);
@@ -613,6 +615,7 @@ class Addon {
             $this->saveAsset($index, $Asset);
             if ($Asset["type"] === self::AssetType_LOCAL){
                 file_put_contents($this->getDir() . $Asset["src"] . "." . $Asset["fileType"], $response["Editor"]);
+                $this->getCacher()->Minify();
             }
             Flasher::addFlash("Asset opgeslagen");
             redirect("/dashboard/content/addon/{$this->getId()}/layout#assets-tabe");
@@ -910,6 +913,21 @@ class Addon {
         return $form;
     }
 
+    public function getCacher():Cacher
+    {
+        $Cacher = new Cacher();
+        $addon = $this;
+        $Assets = $this->getAssets();
+        $Cacher->setName($this->getId())
+            ->setCachDirectory("cached/addon")
+            ->callback(function (Cacher $ch) use ($Assets, $addon){
+                foreach ($Assets as $index => $Asset){
+                    $ch->add($Asset["fileType"], $addon->getContentsAsset($index));
+                }
+            });
+        return $Cacher;
+    }
+
 
     /**
      * @param $content
@@ -927,13 +945,8 @@ class Addon {
         }
         $Assets = $this->getAssets();
         if (count($Assets)){
-            $Cacher = new Cacher();
-            foreach ($Assets as $index => $Asset){
-                $Cacher->add($Asset["fileType"], $this->getContentsAsset($index));
-            }
-            $Cacher->setName($this->getId());
-            $Cacher->setCachDirectorie("cached/addon");
-            $aFiles= $Cacher->getMinifyedFiles();
+
+            $aFiles= $this->getCacher()->getMinifyedFiles();
 
             if (isset($aFiles["css"])){
                 Handler::addCssFile($aFiles["css"]);

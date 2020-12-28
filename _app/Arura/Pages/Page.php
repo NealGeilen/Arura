@@ -107,6 +107,27 @@ class Page extends Modal implements PageEnum{
 
     }
 
+    public static function getCacher() : Cacher
+    {
+        $C = new Cacher();
+        $C->setName("site")
+            ->setCachDirectory("cached")
+            ->callback(function (Cacher $cacher){
+                foreach (json_decode(file_get_contents(Page::TemplatePath.'config.json'), true) as $cath => $files){
+                    foreach ($files as $file){
+                        $cacher->add($cath, __ROOT__ . $file);
+                    }
+                }
+                foreach (Page::DEFAULT_RESOURCE_FILES as $cath => $files){
+                    foreach ($files as $file){
+                        $cacher->add($cath, __ARURA__ROOT__ . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "frontend" .DIRECTORY_SEPARATOR. $file);
+                    }
+                }
+            });
+
+        return $C;
+    }
+
     /**
      * @return array
      * @throws Exception
@@ -126,22 +147,7 @@ class Page extends Modal implements PageEnum{
             }
             return $aFiles;
         } else {
-            $C = new Cacher();
-            foreach (json_decode(file_get_contents(self::TemplatePath.'config.json'), true) as $cath => $files){
-                foreach ($files as $file){
-                    $C->add($cath, __ROOT__ . $file);
-                }
-            }
-
-            foreach (self::DEFAULT_RESOURCE_FILES as $cath => $files){
-                foreach ($files as $file){
-                    $C->add($cath, __ARURA__ROOT__ . DIRECTORY_SEPARATOR . "assets" . DIRECTORY_SEPARATOR . "frontend" .DIRECTORY_SEPARATOR. $file);
-                }
-            }
-
-            $C->setName("site");
-            $C->setCachDirectorie("cached");
-            $aFiles= $C->getMinifyedFiles();
+            $aFiles= self::getCacher()->getMinifyedFiles();
             $Assets = [
                 "css" =>  array_merge([$aFiles["css"]], self::$pageJsCssFiles["css"]),
                 "js" => array_merge([$aFiles["js"]], self::$pageJsCssFiles["js"])
