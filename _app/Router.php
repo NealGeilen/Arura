@@ -96,13 +96,10 @@ try {
     if ($aPath[1] === "dashboard"){
         $Error = new Errors();
         $Error->error($e);
-        switch ($e->getCode()){
-            case (new Forbidden())->getCode():
-                redirect("/dashboard/home");
-                break;
-            case (new Unauthorized())->getCode():
-                redirect("/dashboard/login");
-                break;
+        if ($e->getCode() === (new Forbidden())->getCode() && User::isLogged()){
+            redirect("/dashboard/home");
+        } elseif ($e->getCode() === (new Forbidden())->getCode()){
+            redirect("/dashboard/login");
         }
     }
     if ((int)Application::get("arura", "Debug")){
