@@ -95,16 +95,14 @@ try {
 } catch (Exception $e){
     if ($aPath[1] === "dashboard"){
         $Error = new Errors();
-        $Error->error($e);
         if ($e->getCode() === (new Unauthorized())->getCode() && User::isLogged()){
             redirect("/dashboard/home");
         } elseif ($e->getCode() === (new Forbidden())->getCode()){
             redirect("/dashboard/login");
         }
+        $Error->error($e);
     }
-    if ((int)Application::get("arura", "Debug")){
-        dd($e);
-    }
+
     \Arura\Pages\Page::pageNotFound();
 }
 
