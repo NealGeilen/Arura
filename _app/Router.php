@@ -27,7 +27,6 @@ try {
             }
             break;
         case "dashboard":
-            dd(User::isLogged());
             $oRouter->mount("/dashboard", function () use ($oRouter){
                 $oRouter->get("/", function (){
                     if (User::isLogged()){
