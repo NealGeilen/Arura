@@ -180,7 +180,6 @@ class User
      */
 
     public static function isLogged(){
-        dd($_SESSION);
         return isset($_SESSION['User_Id']);
     }
 
