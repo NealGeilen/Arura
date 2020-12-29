@@ -93,6 +93,9 @@ try {
     }
     $oRouter->run();
 } catch (Exception $e){
+    if ((int)Application::get("arura", "Debug")){
+        dd($e);
+    }
     if ($aPath[1] === "dashboard"){
         $Error = new Errors();
         $Error->error($e);
@@ -101,9 +104,6 @@ try {
         } elseif ($e->getCode() === (new Forbidden())->getCode()){
             redirect("/dashboard/login");
         }
-    }
-    if ((int)Application::get("arura", "Debug")){
-        dd($e);
     }
     \Arura\Pages\Page::pageNotFound();
 }
