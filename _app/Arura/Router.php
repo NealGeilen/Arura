@@ -190,7 +190,7 @@ class Router{
                                 "Function" => "Arura@Settings",
                                 "Icon" => "fas fa-cogs",
                             ],
-                            '/arura/updater' => [
+                            '/arura/updater?t=data' => [
                                 "Right" =>
                                     (
                                     Restrict::Validation(Rights::ARURA_UPDATER)

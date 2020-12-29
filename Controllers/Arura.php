@@ -122,42 +122,57 @@ class Arura extends AbstractController {
             });
         });
 
-        $smarty = Router::getSmarty();
-        $repo = new Git(__WEB__ROOT__);
+        $this->addTab("git", function (){
+            $repo = new Git(__WEB__ROOT__);
+            $smarty = Router::getSmarty();
+            if ($repo->isGit()) {
+                $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
 
+                if (isset($_POST["gitpull"])) {
+                    $repo->Reset(true);
+                    $repo->pull();
+                    Page::getCacher()->Minify();
+                    Logger::Create(Logger::UPDATE, Git::class);
+                    $repo = new Git(__WEB__ROOT__);
+                }
 
-        if ($repo->isGit()){
-            $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
+                if (isset($_POST["gitreset"])) {
+                    $repo->Reset(true);
+                    Page::getCacher()->Minify();
+                    $repo = new Git(__WEB__ROOT__);
+                }
+                $smarty->assign("Status", $repo->getStatus());
+            }
+            $smarty->assign("bGit", $repo->isGit());
+            $this->render("AdminLTE/Pages/Arura/Updater/Git.tpl",[
+                "title" => "Git"
+            ]);
+        });
 
-            if (isset($_POST["gitpull"])){
-                $repo->Reset(true);
-                $repo->pull();
-                Page::getCacher()->Minify();
-                Logger::Create(Logger::UPDATE, Git::class);
-                $repo = new Git(__WEB__ROOT__);
+        $this->addTab("data", function (){
+            $smarty = Router::getSmarty();
+
+            $DB = new DataBaseSync(__APP__ . "DataBaseFiles");
+
+            if (isset($_POST["reload"])){
+                $DB->Reload();
+                Logger::Create(Logger::UPDATE, DataBaseSync::class);
             }
 
-            if (isset($_POST["gitreset"])){
-                $repo->Reset(true);
-                Page::getCacher()->Minify();
-                $repo = new Git(__WEB__ROOT__);
-            }
-            $smarty->assign("Status", $repo->getStatus());
-        }
+            $smarty->assign("aDBChanges", $DB->getChanges());
+            $this->render("AdminLTE/Pages/Arura/Updater/Data.tpl",[
+                "title" => "Database"
+            ]);
+        });
 
-        $DB = new DataBaseSync(__APP__ . "DataBaseFiles");
+        $this->addTab("package", function (){
+            Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater/Updater.js");
+            $this->render("AdminLTE/Pages/Arura/Updater/Composer.tpl",[
+                "title" => "Composer"
+            ]);
+        });
 
-        if (isset($_POST["reload"])){
-            $DB->Reload();
-            Logger::Create(Logger::UPDATE, DataBaseSync::class);
-        }
-
-        $smarty->assign("bGit", $repo->isGit());
-        $smarty->assign("aDBChanges", $DB->getChanges());
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater.js");
-        $this->render("AdminLTE/Pages/Arura/Updater.tpl", [
-            "title" =>"Updaten"
-        ]);
+        $this->displayTab();
     }
 
 
