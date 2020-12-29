@@ -125,6 +125,10 @@ class Page extends Modal implements PageEnum{
                 }
             });
 
+        if(!is_file($C->getCssFile()) || !is_file($C->getJsFile())){
+            $C->Minify();
+        }
+
         return $C;
     }
 
