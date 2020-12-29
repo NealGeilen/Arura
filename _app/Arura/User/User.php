@@ -298,7 +298,11 @@ class User
             [
                 'Session_User_Id' => $this->getId()
             ]);
-        if ($this->db->isQuerySuccessful() && $aSessionData['Session_Id'] === Sessions::getSessionId()){
+        if ($aSessionData){
+            if ($this->db->isQuerySuccessful() && $aSessionData['Session_Id'] === Sessions::getSessionId()){
+                Sessions::end();
+            }
+        } else {
             Sessions::end();
         }
         Logger::Create(Logger::LOGOUT, self::class, $_SERVER["REMOTE_ADDR"]);
