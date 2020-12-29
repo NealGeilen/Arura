@@ -9,6 +9,7 @@ use Arura\Gallery\Image;
 use Arura\Pages\CMS\Page;
 use Arura\Pages\CMS\ShortUrl;
 use Arura\Router;
+use Arura\Sessions;
 use Arura\Settings\Application;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
@@ -92,17 +93,17 @@ try {
     }
     $oRouter->run();
 } catch (Exception $e){
-    if ((int)Application::get("arura", "Debug")){
-        dd($e);
-    }
     if ($aPath[1] === "dashboard"){
         $Error = new Errors();
         $Error->error($e);
-        if ($e->getCode() === (new Forbidden())->getCode() && User::isLogged()){
+        if ($e->getCode() === (new Unauthorized())->getCode() && User::isLogged()){
             redirect("/dashboard/home");
         } elseif ($e->getCode() === (new Forbidden())->getCode()){
             redirect("/dashboard/login");
         }
+    }
+    if ((int)Application::get("arura", "Debug")){
+        dd($e);
     }
     \Arura\Pages\Page::pageNotFound();
 }

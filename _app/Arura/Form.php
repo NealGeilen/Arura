@@ -12,7 +12,6 @@ class Form extends \Nette\Forms\Form{
 
     public function __construct(string $name = null, string $FormRender = self::TwoColumnRender)
     {
-        Sessions::Start();
         parent::__construct($name);
         $this->addProtection();
         $this->onRender[] = $FormRender;

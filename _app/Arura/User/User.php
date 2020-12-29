@@ -265,7 +265,6 @@ class User
      * @return bool
      */
     public function logInUser(){
-        Sessions::start();
         $this->db->query('DELETE FROM '. self::$tblSessions . ' WHERE Session_User_Id = :Session_User_Id',
             [
                 'Session_User_Id' => $this->getId()
@@ -330,7 +329,6 @@ class User
      * @return int|mixed
      */
     public static function addLoginAttempt(){
-        Sessions::Start();
         if (!isset($_SESSION["LoginAttempts"])){
             $_SESSION["LoginAttempts"] = 1;
         } else {
@@ -343,7 +341,6 @@ class User
      * @return bool
      */
     public static function canUserLogin(){
-        Sessions::Start();
         if (isset($_SESSION["LoginAttempts"])){
             if ($_SESSION["LoginAttempts"] < 3){
                 return true;
