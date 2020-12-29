@@ -535,7 +535,6 @@ class Router{
                     switch ($aMethods["Right"]->getValue()){
                         case "USER_LOGGED":
                             if (!User::isLogged()){
-                                dd($aMethods["Right"]);
                                 throw new Unauthorized();
                             }
                             break;
