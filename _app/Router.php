@@ -95,10 +95,10 @@ try {
 } catch (Exception $e){
     if ($aPath[1] === "dashboard"){
         $Error = new Errors();
-        if ($e->getCode() === (new Unauthorized())->getCode() && User::isLogged()){
-            redirect("/dashboard/home");
-        } elseif ($e->getCode() === (new Forbidden())->getCode()){
+        if ($e->getCode() === (new Unauthorized())->getCode() && !User::isLogged()){
             redirect("/dashboard/login");
+        } elseif ($e->getCode() === (new Forbidden())->getCode()){
+            redirect("/dashboard/home");
         }
         $Error->error($e);
     }
