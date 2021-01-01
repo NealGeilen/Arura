@@ -125,7 +125,7 @@ class Arura extends AbstractController {
         $this->addTab("git", function (){
             $repo = new Git(__WEB__ROOT__);
             $smarty = Router::getSmarty();
-            if ($repo->isGit() && $repo->isReadable()) {
+            if ($repo->isGit()) {
                 $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
 
                 if (isset($_POST["gitpull"])) {
@@ -143,7 +143,7 @@ class Arura extends AbstractController {
                 }
                 $smarty->assign("Status", $repo->getStatus());
             }
-            $smarty->assign("bGit", $repo->isGit() && $repo->isReadable());
+            $smarty->assign("bGit", $repo->isGit());
             $this->render("AdminLTE/Pages/Arura/Updater/Git.tpl",[
                 "title" => "Git"
             ]);

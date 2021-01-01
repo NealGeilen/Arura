@@ -18,11 +18,11 @@ class Git extends GitRepository {
     }
 
     public function isGit(){
-        return is_dir($this->repository . DIRECTORY_SEPARATOR . '.git');
+        return is_readable($this->repository.DIRECTORY_SEPARATOR . '.git');
     }
 
     public function isReadable(){
-        return is_readable($this->repository.DIRECTORY_SEPARATOR . '.git'. DIRECTORY_SEPARATOR . "config");
+
     }
 
     /**
