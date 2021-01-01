@@ -28,6 +28,7 @@ class Updater{
         $command = new Command(self::COMPOSER." show -o --format=json --direct");
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
+        $command->useExec = true;
         return $command->execute();
 //        if ($command->execute()) {
 //            return json_array_decode($command->getOutput());
