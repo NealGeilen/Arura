@@ -107,21 +107,6 @@ class Arura extends AbstractController {
      */
     public function Updater(){
 
-        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
-            $updater = new Updater();
-            $requestHandler->addType("get-packages-updates", function ()  use ($updater){
-                return $updater->getPackagesNeededUpdate();
-            });
-            $requestHandler->addType("update-package", function ($data)  use ($updater){
-                Logger::Create(Logger::UPDATE, Composer::class, $data["name"]);
-                return $updater->updatePackage($data["name"]);
-            });
-            $requestHandler->addType("update-all-packages", function ()  use ($updater){
-                Logger::Create(Logger::UPDATE, Composer::class, "All");
-                return $updater->updateAllPackages();
-            });
-        });
-
         $this->addTab("git", function (){
 //            $repo = new Git(__WEB__ROOT__);
             $smarty = Router::getSmarty();
@@ -165,6 +150,20 @@ class Arura extends AbstractController {
         });
 
         $this->addTab("package", function (){
+            Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
+                $updater = new Updater();
+                $requestHandler->addType("get-packages-updates", function ()  use ($updater){
+                    return $updater->getPackagesNeededUpdate();
+                });
+                $requestHandler->addType("update-package", function ($data)  use ($updater){
+                    Logger::Create(Logger::UPDATE, Composer::class, $data["name"]);
+                    return $updater->updatePackage($data["name"]);
+                });
+                $requestHandler->addType("update-all-packages", function ()  use ($updater){
+                    Logger::Create(Logger::UPDATE, Composer::class, "All");
+                    return $updater->updateAllPackages();
+                });
+            });
             Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater/Updater.js");
             $this->render("AdminLTE/Pages/Arura/Updater/Composer.tpl",[
                 "title" => "Composer"
