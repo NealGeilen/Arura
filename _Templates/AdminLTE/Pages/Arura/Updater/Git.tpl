@@ -23,26 +23,27 @@
         </div>
         <div class="card-body bg-secondary">
             {if $bGit}
-                <div class="table-responsive">
-                    <table class="table">
-                        <tr>
-                            <th>Commit Id</th>
-                            <td>{$LastCommit.commit}</td>
-                        </tr>
-                        <tr>
-                            <th>Onderwerp</th>
-                            <td>{$LastCommit.subject}</td>
-                        </tr>
-                        <tr>
-                            <th>Auteur</th>
-                            <td>{$LastCommit.author}</td>
-                        </tr>
-                        <tr>
-                            <th>Datum</th>
-                            <td>{$LastCommit.date|date_format:"%H:%M %d-%m-%Y"}</td>
-                        </tr>
-
-                    </table>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="card card-body bg-primary">
+                            Id: <b>{$LastCommit.commit}</b>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-body bg-secondary">
+                            Onderwerp: <b>{$LastCommit.subject}</b>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-body bg-secondary">
+                            Auteur: <b>{$LastCommit.author}</b>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card card-body bg-secondary">
+                            Datum: <b>{$LastCommit.date|date_format:"%H:%M %d-%m-%Y"}</b>
+                        </div>
+                    </div>
                 </div>
                 <div>
                     <ul class="list-group">
