@@ -150,7 +150,6 @@ class Arura extends AbstractController {
         });
 
         $this->addTab("package", function (){
-            dd((new Updater())->getPackagesNeededUpdate(), shell_exec ( "php composer.phar show -o --format=json --direct" ));
             Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
                 $updater = new Updater();
                 $requestHandler->addType("get-packages-updates", function ()  use ($updater){

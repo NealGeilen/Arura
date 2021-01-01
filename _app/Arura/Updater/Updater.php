@@ -28,18 +28,14 @@ class Updater{
         $command = new Command(self::COMPOSER." show -o --format=json --direct");
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
-        $command->nonBlockingMode = true;
-        $command->timeout=5;
-        $command->useExec = true;
-        return $command;
-//        if ($command->execute()) {
-//            return json_array_decode($command->getOutput());
-//        } else {
-//            if ((bool)Application::get("arura", "Debug")){
-//                return $command->getError(false);
-//            }
-//            return  $command->getExitCode();
-//        }
+        if ($command->execute()) {
+            return json_array_decode($command->getOutput());
+        } else {
+            if ((bool)Application::get("arura", "Debug")){
+                return $command->getError(false);
+            }
+            return  $command->getExitCode();
+        }
     }
 
     public function updatePackage($name = ""){
