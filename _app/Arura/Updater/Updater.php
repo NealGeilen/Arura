@@ -31,7 +31,7 @@ class Updater{
         $command->nonBlockingMode = true;
         $command->timeout=5;
         $command->useExec = true;
-        return $command->execute();
+        return $command;
 //        if ($command->execute()) {
 //            return json_array_decode($command->getOutput());
 //        } else {
