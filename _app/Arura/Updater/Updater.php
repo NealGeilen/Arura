@@ -28,6 +28,8 @@ class Updater{
         $command = new Command(self::COMPOSER." show -o --format=json --direct");
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
+        $command->nonBlockingMode = true;
+        $command->timeout=5;
         $command->useExec = true;
         return $command->execute();
 //        if ($command->execute()) {
