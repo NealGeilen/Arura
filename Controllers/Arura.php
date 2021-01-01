@@ -126,8 +126,6 @@ class Arura extends AbstractController {
             $repo = new Git(__WEB__ROOT__);
             $smarty = Router::getSmarty();
             if ($repo->isGit()) {
-                $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
-
                 if (isset($_POST["gitpull"])) {
                     $repo->Reset(true);
                     $repo->pull();
@@ -141,6 +139,7 @@ class Arura extends AbstractController {
                     Page::getCacher()->Minify();
                     $repo = new Git(__WEB__ROOT__);
                 }
+                $smarty->assign("LastCommit", $repo->getCommitData($repo->getLastCommitId()));
                 $smarty->assign("Status", $repo->getStatus());
             }
             $smarty->assign("bGit", $repo->isGit());

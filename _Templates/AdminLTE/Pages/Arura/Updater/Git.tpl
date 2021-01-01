@@ -48,7 +48,7 @@
                     <ul class="list-group">
                         {foreach from=$Status item=$s}
                             {if $s !== ""}
-                                <li class="list-group-item">{$s}</li>
+                                <li class="list-group-item text-dark">{$s}</li>
                             {/if}
                         {/foreach}
 
