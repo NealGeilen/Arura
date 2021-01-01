@@ -24,22 +24,22 @@
         <div class="card-body bg-secondary">
             {if $bGit}
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <div class="card card-body bg-primary">
-                            Id: <b>{$LastCommit.commit}</b>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="card card-body bg-secondary">
                             Onderwerp: <b>{$LastCommit.subject}</b>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
+                        <div class="card card-body bg-secondary">
+                            Id: <b>{$LastCommit.commit}</b>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
                         <div class="card card-body bg-secondary">
                             Auteur: <b>{$LastCommit.author}</b>
                         </div>
                     </div>
-                    <div class="col-6">
+                    <div class="col-md-6">
                         <div class="card card-body bg-secondary">
                             Datum: <b>{$LastCommit.date|date_format:"%H:%M %d-%m-%Y"}</b>
                         </div>
