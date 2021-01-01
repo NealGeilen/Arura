@@ -150,6 +150,7 @@ class Arura extends AbstractController {
         });
 
         $this->addTab("package", function (){
+            dd((new Updater())->getPackagesNeededUpdate());
             Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler){
                 $updater = new Updater();
                 $requestHandler->addType("get-packages-updates", function ()  use ($updater){
