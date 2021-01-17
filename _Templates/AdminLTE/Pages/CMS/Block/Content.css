@@ -1,0 +1,18 @@
+.Group-Item.active{
+    border: 3px solid var(--primary);
+    /*background: gray;*/
+}
+.Group-Item{
+    border-radius: 5px;
+}
+.Group-Item .btn-group-vertical{
+    display: none;
+}
+
+.Group-Item.active .btn-group-vertical{
+    display: inline-flex;
+    position: absolute;
+    top: -3px;
+    left:-3px;
+    z-index: 1000;
+}

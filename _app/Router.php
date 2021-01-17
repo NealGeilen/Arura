@@ -6,6 +6,7 @@ use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\Unauthorized;
 use Arura\Gallery\Gallery;
 use Arura\Gallery\Image;
+use Arura\Pages\CMS\ContentBlock;
 use Arura\Pages\CMS\Page;
 use Arura\Pages\CMS\ShortUrl;
 use Arura\Router;
@@ -36,6 +37,7 @@ try {
                         redirect("/dashboard/login");
                     }
                 });
+                Cache::Display($oRouter->getCurrentUri());
                 Router::DashBoardRouting($oRouter);
             });
             break;
@@ -77,6 +79,11 @@ try {
                 } catch (Exception $e){
                     http_response_code($e->getCode());
                 }
+            });
+            break;
+        case "Block":
+            $oRouter->all("/Block/{id}", function ($id){
+                ContentBlock::Display($id);
             });
             break;
         case "r":

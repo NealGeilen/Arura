@@ -148,40 +148,24 @@ var Builder = {
             widget:{
                 oTemplate: $(''),
                 init: function (aBlock) {
-                    container = $('<div class="row"></div>');
-                    Widget = Addons[parseInt(aBlock.Content_Addon_Id)];
-                    Settings = Widget.AddonSettings;
-                    aValue = (aBlock.Content_Value === null) ? [{}] : aBlock.Content_Value;
-                    $.each(aValue, function (iPosition, aSection) {
-                        section = $('<div class="Block-Item-Section">').addClass('col-' + aBlock.Content_Raster);
-                        $.each(Settings, function (iKey, aSetting) {
-                            value = aSection[aSetting.AddonSetting_Tag];
-                            oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);
-                            oField.attr('field-tag', aSetting.AddonSetting_Tag).attr('field-type', aSetting.AddonSetting_Type).addClass('Block-Item-Field');
-                            section.append(oField);
-                        });
-                        container.append(section);
+                    iframe = $("<iframe frameborder='0' scrolling='no' src='/Block/"+aBlock.Block_Id+"'></iframe>");
+                    iframe.on("click",function (){
+                        resizeIframe(this);
                     });
-                    return container;
+                    return iframe;
                 },
                 value: function (oBlock) {
-                    aValue= {};
-                    $.each(oBlock.find('.Block-Item-Section'), function (iPosition, oGroup) {
-                        aGroup = {};
-                        $.each($(oGroup).find('.Block-Item-Field'), function (iKey, oField) {
-                            aGroup[$(oField).attr('field-tag')] = Builder.ContentTypes.Types[$(oField).attr('field-type')].value($(oField));
-                        });
-                        aValue[iPosition] = aGroup;
-                    });
-                    return aValue;
                 }
             },
             custom :{
                 oTemplate: $('<span>').addClass('text-center'),
                 init: function (aBlock) {
-                    container = this.oTemplate;
-                    aAddon = Addons[parseInt(aBlock.Content_Addon_Id)];
-                    container.text(aAddon.Addon_Name);
+                    iframe = $("<iframe frameborder='0' scrolling='no' src='/Block/"+aBlock.Content_Id+"'></iframe>");
+                    iframe.on("load",function (){
+                        resizeIframe(this);
+                    });
+                    container = $("<div class='iframe-container'> <div class='overlay'></div></div>");
+                    container.append(iframe);
                     return container;
                 },
                 value: function (oBlock) {
@@ -216,9 +200,7 @@ var Builder = {
                $.each(aStructure, function (iPosition, aGroup) {
                    $(sSelectors.Editor).append(Builder.Group.Build(aGroup));
                });
-                console.log(Addons);
                 $.each(aAddons, function(iKey,aAddon){
-                    console.log(aAddon);
                     sItem = "<div class='col-6'><label class=\"btn btn-secondary\"><input type=\"radio\" name=\"Content_Type\" value='"+ aAddon.Addon_Type+ "' content-addon-id='"+ aAddon.Addon_Id+"'>"+ aAddon.Addon_Name + "</label></div>";
                     $('[addon-types='+aAddon.Addon_Type+']').append(sItem);
                 });
@@ -228,11 +210,11 @@ var Builder = {
                 });
                 Builder.Editor.sortable();
                 Builder.Group.sortable();
-                Sidebar.Block.Events();
+                // Sidebar.Block.Events();
                 SummerNote.SetText($('.SummerNote'))
             });
         },
-        save: function (bSendData) {
+        save: function (bSendData, callback = null) {
             aData={};
             aData.DeleteItems = this.DeleteItems;
             aData.Groups = {};
@@ -261,6 +243,9 @@ var Builder = {
                         Data: aData
                     }),
                     success: function (data) {
+                        if (callback !== null){
+                            callback()
+                        }
                         endPageLoad();
                         addSuccessMessage('Content opgeslagen');
                     }
@@ -327,13 +312,9 @@ var Builder = {
         State:{
             Activate: function (oElement) {
                 this.Deactivate();
-                Sidebar.Group.Active_Id = parseInt(oElement.attr('group-id'));
-                Sidebar.Group.State.Activate();
                 oElement.addClass('active');
             },
             Deactivate: function () {
-                Sidebar.Group.Active_Id = 0;
-                Sidebar.Group.State.Deactivate();
                 $('.CMS-Group.active').removeClass('active');
             }
         },
@@ -429,6 +410,9 @@ var Builder = {
                 .attr('block-id', aBlock.Content_Id);
             this.setArray(oBlock, aBlock);
             this.Events(oBlock);
+            if (aBlock.Content_Addon_Id === "0"){
+                oBlock.find(".addon-edit").remove();
+            }
             oBlock.find('.Block-Item-Content').append(Builder.Item.Build(aBlock));
             return oBlock;
         },
@@ -441,6 +425,11 @@ var Builder = {
                     oElement.remove();
                 }
             });
+        },
+        Edit: function(oElement){
+            Builder.Structure.save(true, function (){
+                location.replace("/dashboard/content/block/"+Builder.Block.getData(oElement).Content_Id+"/content");
+            })
         },
         Create:function(oGroup){
             Modals.Custom({
@@ -480,14 +469,9 @@ var Builder = {
         State:{
             Activate: function (oElement) {
                 this.Deactivate();
-                Sidebar.Block.Active_Id = parseInt(Builder.Block.getData(oElement).Content_Id);
-                Sidebar.Block.State.Activate();
-                Sidebar.Block.setBlockSettingValues();
                 oElement.addClass('active');
             },
             Deactivate: function () {
-                Sidebar.Block.Active_Id = 0;
-                Sidebar.Block.State.Deactivate();
                 $('.Block-Item.active').removeClass('active');
             }
         },
@@ -522,169 +506,169 @@ var Builder = {
         }
     }
 };
-var Sidebar = {
-    Group: {
-        Active_Id: 0,
-        getGroupElement: function(){
-            return $('[group-id='+this.Active_Id+']');
-        },
-        getGroupData:function(){
-            return Builder.Group.getData(this.getGroupElement());
-        },
-        setGroupData: function(sField, value){
-            Builder.Group.setData(this.getGroupElement(),sField,value);
-        },
-        setGroupSettingValues: function(){
-            aData = this.getGroupData();
-            var rest = function (){
-                $('.group-settings-field').val(null)
-            };
-            var set = function (){
-                $.each(aData, function (sKey,sValue) {
-                    $('[field='+sKey+']').val(sValue);
-                });
-            };
-
-            rest();
-            set();
-        },
-        Events : function () {
-            S = this;
-            $.each(this.getGroupData(), function (sField, sValue) {
-                $('[field='+sField+']').unbind().on('input', function () {
-                    S.setGroupData(sField,this.value);
-                });
-            });
-        },
-        State: {
-            Activate: function () {
-                Sidebar.Group.Events();
-                Sidebar.Group.setGroupSettingValues();
-                $('.group-message').css('display', 'none');
-                $('.group-settings').css('display', 'block');
-            },
-            Deactivate : function () {
-                $('.group-message').css('display', 'block');
-                $('.group-settings').css('display', 'none')
-            }
-        }
-    },
-    Block: {
-        Active_Id: 0,
-        getBlockElement: function(){
-            return $('[block-id='+this.Active_Id+']');
-        },
-        getBlockData:function(){
-           return Builder.Block.getData(this.getBlockElement());
-        },
-        setBlockData: function(sField, value){
-          Builder.Block.setData(this.getBlockElement(),sField,value);
-        },
-        setBlockSettingValues: function(){
-            aData = this.getBlockData();
-            var rest = function (){
-                $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
-                $('#content-background-color').val(null);
-                $('#content-background-img').val(null);
-                $('.block-settings-items-control').show();
-                $(".type").text(null);
-            };
-            var set = function (aData){
-                if (aData.Content_Type === "custom" || aData.Content_Type === "widget"){
-                    $(".type").text(Addons[aData.Content_Addon_Id].Addon_Name);
-                } else {
-                    $(".type").text(aData.Content_Type);
-                }
-
-                if (parseInt(aData.Content_Addon_Id) === 0 || (parseInt(Addons[aData.Content_Addon_Id].Addon_Type) === "custom" || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0)){
-                    $('.block-settings-items-control').hide();
-                } else {
-                    $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
-                }
-                $('#content-background-color').val(aData.Content_Css_Background_Color);
-                $('#content-background-img').val(aData.Content_Css_Background_Img)
-            };
-
-            rest();
-            set(aData);
-        },
-        Events : function () {
-            S = this;
-            $('[content-raster]').parent().on('click', function () {
-                Raster = parseInt($(this).find('input').attr('content-raster'));
-                aData = Sidebar.Block.getBlockData();
-                Sidebar.Block.getBlockElement().find('.Block-Item-Section').removeClass('col-' + aData.Content_Raster).addClass('col-'+Raster);
-
-                Sidebar.Block.setBlockData('Content_Raster', Raster);
-            });
-            oInput = $("[field=Content_Css_Background_Img]");
-            oInput.on("click",function () {
-                Filemanger.Selector("img", function (node) {
-                    if (node !== []){
-                        aFile = node[0];
-                        oInput.val("/files/" + aFile.original.dir);
-                        Sidebar.Block.setBlockData(oInput.attr('field'), oInput.val());
-                    }
-                });
-            });
-            $('.block-settings-field').parent().find("button").on("click", function () {
-                oButton = $(this);
-                oInput = oButton.parent().parent().find("input");
-                Sidebar.Block.setBlockData(oInput.attr('field'), null);
-                oInput.val(null);
-            });
-            $('.block-settings-field').on('input', function () {
-                Sidebar.Block.setBlockData($(this).attr('field'), $(this).val());
-            });
-        },
-        State: {
-            Activate: function () {
-                $('.block-message').css('display', 'none');
-                $('.block-settings').css('display', 'block');
-            },
-            Deactivate : function () {
-                $('.block-message').css('display', 'block');
-                $('.block-settings').css('display', 'none')
-            }
-        },
-        Edit: {
-            SortableObj: null,
-            Sortable : function(){
-                this.SortableObj = Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row');
-                this.SortableObj.sortable({
-                    handle : ".Block-Editor-Handle",
-                });
-            },
-            Remove: function(oButton){
-                oButton.parents('.Block-Item-Section').remove();
-            },
-            Add: function(){
-                aBlock = Sidebar.Block.getBlockData();
-                Settings = Addons[parseInt(Sidebar.Block.getBlockData().Content_Addon_Id)].AddonSettings;
-                section = $('<div class="Block-Item-Section">').addClass('col-' + aBlock.Content_Raster).append($('.template-edit-item').html());
-                $.each(Settings, function (iKey, aSetting) {
-                    value = null;
-                    oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);
-                    oField.attr('field-tag', aSetting.AddonSetting_Tag).attr('field-type', aSetting.AddonSetting_Type).addClass('Block-Item-Field');
-                    section.append(oField);
-                });
-                Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row').append(section);
-            },
-            Start : function (){
-                this.Sortable();
-                Sidebar.Block.getBlockElement().find('.Block-Item-Content').addClass('active');
-                Sidebar.Block.getBlockElement().find('.Block-Item-Section').append($('.template-edit-item').html());
-                $('.block-editor-background').addClass('active');
-            },
-            End: function () {
-                this.SortableObj.sortable('destroy');
-                Sidebar.Block.getBlockElement().find('.Block-Item-Content').removeClass('active');
-                Sidebar.Block.getBlockElement().find('.Block-Editor').remove();
-                $('.block-editor-background').removeClass('active');
-            }
-        }
-    }
-};
+// var Sidebar = {
+//     Group: {
+//         Active_Id: 0,
+//         getGroupElement: function(){
+//             return $('[group-id='+this.Active_Id+']');
+//         },
+//         getGroupData:function(){
+//             return Builder.Group.getData(this.getGroupElement());
+//         },
+//         setGroupData: function(sField, value){
+//             Builder.Group.setData(this.getGroupElement(),sField,value);
+//         },
+//         setGroupSettingValues: function(){
+//             aData = this.getGroupData();
+//             var rest = function (){
+//                 $('.group-settings-field').val(null)
+//             };
+//             var set = function (){
+//                 $.each(aData, function (sKey,sValue) {
+//                     $('[field='+sKey+']').val(sValue);
+//                 });
+//             };
+//
+//             rest();
+//             set();
+//         },
+//         Events : function () {
+//             S = this;
+//             $.each(this.getGroupData(), function (sField, sValue) {
+//                 $('[field='+sField+']').unbind().on('input', function () {
+//                     S.setGroupData(sField,this.value);
+//                 });
+//             });
+//         },
+//         State: {
+//             Activate: function () {
+//                 Sidebar.Group.Events();
+//                 Sidebar.Group.setGroupSettingValues();
+//                 $('.group-message').css('display', 'none');
+//                 $('.group-settings').css('display', 'block');
+//             },
+//             Deactivate : function () {
+//                 $('.group-message').css('display', 'block');
+//                 $('.group-settings').css('display', 'none')
+//             }
+//         }
+//     },
+//     Block: {
+//         Active_Id: 0,
+//         getBlockElement: function(){
+//             return $('[block-id='+this.Active_Id+']');
+//         },
+//         getBlockData:function(){
+//            return Builder.Block.getData(this.getBlockElement());
+//         },
+//         setBlockData: function(sField, value){
+//           Builder.Block.setData(this.getBlockElement(),sField,value);
+//         },
+//         setBlockSettingValues: function(){
+//             aData = this.getBlockData();
+//             var rest = function (){
+//                 $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
+//                 $('#content-background-color').val(null);
+//                 $('#content-background-img').val(null);
+//                 $('.block-settings-items-control').show();
+//                 $(".type").text(null);
+//             };
+//             var set = function (aData){
+//                 if (aData.Content_Type === "custom" || aData.Content_Type === "widget"){
+//                     $(".type").text(Addons[aData.Content_Addon_Id].Addon_Name);
+//                 } else {
+//                     $(".type").text(aData.Content_Type);
+//                 }
+//
+//                 if (parseInt(aData.Content_Addon_Id) === 0 || (parseInt(Addons[aData.Content_Addon_Id].Addon_Type) === "custom" || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0)){
+//                     $('.block-settings-items-control').hide();
+//                 } else {
+//                     $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
+//                 }
+//                 $('#content-background-color').val(aData.Content_Css_Background_Color);
+//                 $('#content-background-img').val(aData.Content_Css_Background_Img)
+//             };
+//
+//             rest();
+//             set(aData);
+//         },
+//         Events : function () {
+//             S = this;
+//             $('[content-raster]').parent().on('click', function () {
+//                 Raster = parseInt($(this).find('input').attr('content-raster'));
+//                 aData = Sidebar.Block.getBlockData();
+//                 Sidebar.Block.getBlockElement().find('.Block-Item-Section').removeClass('col-' + aData.Content_Raster).addClass('col-'+Raster);
+//
+//                 Sidebar.Block.setBlockData('Content_Raster', Raster);
+//             });
+//             oInput = $("[field=Content_Css_Background_Img]");
+//             oInput.on("click",function () {
+//                 Filemanger.Selector("img", function (node) {
+//                     if (node !== []){
+//                         aFile = node[0];
+//                         oInput.val("/files/" + aFile.original.dir);
+//                         Sidebar.Block.setBlockData(oInput.attr('field'), oInput.val());
+//                     }
+//                 });
+//             });
+//             $('.block-settings-field').parent().find("button").on("click", function () {
+//                 oButton = $(this);
+//                 oInput = oButton.parent().parent().find("input");
+//                 Sidebar.Block.setBlockData(oInput.attr('field'), null);
+//                 oInput.val(null);
+//             });
+//             $('.block-settings-field').on('input', function () {
+//                 Sidebar.Block.setBlockData($(this).attr('field'), $(this).val());
+//             });
+//         },
+//         State: {
+//             Activate: function () {
+//                 $('.block-message').css('display', 'none');
+//                 $('.block-settings').css('display', 'block');
+//             },
+//             Deactivate : function () {
+//                 $('.block-message').css('display', 'block');
+//                 $('.block-settings').css('display', 'none')
+//             }
+//         },
+//         Edit: {
+//             SortableObj: null,
+//             Sortable : function(){
+//                 this.SortableObj = Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row');
+//                 this.SortableObj.sortable({
+//                     handle : ".Block-Editor-Handle",
+//                 });
+//             },
+//             Remove: function(oButton){
+//                 oButton.parents('.Block-Item-Section').remove();
+//             },
+//             Add: function(){
+//                 aBlock = Sidebar.Block.getBlockData();
+//                 Settings = Addons[parseInt(Sidebar.Block.getBlockData().Content_Addon_Id)].AddonSettings;
+//                 section = $('<div class="Block-Item-Section">').addClass('col-' + aBlock.Content_Raster).append($('.template-edit-item').html());
+//                 $.each(Settings, function (iKey, aSetting) {
+//                     value = null;
+//                     oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);
+//                     oField.attr('field-tag', aSetting.AddonSetting_Tag).attr('field-type', aSetting.AddonSetting_Type).addClass('Block-Item-Field');
+//                     section.append(oField);
+//                 });
+//                 Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row').append(section);
+//             },
+//             Start : function (){
+//                 this.Sortable();
+//                 Sidebar.Block.getBlockElement().find('.Block-Item-Content').addClass('active');
+//                 Sidebar.Block.getBlockElement().find('.Block-Item-Section').append($('.template-edit-item').html());
+//                 $('.block-editor-background').addClass('active');
+//             },
+//             End: function () {
+//                 this.SortableObj.sortable('destroy');
+//                 Sidebar.Block.getBlockElement().find('.Block-Item-Content').removeClass('active');
+//                 Sidebar.Block.getBlockElement().find('.Block-Editor').remove();
+//                 $('.block-editor-background').removeClass('active');
+//             }
+//         }
+//     }
+// };
 var SummerNote ={
     SetText: function (oElement) {
         oElement.summernote({
@@ -734,3 +718,8 @@ $(document).ready(function () {
        }
    })
 });
+
+
+function resizeIframe(obj) {
+    obj.style.height = obj.contentWindow.document.documentElement.scrollHeight + 'px';
+}

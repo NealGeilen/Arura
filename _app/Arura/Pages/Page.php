@@ -65,6 +65,9 @@ class Page extends Modal implements PageEnum{
      */
     protected $PageContend = null;
 
+    protected $embedded = false;
+
+
     /**
      * Page constructor.
      * @param int $id
@@ -172,11 +175,9 @@ class Page extends Modal implements PageEnum{
         $smarty = self::getSmarty();
         $smarty->assign('aResourceFiles', $this->loadResourceFiles());
         $smarty->assign('aMainNav', Menu::getMenuStructure());
-        $smarty->assign('sPageTitle', $this->getTitle());
-        $smarty->assign('sPageDescription', $this->getDescription());
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $smarty->assign("app", Application::getAll());
-        $smarty->assign('content', $this->getPageContent());
+        $smarty->assign("page", $this);
 
         $smarty->display(self::TemplatePath. self::$MasterPage);
         http_response_code($httpResponseCode);
@@ -273,6 +274,7 @@ class Page extends Modal implements PageEnum{
     public function setPageContend($PageContend)
     {
         $this->PageContend = $PageContend;
+        return $this;
     }
 
     /**
@@ -290,5 +292,25 @@ class Page extends Modal implements PageEnum{
     {
         $this->Description = $Description;
     }
+
+    /**
+     * @return bool
+     */
+    public function isEmbedded(): bool
+    {
+        return $this->embedded;
+    }
+
+    /**
+     * @param bool $embedded
+     * @return Page
+     */
+    public function setEmbedded(bool $embedded): Page
+    {
+        $this->embedded = $embedded;
+        return $this;
+    }
+
+
 
 }

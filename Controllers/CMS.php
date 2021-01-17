@@ -93,7 +93,7 @@ class CMS extends AbstractController {
             });
             $requestHandler->addType("Save-Page-Content", function ($aData) use ($p){
                 Logger::Create(Logger::UPDATE, \Arura\Pages\CMS\Page::class, $p->getTitle());
-                return $p->SavePageContents($aData["Data"]);
+                $p->SavePageContents($aData["Data"]);
             });
             $requestHandler->addType("Create-Block", function ($aData) use ($p){
                 return ["Content_Id" => ContentBlock::Create()->getId()];
@@ -108,7 +108,6 @@ class CMS extends AbstractController {
         Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Content.css");
         $this->render("AdminLTE/Pages/CMS/Content.tpl", [
             "title" =>"Pagina content",
-            "sPageSideBar" => Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Content.Sidebar.tpl")
         ]);
     }
 
@@ -251,4 +250,20 @@ class CMS extends AbstractController {
         $Addon->Export();
     }
 
+
+    /**
+     * @Route("/content/block/([^/]+)/content")
+     * @Right("CMS_PAGES")
+     */
+    public function Block($id){
+        $block = new ContentBlock($id);
+        //Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Addons/layout.js");
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/block/Content.css");
+        $this->render("AdminLTE/Pages/CMS/Block/Content.tpl", [
+            "title" =>"Content block",
+            "Block" => $block,
+            "Addon" => $block->getAddon(),
+            "CmsPage" => $block->getPage()
+        ]);
+    }
 }

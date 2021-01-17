@@ -206,3 +206,20 @@ img.Block-Item-Field:after{
     width: 100%;
     text-align: center;
 }
+.Block-Item-Content iframe{
+    width: 100%;
+    border: unset;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.Block-Item-Content .overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    content: "";
+    background-color: rgba(0,0,0,.1);
+    border-radius: 5px;
+}

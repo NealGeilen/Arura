@@ -61,6 +61,9 @@
             <div class="btn btn-primary" onclick="Sidebar.Block.Edit.Add()">
                 <i class="fas fa-plus"></i>
             </div>
+            <button class="btn btn-primary">
+                <i class="fas fa-pen"></i>
+            </button>
         </div>
     </div>
 
@@ -73,8 +76,8 @@
                         <i class="fas fa-plus"></i>
                     </button>
                     <span class="btn btn-sm btn-secondary Group-Position-Handler">
-                    <i class="fas fa-arrows-alt-v"></i>
-                </span>
+                        <i class="fas fa-arrows-alt-v"></i>
+                    </span>
                     <button class="btn btn-sm btn-secondary" onclick="Builder.Group.Delete($(this).parents('.CMS-Group'))">
                         <i class="fas fa-trash-alt"></i>
                     </button>
@@ -99,12 +102,16 @@
             <div class="Block-Item">
                 <div class="Block-Item-Control">
                     <div class="btn-group-vertical btn-group-sm">
-                    <span class="btn btn-xsm btn-primary Block-Item-Position-Handle">
-                        <i class="fas fa-arrows-alt"></i>
-                    </span>
+                        <span class="btn btn-xsm btn-primary Block-Item-Position-Handle">
+                            <i class="fas fa-arrows-alt"></i>
+                        </span>
                         <button class="btn btn-xsm btn-primary" onclick="Builder.Block.Delete($(this).parents('.Block-Item'))">
                             <i class="fas fa-trash-alt"></i>
                         </button>
+                        <button class="btn btn-xsm btn-primary addon-edit" onclick="Builder.Block.Edit($(this).parents('.Block-Item'))">
+                            <i class="fas fa-pen"></i>
+                        </button>
+
                     </div>
                 </div>
                 <div class="Block-Item-Content">
