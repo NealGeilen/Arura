@@ -17,6 +17,9 @@ use Arura\Database;
 use Arura\Settings\Application;
 use Arura\User\Logger;
 use Arura\User\User;
+use Arura\Webhooks\iWebhookEntity;
+use Arura\Webhooks\Trigger;
+use Arura\Webhooks\Webhook;
 use DateTime;
 use Exception;
 use Mollie\Api\Exceptions\ApiException;
@@ -25,7 +28,7 @@ use Rights;
 use SmartyException;
 use Spatie\CalendarLinks\Link;
 
-class Event Extends Page {
+class Event extends Page implements iWebhookEntity{
 
     //Properties
     private $id;
@@ -363,13 +366,29 @@ class Event Extends Page {
                 $oEvent = self::Create($aData);
                 Logger::Create(Logger::CREATE, Event::class, $oEvent->getName());
                 Flasher::addFlash("Evenement {$oEvent->getName()} aangemaakt");
+                if ($oEvent->IsPublic()){
+                    $oEvent->TriggerWebhook(Trigger::EVENT_PUBLISH);
+                }
+                if ($oEvent->getIsActive()){
+                    $oEvent->TriggerWebhook(Trigger::EVENT_REGISTRATION_OPEN);
+                }
+                $oEvent->TriggerWebhook(Trigger::EVENT_CREATE);
                 redirect("/dashboard/winkel/evenementen/" . $oEvent->getId());
             } else{
                 if (!$oEvent->isCanceled() || $oEvent->canEdit()){
                     $db = new Database();
+                    $bOldOpen = $oEvent->IsPublic();
+                    $bOldRegistration = $oEvent->getIsActive();
                     $db->updateRecord("tblEvents", $aData, "Event_Id");
                     $oEvent->load(true);
                     Flasher::addFlash("Evenement {$oEvent->getName()} aangepast");
+                    if ($oEvent->IsPublic() && !$bOldOpen){
+                        $oEvent->TriggerWebhook(Trigger::EVENT_PUBLISH);
+                    }
+                    if ($oEvent->getIsActive() && !$bOldRegistration){
+                        $oEvent->TriggerWebhook(Trigger::EVENT_REGISTRATION_OPEN);
+                    }
+                    $oEvent->TriggerWebhook(Trigger::EVENT_EDIT);
                     Logger::Create(Logger::UPDATE, Event::class, $oEvent->getName());
                 }
 
@@ -657,6 +676,33 @@ class Event Extends Page {
         return $this->db->fetchAll("SELECT COUNT(Registration_Id) AS Amount, Registration_Amount AS Type FROM tblEventRegistration WHERE Registration_Event_Id  = :Event_Id GROUP BY Registration_Amount", ["Event_Id" => $this->getId()]);
     }
 
+    public function serialize():array{
+        $this->load();
+        $url = Application::get("website", "url"). "/event" . $this->getSlug();
+        return [
+            "id" => $this->getId(),
+            "name" => $this->getName(),
+            "description" => $this->getDescription(),
+            "start" => $this->getStart()->getTimestamp(),
+            "end" => $this->getEnd()->getTimestamp(),
+            "location" => $this->getLocation(),
+            "page-url" => $url,
+            "banner-url" => Application::get("website", "url"). $this->getImg(),
+            "sign-ins" => $this->getAmountSignIns(),
+            "capacity" => $this->getCapacity(),
+            "status" => $this->getStatus(),
+            "google-url" => $url .  "/google",
+            "yahoo-url" => $url. "/yahoo",
+            "ical-url" => $url. "/ical",
+            "registration-end" => $this->getEndRegistration()->getTimestamp(),
+            "cancel-reason" => $this->getCancelReason()
+        ];
+    }
+
+    public function TriggerWebhook(int $trigger, array $data){
+        Webhook::Trigger($trigger, array_merge($this->serialize(), $data));
+    }
+
     /**
      * @return mixed
      * @throws Error
@@ -694,7 +740,7 @@ class Event Extends Page {
     }
 
     /**
-     * @return mixed
+     * @return DateTime
      * @throws Error
      */
     public function getEnd()

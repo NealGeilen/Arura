@@ -10,6 +10,7 @@ use Arura\QR;
 use Arura\Settings\Application;
 use Arura\Shop\Payment;
 use Arura\Database;
+use Arura\Webhooks\Trigger;
 use DateTime;
 use Exception;
 use Mollie\Api\Exceptions\ApiException;
@@ -89,6 +90,15 @@ class Registration extends Modal {
         if (!$db->isQuerySuccessful()){
             throw new Error();
         }
+        $oEvent->TriggerWebhook(Trigger::EVENT_REGISTRATION, [
+            "registration-timestamp" => time(),
+            "registration-firstname" => $firstname,
+            "registration-lastname" => $lastname,
+            "registration-email" => $email,
+            "registration-tel" => $tel,
+            "registration-amount" => $Amount,
+            "registration-payment-id" => $PaymentId
+        ]);
         return new self($i);
     }
 
