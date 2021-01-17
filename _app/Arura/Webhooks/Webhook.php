@@ -7,10 +7,8 @@ use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
-use Arura\Pages\CMS\Addon;
 use Arura\User\Logger;
 use Exception;
-use PDOStatement;
 
 class Webhook extends Modal {
 
@@ -43,7 +41,7 @@ class Webhook extends Modal {
     }
 
     /**
-     * @return false|PDOStatement
+     * @return false
      * @throws Error
      */
     public function save(){
@@ -82,8 +80,6 @@ class Webhook extends Modal {
 
     public static function getForm(Webhook $webhook = null){
         $form = new Form("Webhook-form-" . $webhook, Form::OneColumnRender);
-        $form->addText("Addon_Name", "Naam")
-            ->addRule(Form::REQUIRED, "Dit veld is verplicht");
 
 
         $form->addSelect("Webhook_Trigger", "Event")
@@ -123,22 +119,39 @@ class Webhook extends Modal {
         return $form;
     }
 
+    public function getDeleteForm() : Form{
+        $form = new Form("webhook-delete-form", Form::OneColumnRender);
+        $form->addSubmit("verzend", "Verwijderen");
+        if ($form->isSubmitted()){
+            $this->load();
+            $this->db->query("DELETE FROM tblWebhook WHERE Webhook_Id = :Id", ["Id" => $this->getId()]);
+            if ($this->db->isQuerySuccessful()){
+                Logger::Create(Logger::DELETE, self::class, $this->getId());
+                Flasher::addFlash("{$this->getUrl()} verwijderd");
+                header("Location: /dashboard/arura/webhook/" );
+                exit;
+            } else {
+                Flasher::addFlash("{$this->getUrl()} verwijderen mislukt", Flasher::Error);
+            }
+
+        }
+        return $form;
+    }
+
 
     /**
      * @param int $trigger
      * @return Webhook[]
      * @throws Error
      */
-    public static function getWebHooks(int $trigger)
+    public static function getWebHooks(int $trigger = null)
     {
         $db = new Database();
-        $response = $db->fetchAll("SELECT Webhook_Id FROM tblWebhook WHERE Webhook_Trigger = :Trigger", ["Trigger" => $trigger]);
+        $response = $db->fetchAll("SELECT Webhook_Id FROM tblWebhook " . (is_null($trigger) ? null : "WHERE Webhook_Trigger = :Trigger"), (is_null($trigger) ? [] : ["Trigger" => $trigger]));
         $result = [];
-
         foreach ($response as $aWebhook){
             $result[] = new Webhook($aWebhook["Webhook_Id"]);
         }
-
         return $result;
     }
 

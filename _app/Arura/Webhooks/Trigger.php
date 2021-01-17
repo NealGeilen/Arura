@@ -18,6 +18,10 @@ class Trigger{
 
     public static function getTriggers(){
         $oClass = new ReflectionClass(__CLASS__);
-        return $oClass->getConstants();
+        $result = [];
+        foreach ($oClass->getConstants() as $name => $id){
+            $result[$id] = $name;
+        }
+        return $result;
     }
 }

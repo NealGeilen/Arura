@@ -16,6 +16,7 @@ use Arura\Updater\Updater;
 use Arura\User\Logger;
 use Arura\User\Password;
 use Arura\User\User;
+use Arura\Webhooks\Webhook;
 use Composer\Composer;
 use Exception;
 
@@ -171,6 +172,31 @@ class Arura extends AbstractController {
         });
 
         $this->displayTab();
+    }
+
+    /**
+     * @Route("/arura/webhook")
+     * @Right("ARURA_WEBHOOK")
+     */
+    public function Webhook(){
+        $this->render("AdminLTE/Pages/Arura/Webhook/webhook.tpl", [
+            "createForm" => Webhook::getForm(),
+            "Webhooks" => Webhook::getWebHooks(),
+            "title" =>"Webhooks"
+        ]);
+    }
+
+    /**
+     * @Route("/arura/webhook/([^/]+)/edit")
+     * @Right("ARURA_WEBHOOK")
+     */
+    public function WebhookItem($id){
+        $Webhook = new Webhook($id);
+        $this->render("AdminLTE/Pages/Arura/Webhook/edit.tpl", [
+            "form"=> Webhook::getForm($Webhook),
+            "webhook" => $Webhook,
+            "title" =>"Webhooks"
+        ]);
     }
 
 

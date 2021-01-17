@@ -199,6 +199,15 @@ class Router{
                                 "Function" => "Arura@Updater",
                                 "Icon" => "fas fa-server",
                             ],
+                            '/arura/webhook' => [
+                                "Right" =>
+                                    (
+                                    Restrict::Validation(Rights::ARURA_WEBHOOK)
+                                    ),
+                                "Title" => "Webhooks",
+                                "Function" => "Arura@Webhook",
+                                "Icon" => "fas fa-link",
+                            ],
                         ]
                 ],
             ];
