@@ -45,6 +45,8 @@ abstract class AbstractController{
     protected final function render($i, $parameters = []){
         if(is_array($i)){
             echo json_encode($i);
+            http_response_code(200);
+            exit;
         } else  if (is_file(__ARURA_TEMPLATES__ . $i)){
             foreach ($parameters as $key => $value){
                 Router::getSmarty()->assign($key, $value);

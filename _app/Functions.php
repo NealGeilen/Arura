@@ -176,11 +176,8 @@ function postToUrl($url = "", $postParams = []){
 function NotifyNeal(string $message, int $priority = 0):bool
 {
     return (bool)postToUrl("https://cronjobs.nealgeilen.nl/notify/me", [
-        "title" => "Melding van: " . Application::get("website", "name"),
+        "title" => "Melding van: " . Application::get("website", "url"),
         "message" => $message,
         "priority" => $priority
     ]);
-
-
-
 }

@@ -20,7 +20,7 @@
     ]
   },
   "require" : {
-    "php": "^7.1",
+    "php": "^7.4",
     "smarty/smarty": "^3",
     "spatie/image-optimizer": "^1",
     "monolog/monolog": "2.1.0",
@@ -37,6 +37,7 @@
     "bramus/router": "^1.4",
     "mikehaertl/php-shellcommand": "^1.6",
     "symfony/var-dumper": "^5",
+    "spatie/calendar-links": "^1.4",
 
     "ext-pdo": "*",
     "ext-curl": "*",

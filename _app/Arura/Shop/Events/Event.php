@@ -23,6 +23,7 @@ use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Exceptions\IncompatiblePlatform;
 use Rights;
 use SmartyException;
+use Spatie\CalendarLinks\Link;
 
 class Event Extends Page {
 
@@ -392,6 +393,21 @@ class Event Extends Page {
                 $oPage = self::fromUrl($sUrl);
                 if ($oPage->getIsVisible()){
                     switch ($sType){
+                        case "ical":
+                            echo $oPage->getCalendarLinks()->ics();
+                            header('Content-Type: text/calendar; charset=utf-8');
+                            header('Content-Disposition: attachment; filename="ical.ics"');
+                            http_response_code(200);
+                            exit;
+                            break;
+                        case "google":
+                            redirect($oPage->getCalendarLinks()->google());
+                            exit;
+                            break;
+                        case "yahoo":
+                            redirect($oPage->getCalendarLinks()->yahoo());
+                            exit;
+                            break;
                         case "checkout":
                             if ($oPage->isOpen() && !$oPage->isCanceled()){
                                 $oPage->checkout();
@@ -579,6 +595,17 @@ class Event Extends Page {
      */
     public function hasEventRegistrations(){
         return (count($this->db->fetchAll("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
+    }
+
+    /**
+     * @return Link
+     * @throws Error
+     */
+    public function getCalendarLinks() :Link
+    {
+        return  Link::create($this->getName(), $this->getStart(), $this->getEnd())
+            ->description(strip_tags($this->getDescription()))
+            ->address($this->getLocation());
     }
 
     /**
