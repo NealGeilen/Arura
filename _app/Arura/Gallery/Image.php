@@ -140,6 +140,7 @@ class Image extends Page {
                         header('Content-Transfer-Encoding: base64');
                         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
                         header("Content-Type: application/force-download");
+                        http_response_code(200);
                         readfile($file);
                         break;
                     case "thump":
@@ -148,6 +149,7 @@ class Image extends Page {
                         header('Content-Transfer-Encoding: base64');
                         header("Content-Type: image/{$Image->getType()};");
                         header("Content-Length: " . filesize($Image->getThumbnail()));
+                        http_response_code(200);
                         echo $image;
                         break;
                     default:
@@ -156,6 +158,7 @@ class Image extends Page {
                         header('Content-Transfer-Encoding: base64');
                         header("Content-Type: image/{$Image->getType()};");
                         header("Content-Length: " . filesize($Image->getImage()));
+                        http_response_code(200);
                         echo $image;
                         break;
                 }
