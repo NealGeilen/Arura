@@ -265,8 +265,8 @@ class CMS extends AbstractController {
                 $block->set($aBlock, false);
             });
         });
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/block/Content.js");
-        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/block/Content.css");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Block/Content.js");
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Block/Content.css");
         $this->render("AdminLTE/Pages/CMS/Block/Content.tpl", [
             "title" =>"Content block",
             "Block" => $block,
