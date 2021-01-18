@@ -7,13 +7,17 @@ use Arura\Flasher;
 use Arura\Form;
 use Arura\Pages\Page;
 use Arura\Permissions\Restrict;
+use Arura\Settings\Application;
 use Arura\User\Logger;
+use Arura\Webhooks\iWebhookEntity;
+use Arura\Webhooks\Trigger;
+use Arura\Webhooks\Webhook;
 use DateTime;
 use Rights;
 use RuntimeException;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
 
-class Gallery extends Page {
+class Gallery extends Page implements iWebhookEntity {
 
     protected $id = "";
     protected $name = "";
@@ -28,6 +32,23 @@ class Gallery extends Page {
     {
         $this->id = $id;
         parent::__construct();
+    }
+
+    public function serialize():array{
+        $this->load();
+        $url = Application::get("website", "url"). "/album" . $this->getId();
+        return [
+            "id" => $this->getId(),
+            "name" => $this->getName(),
+            "description" => $this->getDescription(),
+            "page-url" => $url,
+            "image-count" => $this->getImageAmount(),
+            "cover-image" => Application::get("website", "url"). $this->getAnCoverImage()->getImage(false)
+        ];
+    }
+
+    public function TriggerWebhook(int $trigger, array $data = []){
+        Webhook::Trigger($trigger, array_merge($this->serialize(), $data));
     }
 
     public static function Display($sId){
@@ -72,13 +93,22 @@ class Gallery extends Page {
                     $form->getValues()->Gallery_Description,
                     (int)$form->getValues()->Gallery_Public
                 );
+                $oNewGallery->TriggerWebhook(Trigger::ALBUM_CREATE);
+                if ($oNewGallery->isPublic()){
+                    $oNewGallery->TriggerWebhook(Trigger::ALBUM_PUBLISH);
+                }
                 Logger::Create(Logger::CREATE, self::class, $oNewGallery->getName());
             } else{
+                $bOldPublic = $gallery->isPublic();
                 $gallery
                     ->setIsPublic($form->getValues()->Gallery_Public)
                     ->setName($form->getValues()->Gallery_Name)
                     ->setDescription($form->getValues()->Gallery_Description);
                 $gallery->Save();
+                if ($gallery->isPublic() && !$bOldPublic){
+                    $gallery->TriggerWebhook(Trigger::ALBUM_PUBLISH);
+                }
+                $gallery->TriggerWebhook(Trigger::ALBUM_EDIT);
                 Logger::Create(Logger::UPDATE, self::class, $gallery->getName());
                 $oNewGallery = $gallery;
             }
