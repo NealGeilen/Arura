@@ -45,6 +45,8 @@ class Addon {
      */
     protected $multipleValues = true;
 
+    protected $isListStyle = false;
+
     /**
      * @var bool
      */
@@ -116,6 +118,7 @@ class Addon {
                     ->setActive((bool)$aAddon["Addon_Active"])
                     ->setMultipleValues((bool)$aAddon["Addon_Multipel_Values"])
                     ->setName($aAddon["Addon_Name"])
+                    ->setIsListStyle((bool)$aAddon["Addon_ListStyle"])
                     ->setType($aAddon["Addon_Type"])
                     ->isLoaded = true;
             } else {
@@ -183,8 +186,19 @@ class Addon {
             "Addon_Type" => (string)$aAddon["Addon_Type"],
             "Addon_Active" => (int)$aAddon["Addon_Active"],
             "Addon_Multipel_Values" => (int)$aAddon["Addon_Multipel_Values"],
+            "Addon_ListStyle" => (int)$aAddon["Addon_ListStyle"]
         ]);
         return new self($id);
+    }
+
+    public static function force($aAddon){
+        return [
+            "Addon_Id" => (int)$aAddon["Addon_Id"],
+            "Addon_Name" => (string)$aAddon["Addon_Name"],
+            "Addon_Active" => (int)$aAddon["Addon_Active"],
+            "Addon_Multipel_Values" => (int)$aAddon["Addon_Multipel_Values"],
+            "Addon_ListStyle" => (int)$aAddon["Addon_ListStyle"]
+        ];
     }
 
     /**
@@ -195,7 +209,7 @@ class Addon {
      */
     public static function save(int $id, array $aAddon){
         $db = new Database();
-        $db->updateRecord("tblCmsAddons",$aAddon);
+        $db->updateRecord("tblCmsAddons",self::force($aAddon));
         return  $db->isQuerySuccessful();
     }
 
@@ -219,6 +233,7 @@ class Addon {
         }
         $form->addCheckbox("Addon_Active", "Actief");
         $form->addCheckbox("Addon_Multipel_Values", "Meerderen velden");
+        $form->addCheckbox("Addon_ListStyle", "Lijst weergaven");
 
         $form->addSubmit("submit", "Opslaan");
 
@@ -228,7 +243,8 @@ class Addon {
             $form->setDefaults([
                 "Addon_Name" => $Addon->getName(),
                 "Addon_Active" => $Addon->isActive(),
-                "Addon_Multipel_Values" => $Addon->isMultipleValues()
+                "Addon_Multipel_Values" => $Addon->isMultipleValues(),
+                "Addon_ListStyle" => $Addon->isListStyle()
             ]);
         }
 
@@ -242,7 +258,6 @@ class Addon {
                 $Addon->writeTemplateFile("");
                 redirect("/dashboard/content/addons");
             } else {
-
                 if (!self::save($form->getValues("array")["Addon_Id"],$form->getValues("array"))){
                     $form->addError("Opslaan mislukt");
                 } else {
@@ -827,9 +842,14 @@ class Addon {
      * @throws Error
      */
     public function getFields(){
-        return $this->db->fetchAll("SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Addon_Id = :Addon_Id ORDER BY AddonSetting_Position",[
+        $aFields =  $this->db->fetchAll("SELECT * FROM tblCmsAddonSettings WHERE AddonSetting_Addon_Id = :Addon_Id ORDER BY AddonSetting_Position",[
             "Addon_Id" => $this->getId()
         ]);
+        $return = [];
+        foreach ($aFields as $aField){
+            $return[$aField["AddonSetting_Tag"]] = $aField;
+        }
+        return  $return;
     }
 
 
@@ -972,6 +992,7 @@ class Addon {
         $File["Name"] = $this->getName();
         $File["Multiple"] = $this->isMultipleValues();
         $File["Active"] = $this->isActive();
+        $File["ListStyle"] = $this->isListStyle();
         $File["Type"] = $this->getType();
         $this->writeDataFile($File);
 
@@ -1007,6 +1028,7 @@ class Addon {
                 "Addon_Type" => $Data["Type"],
                 "Addon_Active" => (int)$Data["Active"],
                 "Addon_Multipel_Values" => (int)$Data["Multiple"],
+                "Addon_ListStyle" =>(int)$Data["ListStyle"]
             ]);
 
             foreach ($Data["Fields"] as  $Field){
@@ -1043,6 +1065,26 @@ class Addon {
         }
         return$form;
     }
+
+    /**
+     * @return bool
+     */
+    public function isListStyle(): bool
+    {
+        $this->load();
+        return $this->isListStyle;
+    }
+
+    /**
+     * @param bool $isListStyle
+     * @return Addon
+     */
+    public function setIsListStyle(bool $isListStyle): Addon
+    {
+        $this->isListStyle = $isListStyle;
+        return $this;
+    }
+
 
 
 

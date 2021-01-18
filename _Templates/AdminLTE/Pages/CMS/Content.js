@@ -148,7 +148,8 @@ var Builder = {
             widget:{
                 oTemplate: $(''),
                 init: function (aBlock) {
-                    iframe = $("<iframe frameborder='0' scrolling='no' src='/Block/"+aBlock.Block_Id+"'></iframe>");
+                    console.log(aBlock);
+                    iframe = $("<iframe frameborder='0' scrolling='no' src='/Block/"+aBlock.Content_Id+"'></iframe>");
                     iframe.on("click",function (){
                         resizeIframe(this);
                     });

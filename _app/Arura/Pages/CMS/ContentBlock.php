@@ -190,19 +190,19 @@ class ContentBlock extends Modal{
     }
 
     /**
-     * @return string
+     * @return string|array
      */
-    public function getValue(): string
+    public function getValue()
     {
         $this->load();
         return $this->value;
     }
 
     /**
-     * @param string $value
+     * @param string|array $value
      * @return ContentBlock
      */
-    public function setValue(string $value): ContentBlock
+    public function setValue($value): ContentBlock
     {
         $this->value = $value;
         return $this;

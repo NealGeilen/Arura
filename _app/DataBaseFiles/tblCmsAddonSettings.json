@@ -1,1 +1,39 @@
-{"columns":{"AddonSetting_Id":{"Type":"int(11)","Null":"NO","Key":"PRI","Default":null,"Extra":"auto_increment"},"AddonSetting_Addon_Id":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""},"AddonSetting_Type":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""},"AddonSetting_Position":{"Type":"int(11)","Null":"NO","Key":"","Default":null,"Extra":""},"AddonSetting_Tag":{"Type":"varchar(255)","Null":"NO","Key":"","Default":null,"Extra":""}}}
+{
+	"columns": {
+		"AddonSetting_Id": {
+			"Type": "int(11)",
+			"Null": "NO",
+			"Key": "PRI",
+			"Default": null,
+			"Extra": "auto_increment"
+		},
+		"AddonSetting_Addon_Id": {
+			"Type": "int(11)",
+			"Null": "NO",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		"AddonSetting_Type": {
+			"Type": "varchar(255)",
+			"Null": "NO",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		"AddonSetting_Position": {
+			"Type": "int(11)",
+			"Null": "NO",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		},
+		"AddonSetting_Tag": {
+			"Type": "varchar(255)",
+			"Null": "NO",
+			"Key": "",
+			"Default": null,
+			"Extra": ""
+		}
+	}
+}

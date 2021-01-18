@@ -1,1 +1,60 @@
-{"columns":{"Content_Id":{"Type":"int(11)","Null":"NO","Key":"PRI","Default":null,"Extra":"auto_increment"},"Content_Group_Id":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Addon_Id":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Type":{"Type":"varchar(255)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Value":{"Type":"longtext","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Position":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Size":{"Type":"int(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Raster":{"Type":"int(11)","Null":"YES","Key":"","Default":"2","Extra":""},"Content_Css_Background_Color":{"Type":"varchar(11)","Null":"YES","Key":"","Default":null,"Extra":""},"Content_Css_Background_Img":{"Type":"varchar(255)","Null":"YES","Key":"","Default":null,"Extra":""}}}
+{
+  "columns": {
+    "Content_Id": {
+      "Type": "int(11)",
+      "Null": "NO",
+      "Key": "PRI",
+      "Default": null,
+      "Extra": "auto_increment"
+    },
+    "Content_Group_Id": {
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Content_Addon_Id": {
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Content_Type": {
+      "Type": "varchar(255)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Content_Value": {
+      "Type": "longtext",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Content_Position": {
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Content_Size": {
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Content_Raster": {
+      "Type": "int(11)",
+      "Null": "YES",
+      "Key": "",
+      "Default": "2",
+      "Extra": ""
+    }
+  }
+}

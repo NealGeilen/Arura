@@ -6,8 +6,12 @@
 {/block}
 
 {block content}
-
-
+    <script>
+        var _Content = {$Block->getValue()|json_encode};
+        var _Fields = {$Addon->getFields()|json_encode};
+        var _Raster = {$Block->GetRaster()};
+        var _IsMultiple = {$Addon->isMultipleValues()};
+    </script>
     <div class="row">
         <div class="col-md-6">
             <div class="card card-body bg-primary">
@@ -15,22 +19,22 @@
                 <h4>Soort: {$Addon->getType()|ucfirst}</h4>
             </div>
         </div>
-        {if $Addon->getType() != "custom"}
+        {if $Addon->getType() != "custom" && $Addon->isMultipleValues() && !$Addon->isListStyle()}
         <div class="col-md-6">
             <div class="card card-body bg-primary">
                 <h5>Raster groote</h5>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                    <label class="btn btn-secondary active">
-                        <input type="radio" name="options" id="option1" autocomplete="off" checked> 12
+                    <label class="btn btn-secondary {if $Block->GetRaster() === 12}active{/if}" onclick="Builder.Item.ChangeRaster(12, this)">
+                        <input type="radio"> 12
                     </label>
-                    <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option2" autocomplete="off"> 6-6
+                    <label class="btn btn-secondary {if $Block->GetRaster() === 6}active{/if}" onclick="Builder.Item.ChangeRaster(6, this)">
+                        <input type="radio"> 6-6
                     </label>
-                    <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> 4-4-4
+                    <label class="btn btn-secondary {if $Block->GetRaster() === 4}active{/if}" onclick="Builder.Item.ChangeRaster(4, this)">
+                        <input type="radio"> 4-4-4
                     </label>
-                    <label class="btn btn-secondary">
-                        <input type="radio" name="options" id="option3" autocomplete="off"> 3-3-3-3
+                    <label class="btn btn-secondary {if $Block->GetRaster() === 3}active{/if}" onclick="Builder.Item.ChangeRaster(3,this)">
+                        <input type="radio" > 3-3-3-3
                     </label>
                 </div>
             </div>
@@ -38,37 +42,22 @@
         {/if}
     </div>
     {if $Addon->getType() != "custom"}
-        <div class="card bg-secondary">
+        <div class="card card-secondary">
             <div class="card-header">
                 <h3 class="card-title">Content</h3>
                 <div class="card-tools">
-                    <button class="btn btn-primary">
+                    {if $Addon->isMultipleValues()}
+                    <button class="btn btn-primary" onclick="Builder.Item.Create()">
                         <i class="fas fa-plus"></i>
                     </button>
-                    <button class="btn btn-primary">
+                    {/if}
+                    <button class="btn btn-primary" onclick="Builder.Structure.save()">
                         <i class="fas fa-save"></i>
                     </button>
                 </div>
             </div>
             <div class="card-body">
-                <div class="Group row">
-                    <div class="Group-Item active position-relative col-md-6">
-                        <div class="btn-group-vertical">
-                            <span class="btn btn-primary">
-                                <i class="fas fa-arrows-alt-v"></i>
-                            </span>
-                            <button class="btn btn-primary">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                        <div class="row">
-                            {foreach $Addon->getFields() as $Field}
-                                <div class="col-12">
-                                    {$Field|var_dump}
-                                </div>
-                            {/foreach}
-                        </div>
-                    </div>
+                <div class="Groups row">
                 </div>
             </div>
         </div>
@@ -77,4 +66,25 @@
             Een custom addon kan niet bewerkt worden!
         </div>
     {/if}
+
+    <div class="d-none">
+        <div class="template-group">
+            <div class="Group-Item col-md-12 ">
+                {if $Addon->isMultipleValues()}
+                <div class="btn-group-vertical">
+                            <span class="btn btn-primary Group-handle">
+                                <i class="fas fa-arrows-alt"></i>
+                            </span>
+                    <button class="btn btn-primary" onclick="Builder.Item.Delete($(this).parents('.Group-Item'))">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+                {/if}
+                <div class="content bg-secondary">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 {/block}

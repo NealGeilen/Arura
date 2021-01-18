@@ -257,7 +257,15 @@ class CMS extends AbstractController {
      */
     public function Block($id){
         $block = new ContentBlock($id);
-        //Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Addons/layout.js");
+        Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($block){
+            $requestHandler->addType("save", function ($aData) use ($block){
+                $aBlock = $block->get();
+                $aBlock["Content_Value"] = $aData["Value"];
+                $aBlock["Content_Raster"] = $aData["Raster"];
+                $block->set($aBlock);
+            });
+        });
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/block/Content.js");
         Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/block/Content.css");
         $this->render("AdminLTE/Pages/CMS/Block/Content.tpl", [
             "title" =>"Content block",

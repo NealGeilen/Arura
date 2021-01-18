@@ -62,7 +62,11 @@ var Modals = (function() {
         });
         //Set titel en message field
         modal.find(aSelectors.Modal_Title).text(settings.Title);
-        modal.find(aSelectors.Modal_Body).html(settings.Message);
+        if (typeof settings.Message === 'function'){
+            modal.find(aSelectors.Modal_Body).html(settings.Message(this, settings));
+        } else {
+            modal.find(aSelectors.Modal_Body).html(settings.Message);
+        }
 
 
         //Add buttons to modal footer
