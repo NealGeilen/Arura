@@ -43,10 +43,6 @@ img:after{
     display: block;
     content: '\f03e';
     color: #abb4be;
-    /*position: absolute;*/
-    /*right: 45%;*/
-    /*left: 45%;*/
-    /*top: 30%;*/
     width: 10%;
     min-height: 80px;
     margin: 0 auto;
