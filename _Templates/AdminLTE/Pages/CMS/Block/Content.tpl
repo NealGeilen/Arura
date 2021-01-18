@@ -10,7 +10,7 @@
         var _Content = {$Block->getValue()|json_encode};
         var _Fields = {$Addon->getFields()|json_encode};
         var _Raster = {$Block->GetRaster()};
-        var _IsMultiple = {$Addon->isMultipleValues()};
+        var _IsMultiple = {if $Addon->isMultipleValues()}true{else}false{/if};
     </script>
     <div class="row">
         <div class="col-md-6">
