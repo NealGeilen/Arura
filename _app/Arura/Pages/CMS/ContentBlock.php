@@ -76,7 +76,7 @@ class ContentBlock extends Modal{
      */
     public function set($aBlock, $excludValue = true){
         $aBlock['Content_Id'] = $this->getId();
-        if ((int)$aBlock["Content_Addon_Id"]>0){
+        if ((int)$aBlock["Content_Addon_Id"]>0 && !$excludValue){
             if (!isset($aBlock["Content_Value"])){
                 $aBlock["Content_Value"] = "";
             }
