@@ -74,13 +74,17 @@ class ContentBlock extends Modal{
      * @return bool
      * @throws Error
      */
-    public function set($aBlock){
+    public function set($aBlock, $excludValue = true){
         $aBlock['Content_Id'] = $this->getId();
-        if (!isset($aBlock["Content_Value"])){
-            $aBlock["Content_Value"] = "";
-        }
-        if (is_array($aBlock['Content_Value'])){
-            $aBlock['Content_Value'] = json_encode($aBlock['Content_Value']);
+        if (!$excludValue){
+            if (!isset($aBlock["Content_Value"])){
+                $aBlock["Content_Value"] = "";
+            }
+            if (is_array($aBlock['Content_Value'])){
+                $aBlock['Content_Value'] = json_encode($aBlock['Content_Value']);
+            }
+        } else {
+            unset($aBlock["Content_Value"]);
         }
         $this -> db -> updateRecord('tblCmsContentBlocks',$aBlock,'Content_Id');
         return $this->db->isQuerySuccessful();

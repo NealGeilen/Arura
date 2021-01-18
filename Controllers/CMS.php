@@ -262,7 +262,7 @@ class CMS extends AbstractController {
                 $aBlock = $block->get();
                 $aBlock["Content_Value"] = $aData["Value"];
                 $aBlock["Content_Raster"] = $aData["Raster"];
-                $block->set($aBlock);
+                $block->set($aBlock, false);
             });
         });
         Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/block/Content.js");
