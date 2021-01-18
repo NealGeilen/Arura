@@ -2,7 +2,9 @@
 namespace Arura\Api;
 
 use Arura\Exceptions\NotAcceptable;
+use Arura\Pages\Page;
 use Arura\Settings\Application;
+use Arura\User\Password;
 use Arura\User\User;
 use Exception;
 
@@ -14,7 +16,7 @@ class Handler{
 
     protected $callback;
 
-    public $requiredFields = ["Token"];
+    public $requiredFields = [];
 
     /**
      * @param array $requiredFields
@@ -31,7 +33,7 @@ class Handler{
     public function run(){
         try {
             $this->validateFields();
-            $this->setResponse(call_user_func($this->getCallback(), $_REQUEST));
+            $this->setResponse(call_user_func($this->getCallback(), Router::getRequest()));
         } catch (Exception $e){
             $this->setException($e);
         }
@@ -43,23 +45,22 @@ class Handler{
     }
 
     public function validateFields(){
-        if (isset($_REQUEST["Token"]) && isset($_REQUEST["User"])){
-            $User = User::getUserOnEmail($_REQUEST["User"]);
+        $request = Router::getRequest();
+        if ($request->headers->has("X-AUTH-TOKEN") && $request->headers->has("X-AUTH-USER")){
+            $User = User::getUserOnEmail($request->headers->get("X-AUTH-USER", null));
             if ($User !== false){
-                if ($User->getApiToken() === $_REQUEST["Token"]){
+                if (Password::Verify($request->headers->get("X-AUTH-TOKEN"), $User->getApiToken())){
                     foreach ($this->getRequiredFields() as $sField){
-                        if (!isset($_REQUEST[$sField])){
+                        if (!$request->request->has($sField)){
                             throw new NotAcceptable("{$sField} is required");
-                        } elseif (empty($_REQUEST[$sField]) && !is_numeric($_REQUEST[$sField])) {
-                            throw new NotAcceptable("{$sField} needs to have a value. given value '{$_REQUEST[$sField]}'");
                         }
                     }
                     return true;
                 }
             }
         }
-        header('HTTP/1.1 404 Not Found');
-        exit;
+        Page::pageNotFound();
+        return false;
     }
 
     /**

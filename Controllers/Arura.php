@@ -65,6 +65,7 @@ class Arura extends AbstractController {
             "editForm" => User::getProfileForm($oUser),
             "passwordForm" => User::getPasswordForm($oUser),
             "roleForm" => User::getRoleForm($oUser),
+            "apiForm" => $oUser->getApiForm(),
             "Logs" => Logger::getLogsUser($oUser),
             "aSessions" => $db->fetchAll("SELECT * FROM tblSessions WHERE Session_User_Id = :User_Id", ["User_Id" => $oUser->getId()])
         ]);

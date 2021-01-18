@@ -417,7 +417,6 @@ class User
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         if (Restrict::Validation(Rights::ARURA_USERS) && !is_null($user)){
             $form->addCheckbox("User_IsActive", "Account actief");
-            $form->addText("User_Api_Token", "API Token");
         }
         if (!is_null($user)){
             $form->setDefaults($user->__ToArray());
@@ -439,7 +438,6 @@ class User
                     $user->setFirstname($form->getValues()->User_Firstname);
                     $user->setLastname($form->getValues()->User_Lastname);
                     if (Restrict::Validation(Rights::ARURA_USERS)){
-                        $user->setApiToken($form->getValues()->User_Api_Token);
                         $user->setIsActive($form->getValues()->User_IsActive);
                     }
                 }
@@ -450,6 +448,21 @@ class User
                     Logger::Create(Logger::UPDATE, User::class, $user->getUsername());
                     Flasher::addFlash("Profiel opgeslagen");
                 }
+            }
+        }
+        return $form;
+    }
+
+    public function getApiForm(){
+        $form = new Form("api-form");
+        $form->addSubmit("submit", "Nieuwe api Key");
+        if ($form->isSubmitted()){
+            $token = str_random(20);
+            $EncryptedToken = Password::Create($token);
+            $this->setApiToken($EncryptedToken);
+            if ($this->save()){
+                Flasher::addFlash("Nieuwe Api token aangemaakt");
+                $this->setApiToken($token);
             }
         }
         return $form;

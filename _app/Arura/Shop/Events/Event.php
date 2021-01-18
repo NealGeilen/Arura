@@ -412,6 +412,11 @@ class Event extends Page implements iWebhookEntity{
                 $oPage = self::fromUrl($sUrl);
                 if ($oPage->getIsVisible()){
                     switch ($sType){
+                        case "json":
+                            echo json_encode($oPage->serialize());
+                            http_response_code(200);
+                            exit;
+                            break;
                         case "ical":
                             echo $oPage->getCalendarLinks()->ics();
                             header('Content-Type: text/calendar; charset=utf-8');
@@ -682,7 +687,7 @@ class Event extends Page implements iWebhookEntity{
         return [
             "id" => $this->getId(),
             "name" => $this->getName(),
-            "description" => $this->getDescription(),
+            "description" => strip_tags($this->getDescription()),
             "start" => $this->getStart()->getTimestamp(),
             "end" => $this->getEnd()->getTimestamp(),
             "location" => $this->getLocation(),

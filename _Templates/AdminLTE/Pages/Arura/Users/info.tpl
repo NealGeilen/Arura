@@ -28,6 +28,16 @@
                     {$editForm}
                 </div>
             </div>
+            <div class="card card-secondary bg-secondary">
+                <div class="card-body">
+                    {if $apiForm->isSubmitted()}
+                        <div class="alert alert-warning mb-3">
+                            Nieuwe token: "{$User->getApiToken()}" <br/> Eenmalig beschikbaar!
+                        </div>
+                    {/if}
+                    {$apiForm}
+                </div>
+            </div>
         </div>
         <div class="tab-pane fade" id="password" role="tabpanel" aria-labelledby="profile-tab">
             <div class="card card-secondary">
