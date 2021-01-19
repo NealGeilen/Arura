@@ -298,9 +298,7 @@ class Page extends Pages\Page{
             foreach ($this->getGroups() as $aGroup){
                 $aBlocks = [];
                 foreach ($this->getContentBlocks((int)$aGroup['Group_Id']) as $aContentBlock){
-                    if (empty($aContentBlock['Content_Value'])){
-                        continue;
-                    }
+                    $aContentBlock["Template"] = null;
                     switch ($aContentBlock['Content_Type']){
                         case 'TextArea':
                             $aContentBlock['Template'] = $aContentBlock['Content_Value'];
@@ -327,8 +325,10 @@ class Page extends Pages\Page{
                             $aContentBlock['Template'] = $Addon->Display($aContentBlock['Content_Value'], $aContentBlock,self::getSmarty());
                             break;
                     }
-                    if (!empty($aContentBlock["Template"])){
+                    if ($aContentBlock["Template"] !== null){
                         $aBlocks[(int)$aContentBlock['Content_Position']] = $aContentBlock;
+                    } else{
+                        continue;
                     }
                 }
                 if (!empty($aBlocks)){
