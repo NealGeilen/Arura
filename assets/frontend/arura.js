@@ -18,6 +18,11 @@ function serializeArray(oForm) {
 
 
 $(document).ready(function () {
+    Arura.Event.BankSelect();
+    Arura.Event.RegisterForm($(".form-event-checkout"));
+    Arura.Event.OrderTicketAmountForm($(".form-event-order"));
+    Arura.Event.RegisterEvent($(".event-signup"));
+    Arura.Gallery.init();
     Arura.Cms.Corrections();
 });
 
@@ -57,101 +62,74 @@ Arura = {
             });
         },
         BankSelect: function () {
-            $(".bank-select").on("click", function () {
-                $(".bank-select.active").removeClass("active");
-                $(this).addClass("active");
-            });
+            if ($(".bank-select").length){
+                $(".bank-select").on("click", function () {
+                    $(".bank-select.active").removeClass("active");
+                    $(this).addClass("active");
+                });
+            }
         },
         RegisterForm: function (oForm) {
-            oForm.validate({
-                rules: {
-                    issuer : {
-                        required :true
+            if (oForm.length){
+                oForm.validate({
+                    rules: {
+                        issuer : {
+                            required :true
+                        },
                     },
-                },
-                messages: {
-                    issuer: {
-                        required: "Selecteer eerst je bank"
+                    messages: {
+                        issuer: {
+                            required: "Selecteer eerst je bank"
+                        }
+                    },
+                    onclick: function(label,i){
+                        $("[name=issuer]").removeClass("error").parent().removeClass("bank-error");
+                        $(".bank-select-error").html(null);
+                    },
+                    errorPlacement: function(error, element) {
+                        if (element.attr("name") === "issuer") {
+                            oForm = element.parents("form");
+                            oForm.find(".bank-select").addClass("bank-error");
+                            error.appendTo(oForm.find(".bank-select-error"));
+                        } else {
+                            error.insertAfter(element);
+                        }
                     }
-                },
-                onclick: function(label,i){
-                    $("[name=issuer]").removeClass("error").parent().removeClass("bank-error");
-                    $(".bank-select-error").html(null);
-                },
-                errorPlacement: function(error, element) {
-                    if (element.attr("name") === "issuer") {
-                        oForm = element.parents("form");
-                        oForm.find(".bank-select").addClass("bank-error");
-                        error.appendTo(oForm.find(".bank-select-error"));
-                    } else {
-                        error.insertAfter(element);
-                    }
-                }
-            });
+                });
+            }
         },
         OrderTicketAmountForm: function (oForm) {
-            oForm.validate({
-                // submitHandler: function (oForm) {},
-                errorPlacement: function(error, element) {
-                    console.log(error, element);
-                    if (element.hasClass("ticket-amount")) {
-                        oCard = element.parents(".card");
-                        oCard.find(".ticket-error").html(error);
-                    } else {
-                        error.insertAfter(element);
+            if (oForm.length){
+                oForm.validate({
+                    // submitHandler: function (oForm) {},
+                    errorPlacement: function(error, element) {
+                        console.log(error, element);
+                        if (element.hasClass("ticket-amount")) {
+                            oCard = element.parents(".card");
+                            oCard.find(".ticket-error").html(error);
+                        } else {
+                            error.insertAfter(element);
+                        }
                     }
-                }
-            });
-            $( ".ticket-amount" ).rules( "add", {
-                messages: {
-                    required: "Er zijn geen aantallen opgegegven. Dit is verplicht.",
-                },
-                required: {
-                    depends: function(element) {
-                        $.each($(element).parents("table").find("input[type=number]"), function (i ,oElement) {
-                            if ($(oElement).val() !== ""){
-                                if (parseInt($(oElement).val()) > 0){
-                                    return false;
+                });
+                $( ".ticket-amount" ).rules( "add", {
+                    messages: {
+                        required: "Er zijn geen aantallen opgegegven. Dit is verplicht.",
+                    },
+                    required: {
+                        depends: function(element) {
+                            $.each($(element).parents("table").find("input[type=number]"), function (i ,oElement) {
+                                if ($(oElement).val() !== ""){
+                                    if (parseInt($(oElement).val()) > 0){
+                                        return false;
+                                    }
                                 }
-                            }
-                        });
-                        return true ;
+                            });
+                            return true ;
+                        }
                     }
-                }
-            });
-        }
-    },
-    Cart : {
-        buildCart: function(aData){
-
-        },
-        addToCart : function (iProduct, sType, iAmount ) {
-            Arura.xhr({
-                url: Arura.API_DIR + "shopper.php?type=add-to-cart",
-                data: {
-                    "type":sType,
-                    "id": iProduct,
-                    "amount": iAmount
-                },
-                success: function (response) {
-                    addSuccessMessage("Toegevoegd");
-                    Arura.Cart.buildCart(response.data);
-                }
-            });
-        },
-        removeFromCart : function (iProduct, iAmount ) {
-            Arura.xhr({
-                url: Arura.API_DIR + "shopper.php?type=remove-from-cart",
-                data: {
-                    "type":sType,
-                    "id": iProduct,
-                    "amount": iAmount
-                },
-                success: function (response) {
-                    addSuccessMessage("Toegevoegd");
-                    Arura.Cart.buildCart(response.data);
-                }
-            });
+                });
+            }
         }
     },
     System: {
@@ -216,39 +194,6 @@ Arura = {
             Arura.System.StartPageLoad();
             $(document).ready(function () {
                 Arura.System.EndPageLoad();
-            });
-        },
-        ContactForm: function (oForm  = $("[form=contact]")) {
-            oForm.validate({
-                submitHandler: function (oForm, event) {
-                    event.preventDefault();
-                    Arura.System.StartPageLoad();
-                    oForm = $(oForm);
-                    oForm.find(':submit').prop('disabled', true);
-                    Arura.xhr({
-                        url: Arura.API_DIR + 'contact.php',
-                        data: serializeArray(oForm),
-                        success : function (){
-                            Arura.System.EndPageLoad();
-                            oForm.find('.alert-success').slideDown('slow', function () {
-                                oForm.find('.form-control').val(null);
-                                oForm.find(':submit').prop('disabled', false);
-                                setTimeout(function () {
-                                    oForm.find('.alert-success').slideUp('slow');
-                                }, 10000);
-                            });
-                        },
-                        error : function () {
-                            Arura.System.EndPageLoad();
-                            oForm.find('.alert-danger').slideDown('slow', function () {
-                                oForm.find(':submit').prop('disabled', false);
-                                setTimeout(function () {
-                                    oForm.find('.alert-danger').slideUp('slow');
-                                },  5000);
-                            });
-                        }
-                    });
-                }
             });
         }
     },
@@ -357,17 +302,19 @@ Arura = {
     },
     Gallery: {
         init: function () {
-            $(".Gallery").magnificPopup({
-                delegate: 'a',
-                type: 'image',
-                gallery: {
-                    enabled: true,
-                    arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
-                    tPrev: 'Vorige',
-                    tNext: 'Volgende',
-                    tCounter: '<span class="mfp-counter">%curr% van %total%</span>' // markup of counter
-                }
-            });
+            if ($(".Gallery").length){
+                $(".Gallery").magnificPopup({
+                    delegate: 'a',
+                    type: 'image',
+                    gallery: {
+                        enabled: true,
+                        arrowMarkup: '<button title="%title%" type="button" class="mfp-arrow mfp-arrow-%dir%"></button>', // markup of an arrow button
+                        tPrev: 'Vorige',
+                        tNext: 'Volgende',
+                        tCounter: '<span class="mfp-counter">%curr% van %total%</span>' // markup of counter
+                    }
+                });
+            }
         }
     }
 };
