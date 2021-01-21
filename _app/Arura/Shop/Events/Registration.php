@@ -293,6 +293,7 @@ class Registration extends Modal {
             $oMailer->setBody(__RESOURCES__ . "Mails/event.html");
             $oMailer->setSubject("Aanmelding voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
         }
+        $oMailer->addStringAttachment($this->getEvent()->getIcal($this)->get(), $this->getEvent()->getName().'.ics');
 
 
         $oMailer->addBCC($this->getEmail());

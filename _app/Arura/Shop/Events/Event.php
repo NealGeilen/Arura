@@ -27,6 +27,12 @@ use Mollie\Api\Exceptions\IncompatiblePlatform;
 use Rights;
 use SmartyException;
 use Spatie\CalendarLinks\Link;
+use Spatie\IcalendarGenerator\Components\Calendar;
+use Spatie\IcalendarGenerator\Components\Timezone;
+use Spatie\IcalendarGenerator\Components\TimezoneEntry;
+use Spatie\IcalendarGenerator\Enums\EventStatus;
+use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
+use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 
 class Event extends Page implements iWebhookEntity{
 
@@ -397,6 +403,38 @@ class Event extends Page implements iWebhookEntity{
         return $form;
     }
 
+    /**
+     * @param Registration|null $registration
+     * @return Calendar
+     * @throws Error
+     */
+    public function getIcal(Registration $registration = null) :Calendar
+    {
+        $timezone = Timezone::create('Europe/Brussels');
+
+
+        $event = \Spatie\IcalendarGenerator\Components\Event::create($this->getName())
+            ->startsAt($this->getStart())
+            ->endsAt($this->getEnd())
+            ->description(strip_tags($this->getDescription()))
+            ->address($this->getLocation())
+            ->addressName($this->getLocation())
+            ->organizer($this->getOrganizer()->getEmail(), $this->getOrganizer()->getFirstname());
+
+        if ($registration !== null){
+            $event->attendee($registration->getEmail(), "{$registration->getFirstname()} {$registration->getLastname()}", ParticipationStatus::accepted());
+        }
+
+        if ($this->isCanceled()){
+            $event->status(EventStatus::cancelled());
+        }
+
+        return Calendar::create(Application::get("website", "name"))
+            ->timezone($timezone)
+            ->productIdentifier(Application::get("website", "name") .Application::get("website", "url"))
+            ->event($event);
+    }
+
 
     /**
      * @param string $sSlug
@@ -418,7 +456,7 @@ class Event extends Page implements iWebhookEntity{
                             exit;
                             break;
                         case "ical":
-                            echo $oPage->getCalendarLinks()->ics();
+                            echo $oPage->getIcal()->get();
                             header('Content-Type: text/calendar; charset=utf-8');
                             header('Content-Disposition: attachment; filename="ical.ics"');
                             http_response_code(200);
@@ -683,7 +721,7 @@ class Event extends Page implements iWebhookEntity{
 
     public function serialize():array{
         $this->load();
-        $url = Application::get("website", "url"). "/event" . $this->getSlug();
+        $url = Application::get("website", "url"). "/event/" . $this->getSlug();
         return [
             "id" => $this->getId(),
             "name" => $this->getName(),
@@ -704,7 +742,7 @@ class Event extends Page implements iWebhookEntity{
         ];
     }
 
-    public function TriggerWebhook(int $trigger, array $data){
+    public function TriggerWebhook(int $trigger, array $data = []){
         Webhook::Trigger($trigger, array_merge($this->serialize(), $data));
     }
 
