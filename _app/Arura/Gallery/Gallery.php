@@ -36,7 +36,7 @@ class Gallery extends Page implements iWebhookEntity {
 
     public function serialize():array{
         $this->load();
-        $url = Application::get("website", "url"). "/album" . $this->getId();
+        $url = Application::get("website", "url"). "/album/" . $this->getId();
         return [
             "id" => $this->getId(),
             "name" => $this->getName(),

@@ -40,6 +40,9 @@ class Router{
                     $router->all("/search", function (){
                         Gallery::SearchAlbums();
                     });
+                    $router->all("/random", function (){
+                        Gallery::RandomAlbums();
+                    });
                     $router->all("/([^/]+)/upload", function ($id){
                         Gallery::uploadImage($id);
                     });

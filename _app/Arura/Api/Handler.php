@@ -38,7 +38,7 @@ class Handler{
             $this->setException($e);
         }
         if ($this->getException() === null){
-            echo json_encode(["data" => $this->getResponse(), "code" => 200, "Message" => "success"]);
+            echo json_encode(["data" => $this->getResponse(), "code" => 200, "Message" => "success", "time" => time()]);
         } else {
             echo json_encode(["data" => [], "code" => $this->getException()->getCode(), "Message" => $this->getException()->getMessage()]);
         }
