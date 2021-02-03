@@ -145,34 +145,18 @@ var Builder = {
             }
         },
         Addons:{
-            widget:{
-                oTemplate: $(''),
-                init: function (aBlock) {
-                    console.log(aBlock);
-                    iframe = $("<iframe frameborder='0' scrolling='no' src='/Block/"+aBlock.Content_Id+"'></iframe>");
-                    iframe.on("click",function (){
-                        resizeIframe(this);
-                    });
-                    return iframe;
-                },
-                value: function (oBlock) {
-                }
+            init: function (aBlock) {
+                iframe = $("<iframe frameborder='0' scrolling='no' src='/Block/"+aBlock.Content_Id+"'></iframe>");
+                iframe.on("load",function (){
+                    resizeIframe(this);
+                });
+                container = $("<div class='iframe-container'> <div class='overlay'></div></div>");
+                container.append(iframe);
+                return container;
             },
-            custom :{
-                oTemplate: $('<span>').addClass('text-center'),
-                init: function (aBlock) {
-                    iframe = $("<iframe frameborder='0' scrolling='no' src='/Block/"+aBlock.Content_Id+"'></iframe>");
-                    iframe.on("load",function (){
-                        resizeIframe(this);
-                    });
-                    container = $("<div class='iframe-container'> <div class='overlay'></div></div>");
-                    container.append(iframe);
-                    return container;
-                },
-                value: function (oBlock) {
-                    return 1;
-                }
-            },
+            value: function (oBlock) {
+                return 1;
+            }
         }
     },
     Structure: {
@@ -264,6 +248,18 @@ var Builder = {
       }
     },
     Group: {
+        SettingFields:[
+            {
+                name: "Css class",
+                type: "text",
+                tag: "Group_Css_Class"
+            },
+            {
+                name: "Css id",
+                type: "text",
+                tag: "Group_Css_Id"
+            }
+        ],
         setArray: function(oGroup, aArray){
             Builder.DataSet.Groups[parseInt(oGroup.attr('group-id'))] = aArray;
         },
@@ -309,6 +305,26 @@ var Builder = {
                     oElement.remove();
                 }
             });
+        },
+        Edit: function (oElement){
+            aGroup = Builder.Group.getData(oElement);
+            content = $("<div>").addClass("row")
+            $.each(Builder.Group.SettingFields, function (i, setting){
+                content.append(
+                    "<div class='col-12'><label>"+setting.name+"</label><input name='"+setting.tag+"' value='"+aGroup[setting.tag]+"' type='"+setting.type+"' class='form-control'></div>"
+                )
+            });
+            console.log(Builder.Group.getData(oElement))
+            Modals.Custom({
+                Title: "Test",
+                Message: content,
+                onConfirm:function (modal){
+                    modal.find("input").each(function (i, field){
+                        Builder.Group.setData(oElement, $(field).attr("name"), $(field).val());
+                    });
+                }
+            })
+
         },
         State:{
             Activate: function (oElement) {
@@ -482,7 +498,7 @@ var Builder = {
             switch(aBlock.Content_Type){
                 case 'widget':
                 case 'custom':
-                    value = Builder.ContentTypes.Addons[aBlock.Content_Type].value(oBlock.find('.Block-Item-Content'));
+                    value = Builder.ContentTypes.Addons.value(oBlock.find('.Block-Item-Content'));
                     break;
                 default:
                     value = Builder.ContentTypes.Types[aBlock.Content_Type].value(oBlock.find('.Block-Item-Field'));
@@ -497,7 +513,7 @@ var Builder = {
             switch(aBlock.Content_Type){
                 case 'widget':
                 case 'custom':
-                    oItem = Builder.ContentTypes.Addons[aBlock.Content_Type].init(aBlock);
+                    oItem = Builder.ContentTypes.Addons.init(aBlock);
                     break;
                 default:
                     oItem = Builder.ContentTypes.Types[aBlock.Content_Type].init(aBlock.Content_Value).addClass('Block-Item-Field');
@@ -507,169 +523,6 @@ var Builder = {
         }
     }
 };
-// var Sidebar = {
-//     Group: {
-//         Active_Id: 0,
-//         getGroupElement: function(){
-//             return $('[group-id='+this.Active_Id+']');
-//         },
-//         getGroupData:function(){
-//             return Builder.Group.getData(this.getGroupElement());
-//         },
-//         setGroupData: function(sField, value){
-//             Builder.Group.setData(this.getGroupElement(),sField,value);
-//         },
-//         setGroupSettingValues: function(){
-//             aData = this.getGroupData();
-//             var rest = function (){
-//                 $('.group-settings-field').val(null)
-//             };
-//             var set = function (){
-//                 $.each(aData, function (sKey,sValue) {
-//                     $('[field='+sKey+']').val(sValue);
-//                 });
-//             };
-//
-//             rest();
-//             set();
-//         },
-//         Events : function () {
-//             S = this;
-//             $.each(this.getGroupData(), function (sField, sValue) {
-//                 $('[field='+sField+']').unbind().on('input', function () {
-//                     S.setGroupData(sField,this.value);
-//                 });
-//             });
-//         },
-//         State: {
-//             Activate: function () {
-//                 Sidebar.Group.Events();
-//                 Sidebar.Group.setGroupSettingValues();
-//                 $('.group-message').css('display', 'none');
-//                 $('.group-settings').css('display', 'block');
-//             },
-//             Deactivate : function () {
-//                 $('.group-message').css('display', 'block');
-//                 $('.group-settings').css('display', 'none')
-//             }
-//         }
-//     },
-//     Block: {
-//         Active_Id: 0,
-//         getBlockElement: function(){
-//             return $('[block-id='+this.Active_Id+']');
-//         },
-//         getBlockData:function(){
-//            return Builder.Block.getData(this.getBlockElement());
-//         },
-//         setBlockData: function(sField, value){
-//           Builder.Block.setData(this.getBlockElement(),sField,value);
-//         },
-//         setBlockSettingValues: function(){
-//             aData = this.getBlockData();
-//             var rest = function (){
-//                 $('.Content-Rater-Selector').find('[content-raster]').prop('checked', false).parent().removeClass('active');
-//                 $('#content-background-color').val(null);
-//                 $('#content-background-img').val(null);
-//                 $('.block-settings-items-control').show();
-//                 $(".type").text(null);
-//             };
-//             var set = function (aData){
-//                 if (aData.Content_Type === "custom" || aData.Content_Type === "widget"){
-//                     $(".type").text(Addons[aData.Content_Addon_Id].Addon_Name);
-//                 } else {
-//                     $(".type").text(aData.Content_Type);
-//                 }
-//
-//                 if (parseInt(aData.Content_Addon_Id) === 0 || (parseInt(Addons[aData.Content_Addon_Id].Addon_Type) === "custom" || parseInt(Addons[aData.Content_Addon_Id].Addon_Multipel_Values) === 0)){
-//                     $('.block-settings-items-control').hide();
-//                 } else {
-//                     $('.Content-Rater-Selector').find('[content-raster='+aData.Content_Raster+']').prop('checked', true).parent().addClass('active');
-//                 }
-//                 $('#content-background-color').val(aData.Content_Css_Background_Color);
-//                 $('#content-background-img').val(aData.Content_Css_Background_Img)
-//             };
-//
-//             rest();
-//             set(aData);
-//         },
-//         Events : function () {
-//             S = this;
-//             $('[content-raster]').parent().on('click', function () {
-//                 Raster = parseInt($(this).find('input').attr('content-raster'));
-//                 aData = Sidebar.Block.getBlockData();
-//                 Sidebar.Block.getBlockElement().find('.Block-Item-Section').removeClass('col-' + aData.Content_Raster).addClass('col-'+Raster);
-//
-//                 Sidebar.Block.setBlockData('Content_Raster', Raster);
-//             });
-//             oInput = $("[field=Content_Css_Background_Img]");
-//             oInput.on("click",function () {
-//                 Filemanger.Selector("img", function (node) {
-//                     if (node !== []){
-//                         aFile = node[0];
-//                         oInput.val("/files/" + aFile.original.dir);
-//                         Sidebar.Block.setBlockData(oInput.attr('field'), oInput.val());
-//                     }
-//                 });
-//             });
-//             $('.block-settings-field').parent().find("button").on("click", function () {
-//                 oButton = $(this);
-//                 oInput = oButton.parent().parent().find("input");
-//                 Sidebar.Block.setBlockData(oInput.attr('field'), null);
-//                 oInput.val(null);
-//             });
-//             $('.block-settings-field').on('input', function () {
-//                 Sidebar.Block.setBlockData($(this).attr('field'), $(this).val());
-//             });
-//         },
-//         State: {
-//             Activate: function () {
-//                 $('.block-message').css('display', 'none');
-//                 $('.block-settings').css('display', 'block');
-//             },
-//             Deactivate : function () {
-//                 $('.block-message').css('display', 'block');
-//                 $('.block-settings').css('display', 'none')
-//             }
-//         },
-//         Edit: {
-//             SortableObj: null,
-//             Sortable : function(){
-//                 this.SortableObj = Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row');
-//                 this.SortableObj.sortable({
-//                     handle : ".Block-Editor-Handle",
-//                 });
-//             },
-//             Remove: function(oButton){
-//                 oButton.parents('.Block-Item-Section').remove();
-//             },
-//             Add: function(){
-//                 aBlock = Sidebar.Block.getBlockData();
-//                 Settings = Addons[parseInt(Sidebar.Block.getBlockData().Content_Addon_Id)].AddonSettings;
-//                 section = $('<div class="Block-Item-Section">').addClass('col-' + aBlock.Content_Raster).append($('.template-edit-item').html());
-//                 $.each(Settings, function (iKey, aSetting) {
-//                     value = null;
-//                     oField = Builder.ContentTypes.Types[aSetting.AddonSetting_Type].init(value);
-//                     oField.attr('field-tag', aSetting.AddonSetting_Tag).attr('field-type', aSetting.AddonSetting_Type).addClass('Block-Item-Field');
-//                     section.append(oField);
-//                 });
-//                 Sidebar.Block.getBlockElement().find('.Block-Item-Content > .row').append(section);
-//             },
-//             Start : function (){
-//                 this.Sortable();
-//                 Sidebar.Block.getBlockElement().find('.Block-Item-Content').addClass('active');
-//                 Sidebar.Block.getBlockElement().find('.Block-Item-Section').append($('.template-edit-item').html());
-//                 $('.block-editor-background').addClass('active');
-//             },
-//             End: function () {
-//                 this.SortableObj.sortable('destroy');
-//                 Sidebar.Block.getBlockElement().find('.Block-Item-Content').removeClass('active');
-//                 Sidebar.Block.getBlockElement().find('.Block-Editor').remove();
-//                 $('.block-editor-background').removeClass('active');
-//             }
-//         }
-//     }
-// };
 var SummerNote ={
     SetText: function (oElement) {
         oElement.summernote({

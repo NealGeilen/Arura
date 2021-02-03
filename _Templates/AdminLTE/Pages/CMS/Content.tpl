@@ -81,6 +81,9 @@
                     <button class="btn btn-sm btn-secondary" onclick="Builder.Group.Delete($(this).parents('.CMS-Group'))">
                         <i class="fas fa-trash-alt"></i>
                     </button>
+                    <button class="btn btn-sm btn-secondary" onclick="Builder.Group.Edit($(this).parents('.CMS-Group'))">
+                        <i class="fas fa-pen"></i>
+                    </button>
                 </div>
                 <div class="CMS-Group-Content row">
                 </div>
