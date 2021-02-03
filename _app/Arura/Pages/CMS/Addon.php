@@ -209,7 +209,7 @@ class Addon {
      */
     public static function save(int $id, array $aAddon){
         $db = new Database();
-        $db->updateRecord("tblCmsAddons",self::force($aAddon));
+        $db->updateRecord("tblCmsAddons",self::force($aAddon), "Addon_Id");
         return  $db->isQuerySuccessful();
     }
 
