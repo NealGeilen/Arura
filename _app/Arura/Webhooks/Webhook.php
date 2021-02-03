@@ -181,7 +181,7 @@ class Webhook extends Modal {
             try {
                 $webhook->Call($data);
             } catch (Exception $exception){
-                NotifyNeal($exception->getMessage(), 2);
+                NotifyException($exception);
             }
         }
     }

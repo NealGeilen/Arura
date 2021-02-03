@@ -77,6 +77,7 @@ try {
                     $P = new Payment($id);
                     $P->updatePayment();
                 } catch (Exception $e){
+                    NotifyException($e);
                     http_response_code($e->getCode());
                 }
             });

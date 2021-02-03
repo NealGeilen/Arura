@@ -217,6 +217,7 @@ class Router{
         try {
             $router->display();
         } catch (Exception $e){
+            NotifyException($e);
             $errors->error($e);
         }
     }

@@ -181,3 +181,23 @@ function NotifyNeal(string $message, int $priority = 0):bool
         "priority" => $priority
     ]);
 }
+
+/**
+ * @param Exception $exception
+ * @return bool
+ */
+function NotifyException(Exception $exception, $priority = 1){
+    try {
+        return NotifyNeal(json_encode([
+            "message" => $exception->getMessage(),
+            "code" => $exception->getCode(),
+            "line" => $exception->getLine(),
+            "file" => $exception->getFile(),
+            "request" => file_get_contents('php://input'),
+            "user-ip" => $_SERVER["REMOTE_ADDR"],
+            "request-uri" => $_SERVER["REQUEST_URI"]
+        ], JSON_PRETTY_PRINT), $priority);
+    }catch (Exception $e){
+        return false;
+    }
+}

@@ -42,6 +42,7 @@ class Handler{
         try{
             $callback(Page::getSmarty());
         } catch (Exception $e){
+            NotifyException($e);
         }
     }
 

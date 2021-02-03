@@ -226,7 +226,7 @@ class Page extends Modal implements PageEnum{
     }
 
     public static function pageNotFound(){
-        NotifyNeal("An idiot tried a page that doesn't exist '{$_SERVER["REDIRECT_URL"]}'", -2);
+        NotifyException(new NotFound("Page not found: {$_SERVER["REDIRECT_URL"]}"), -2);
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");
