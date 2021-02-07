@@ -31,24 +31,31 @@ class Router{
 
     public static function Rout(\Bramus\Router\Router $router){
         $aPath = explode("/", $router->getCurrentUri());
-        switch ($aPath[2]){
-            case "gallery":
-                $router->mount("/gallery", function () use ($router){
-                    $router->all("/create", function (){
-                        Gallery::create();
+        if (isset($aPath[2])){
+            switch ($aPath[2]){
+                case "gallery":
+                    $router->mount("/gallery", function () use ($router){
+                        $router->all("/create", function (){
+                            Gallery::create();
+                        });
+                        $router->all("/search", function (){
+                            Gallery::SearchAlbums();
+                        });
+                        $router->all("/random", function (){
+                            Gallery::RandomAlbums();
+                        });
+                        $router->all("/([^/]+)/upload", function ($id){
+                            Gallery::uploadImage($id);
+                        });
                     });
-                    $router->all("/search", function (){
-                        Gallery::SearchAlbums();
-                    });
-                    $router->all("/random", function (){
-                        Gallery::RandomAlbums();
-                    });
-                    $router->all("/([^/]+)/upload", function ($id){
-                        Gallery::uploadImage($id);
-                    });
-                });
-                break;
+                    break;
+            }
+        } else {
+            Handler::Create([], function (){
+                return "Verification success";
+            });
         }
+
     }
 
 }

@@ -1,6 +1,8 @@
 <?php
 namespace Arura\Pages\CMS;
 
+use Arura\Exceptions\MethodNotAllowed;
+use Arura\SystemLogger\SystemLogger;
 use Exception;
 
 class Handler{
@@ -42,7 +44,7 @@ class Handler{
         try{
             $callback(Page::getSmarty());
         } catch (Exception $e){
-            NotifyException($e);
+            SystemLogger::AddException(SystemLogger::Addon, $e);
         }
     }
 

@@ -82,7 +82,7 @@ class DataBaseSync extends Modal {
         }
         //Drop Tables if they dont have a file, When found drop table
         foreach ($this->getAllTables() as $sTable){
-            if (!isset($this->aTables[$sTable]) && substr( $sTable, 0, 3 ) !== "SA_" ){
+            if (!isset($this->aTables[$sTable]) && substr( $sTable, 0, 3 ) !== "SA_" && $sTable !== "tblSystemLog"){
                 $Changes[] = "tabel: '{$sTable}' moet verwijderd worden";
             }
         }
@@ -123,7 +123,7 @@ class DataBaseSync extends Modal {
         }
         //Drop Tables if they dont have a file, When found drop table
         foreach ($this->getAllTables() as $sTable){
-            if (!isset($this->aTables[$sTable]) && substr( $sTable, 0, 3 ) !== "SA_" ){
+            if (!isset($this->aTables[$sTable]) && substr( $sTable, 0, 3 ) !== "SA_" && $sTable !== "tblSystemLog"){
                 $this->dropTable($sTable);
             }
         }

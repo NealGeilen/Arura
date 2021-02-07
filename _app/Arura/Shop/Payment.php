@@ -3,6 +3,7 @@ namespace Arura\Shop;
 
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 use Arura\Modal;
 use Exception;
 use Mollie\Api\Exceptions\ApiException;
@@ -290,12 +291,10 @@ class Payment extends Modal {
     public function __construct($sId)
     {
         parent::__construct();
-        if (!is_null($sId)){
-            if (count($this->db->fetchAll("SELECT Payment_Id FROM tblPayments WHERE Payment_Id = :Payment_Id", ["Payment_Id"=>$sId])) < 0){
-                throw new Exception("Payment not found", 404);
-            }
-            $this->id = $sId;
+        if (count($this->db->fetchAll("SELECT Payment_Id FROM tblPayments WHERE Payment_Id = :Payment_Id", ["Payment_Id"=>$sId])) <= 0){
+            throw new NotFound("Payment not found");
         }
+        $this->id = $sId;
     }
 
     /**

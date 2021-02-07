@@ -6,6 +6,7 @@ use Arura\Exceptions\NotFound;
 use Arura\Modal;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
+use Arura\SystemLogger\SystemLogger;
 use Cacher\Cacher;
 use Exception;
 use Rights;
@@ -222,11 +223,11 @@ class Page extends Modal implements PageEnum{
             exit;
 
         }
+        SystemLogger::AddException(SystemLogger::Website, new NotFound("Item not found"));
         self::pageNotFound();
     }
 
     public static function pageNotFound(){
-        NotifyException(new NotFound("Page not found: {$_SERVER["REDIRECT_URL"]}"), -2);
         $oPage = new Page();
         $oPage->setTitle("Pagina niet gevonden");
         $oPage->setDescription("Deze pagina bestaat niet");

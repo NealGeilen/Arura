@@ -2,6 +2,7 @@
 
 use Arura\Database;
 use Arura\Settings\Application;
+use Monolog\Logger;
 
 /**
  * @return bool
@@ -53,6 +54,7 @@ function json_array_decode($sString){
     if (isJson($sString)){
         return json_decode($sString,true);
     }
+    return false;
 }
 
 /**
@@ -175,11 +177,17 @@ function postToUrl($url = "", $postParams = []){
  */
 function NotifyNeal(string $message, int $priority = 0):bool
 {
-    return (bool)postToUrl("https://cronjobs.nealgeilen.nl/notify/me", [
+    $state =  (bool)postToUrl("https://cronjobs.nealgeilen.nl/notify/me", [
         "title" => "Melding van: " . Application::get("website", "url"),
         "message" => $message,
         "priority" => $priority
     ]);
+
+    if (!$state){
+        Arura\SystemLogger\SystemLogger::addRecord(Arura\SystemLogger\SystemLogger::System, Logger::INFO, "Notification message could not be send!");
+    }
+
+    return $state;
 }
 
 /**

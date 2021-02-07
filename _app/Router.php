@@ -10,10 +10,9 @@ use Arura\Pages\CMS\ContentBlock;
 use Arura\Pages\CMS\Page;
 use Arura\Pages\CMS\ShortUrl;
 use Arura\Router;
-use Arura\Sessions;
-use Arura\Settings\Application;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
+use Arura\SystemLogger\SystemLogger;
 use Arura\User\User;
 
 
@@ -77,8 +76,9 @@ try {
                     $P = new Payment($id);
                     $P->updatePayment();
                 } catch (Exception $e){
-                    NotifyException($e);
+                    SystemLogger::AddException(SystemLogger::Payment, $e);
                     http_response_code($e->getCode());
+                    exit;
                 }
             });
             break;
@@ -100,17 +100,19 @@ try {
             break;
     }
     $oRouter->run();
-} catch (Exception $e){
+} catch (Unauthorized $unauthorized){
+    if (User::isLogged()){
+        redirect("/dashboard/login");
+    }
+}  catch (Forbidden $forbidden) {
+    redirect("/dashboard/home");
+}  catch (Exception $e){
     if ($aPath[1] === "dashboard"){
         $Error = new Errors();
-        if ($e->getCode() === (new Unauthorized())->getCode() && !User::isLogged()){
-            redirect("/dashboard/login");
-        } elseif ($e->getCode() === (new Forbidden())->getCode()){
-            redirect("/dashboard/home");
-        }
+        SystemLogger::AddException(SystemLogger::DashBoard, $e);
         $Error->error($e);
     }
-
+    SystemLogger::AddException(SystemLogger::Website, $e);
     \Arura\Pages\Page::pageNotFound();
 }
 

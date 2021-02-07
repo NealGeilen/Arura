@@ -11,6 +11,7 @@ use Arura\Pages\Page;
 use Arura\Permissions\Role;
 use Arura\Router;
 use Arura\Settings\Application;
+use Arura\SystemLogger\SystemLogger;
 use Arura\Updater\DataBaseSync;
 use Arura\Updater\Updater;
 use Arura\User\Logger;
@@ -197,6 +198,20 @@ class Arura extends AbstractController {
             "form"=> Webhook::getForm($Webhook),
             "webhook" => $Webhook,
             "title" =>"Webhooks"
+        ]);
+    }
+
+
+    /**
+     * @Route("/arura/logs")
+     * @Right("ARURA_LOGS")
+     */
+    public function Logs(){
+        $db = new Database();
+        $this->render("AdminLTE/Pages/Arura/Logs/Logs.tpl", [
+            "Logs" => $db->fetchAll("SELECT * FROM tblSystemLog JOIN tblUsers tU on tblSystemLog.User_Id = tU.User_Id ORDER BY time DESC "),
+            "title" =>"Logs",
+            "Levels" => SystemLogger::Levels
         ]);
     }
 

@@ -373,7 +373,7 @@ class Addon {
         if (is_dir(self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR .  $this->getId())){
             return self::__ADDON_DIR__ .ucfirst($this->getType()). DIRECTORY_SEPARATOR .  $this->getId() . DIRECTORY_SEPARATOR;
         }
-        throw new NotFound("Addon dir not found for: {$this->getId()}");
+        throw new NotFound("Addon dir not found for: {$this->getId()}", 500);
     }
 
     /**

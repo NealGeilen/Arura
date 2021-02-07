@@ -4,6 +4,7 @@ class Rights{
     const ARURA_SETTINGS = 3;
     const ARURA_UPDATER = 4;
     const ARURA_WEBHOOK = 5;
+    const ARURA_LOGS = 6;
 
     const CMS_PAGES = 10;
     const CMS_MENU = 11;

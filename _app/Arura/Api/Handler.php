@@ -4,9 +4,11 @@ namespace Arura\Api;
 use Arura\Exceptions\NotAcceptable;
 use Arura\Pages\Page;
 use Arura\Settings\Application;
+use Arura\SystemLogger\SystemLogger;
 use Arura\User\Password;
 use Arura\User\User;
 use Exception;
+use Monolog\Logger;
 
 class Handler{
 
@@ -31,6 +33,7 @@ class Handler{
     }
 
     public function run(){
+        set_error_handler("error_reporter");
         try {
             $this->validateFields();
             $this->setResponse(call_user_func($this->getCallback(), Router::getRequest()));
@@ -40,6 +43,7 @@ class Handler{
         if ($this->getException() === null){
             echo json_encode(["data" => $this->getResponse(), "code" => 200, "Message" => "success", "time" => time()]);
         } else {
+            SystemLogger::addRecord(SystemLogger::Api, Logger::WARNING, "Api Exception");
             echo json_encode(["data" => [], "code" => $this->getException()->getCode(), "Message" => $this->getException()->getMessage()]);
         }
     }
@@ -59,6 +63,7 @@ class Handler{
                 }
             }
         }
+        SystemLogger::addRecord(SystemLogger::Api, Logger::WARNING, "Api Login failed: {$request->headers->get("X-AUTH-USER", "No user given")}");
         Page::pageNotFound();
         return false;
     }

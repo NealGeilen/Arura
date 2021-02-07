@@ -8,6 +8,7 @@ use Arura\Database;
 use Arura\Exceptions\NotAcceptable;
 use Arura\Mailer\Mailer;
 use Arura\Settings\Application;
+use Arura\SystemLogger\SystemLogger;
 use PHPMailer\PHPMailer\Exception;
 use SmartyException;
 
@@ -143,15 +144,15 @@ class Recovery extends Modal {
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Herstel mail aanvragen");
         if ($form->isSubmitted()){
-            $user = User::getUserOnEmail($form->getValues()->mail);
-            if ($user === false){
-                $form->addError("E-mailadres niet bekend");
-            }
         }
         if ($form->isSuccess()){
             $user = User::getUserOnEmail($form->getValues()->mail);
-            $recovery = self::requestToken($user);
-            $recovery->sendRecoveryMail();
+            if ($user){
+                $recovery = self::requestToken($user);
+                $recovery->sendRecoveryMail();
+            } else {
+                SystemLogger::addRecord(SystemLogger::UserAction, \Monolog\Logger::INFO, "Request for password recovery failed: {$form->getValues()->mail}");
+            }
         }
         return  $form;
     }

@@ -7,6 +7,7 @@ use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
+use Arura\SystemLogger\SystemLogger;
 use Arura\User\Logger;
 use Exception;
 
@@ -181,7 +182,7 @@ class Webhook extends Modal {
             try {
                 $webhook->Call($data);
             } catch (Exception $exception){
-                NotifyException($exception);
+                SystemLogger::AddException(SystemLogger::Webhook, $exception);
             }
         }
     }

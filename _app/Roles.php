@@ -44,7 +44,7 @@ class Roles{
         ],
         self::SYSTEM_ADMIN => [
             "Name" => "Systeem Admin",
-            "Rights" => [Rights::ARURA_USERS, Rights::ARURA_SETTINGS, Rights::ARURA_UPDATER, Rights::ARURA_WEBHOOK]
+            "Rights" => [Rights::ARURA_USERS, Rights::ARURA_SETTINGS, Rights::ARURA_UPDATER, Rights::ARURA_WEBHOOK, Rights::ARURA_LOGS]
         ],
         self::GALLERY => [
             "Name" => "Album's",

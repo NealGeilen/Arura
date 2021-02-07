@@ -5,6 +5,7 @@ namespace Arura\Settings;
 use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
+use Arura\SystemLogger\SystemLogger;
 
 class Application{
 
@@ -34,7 +35,8 @@ class Application{
     public static function get($sPlg = "", $sName = ""){
         self::load();
         if (!isset(self::$aSettingData[$sPlg][$sName])){
-            throw new NotFound("Setting not found {$sPlg}:{$sName}");
+            SystemLogger::AddException(SystemLogger::Settings, new NotFound("Setting not found {$sPlg}:{$sName}", 500));
+            exit;
         }
         return self::$aSettingData[$sPlg][$sName];
     }

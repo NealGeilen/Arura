@@ -166,7 +166,9 @@ class Router{
                         (
                             Restrict::Validation(Rights::ARURA_USERS) ||
                             Restrict::Validation(Rights::ARURA_SETTINGS) ||
-                            Restrict::Validation(Rights::ARURA_UPDATER)
+                            Restrict::Validation(Rights::ARURA_UPDATER) ||
+                            Restrict::Validation(Rights::ARURA_WEBHOOK) ||
+                            Restrict::Validation(Rights::ARURA_LOGS)
                         ),
                     "Title" => "Arura",
                     "Icon" => "fas fa-toolbox",
@@ -208,6 +210,15 @@ class Router{
                                 "Function" => "Arura@Webhook",
                                 "Icon" => "fas fa-link",
                             ],
+                            '/arura/logs' => [
+                                "Right" =>
+                                    (
+                                    Restrict::Validation(Rights::ARURA_LOGS)
+                                    ),
+                                "Title" => "Logs",
+                                "Function" => "Arura@Logs",
+                                "Icon" => "fas fa-link",
+                            ],
                         ]
                 ],
             ];
@@ -217,7 +228,7 @@ class Router{
         try {
             $router->display();
         } catch (Exception $e){
-            NotifyException($e);
+            SystemLogger::AddException(SystemLogger::TemplateRender, $e);
             $errors->error($e);
         }
     }

@@ -1,6 +1,7 @@
 <?php
 namespace Arura\User;
 use Arura\Form;
+use Arura\SystemLogger\SystemLogger;
 
 class Password{
 
@@ -29,21 +30,25 @@ class Password{
         $form->addPassword("password", "Wachtwoord")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Inloggen");
-        if ($form->isSubmitted()){
+        if ($form->isSubmitted()) {
             $user = User::getUserOnEmail($form->getValues()->mail);
-            if ($user === false){
-                $form->addError("E-mailadres niet beschikbaar");
-            } elseif (!$user->isActive()){
+            if ($user === false) {
+                $form->addError("Gegevens onjuist");
+            } elseif (!$user->isActive()) {
                 $form->addError("Account is gedeactiveerd");
-            }else {
-                if(Password::Verify($form->getValues()->password, $user->getPassword())){
+            } else {
+                if (Password::Verify($form->getValues()->password, $user->getPassword())) {
                     $user->logInUser();
-                } else{
+                } else {
                     User::addLoginAttempt();
-                    $form->addError("Wachtwoord onjuist");
+                    $form->addError("Gegevens onjuist");
                 }
             }
+
+            if ($form->hasErrors()) {
+                SystemLogger::addRecord(SystemLogger::UserAction, \Monolog\Logger::INFO, 'Failed login request: '.$form->getValues()->mail );
+            }
         }
-        return  $form;
+        return $form;
     }
 }
