@@ -151,7 +151,7 @@ class Recovery extends Modal {
                 $recovery = self::requestToken($user);
                 $recovery->sendRecoveryMail();
             } else {
-                SystemLogger::addRecord(SystemLogger::UserAction, \Monolog\Logger::INFO, "Request for password recovery failed: {$form->getValues()->mail}");
+                SystemLogger::addRecord(SystemLogger::Security, \Monolog\Logger::INFO, "Request for password recovery failed: {$form->getValues()->mail}");
             }
         }
         return  $form;

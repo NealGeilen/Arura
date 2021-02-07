@@ -7,6 +7,7 @@ use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\NotFound;
 use Arura\Exceptions\Unauthorized;
 use Arura\Permissions\Restrict;
+use Arura\SystemLogger\SystemLogger;
 use Arura\User\User;
 use Cacher\Cacher;
 use Exception;
@@ -217,7 +218,7 @@ class Router{
                                     ),
                                 "Title" => "Logs",
                                 "Function" => "Arura@Logs",
-                                "Icon" => "fas fa-link",
+                                "Icon" => "fas fa-list",
                             ],
                         ]
                 ],
@@ -228,7 +229,7 @@ class Router{
         try {
             $router->display();
         } catch (Exception $e){
-            SystemLogger::AddException(SystemLogger::TemplateRender, $e);
+            SystemLogger::AddException(SystemLogger::DashBoard, $e);
             $errors->error($e);
         }
     }

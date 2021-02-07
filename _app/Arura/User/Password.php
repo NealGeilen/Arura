@@ -46,7 +46,7 @@ class Password{
             }
 
             if ($form->hasErrors()) {
-                SystemLogger::addRecord(SystemLogger::UserAction, \Monolog\Logger::INFO, 'Failed login request: '.$form->getValues()->mail );
+                SystemLogger::addRecord(SystemLogger::Security, \Monolog\Logger::INFO, 'Failed login request: '.$form->getValues()->mail );
             }
         }
         return $form;
