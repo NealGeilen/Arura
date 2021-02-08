@@ -61,8 +61,13 @@ try {
             });
             break;
         case "album":
-            $oRouter->all("/album/{id}", function ($id){
-                Gallery::Display($id);
+            $oRouter->mount("/album", function () use ($oRouter){
+                $oRouter->all("/([^/]+)", function ($id){
+                    Gallery::Display($id);
+                });
+                $oRouter->all("/([^/]+)/{type}", function ($id, $type){
+                    Gallery::Display($id, $type);
+                });
             });
             break;
         case "api":
