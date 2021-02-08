@@ -36,9 +36,9 @@ class Cache{
 
   );
 
-    public static function Display(string $rout){
-        if (is_file(__ROOT__ . $rout)){
-            $File = pathinfo(__ROOT__ . $rout);
+    public static function Display(string $rout,string $title = null,bool $download = false){
+        if (is_file($rout)){
+            $File = pathinfo($rout);
             if (isset(self::$Types[$File["extension"]])){
                 $day = 84600;
 
@@ -60,16 +60,25 @@ class Cache{
                         break;
                 }
 
+                if (is_null($title)){
+                    $title = $File["basename"];
+                }
 
+                if ($download){
+                    header("Content-Disposition: attachment; filename={$title}");
+                    header("Content-Type: application/force-download");
+                } else {
+                    header("Content-Disposition: inline; filename={$title}");
+                }
                 header("Cache-Control: must-revalidate,max-age={$seconds_to_cache}");
                 header("Content-Type: ".self::$Types[$File["extension"]]);
-                header("Content-Length: " . filesize(__ROOT__ . $rout));
-                header("Content-Disposition: attachment; filename={$File["basename"]}");
+                header("Content-Length: " . filesize($rout));
                 header('Content-Transfer-Encoding: base64');
                 header("Expires: " . gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT");
                 header("Pragma: cache");
+
                 http_response_code(200);
-                readfile(__ROOT__ . $rout);
+                readfile($rout);
                 exit;
             }
         }

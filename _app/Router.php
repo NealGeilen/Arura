@@ -36,7 +36,7 @@ try {
                         redirect("/dashboard/login");
                     }
                 });
-                Cache::Display($oRouter->getCurrentUri());
+                Cache::Display(__ROOT__ .$oRouter->getCurrentUri());
                 Router::DashBoardRouting($oRouter);
             });
             break;
@@ -94,7 +94,7 @@ try {
             break;
         default:
             $oRouter->mount("/", function () use ($oRouter){
-                Cache::Display($oRouter->getCurrentUri());
+                Cache::Display(__ROOT__ .$oRouter->getCurrentUri());
                 Page::Display($oRouter->getCurrentUri());
             });
             break;

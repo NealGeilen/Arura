@@ -1,8 +1,10 @@
 <?php
 namespace Arura\Gallery;
 
+use Arura\Cache;
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
@@ -31,11 +33,14 @@ class Image extends Page {
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             $aImage = $this->db->fetchRow("SELECT * FROM tblGalleryImage WHERE Image_Id = :id", ["id" =>$this->getId()]);
+            if (empty($aImage)){
+                throw new NotFound("Image not found");
+            }
             $this
                 ->setOrder((int)$aImage["Image_Order"])
-                ->setName($aImage["Image_Name"])
+                ->setName((string)$aImage["Image_Name"])
                 ->setIsPublic((bool)$aImage["Image_Public"])
-                ->setType($aImage["Image_Type"])
+                ->setType((string)$aImage["Image_Type"])
                 ->setIsCover((bool)$aImage["Image_Cover"])
                 ->setGallery(new Gallery($aImage["Image_Gallery_Id"]))
             ;
@@ -71,7 +76,9 @@ class Image extends Page {
     public function Save(){
         if ($this->isLoaded){
             $this->db->updateRecord("tblGalleryImage", $this->__toArray(), "Image_Id");
+            return $this->db->isQuerySuccessful();
         }
+        return false;
     }
 
     /**
@@ -131,35 +138,13 @@ class Image extends Page {
             if (($Image->isPublic() && $Image->getGallery()->isPublic())|| Restrict::Validation(Rights::GALLERY_MANGER)){
                 switch ($sType){
                     case "download":
-                        $filename = Gallery::__IMAGES__. $Image->getGallery()->getId() . DIRECTORY_SEPARATOR . $Image->getId() . ".{$Image->getType()}";
-                        $size = getimagesize($filename);
-                        $file = $filename;
-                        header("Content-type:". $size['mime']);
-                        header("Content-Length: " . filesize($file));
-                        header("Content-Disposition: attachment; filename={$Image->getName()}.{$Image->getType()}");
-                        header('Content-Transfer-Encoding: base64');
-                        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-                        header("Content-Type: application/force-download");
-                        http_response_code(200);
-                        readfile($file);
+                        Cache::Display($Image->getImage(), "{$Image->getName()}.{$Image->getType()}", true);
                         break;
                     case "thump":
-                        $image = file_get_contents($Image->getThumbnail());//
-                        header("Content-Disposition: attachment; filename={$Image->getName()}.{$Image->getType()}");
-                        header('Content-Transfer-Encoding: base64');
-                        header("Content-Type: image/{$Image->getType()};");
-                        header("Content-Length: " . filesize($Image->getThumbnail()));
-                        http_response_code(200);
-                        echo $image;
+                        Cache::Display($Image->getThumbnail(), "{$Image->getName()}.{$Image->getType()}", false);
                         break;
                     default:
-                        $image = file_get_contents($Image->getImage());
-                        header("Content-Disposition: attachment; filename={$Image->getName()}.{$Image->getType()}");
-                        header('Content-Transfer-Encoding: base64');
-                        header("Content-Type: image/{$Image->getType()};");
-                        header("Content-Length: " . filesize($Image->getImage()));
-                        http_response_code(200);
-                        echo $image;
+                        Cache::Display($Image->getImage(), "{$Image->getName()}.{$Image->getType()}", false);
                         break;
                 }
                 exit;
