@@ -23,9 +23,13 @@ class Page extends Modal implements PageEnum{
     const DEFAULT_RESOURCE_FILES = [
        "js" => [
            "cookieconsent-1.2.3/cookieconsent.min.js",
+           "Magnific-Popup-1.1.0/jquery.magnific-popup.min.js",
            "arura.js",
            "Modals.js"
-       ]
+       ],
+        "css" => [
+            "Magnific-Popup-1.1.0/magnific-popup.css"
+        ]
     ];
 
     /**
