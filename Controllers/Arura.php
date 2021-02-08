@@ -209,7 +209,7 @@ class Arura extends AbstractController {
     public function Logs(){
         $db = new Database();
         $this->render("AdminLTE/Pages/Arura/Logs/Logs.tpl", [
-            "Logs" => $db->fetchAll("SELECT * FROM tblSystemLog JOIN tblUsers tU on tblSystemLog.User_Id = tU.User_Id ORDER BY time DESC "),
+            "Logs" => $db->fetchAll("SELECT * FROM tblSystemLog LEFT JOIN tblUsers tU on tblSystemLog.User_Id = tU.User_Id ORDER BY time DESC "),
             "title" =>"Logs",
             "Levels" => SystemLogger::Levels
         ]);
