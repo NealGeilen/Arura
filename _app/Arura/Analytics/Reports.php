@@ -2,7 +2,9 @@
 namespace Arura\Analytics;
 
 use Arura\Exceptions\NotFound;
+use Arura\Settings\Application;
 use Exception;
+use Google_Exception;
 use Google_Service_AnalyticsReporting_Dimension;
 use Google_Service_AnalyticsReporting_Metric;
 
@@ -173,6 +175,9 @@ class Reports{
 
     public static function getPageViews(int $iLastDays,string $sPath) : int
     {
+        if (empty(Application::get("analytics google", "Vieuw"))){
+            return 0;
+        }
         $Report = self::Report("ga:pagePath", "ga:pageviews", "ga:pagePath==" . $sPath);
         $Report->setDataRange("{$iLastDays}daysAgo", "Today");
         $aData = $Report->getReport();
