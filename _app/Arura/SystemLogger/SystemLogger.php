@@ -100,6 +100,8 @@ class SystemLogger{
             $userId = User::activeUser();
             if (!is_null($userId)){
                 $userId = $userId->getId();
+            } else {
+                $userId = 0;
             }
            $result = array_merge([
                "User_Id" => $userId,

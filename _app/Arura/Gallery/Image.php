@@ -32,7 +32,7 @@ class Image extends Page {
         if (!$this->isLoaded || $force) {
             $aImage = $this->db->fetchRow("SELECT * FROM tblGalleryImage WHERE Image_Id = :id", ["id" =>$this->getId()]);
             $this
-                ->setOrder($aImage["Image_Order"])
+                ->setOrder((int)$aImage["Image_Order"])
                 ->setName($aImage["Image_Name"])
                 ->setIsPublic((bool)$aImage["Image_Public"])
                 ->setType($aImage["Image_Type"])
