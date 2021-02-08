@@ -39,10 +39,11 @@ class Cache{
     public static function Display(string $rout,string $title = null,bool $download = false){
         if (is_file($rout)){
             $File = pathinfo($rout);
-            if (isset(self::$Types[$File["extension"]])){
+            $extension = strtolower($File["extension"]);
+            if (isset(self::$Types[$extension])){
                 $day = 84600;
 
-                $a = explode("/", self::$Types[$File["extension"]],2);
+                $a = explode("/", self::$Types[$extension],2);
 
                 switch ($a[0]){
                     case "image":
@@ -71,7 +72,7 @@ class Cache{
                     header("Content-Disposition: inline; filename={$title}");
                 }
                 header("Cache-Control: must-revalidate,max-age={$seconds_to_cache}");
-                header("Content-Type: ".self::$Types[$File["extension"]]);
+                header("Content-Type: ".self::$Types[$extension]);
                 header("Content-Length: " . filesize($rout));
                 header('Content-Transfer-Encoding: base64');
                 header("Expires: " . gmdate("D, d M Y H:i:s", time() + $seconds_to_cache) . " GMT");
