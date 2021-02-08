@@ -37,12 +37,17 @@ class Gallery extends Page implements iWebhookEntity {
     public function serialize():array{
         $this->load();
         $url = Application::get("website", "url"). "/album/" . $this->getId();
+        $Images = [];
+        foreach ($this->getImages(true, true) as $img){
+            $Images[] = $img->serialize();
+        }
         return [
             "id" => $this->getId(),
             "name" => $this->getName(),
             "description" => $this->getDescription(),
             "page-url" => $url,
             "image-count" => $this->getImageAmount(),
+            "images" => $Images,
             "cover-image" => Application::get("website", "url"). $this->getAnCoverImage()->getImage(false)
         ];
     }
@@ -51,19 +56,28 @@ class Gallery extends Page implements iWebhookEntity {
         Webhook::Trigger($trigger, array_merge($this->serialize(), $data));
     }
 
-    public static function Display($sId){
-        parent::displayView($sId, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl){
+    public static function Display($sId, $type = ""){
+        parent::displayView($sId, Restrict::Validation(Rights::GALLERY_MANGER), function ($sUrl) use ($type){
             $Gallery = new self($sUrl);
             if ($Gallery->isPublic() || Restrict::Validation(Rights::GALLERY_MANGER)){
-                self::getSmarty()->assign("Gallery", $Gallery);
-                if (is_file(__CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl")){
-                    $content = __CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
-                } else {
-                    $content = __STANDARD_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
+                switch ($type){
+                    case "json":
+                        echo json_encode($Gallery->serialize());
+                        http_response_code(200);
+                        exit;
+                        break;
+                    default:
+                        self::getSmarty()->assign("Gallery", $Gallery);
+                        if (is_file(__CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl")){
+                            $content = __CUSTOM_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
+                        } else {
+                            $content = __STANDARD_MODULES__ . "Gallery" . DIRECTORY_SEPARATOR . "Gallery.tpl";
+                        }
+                        $Gallery->setTitle($Gallery->getName());
+                        $Gallery->setPageContend(self::getSmarty()->fetch($content));
+                        $Gallery->showPage();
+                        break;
                 }
-                $Gallery->setTitle($Gallery->getName());
-                $Gallery->setPageContend(self::getSmarty()->fetch($content));
-                $Gallery->showPage();
             }
         });
     }

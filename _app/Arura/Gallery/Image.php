@@ -10,11 +10,13 @@ use Arura\Form;
 use Arura\Modal;
 use Arura\Pages\Page;
 use Arura\Permissions\Restrict;
+use Arura\Settings\Application;
 use Arura\User\Logger;
 use Arura\User\User;
+use Arura\Webhooks\iWebhookEntity;
 use Rights;
 
-class Image extends Page {
+class Image extends Page implements iWebhookEntity {
 
     protected $id = "";
     protected $type = "";
@@ -386,4 +388,20 @@ class Image extends Page {
     }
 
 
+    public function serialize(): array
+    {
+        $this->load();
+        return [
+            "name" => $this->getName(),
+            "type" => $this->getType(),
+            "is-public" => $this->isPublic(),
+            "is-cover" => $this->isCover(),
+            "url" => Application::get("website", "url") . $this->getImage(false)
+        ];
+    }
+
+    public function TriggerWebhook(int $trigger, array $data)
+    {
+        // TODO: Implement TriggerWebhook() method.
+    }
 }
