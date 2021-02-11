@@ -7,12 +7,6 @@ use Exception;
 
 class Handler{
 
-    protected $Template = null;
-
-
-    public function __construct(){
-    }
-
     /**
      * @param $sFile
      * @return bool
@@ -46,15 +40,6 @@ class Handler{
         } catch (Exception $e){
             SystemLogger::AddException(SystemLogger::Addon, $e);
         }
-    }
-
-
-    public function setTemplate($Template){
-        $this->Template = $Template;
-    }
-
-    public function exitScript(){
-        return  $this->Template;
     }
 
 

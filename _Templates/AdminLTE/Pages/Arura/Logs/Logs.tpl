@@ -7,21 +7,19 @@
 {block content}
     {foreach $Logs as $Log}
         <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-3">
-                        <h4 class="m-0">{$Log.channel} <span class="badge {if $Log.level >= 100} badge-secondary{/if}{if $Log.level >= 200} badge-info{/if}{if $Log.level >= 300} badge-warning{/if}{if $Log.level >= 500} badge-danger{/if}">{$Levels[{$Log.level}]}</span></h4>
-                    </div>
-                    <div class="col-5">
-                        <span class="text-truncate w-100 d-block">{$Log.message}</span>
-                    </div>
-                    <div class="col-4">
-                        <span class="float-right">
-                            {$Log.time|date_format:"%H:%M %d-%m-%y"}
-                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#Log-{$Log.id}" aria-expanded="false" aria-controls="collapseExample">
+            <div class="card-body position-relative">
+                <div class="position-absolute" style="right: 1rem; top: 1rem; z-index: 100">
+                    {$Log.time|date_format:"%H:%M %d-%m-%y"}
+                            <button class="btn btn-primary" data-toggle="collapse" data-target="#Log-{$Log.id}">
                                 <i class="fa fa-plus"></i>
                             </button>
-                        </span>
+                </div>
+                <div class="row" style="z-index: 50">
+                    <div class="col-md-3 col-12">
+                        <h4 class="m-0">{$Log.channel} <span class="badge {if $Log.level >= 100} badge-secondary{/if}{if $Log.level >= 200} badge-info{/if}{if $Log.level >= 300} badge-warning{/if}{if $Log.level >= 500} badge-danger{/if}">{$Levels[{$Log.level}]}</span></h4>
+                    </div>
+                    <div class="col-md-8 col-12">
+                        <span class="text-truncate w-75 d-block">{$Log.message}</span>
                     </div>
                 </div>
                 <div class="collapse" id="Log-{$Log.id}">

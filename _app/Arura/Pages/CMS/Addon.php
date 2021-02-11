@@ -6,9 +6,11 @@ use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
+use Arura\SystemLogger\SystemLogger;
 use Arura\User\Logger;
 use Arura\User\User;
 use Cacher\Cacher;
+use Exception;
 use PDOStatement;
 use Smarty;
 use SmartyException;
@@ -150,7 +152,7 @@ class Addon {
     }
 
     /**
-     * @return array
+     * @return array|Addon[]
      * @throws Error
      */
     public static function getAllAddons(bool $NeedsActive = true, bool $inObjects = false){
@@ -159,6 +161,10 @@ class Addon {
         $aList = [];
 
         if ($inObjects){
+
+            foreach ($aAddons as $item){
+                $aList[] = new self($item["Addon_Id"]);
+            }
 
             //TODO cast to objects
 
@@ -948,6 +954,12 @@ class Addon {
         return $Cacher;
     }
 
+    public function CacheAllAddons(){
+        foreach (self::getAllAddons(false, true) as $Addon){
+            $Addon->getCacher()->Minify();
+        }
+    }
+
 
     /**
      * @param $content
@@ -958,25 +970,30 @@ class Addon {
      * @throws SmartyException
      */
     public function Display($content, array $ContentBlock, Smarty $smarty){
-        $smarty->assign("Content", $content);
-        $smarty->assign("Block", $ContentBlock);
-        if ($this->hasPhpFile()){
-            require_once $this->getDir() . self::PhpFile;
-        }
-        $Assets = $this->getAssets();
-        if (count($Assets)){
-
-            $aFiles= $this->getCacher()->getMinifyedFiles();
-
-            if (isset($aFiles["css"])){
-                Handler::addCssFile($aFiles["css"]);
+        try{
+            $smarty->assign("Content", $content);
+            $smarty->assign("Block", $ContentBlock);
+            if ($this->hasPhpFile()){
+                include_once $this->getDir() . self::PhpFile;
             }
+            $Assets = $this->getAssets();
+            if (count($Assets)){
 
-            if (isset($aFiles["js"])){
-                Handler::addJsFile($aFiles["js"]);
+                $aFiles= $this->getCacher()->getMinifyedFiles();
+
+                if (isset($aFiles["css"])){
+                    Handler::addCssFile($aFiles["css"]);
+                }
+
+                if (isset($aFiles["js"])){
+                    Handler::addJsFile($aFiles["js"]);
+                }
             }
+            return $smarty->fetch($this->getDir() . self::TemplateFile);
+        } catch (Exception $e){
+            SystemLogger::AddException(SystemLogger::Addon, $e);
+            return false;
         }
-        return $smarty->fetch($this->getDir() . self::TemplateFile);
     }
 
 
