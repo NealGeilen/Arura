@@ -2,6 +2,7 @@
 namespace Arura\Api;
 
 use Arura\Api\Calls\Gallery;
+use Arura\Api\Calls\Service;
 use Arura\Exceptions\NotFound;
 use Arura\SecureAdmin\Database;
 use Arura\SecureAdmin\SecureAdmin;
@@ -47,6 +48,13 @@ class Router{
                         $router->all("/([^/]+)/upload", function ($id){
                             Gallery::uploadImage($id);
                         });
+                    });
+                    break;
+                case "service":
+                    $router->mount("/service", function () use ($router){
+                       $router->get("/cleanlogs", function (){
+                           Service::CleanLogs();
+                       });
                     });
                     break;
             }
