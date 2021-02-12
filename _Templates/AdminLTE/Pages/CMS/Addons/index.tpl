@@ -5,6 +5,11 @@
 {/block}
 
 {block content}
+    <div class="mb-2">
+        <div class="alert alert-primary">
+            {$AddonCachForm}
+        </div>
+    </div>
     <div class="card card-primary">
         <header class="card-header">
             <div class="card-tools">
@@ -96,8 +101,6 @@
 
 {block JsPage}
     <script>
-        $(".dropzone").dropzone({
-
-        });
+        $(".dropzone").dropzone({});
     </script>
 {/block}

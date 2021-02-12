@@ -165,8 +165,8 @@ class CMS extends AbstractController {
         $this->render("AdminLTE/Pages/CMS/Addons/index.tpl",
             [
                 "Addons" => Addon::getAllAddons(false),
+                "AddonCachForm" => Addon::CacheAllAddonsForm(),
                 "title" => "Addons",
-//                "ImportForm" => Addon::ImportForm()
             ]);
     }
 

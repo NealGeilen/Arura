@@ -17,7 +17,6 @@ class Updater{
         } else {
             self::$MAIN_DIR = __ROOT__;
         }
-
     }
 
     /**

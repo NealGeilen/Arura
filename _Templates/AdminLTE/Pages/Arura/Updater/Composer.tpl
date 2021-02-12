@@ -16,7 +16,7 @@
             </div>
         </div>
         <div class="card-body bg-primary">
-            <ul class="list-group">
+            <ul class="list-group text-dark">
 
             </ul>
         </div>

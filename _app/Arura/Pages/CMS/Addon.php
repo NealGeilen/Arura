@@ -954,11 +954,31 @@ class Addon {
         return $Cacher;
     }
 
-    public function CacheAllAddons(){
+
+    public static function CacheAllAddons(){
         foreach (self::getAllAddons(false, true) as $Addon){
             $Addon->getCacher()->Minify();
         }
     }
+
+    /**
+     * @return Form
+     * @throws Error
+     * @throws NotFound
+     */
+    public static function CacheAllAddonsForm(){
+        $form = new Form("CachAddons");
+        $form->addSubmit("submit", "Alle cach vernieuwen");
+
+        if ($form->isSuccess()){
+            self::CacheAllAddons();
+            Logger::Create(Logger::UPDATE, Addon::class,  "All Addons");
+            Flasher::addFlash("Alle cahc vernieuwed");
+        }
+        return$form;
+    }
+
+
 
 
     /**

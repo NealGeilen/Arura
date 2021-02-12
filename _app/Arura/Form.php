@@ -3,7 +3,6 @@ namespace Arura;
 
 use Arura\Exceptions\Error;
 use Nette\Forms\Controls\Checkbox;
-use Symfony\Component\VarDumper\VarDumper;
 
 class Form extends \Nette\Forms\Form{
 
@@ -64,7 +63,7 @@ class Form extends \Nette\Forms\Form{
     }
 
 
-    protected static function TwoColForm(Form $form): void
+    public static function TwoColForm(Form $form): void
     {
         $renderer = $form->getRenderer();
         $renderer->wrappers['controls']['container'] = 'div class="row"';
@@ -77,7 +76,7 @@ class Form extends \Nette\Forms\Form{
         self::bootstrap4($form);
     }
 
-    protected static function OneColForm(Form $form): void
+    public static function OneColForm(Form $form): void
     {
         $renderer = $form->getRenderer();
         $renderer->wrappers['controls']['container'] = 'div class="row"';
@@ -86,9 +85,7 @@ class Form extends \Nette\Forms\Form{
         $renderer->wrappers['control']['description'] = 'span class=form-text';
         $renderer->wrappers['control']['errorcontainer'] = 'span class=form-control-feedback';
         $renderer->wrappers['control']['.error'] = 'is-invalid';
-
         self::bootstrap4($form);
-
     }
 
     protected static function bootstrap4(Form $form){
