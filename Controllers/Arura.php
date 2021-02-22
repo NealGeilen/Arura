@@ -167,11 +167,11 @@ class Arura extends AbstractController {
                     return $updater->updateAllPackages();
                 });
             });
-            Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater/Updater.js");
             $this->render("AdminLTE/Pages/Arura/Updater/Composer.tpl",[
                 "title" => "Composer"
             ]);
         });
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater/Updater.js");
 
         $this->displayTab();
     }

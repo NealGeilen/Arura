@@ -9,6 +9,7 @@ use Arura\Gallery\Image;
 use Arura\Pages\CMS\ContentBlock;
 use Arura\Pages\CMS\Page;
 use Arura\Pages\CMS\ShortUrl;
+use Arura\Pages\CMS\Sitemap;
 use Arura\Router;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
@@ -49,6 +50,11 @@ try {
                     $oRouter->all("/([^/]+)/{type}", function ($id, $type){
                         Event::Display($id, $type);
                     });
+                });
+                break;
+            case "sitemap.xml":
+                $oRouter->all("/sitemap.xml", function () use ($oRouter){
+                    Sitemap::Display();
                 });
                 break;
             case "gallery":

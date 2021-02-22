@@ -1,16 +1,17 @@
 <?php
 namespace Arura\Pages\CMS;
 
+use Arura\Cache;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
+use Arura\Gallery\Gallery;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
+use Arura\Shop\Events\Event;
 use DateTime;
 use DateTimeZone;
 use DOMDocument;
-use Google_Client;
 use Google_Exception;
-use Google_Service_Webmasters;
 use Rights;
 
 class Sitemap
@@ -37,28 +38,15 @@ class Sitemap
 
     public function load()
     {
-        $xml  = simplexml_load_file($this->file, "SimpleXMLElement", LIBXML_NOCDATA);
-        $json = json_encode($xml);
-        $raw  = json_decode($json, true);
-        $this->tree = null;
-
-        $this->urlset = array_map(function ($url) {
-            return [
-                'loc'        => $url['loc'],
-                'changefreq' => array_key_exists('changefreq', $url) ? $url['changefreq']          : null,
-                'priority'   => array_key_exists('priority', $url)   ? floatval($url['priority'])  : null,
-                'lastmod'    => array_key_exists('lastmod', $url)    ? date_parse($url['lastmod']) : null
-            ];
-        }, $raw["url"]);
+        $this->parsePages();
     }
 
     public function save()
     {
-        Restrict::Validation(Rights::CMS_PAGES);
-
+        $xml = $this->toXML(true, true);
         file_put_contents(
             $this->file,
-            $this->toXML(true, true)
+            $xml
         );
     }
 
@@ -67,8 +55,10 @@ class Sitemap
      */
     private function parsePages()
     {
+        /**
+         * CMS Pages
+         */
         $aPages = Page::getAllVisiblePages();
-
         foreach ($aPages as $page) {
             $lastmod = new DateTime();
 
@@ -79,9 +69,59 @@ class Sitemap
                 'loc'        => $uri,
                 'changefreq' => Sitemap::CHANGEFREQ_MONTHLY,
                 'priority'   => $isRoot ? 1 : 0.7,
-                'lastmod'    => $lastmod
+                'lastmod'    => $lastmod->format(DATE_W3C)
             ];
         }
+
+        /**
+         * Event pages
+         */
+        $aPages = Event::getAllEvents();
+        foreach ($aPages as $page) {
+            $lastmod = new DateTime();
+
+            $uri    = Application::get("website", "url") ."/event/". $page["Event_Slug"];
+
+            $this->urlset[] = [
+                'loc'        => $uri,
+                'changefreq' => Sitemap::CHANGEFREQ_YEARLY,
+                'priority'   => 0.9,
+                'lastmod'    => $lastmod->format(DATE_W3C)
+            ];
+        }
+
+
+        /**
+         * Event pages
+         */
+        $aPages = Gallery::getAllGalleries(true,0, 0, "", "Gallery_Id");
+        foreach ($aPages as $page) {
+            $lastmod = $page->getCreatedDate();
+
+            $uri    = Application::get("website", "url") ."/gallery/".$page->getId();
+
+            $this->urlset[] = [
+                'loc'        => $uri,
+                'changefreq' => Sitemap::CHANGEFREQ_YEARLY,
+                'priority'   => 0.4,
+                'lastmod'    => $lastmod->format(DATE_W3C)
+            ];
+        }
+    }
+
+
+    public static function Display(){
+        $Sitemap = new self();
+        $Sitemap->build();
+        $xml = $Sitemap->toXML(true, true);
+        header("Cache-Control: must-revalidate,max-age=" . 40*84600);
+        header("Content-Type: application/xml");
+        header("Content-Length: " .strlen($xml));
+        header('Content-Transfer-Encoding: base64');
+        header("Expires: " . gmdate("D, d M Y H:i:s", time() + 40*84600) . " GMT");
+        header("Pragma: cache");
+        header("Content-Disposition: inline; filename=sitemap.xml");
+        echo $xml;
     }
 
     /**
@@ -89,8 +129,6 @@ class Sitemap
      */
     public function build()
     {
-        Restrict::Validation(Rights::CMS_MENU);
-
         $this->urlset = [];
         $this->parsePages();
     }
@@ -111,7 +149,7 @@ class Sitemap
 
             if ($item['lastmod'] !== null) {
                 $item['lastmod']->setTimezone(new DateTimeZone('UTC'));
-                $url->appendChild($dom->createElement('lastmod', $item['lastmod']->format(DATE_W3C)));
+                $url->appendChild($dom->createElement('lastmod', $item['lastmod']));
             }
 
             if ($item['priority'] !== null) {

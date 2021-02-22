@@ -1,25 +1,26 @@
-$.ajax({
-    type: 'post',
-    data: {
-        type : "get-packages-updates"
-    },
-    dataType: 'json',
-    url : window.location,
-    success: function (response) {
-        console.log(response)
-        $(".arura-updater").find(".overlay").remove();
-        if (response.data.installed.length !== 0){
-            $(".arura-updater .card-tools>.btn-group").prepend("<button class='btn btn-success float-right' onclick='updateAllPackages()'>Allemaal updaten</button>")
-            $.each(response.data.installed, function (i, pack) {
-                console.log(pack);
-                $(".arura-updater .list-group").append("<li class='list-group-item' name='"+pack.name+"'><b>"+pack.name+"</b><br/> Huidige versie: <b>" + pack.version+"</b><br/> Nieuwe versie: <b>"+pack.latest+"</b><button onclick='updatePackage(\""+pack.name+"\")' class='btn btn-success float-right'>Update "+pack.name+"</button></li>")
-            })
-        } else {
-            $(".arura-updater .card-body").append('<div class="alert alert-info">Geen updates aanwezig</div>');
-        }
+if($(".arura-updater").length){
+    $.ajax({
+        type: 'post',
+        data: {
+            type : "get-packages-updates"
+        },
+        dataType: 'json',
+        url : window.location,
+        success: function (response) {
+            $(".arura-updater").find(".overlay").remove();
+            if (response.data.installed.length !== 0){
+                $(".arura-updater .card-tools>.btn-group").prepend("<button class='btn btn-success float-right' onclick='updateAllPackages()'>Allemaal updaten</button>")
+                $.each(response.data.installed, function (i, pack) {
+                    console.log(pack);
+                    $(".arura-updater .list-group").append("<li class='list-group-item' name='"+pack.name+"'><b>"+pack.name+"</b><br/> Huidige versie: <b>" + pack.version+"</b><br/> Nieuwe versie: <b>"+pack.latest+"</b><button onclick='updatePackage(\""+pack.name+"\")' class='btn btn-success float-right'>Update "+pack.name+"</button></li>")
+                })
+            } else {
+                $(".arura-updater .card-body").append('<div class="alert alert-info">Geen updates aanwezig</div>');
+            }
 
-    }
-});
+        }
+    });
+}
 
 function updatePackage(name = "") {
     startPageLoad();

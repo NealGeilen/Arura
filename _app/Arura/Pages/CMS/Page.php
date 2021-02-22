@@ -306,7 +306,7 @@ class Page extends Pages\Page{
                             $aContentBlock['Template'] = $aContentBlock['Content_Value'];
                             break;
                         case 'Picture':
-                            $aContentBlock['Template'] = "<img src='/files/" . $aContentBlock['Content_Value']."'>";
+                            $aContentBlock['Template'] = "<img src='/files/" . $aContentBlock['Content_Value']."' alt='{$aContentBlock["Content_Value"]}'>";
                             break;
                         case "Filler":
                             $aContentBlock['Template'] = "<div class='filler'></div>";

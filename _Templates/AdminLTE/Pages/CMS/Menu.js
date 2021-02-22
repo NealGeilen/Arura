@@ -93,7 +93,6 @@ function creatNavBarItemModal() {
 
 function editNavBarItemModal(oRow) {
     oRow = $(oRow.parent().parent().parent().parent().parent().parent());
-    console.log(oRow);
     oTemplate = $($('.template-input').html());
     oTemplate.find('[name=name]').val(oRow.attr('data-name'));
     oTemplate.find('[name=url]').val(oRow.attr('data-url'));
@@ -119,25 +118,6 @@ function getNewId(){
     });
     return ++iH
 }
-
-
-function buildSitemap(){
-    $.ajax({
-        url: window.location.href,
-        type: 'post',
-        dataType: 'json',
-        data: {
-          type : "build-sitemap"
-        },
-        success: function (response) {
-            addSuccessMessage("Sitemap gebouwd");
-        },
-        error: function () {
-            addErrorMessage("Sitemap bouwen mislukt")
-        }
-    });
-}
-
 
 function submitSitemap(){
     Modals.Warning({

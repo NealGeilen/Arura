@@ -63,11 +63,6 @@ class CMS extends AbstractController {
                 }
                 file_put_contents(__WEB_TEMPLATES__.'menu.json', json_encode($aNavData));
             });
-            $requestHandler->addType("build-sitemap", function (){
-                $Sitemap = new Sitemap();
-                $Sitemap->build();
-                $Sitemap->save();
-            });
             $requestHandler->addType("send-sitemap", function (){
                 $Sitemap = new Sitemap();
                 $Sitemap->submit();

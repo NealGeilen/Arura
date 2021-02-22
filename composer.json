@@ -2,7 +2,7 @@
   "name": "arura/dashboard",
   "description": "Arura",
   "license": "proprietary",
-  "version": "3.2.1",
+  "version": "3.2.2",
   "authors": [
     {
       "name": "Neal Geilen",
@@ -34,7 +34,7 @@
     "mpdf/mpdf": "^8.0",
     "nette/forms": "^v3",
     "nealg/cacher" :  "^1.1",
-    "bramus/router": "^1.4",
+    "bramus/router": "^1.5",
     "mikehaertl/php-shellcommand": "^1.6",
     "symfony/var-dumper": "^5",
     "spatie/calendar-links": "^1.4",

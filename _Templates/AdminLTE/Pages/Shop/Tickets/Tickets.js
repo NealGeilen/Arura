@@ -23,7 +23,6 @@ Tickets = {
           } );
 
           function format(dd){
-              console.log(dd.Tickets.length);
               if (dd.Tickets.length){
                   oTemplate = $($(".template-ticket").html());
                   $.each(dd.Tickets, function (i, aTicket) {
@@ -64,7 +63,6 @@ Tickets = {
 
 $(document).ready(function () {
     if (typeof aRegistrations !== "undefined"){
-        console.log(aRegistrations);
         Tickets.Registration.DataTable($(".registrations-table"))
     }
 });

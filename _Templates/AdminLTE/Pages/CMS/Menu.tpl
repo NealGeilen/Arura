@@ -95,9 +95,6 @@
             </div>
         </div>
         <div class="card-body">
-            <button class="btn btn-primary" onclick="buildSitemap()">
-                Update sitemap
-            </button>
             <button class="btn btn-secondary" onclick="submitSitemap()">
                 Sitemap verzenden naar Google
             </button>
