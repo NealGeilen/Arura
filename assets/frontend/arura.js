@@ -1,6 +1,5 @@
 function serializeArray(oForm) {
     aList = {};
-    console.log(oForm);
     $.each(oForm.find('input, textarea[name], select'), function (iKey, oField) {
         value = $(oField).val();
         if (value !== "" && $(oField).attr('name') !== undefined){

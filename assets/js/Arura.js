@@ -286,7 +286,6 @@ $(".nav-tabs[role=tablist]").find(".nav-link").on("click", function (){
 });
 
 if (location.hash !== ""){
-    console.log(location.hash);
     $(location.hash).parents(".tab-content").find(".tab-pane.active").removeClass("active").removeClass("show");
     $(location.hash + ".tab-pane").addClass("active").addClass("show");
     $("[href='"+location.hash+"']").parents(".nav-tabs").find(".active").removeClass("active")
