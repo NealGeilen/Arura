@@ -164,7 +164,15 @@ class Gallery extends Page implements iWebhookEntity {
             }
             $sWhereSql .= " Gallery_Id LIKE :search OR Gallery_Name LIKE :search OR Gallery_Description LIKE :search";
         }
-        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY {$orderBy} DESC LIMIT {$iLimit} OFFSET {$iOffset}", ["search" => $search]);
+        $limit = null;
+        if ($iLimit > 0){
+            $limit = "LIMIT {$iLimit}";
+        }
+        $offset = null;
+        if ($iOffset > 0){
+            $offset = "OFFSET {$iOffset}";
+        }
+        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY {$orderBy} DESC {$limit} {$offset}", ["search" => $search]);
         foreach ($aIds as $sId){
             $aGalleries[] = new self($sId);
         }

@@ -92,9 +92,9 @@ class Sitemap
 
 
         /**
-         * Event pages
+         * Gallery pages
          */
-        $aPages = Gallery::getAllGalleries(true,0, 0, "", "Gallery_Id");
+        $aPages = Gallery::getAllGalleries(true);
         foreach ($aPages as $page) {
             $lastmod = $page->getCreatedDate();
 
@@ -148,7 +148,6 @@ class Sitemap
             $url->appendChild($dom->createElement('loc', $item['loc']));
 
             if ($item['lastmod'] !== null) {
-                $item['lastmod']->setTimezone(new DateTimeZone('UTC'));
                 $url->appendChild($dom->createElement('lastmod', $item['lastmod']));
             }
 
