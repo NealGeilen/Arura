@@ -83,6 +83,11 @@ MainLineChart = {
             if (typeof  JSONPayments !== "undefined"){
                 MainLineChart.addDataSet(JSONPayments, "Betalingen", "23, 162, 184");
             }
+        },
+        Logs: function (){
+            if (typeof  JSONLogs !== "undefined"){
+                MainLineChart.addDataSet(JSONLogs, "Systeem meldingen", "255, 0, 0");
+            }
         }
     },
     init: function (){
@@ -128,7 +133,7 @@ MainLineChart.oChart = new Chart($(".TimeLine")[0],{
             yAxes: [{
                 ticks: {
                     Min: 0,
-                    suggestedMax: 10,
+                    suggestedMax: 25,
                     display: false
                 },
                 gridLines: {
@@ -152,3 +157,4 @@ MainLineChart.Types.Analytics(MainLineChart.oChart);
 MainLineChart.Types.UserActions();
 MainLineChart.Types.EventRegistrations();
 MainLineChart.Types.Payments();
+MainLineChart.Types.Logs();

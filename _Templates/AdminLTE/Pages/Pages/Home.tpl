@@ -4,6 +4,7 @@
         var JSONUserActions = '{$JSONUserActions}';
         var JSONEventRegistrations = '{$JSONEventRegistrations}';
         var JSONPayments = '{$JSONPayments}';
+        var JSONLogs = '{$JSONLogs}';
     </script>
     <div class="row">
         <div class="col-12">
@@ -11,8 +12,8 @@
                 <div class="card-header">
                     <div class="card-title">Welkom {$aUser.User_Firstname} {$aUser.User_Lastname}</div>
                 </div>
-                <div class="card-body bg-primary">
-                    <canvas class="TimeLine"></canvas>
+                <div class="card-body bg-primary position-relative">
+                    <canvas class="TimeLine d-inline"></canvas>
                 </div>
             </div>
         </div>
