@@ -30,7 +30,7 @@ class Password{
         $form->addPassword("password", "Wachtwoord")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Inloggen");
-        if ($form->isSubmitted()) {
+        if ($form->isSuccess()) {
             $user = User::getUserOnEmail($form->getValues()->mail);
             if ($user === false) {
                 $form->addError("Gegevens onjuist");

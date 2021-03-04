@@ -99,7 +99,7 @@ class Webhook extends Modal {
         }
 
 
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             if (is_null($webhook)){
                 $response = $form->getValues("array");
                 $webhook = self::create($response["Webhook_Url"], $response["Webhook_Trigger"]);
@@ -123,7 +123,7 @@ class Webhook extends Modal {
     public function getDeleteForm() : Form{
         $form = new Form("webhook-delete-form", Form::OneColumnRender);
         $form->addSubmit("verzend", "Verwijderen");
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             $this->load();
             $this->db->query("DELETE FROM tblWebhook WHERE Webhook_Id = :Id", ["Id" => $this->getId()]);
             if ($this->db->isQuerySuccessful()){

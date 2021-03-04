@@ -76,11 +76,11 @@ class Sitemap
         /**
          * Event pages
          */
-        $aPages = Event::getAllEvents();
-        foreach ($aPages as $page) {
+        $aEvents = Event::getEvents();
+        foreach ($aEvents as $event) {
             $lastmod = new DateTime();
 
-            $uri    = Application::get("website", "url") ."/event/". $page["Event_Slug"];
+            $uri    = Application::get("website", "url") ."/event/". $event->getSlug();
 
             $this->urlset[] = [
                 'loc'        => $uri,
@@ -98,7 +98,7 @@ class Sitemap
         foreach ($aPages as $page) {
             $lastmod = $page->getCreatedDate();
 
-            $uri    = Application::get("website", "url") ."/gallery/".$page->getId();
+            $uri    = Application::get("website", "url") ."/album/".$page->getId();
 
             $this->urlset[] = [
                 'loc'        => $uri,

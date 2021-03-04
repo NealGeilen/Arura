@@ -143,7 +143,7 @@ class Recovery extends Modal {
         $form->addEmail("mail", "E-mailadres")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Herstel mail aanvragen");
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
         }
         if ($form->isSuccess()){
             $user = User::getUserOnEmail($form->getValues()->mail);

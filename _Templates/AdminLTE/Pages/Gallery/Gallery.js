@@ -42,7 +42,6 @@ var Gallery = {
                     /*Called just before each file is sent*/
                     xhr.ontimeout = (() => {
                         /*Execute on case of timeout only*/
-                        console.log('Server Timeout')
                     });
                 });
                 this.on("complete", function(file) {

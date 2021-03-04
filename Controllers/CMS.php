@@ -116,7 +116,7 @@ class CMS extends AbstractController {
         $form->addHidden("Page_Id")
             ->addRule(Form::INTEGER);
         $form->setDefaults($p->__toArray());
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             Logger::Create(Logger::UPDATE, \Arura\Pages\CMS\Page::class, $p->getTitle());
             $p->set($form->getValues('array'));
             $p->load(true);

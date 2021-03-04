@@ -255,7 +255,7 @@ class Addon {
         }
 
 
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             if (is_null($Addon)){
                 $Addon = self::create($form->getValues("array"));
                 Logger::Create(Logger::CREATE, Addon::class,  $Addon->getName());

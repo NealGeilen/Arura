@@ -358,7 +358,7 @@ class User
             $form->addCheckbox($iId, $aData["Name"])->setDefaultValue(in_array($iId, $aRoleIds));
         }
         $form->addSubmit("submit", "Opslaan");
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             $db = new Database();
             Logger::Create(Logger::UPDATE, User::class, $user->getUsername());
             foreach ($form->getValues("array") as $id => $value){
@@ -384,7 +384,7 @@ class User
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Opslaan");
 
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             if ($form->getValues()->password_1 === $form->getValues()->password_2){
                 $user -> setPassword(Password::Create($form->getValues()->password_1));
 
@@ -423,7 +423,7 @@ class User
         }
 
         $form->addSubmit("submit", "Opslaan");
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
 
             if (is_null($user)){
                $user = User::createUser($form->getValues()->User_Username, $form->getValues()->User_Firstname, $form->getValues()->User_Lastname, $form->getValues()->User_Email, "");
@@ -456,7 +456,7 @@ class User
     public function getApiForm(){
         $form = new Form("api-form");
         $form->addSubmit("submit", "Nieuwe api Key");
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             $token = str_random(20);
             $EncryptedToken = Password::Create($token);
             $this->setApiToken($EncryptedToken);

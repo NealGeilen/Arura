@@ -99,7 +99,7 @@ class Gallery extends Page implements iWebhookEntity {
             $form->addHidden("Gallery_Id");
             $form->setDefaults($gallery->__toArray());
         }
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
 
             if (is_null($gallery)){
                 $oNewGallery = self::Create(
@@ -348,7 +348,7 @@ class Gallery extends Page implements iWebhookEntity {
         $form = new Form("gallery-delete-form", Form::OneColumnRender);
         $form->addSubmit("verzend", "Verwijderen");
 
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
 
             if ($this->Delete()){
                 Logger::Create(Logger::DELETE, self::class, $this->getName());

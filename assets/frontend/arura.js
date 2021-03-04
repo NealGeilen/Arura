@@ -102,7 +102,6 @@ Arura = {
                 oForm.validate({
                     // submitHandler: function (oForm) {},
                     errorPlacement: function(error, element) {
-                        console.log(error, element);
                         if (element.hasClass("ticket-amount")) {
                             oCard = element.parents(".card");
                             oCard.find(".ticket-error").html(error);

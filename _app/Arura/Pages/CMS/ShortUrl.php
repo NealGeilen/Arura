@@ -183,7 +183,7 @@ class ShortUrl extends Modal {
         }
 
         $form->addSubmit("submit", "Opslaan");
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
 
             if (is_null($shortUrl)){
                 $shortUrl = self::Create($form->getValues()->Url_Direction);

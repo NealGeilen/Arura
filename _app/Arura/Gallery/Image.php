@@ -163,7 +163,7 @@ class Image extends Page implements iWebhookEntity {
         $form->addHidden("Image_Id");
         $form->setDefaults($this->__toArray());
 
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
 
             $this
                 ->setIsPublic($form->getValues()->Image_Public)
@@ -183,7 +183,7 @@ class Image extends Page implements iWebhookEntity {
         $form->addHidden("Image_Id");
         $form->setDefaults($this->__toArray());
 
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
 
             if ($this->Delete()){
                 Flasher::addFlash("{$this->getName()} verwijderd");

@@ -69,6 +69,7 @@ class Pages extends AbstractController {
 
     /**
      * @Route("/profile")
+     * @Right("USER_LOGGED")
      */
     public function Profile(){
         $this->render("AdminLTE/Pages/Pages/Profile.tpl", [
@@ -82,6 +83,7 @@ class Pages extends AbstractController {
 
     /**
      * @Route("/activities")
+     * @Right("USER_LOGGED")
      */
     public function Activities(){
         $this->render("AdminLTE/Pages/Pages/Activities.tpl", [

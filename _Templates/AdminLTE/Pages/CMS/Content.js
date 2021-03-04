@@ -314,7 +314,6 @@ var Builder = {
                     "<div class='col-12'><label>"+setting.name+"</label><input name='"+setting.tag+"' value='"+aGroup[setting.tag]+"' type='"+setting.type+"' class='form-control'></div>"
                 )
             });
-            console.log(Builder.Group.getData(oElement))
             Modals.Custom({
                 Title: "Test",
                 Message: content,

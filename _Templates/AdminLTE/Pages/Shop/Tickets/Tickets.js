@@ -26,7 +26,6 @@ Tickets = {
               if (dd.Tickets.length){
                   oTemplate = $($(".template-ticket").html());
                   $.each(dd.Tickets, function (i, aTicket) {
-                      console.log(aTicket);
                       oRow = $("<tr>");
                       oRow.append("<td>"+aTicket.OrderedTicket_Hash+"</td>");
                       oRow.append("<td>"+aTicket.Ticket_Name+"</td>");

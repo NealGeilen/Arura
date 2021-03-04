@@ -284,7 +284,7 @@ class Event extends Page implements iWebhookEntity{
             }
         }
 
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
 
             $aData = $form->getValues("array");
             if ($this->cancel($aData["Event_CancelReason"])){
@@ -344,7 +344,7 @@ class Event extends Page implements iWebhookEntity{
             $aEvent["Event_Registration_End_Timestamp"]= $oEvent->getEndRegistration()->format("Y-m-d\TH:i");
             $form->setDefaults($aEvent);
         }
-        if ($form->isSubmitted()){
+        if ($form->isSuccess()){
             $aData = $form->getValues("array");
             if (isset($aData["Event_Slug"])){
                 $db = new Database();
