@@ -57,6 +57,7 @@ class Form extends \Nette\Forms\Form{
                     $control->setAttribute("value", $item->value);
                 default:
                     $control->setAttribute("class", "form-control {$cssClass}");
+                    $control->setAttribute("placeholder", $item->getCaption());
                     break;
             }
             return "<div class='form-group'>{$item->getLabel()}{$control}{$sErrors}</div>";
