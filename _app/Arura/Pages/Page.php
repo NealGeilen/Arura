@@ -102,7 +102,7 @@ class Page extends Modal implements PageEnum{
     /**
      * @throws Error
      */
-    public function forceHTTPS(){
+    public static function forceHTTPS(){
         if (Application::get("website", "HTTPS")){
             if(!isset($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] != "on")
             {
@@ -176,7 +176,6 @@ class Page extends Modal implements PageEnum{
      * @throws Exception
      */
     public function showPage($httpResponseCode = 200){
-        $this->forceHTTPS();
         $smarty = self::getSmarty();
         $smarty->assign('aResourceFiles', $this->loadResourceFiles());
         $smarty->assign('aMainNav', Menu::getMenuStructure());

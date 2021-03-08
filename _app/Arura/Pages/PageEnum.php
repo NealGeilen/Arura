@@ -10,8 +10,6 @@ interface PageEnum
 
     public function getPageContent();
 
-    public function forceHTTPS();
-
     public function showPage();
 
     /**

@@ -21,6 +21,8 @@ use Arura\User\User;
 try {
     $oRouter = new \Bramus\Router\Router();
 
+    Page::forceHTTPS();
+
     $oRouter->set404(function (){
         Page::pageNotFound();
     });
