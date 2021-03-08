@@ -11,6 +11,7 @@ use Arura\Pages\CMS\Page;
 use Arura\Pages\CMS\ShortUrl;
 use Arura\Pages\CMS\Sitemap;
 use Arura\Router;
+use Arura\Settings\Application;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
 use Arura\SystemLogger\SystemLogger;
@@ -65,6 +66,14 @@ try {
                 case "sitemap.txt":
                     $oRouter->all("/sitemap.txt", function () use ($oRouter){
                         Sitemap::DisplayTxt();
+                    });
+                    break;
+                case "favicon.ico":
+                    $oRouter->all("/favicon.ico", function () use ($oRouter){
+                        $File = pathinfo(__ROOT__ .  Application::get("website", "favicon"));
+                        if ($File["extension"] === "ico"){
+                            Cache::Display(__ROOT__ .  Application::get("website", "favicon"));
+                        }
                     });
                     break;
                 case "gallery":
