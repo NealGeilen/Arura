@@ -23,6 +23,9 @@ class Form extends \Nette\Forms\Form{
                 $s .= $component->getControl();
             }
         }
+        foreach ($this->getErrors() as $error){
+            $s .= "<div class='alert alert-danger'>{$error}</div>";
+        }
         return $s;
     }
 

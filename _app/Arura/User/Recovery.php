@@ -144,8 +144,6 @@ class Recovery extends Modal {
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Herstel mail aanvragen");
         if ($form->isSuccess()){
-        }
-        if ($form->isSuccess()){
             $user = User::getUserOnEmail($form->getValues()->mail);
             if ($user){
                 $recovery = self::requestToken($user);
@@ -157,7 +155,8 @@ class Recovery extends Modal {
         return  $form;
     }
 
-    public static function getRecoveryForm() : Form{
+    public static function getRecoveryForm() : Form
+    {
         $form = new Form("recovery-form");
         $form->addPassword('password', 'Wachtwoord:')
             ->addRule(Form::REQUIRED, "Dit veld is verplicht")

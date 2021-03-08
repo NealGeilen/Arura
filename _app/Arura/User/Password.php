@@ -31,13 +31,14 @@ class Password{
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $form->addSubmit("submit", "Inloggen");
         if ($form->isSuccess()) {
-            $user = User::getUserOnEmail($form->getValues()->mail);
+            $data = $form->getValues();
+            $user = User::getUserOnEmail($data->mail);
             if ($user === false) {
                 $form->addError("Gegevens onjuist");
             } elseif (!$user->isActive()) {
                 $form->addError("Account is gedeactiveerd");
             } else {
-                if (Password::Verify($form->getValues()->password, $user->getPassword())) {
+                if (Password::Verify($data->password, $user->getPassword())) {
                     $user->logInUser();
                 } else {
                     User::addLoginAttempt();
@@ -46,7 +47,7 @@ class Password{
             }
 
             if ($form->hasErrors()) {
-                SystemLogger::addRecord(SystemLogger::Security, \Monolog\Logger::INFO, 'Failed login request: '.$form->getValues()->mail );
+                SystemLogger::addRecord(SystemLogger::Security, \Monolog\Logger::INFO, 'Failed login request: '.$data->mail );
             }
         }
         return $form;
