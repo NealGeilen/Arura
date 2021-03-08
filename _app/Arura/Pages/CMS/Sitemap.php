@@ -122,6 +122,7 @@ class Sitemap
         header("Pragma: cache");
         header("Content-Disposition: inline; filename=sitemap.xml");
         echo $xml;
+        exit;
     }
 
 
@@ -137,6 +138,7 @@ class Sitemap
         header("Pragma: cache");
         header("Content-Disposition: inline; filename=sitemap.txt");
         echo $txt;
+        exit;
     }
 
     /**
