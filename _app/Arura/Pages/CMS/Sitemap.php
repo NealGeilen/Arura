@@ -124,6 +124,21 @@ class Sitemap
         echo $xml;
     }
 
+
+    public static function DisplayTxt(){
+        $Sitemap = new self();
+        $Sitemap->build();
+        $txt = $Sitemap->toTxt();
+        header("Cache-Control: must-revalidate,max-age=" . 40*84600);
+        header("Content-Type: text/plain");
+        header("Content-Length: " .strlen($txt));
+        header('Content-Transfer-Encoding: base64');
+        header("Expires: " . gmdate("D, d M Y H:i:s", time() + 40*84600) . " GMT");
+        header("Pragma: cache");
+        header("Content-Disposition: inline; filename=sitemap.txt");
+        echo $txt;
+    }
+
     /**
      * @throws Error
      */
@@ -166,6 +181,16 @@ class Sitemap
         return $raw
             ? $dom->saveXML()
             : $dom;
+    }
+
+
+    public function toTxt()
+    {
+        $text = "";
+        foreach ($this->urlset as $url){
+            $text .="{$url['loc']} \r";
+        }
+        return$text;
     }
 
     public function getUrlSet()
