@@ -111,8 +111,8 @@ try {
                         } catch (Exception $e){
                             SystemLogger::AddException(SystemLogger::Payment, $e);
                             http_response_code($e->getCode());
-                            exit;
                         }
+                        exit;
                     });
                     break;
                 case "Block":

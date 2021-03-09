@@ -46,6 +46,7 @@ class Handler{
             SystemLogger::addRecord(SystemLogger::Api, Logger::WARNING, "Api Exception");
             echo json_encode(["data" => [], "code" => $this->getException()->getCode(), "Message" => $this->getException()->getMessage()]);
         }
+        exit;
     }
 
     public function validateFields(){
