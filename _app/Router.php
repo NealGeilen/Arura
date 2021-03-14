@@ -16,6 +16,7 @@ use Arura\Shop\Events\Event;
 use Arura\Shop\Payment;
 use Arura\SystemLogger\SystemLogger;
 use Arura\User\User;
+use Monolog\Logger;
 
 
 try {
@@ -31,6 +32,17 @@ try {
         $aPath = explode("/", $aUrl["path"]);
         if (isset($aPath[1])){
             switch ($aPath[1]){
+                case "composer.json":
+                case "composer.phar":
+                case ".htaccess":
+                case "vendor":
+                case "_config.php":
+                case "templates_c":
+                case "_Addons":
+                case "_app":
+                    SystemLogger::addRecord(SystemLogger::Website, Logger::WARNING, "Secure file requested: {$aPath[1]}");
+                    Page::pageNotFound();
+                    break;
                 case "json":
                     if (file_exists(__ROOT__ . $aUrl["path"])){
                         include __ROOT__ . $aUrl["path"];
