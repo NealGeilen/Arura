@@ -381,7 +381,7 @@ class Gallery extends Page implements iWebhookEntity {
      */
     public static function Create(string $Name, $Description = "", $public = 0){
         $db = new Database();
-        $Id = createGuid();
+        $Id = getHash("tblGallery", "Gallery_Id");
         $db->createRecord("tblGallery",
             [
                 "Gallery_Id" => $Id,

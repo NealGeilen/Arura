@@ -95,7 +95,7 @@
                 </div>
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-title">Annuleren <span class="badge badge-beta">Beta</span></h2>
+                        <h2 class="card-title">Annuleren</h2>
                     </div>
                     <div class="card-body">
                         {if $Event->isCanceled()}

@@ -13,6 +13,7 @@ use Arura\Pages\CMS\Sitemap;
 use Arura\Router;
 use Arura\Settings\Application;
 use Arura\Shop\Events\Event;
+use Arura\Shop\Events\View;
 use Arura\Shop\Payment;
 use Arura\SystemLogger\SystemLogger;
 use Arura\User\User;
@@ -65,10 +66,10 @@ try {
                 case "event":
                     $oRouter->mount("/event", function () use ($oRouter){
                         $oRouter->all("/([^/]+)", function ($id){
-                            Event::Display($id);
+                            View::Display($id);
                         });
                         $oRouter->all("/([^/]+)/{type}", function ($id, $type){
-                            Event::Display($id, $type);
+                            View::Display($id, $type);
                         });
                     });
                     break;

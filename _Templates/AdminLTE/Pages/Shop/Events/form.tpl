@@ -13,6 +13,7 @@
         var _Event_Id = {$Event->getId()}
     </script>
 
+
     {if !$Event->hasEventRegistrations() && !$Event->isCanceled()}
         <div class="callout callout-info">
             <p>Aangemaakte velden komen bij het standaard registartie formulier te staan.</p>
@@ -31,7 +32,7 @@
                 <h3 class="card-title">Formulier</h3>
                 <div class="card-tools">
                     <div class="btn-group">
-                        <button class="btn btn-primary" onclick="">
+                        <button class="btn btn-primary" data-toggle="modal" data-target="#CreatFieldFormModal">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
@@ -39,6 +40,9 @@
             </div>
             <div class="card-body">
                 <section class="editor row">
+                    {foreach $Fields as $Field}
+                        {$Field->render(true)}
+                    {/foreach}
                 </section>
             </div>
         </div>
@@ -55,69 +59,37 @@
     {/if}
 
     <div class="template-field-block d-none">
-        <div class="Field-Item">
-            <div class="Field-Item-Control">
-                <div class="btn-group-vertical btn-group-sm">
-                    <span class="btn btn-xsm btn-primary Field-Position-Handler">
-                        <i class="fas fa-arrows-alt"></i>
-                    </span>
-                    <button class="btn btn-xsm btn-primary">
-                        <i class="fas fa-pen"></i>
-                    </button>
-                    <button class="btn btn-xsm btn-primary" onclick="Builder.Block.Delete($(this).parents('.Block-Item'))">
-                        <i class="fas fa-trash-alt"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="Field-Item-Content">
-            </div>
-            <span class="btn btn-sm btn-primary Field-Item-Width-Control ui-resizable-handle ui-resizable-e">
-                        <i class="fas fa-arrows-alt-h"></i>
-            </span>
-        </div>
+
     </div>
 
-
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-        Launch demo modal
-    </button>
-
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="CreatFieldFormModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Formulier veld</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Veld toevoegen</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="form-row">
-                            <div class="col-6 form-group">
-                                <label>Naam</label>
-                                <input class="form-control" type="text" name="Field_Title" required>
-                            </div>
-                            <div class="col-6 form-group">
-                                <label>Tag</label>
-                                <input class="form-control" type="text" name="Field_Tag" required>
-                            </div>
-                            <div class="col-6 form-group">
-                                <label>Soort veld</label>
-                                <select class="form-control" name="Field_Type">
-                                    <option value="text">Text</option>
-                                    <option value="number">Nummer</option>
-                                    <option value="email">Email</option>
-                                </select>
-                            </div>
-                        </div>
-                    </form>
+                    {$CreatFieldForm}
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="EditFieldFormModal" >
+        <div class="modal-dialog  modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Veld aanpassen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
                 </div>
             </div>
         </div>

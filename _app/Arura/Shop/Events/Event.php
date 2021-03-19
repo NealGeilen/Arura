@@ -11,7 +11,9 @@ use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Mailer\Mailer;
+use Arura\Modal;
 use Arura\Pages\Page;
+use Arura\Shop\Events\Ticket\Ticket;
 use Arura\Shop\Payment;
 use Arura\Database;
 use Arura\Settings\Application;
@@ -34,7 +36,7 @@ use Spatie\IcalendarGenerator\Enums\EventStatus;
 use Spatie\IcalendarGenerator\Enums\ParticipationStatus;
 use Spatie\IcalendarGenerator\Enums\TimezoneEntryType;
 
-class Event extends Page implements iWebhookEntity{
+class Event extends Modal implements iWebhookEntity{
 
     //Properties
     private $id;
@@ -53,7 +55,7 @@ class Event extends Page implements iWebhookEntity{
     private $dEndRegistration;
     private $sCancelReason;
 
-    public static $MasterPage;
+
 
     /**
      * Event constructor.
@@ -63,15 +65,11 @@ class Event extends Page implements iWebhookEntity{
     public function __construct($iId)
     {
         $this->setId($iId);
-        parent::__construct($iId);
+        parent::__construct();
         if (count($this->db->fetchAll("SELECT Event_Id FROM tblEvents WHERE Event_Id = ?", [$this->getId()])) < 0){
             throw new Exception("Event not found", 404);
         }
-        if (is_file(__CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "event.tpl")){
-            self::$MasterPage = __CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "event.tpl";
-        } else {
-            self::$MasterPage = __STANDARD_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "event.tpl";
-        }
+
     }
 
     /**
@@ -88,13 +86,21 @@ class Event extends Page implements iWebhookEntity{
      * @return Event[]
      * @throws Error
      */
-    public static function getEvents(int  $limit = null, $isOver = false){
+    public static function getEvents(int  $limit = null, $isOver = false, $needsPublic = false, $hasHappend = false){
         $db = new Database();
         $aEvents = [];
         $sLimit ="";
         $sWhere = "";
+
+        if ($hasHappend){
+            $sWhere .= " WHERE Event_End_Timestamp <= UNIX_TIMESTAMP() ";
+        }
+
         if ($isOver){
-            $sWhere .= " WHERE Event_Start_Timestamp > UNIX_TIMESTAMP() ";
+            $sWhere .= " WHERE Event_End_Timestamp >= UNIX_TIMESTAMP() ";
+        }
+        if ($needsPublic){
+            $sWhere .= " WHERE Event_IsPublic = 1 ";
         }
         if (!is_null($limit)){
             $sLimit .= " LIMIT {$limit}";
@@ -140,20 +146,6 @@ class Event extends Page implements iWebhookEntity{
     }
 
     /**
-     * @throws SmartyException
-     * @throws Error
-     */
-    public function showPage($httpResponseCode = 200)
-    {
-        $smarty = self::getSmarty();
-        $smarty->assign("aEvent", $this->__ToArray());
-        $smarty->assign("Event", $this);
-        $smarty->assign('aWebsite', Application::getAll()['website']);
-        $this->setPageContend($smarty->fetch(self::$MasterPage));
-        parent::showPage($httpResponseCode);
-    }
-
-    /**
      * @return bool
      * @throws Error
      */
@@ -181,90 +173,10 @@ class Event extends Page implements iWebhookEntity{
             [
                 $sUrl
             ]);
-        return (empty($i)) ? false : new self((int)$i['Event_Id']);
-    }
-
-    /**
-     * @param $url
-     * @return bool
-     * @throws Exception
-     */
-    public static function urlExists($url)
-    {
-        $instance = self::fromUrl($url);
-        return $instance !== false;
-    }
-
-    /**
-     * @return array
-     * @throws Error
-     */
-    private function collectTicketsPOST(){
-        $aTickets = [];
-        $iTotalAmount = 0;
-        foreach ($_POST["Tickets"] as $iTicket => $iAmount){
-            if ((int)$iAmount > 0){
-                $aTicket = $this->db->fetchRow("SELECT * FROM tblEventTickets WHERE Ticket_Id = :Ticket_Id AND Ticket_Event_Id = :Event_Id",[
-                    "Event_Id" => $this->getId(),
-                    "Ticket_Id" => $iTicket
-                ]);
-                if (!empty($aTicket)){
-                    $aTicket["Amount"] = (int)$iAmount;
-                    $iTotalAmount += ((int)$iAmount * (float)$aTicket["Ticket_Price"]);
-                    $aTickets[] = $aTicket;
-                }
-            }
+        if ($i === []){
+            return false;
         }
-        return [
-            "Amount" => $iTotalAmount,
-            "Tickets" => $aTickets
-        ];
-    }
-
-    /**
-     * @throws SmartyException
-     * @throws Error
-     */
-    public function checkout(){
-        if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"])){
-            $aCollection = $this->collectTicketsPOST();
-            if (!empty($aCollection["Tickets"])){
-                $this->setTitle("Checkout | ". $this->getName());
-                self::getSmarty()->assign("iTotalAmount", $aCollection["Amount"]);
-                self::getSmarty()->assign("aTickets", $aCollection["Tickets"]);
-                self::getSmarty()->assign("aIssuers", Payment::getIdealIssuers());
-                if (is_file(__CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "checkout.tpl")){
-                    self::$MasterPage = __CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "checkout.tpl";
-                } else {
-                    self::$MasterPage = __STANDARD_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "checkout.tpl";
-                }
-                $this->showPage();
-            }
-        }
-    }
-
-    /**
-     * @throws Error
-     * @throws ApiException
-     * @throws IncompatiblePlatform
-     */
-    public function payment(){
-        if (isset($_POST["Tickets"]) && is_array($_POST["Tickets"]) && isset($_POST["firstname"])){
-            $aCollection = $this->collectTicketsPOST();
-            if (!empty($aCollection["Tickets"])){
-                $Payment_ID = Payment::CreatPaymentId();
-                Payment::$REDIRECT_URL = Application::get("website", "url")."/event/".$this->getSlug()."/done?i=".$Payment_ID;
-                $P = Payment::CreatePayment(
-                    $Payment_ID,
-                    $aCollection["Amount"],
-                    Payment::METHOD_IDEAL,
-                    "Betaling tickets voor " . $this->getName(),
-                    $_POST["issuer"],
-                    ["Tickets" => $aCollection["Tickets"]]);
-                Registration::NewRegistration($this, $_POST["firstname"], $_POST["lastname"], $_POST["email"], $_POST["tel"], null, $Payment_ID);
-                $P->redirectToMollie();
-            }
-        }
+        return new self($i["Event_Id"]);
     }
 
     /**
@@ -379,7 +291,7 @@ class Event extends Page implements iWebhookEntity{
                     $oEvent->TriggerWebhook(Trigger::EVENT_REGISTRATION_OPEN);
                 }
                 $oEvent->TriggerWebhook(Trigger::EVENT_CREATE);
-                redirect("/dashboard/winkel/evenementen/" . $oEvent->getId());
+                redirect("/dashboard/winkel/evenement/" . $oEvent->getId());
             } else{
                 if (!$oEvent->isCanceled() || $oEvent->canEdit()){
                     $db = new Database();
@@ -436,96 +348,7 @@ class Event extends Page implements iWebhookEntity{
     }
 
 
-    /**
-     * @param string $sSlug
-     * @param null $iRight
-     * @param callable|null $function
-     * @throws Error
-     * @throws SmartyException
-     * @throws NotFound
-     */
-    public static function Display($sName = "",  $sType= ""){
-        parent::displayView($sName, Rights::SHOP_EVENTS_MANAGEMENT, function ($sUrl) use ($sType){
-            if (self::urlExists($sUrl)){
-                $oPage = self::fromUrl($sUrl);
-                if ($oPage->getIsVisible()){
-                    switch ($sType){
-                        case "json":
-                            echo json_encode($oPage->serialize());
-                            http_response_code(200);
-                            exit;
-                            break;
-                        case "ical":
-                            echo $oPage->getIcal()->get();
-                            header('Content-Type: text/calendar; charset=utf-8');
-                            header('Content-Disposition: attachment; filename="ical.ics"');
-                            http_response_code(200);
-                            exit;
-                            break;
-                        case "google":
-                            redirect($oPage->getCalendarLinks()->google());
-                            exit;
-                            break;
-                        case "yahoo":
-                            redirect($oPage->getCalendarLinks()->yahoo());
-                            exit;
-                            break;
-                        case "checkout":
-                            if ($oPage->isOpen() && !$oPage->isCanceled()){
-                                $oPage->checkout();
-                            }
-                            break;
-                        case "payment":
-                            if ($oPage->isOpen() && !$oPage->isCanceled()){
-                                $oPage->payment();
-                            }
-                            break;
-                        case "done":
-                            if ($oPage->isOpen() && isset($_GET["i"]) && !$oPage->isCanceled()){
-                                $P = new Payment($_GET["i"]);
-                                self::getSmarty()->assign("sStatus", $P->getStatus());
-                                $oPage->setTitle("Voltooid | ". $oPage->getName());
-                                if (is_file(__CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "done.tpl")){
-                                    self::$MasterPage = __CUSTOM_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "done.tpl";
-                                } else {
-                                    self::$MasterPage = __STANDARD_MODULES__ . "Events" . DIRECTORY_SEPARATOR . "done.tpl";
-                                }
-                                if ($P->getStatus() === "paid"){
-                                    $R = Registration::getRegistrationFromPayment($P);
-                                    $R ->sendEventDetails();
-                                }
-                                $oPage->showPage();
-                            }
-                            break;
-                        default:
-                            Request::handleXmlHttpRequest(function (RequestHandler $requestHandler){
-                                $requestHandler->addType("register-event", function ($aData){
-                                    $oEvent = new Event((int)$aData["id"]);
-                                    if (!$oEvent->hasEventTickets() || !$oEvent->isCanceled()){
-                                        $R = Registration::NewRegistration($oEvent, $aData["firstname"], $aData["lastname"], $aData["email"], $aData["tel"], $aData["amount"]);
-                                        $R->sendEventDetails();
-                                    } else {
-                                        throw new Forbidden();
-                                    }
-                                });
-                            });
-                            $db = new Database();
-                            $aTickets = $db->fetchAll("SELECT Ticket_Id,Ticket_Capacity,Ticket_Description, Ticket_Name,Ticket_Price FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $oPage->getId()]);
-                            $aList = [];
-                            foreach ($aTickets as $aTicket){
-                                $aTicket["Count"] = $db->fetchRow("SELECT COUNT(OrderedTicket_Ticket_Id) AS Count FROM tblEventTickets JOIN tblEventOrderedTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE Ticket_Id = :Id", ["Id"=>$aTicket["Ticket_Id"]])["Count"];
-                                $aList[] = $aTicket;
-                            }
-                            self::getSmarty()->assign("aTickets", $aList);
-                            $oPage->setTitle($oPage->getName());
-                            self::getSmarty()->assign("iRegistartions", $oPage->getRegisteredAmount());
-                            $oPage->showPage();
-                            break;
-                    }
-                }
-            }
-        });
-    }
+
 
     public function getStatus(){
         if ($this->isCanceled()){
@@ -649,6 +472,15 @@ class Event extends Page implements iWebhookEntity{
      */
     public function hasEventTickets(){
         return (count($this->db->fetchAll("SELECT Ticket_Id FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id"=> $this->getId()])) > 0);
+    }
+
+    public function getTickets(){
+        $Ids = $this->db->fetchAllColumn("SELECT Ticket_Id FROM tblEventTickets WHERE Ticket_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
+        $List = [];
+        foreach ($Ids as $id){
+            $List[] = new Ticket($id);
+        }
+        return $List;
     }
 
     /**

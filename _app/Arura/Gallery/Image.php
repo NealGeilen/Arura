@@ -90,7 +90,7 @@ class Image extends Page implements iWebhookEntity {
      */
     public static function Create(Gallery $Gallery, string $Name,string $Type, $Order = 0, $cover = 0){
         $db = new Database();
-        $Id = createGuid();
+        $Id = getHash("tblGalleryImage", "Image_Id");
         $db->createRecord("tblGalleryImage",
             [
                 "Image_Id" => $Id,

@@ -5,6 +5,7 @@ use Arura\Database;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Modal;
+use Arura\Shop\Events\Registration;
 use Exception;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Exceptions\IncompatiblePlatform;
@@ -342,11 +343,20 @@ class Payment extends Modal {
         return self::ISSUERS;
     }
 
+    public static  function IsAnIdealIssuer(string $id){
+        foreach (self::ISSUERS as $ISSUER){
+            if ($ISSUER["id"] === $id){
+                return true;
+            }
+        }
+        return false;
+    }
+
     /**
      * @return string
      */
     public static function CreatPaymentId(){
-        return getHash("tblPayments", "Payment_Id", 20);
+        return getHash("tblPayments", "Payment_Id");
     }
 
     /**
@@ -456,6 +466,13 @@ class Payment extends Modal {
      * @throws Error
      */
     public function updatePayment(){
+
+        if ($this->isPaymentFromEvents() && $this->getPayment()->status === "paid"){
+            $registration = Registration::getRegistrationFromPayment($this);
+            $registration->sendEventDetails();
+
+        }
+
         $this->db->updateRecord("tblPayments",[
             "Payment_Id" => $this->getId(),
             "Payment_Status" => $this->getPayment()->status,

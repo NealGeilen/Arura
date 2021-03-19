@@ -1,8 +1,8 @@
 <section>
-    <form method="post" action="{$aWebsite.url}/event/{$smarty.SERVER.REDIRECT_URL}/payment" class="form-event-checkout">
+    <form method="post" action="/event/{$Event->getSlug()}/payment" class="form-event-checkout">
         <h2>Gegevens</h2>
         <div class="form-row">
-            <input type="hidden" name="id" required value="{$aEvent.Event_Id}">
+            <input type="hidden" name="id" required value="{$Event->getId()}">
             <div class="form-group col-6">
                 <label>Voornaam</label>
                 <input type="text" name="firstname" class="form-control" required>
@@ -24,6 +24,7 @@
                 <div class="help-block with-errors"></div>
             </div>
         </div>
+        {$form}
         <hr/>
         <h2>Tickets</h2>
         <div class="table-responsive">
@@ -37,12 +38,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                {foreach from=$aTickets item=aTicket}
+                {foreach from=$collection.Tickets item=Ticket}
                     <tr>
-                        <td>{$aTicket.Ticket_Name}<input type="hidden" value="{$aTicket.Amount}" required name="Tickets[{$aTicket.Ticket_Id}]"></td>
-                        <td>{$aTicket.Amount}</td>
-                        <td>€{$aTicket.Ticket_Price|number_format:2:",":"."}</td>
-                        <td>€{($aTicket.Ticket_Price * $aTicket.Amount)|number_format:2:",":"."}</td>
+                        <td>{$Ticket->getName()}
+                        <td>{$Ticket->Amount}</td>
+                        <td>€{$Ticket->getPrice()|number_format:2:",":"."}</td>
+                        <td>€{($Ticket->getPrice() * {$Ticket->Amount})|number_format:2:",":"."}</td>
                     </tr>
                 {/foreach}
                 </tbody>
@@ -50,7 +51,7 @@
                 <tr>
                     <td colspan="2"></td>
                     <th>Totaal bedrag</th>
-                    <th>€{$iTotalAmount|number_format:2:",":"."}</th>
+                    <th>€{$collection.Amount|number_format:2:",":"."}</th>
                 </tr>
                 </tfoot>
             </table>
@@ -58,12 +59,12 @@
         <hr/>
         <h2>Selecteer uw bank</h2>
         <div class="row text-center">
-            {foreach from=$aIssuers item=aIssuer}
+            {foreach from=$Issuers item=Issuer}
             <div class="col-md-4 col-6">
                 <label class="bank-select">
-                    <img src="{$aIssuer.image.size2x}">
-                    {$aIssuer.name}
-                    <input type="radio" name="issuer" value="{$aIssuer.id}" required>
+                    <img src="{$Issuer.image.size2x}">
+                    {$Issuer.name}
+                    <input type="radio" name="issuer" value="{$Issuer.id}" required>
                 </label>
             </div>
             {/foreach}

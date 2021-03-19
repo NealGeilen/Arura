@@ -103,10 +103,10 @@ function str_after($str, $needle)
  * @throws \Arura\Exceptions\Error
  * @throws Exception
  */
-function getHash($sTable, $sColumn, $iLength = 25){
+function getHash($sTable, $sColumn){
     $db = new Database();
     do {
-        $str = str_random($iLength);
+        $str = str_replace("-", "", createGuid());
         $aData = $db -> fetchRow("SELECT " . $sColumn . " FROM " . $sTable . " WHERE " .$sColumn . " = :".$sColumn, [$sColumn => $str]);
     } while(isset($aData[$sColumn]));
     return $str;
@@ -208,4 +208,12 @@ function NotifyException(Exception $exception, $priority = 1){
     }catch (Exception $e){
         return false;
     }
+}
+
+/**
+ * @param string $input
+ * @return string
+ */
+function StripUserInput(string $input){
+    return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
 }

@@ -12,6 +12,7 @@ use Exception;
 use Rights;
 use Smarty;
 use SmartyException;
+use Symfony\Component\HttpFoundation\Request;
 
 class Page extends Modal implements PageEnum{
 
@@ -31,6 +32,23 @@ class Page extends Modal implements PageEnum{
             "Magnific-Popup-1.1.0/magnific-popup.css"
         ]
     ];
+    private static ?Request $request = null;
+
+
+    public static function getRequest() : Request
+    {
+        if (self::$request === null){
+            self::$request = new Request(
+                $_GET,
+                $_POST,
+                [],
+                $_COOKIE,
+                $_FILES,
+                $_SERVER
+            );
+        }
+        return self::$request;
+    }
 
     /**
      * @var

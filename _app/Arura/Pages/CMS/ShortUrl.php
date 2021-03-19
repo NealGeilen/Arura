@@ -128,7 +128,7 @@ class ShortUrl extends Modal {
      */
     public static function Create(string $destination){
         $db = new Database();
-        $token = getHash("tblShortUrl", "Url_Token", 10);
+        $token = getHash("tblShortUrl", "Url_Token");
         $result = $db->createRecord("tblShortUrl", [
             "Url_Token" => $token,
             "Url_Direction" => $destination

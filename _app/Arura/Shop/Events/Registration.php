@@ -8,6 +8,7 @@ use Arura\Modal;
 use Arura\PDF;
 use Arura\QR;
 use Arura\Settings\Application;
+use Arura\Shop\Events\Ticket\OrderedTicket;
 use Arura\Shop\Payment;
 use Arura\Database;
 use Arura\Webhooks\Trigger;
@@ -20,20 +21,16 @@ use SmartyException;
 
 class Registration extends Modal {
 
-    protected $id = 0;
-    protected $event;
-    protected $signUpTime;
-    protected $firstname;
-    protected $lastname;
-    protected $email;
-    protected $tel;
-    protected $amount;
-    protected $payment;
-
-    /**
-     *
-     */
-//    const TemplateDir = __RESOURCES__ . "Tickets/";
+    protected int $id = 0;
+    protected Event $event;
+    protected DateTime $signUpTime;
+    protected string $firstname;
+    protected string $lastname;
+    protected string $email;
+    protected string $tel;
+    protected int $amount;
+    protected ?Payment $payment = null;
+    protected array $AdditionalFields = [];
 
     /**
      * Registration constructor.
@@ -67,7 +64,7 @@ class Registration extends Modal {
      * @return Registration
      * @throws Error
      */
-    public static function NewRegistration(Event $oEvent, $firstname, $lastname, $email, $tel, $Amount= null, $PaymentId = null){
+    public static function Registrate(Event $oEvent, $firstname, $lastname, $email, $tel, $Amount= null, Payment $payment = null, array $AdditionalFields = []){
         $db = new Database();
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
             throw new Error("Email not valid");
@@ -85,7 +82,8 @@ class Registration extends Modal {
             "Registration_Email" => $email,
             "Registration_Tel" => $tel,
             "Registration_Amount" => $Amount,
-            "Registration_Payment_Id" => $PaymentId
+            "Registration_Payment_Id" => is_null($payment) ? null : $payment->getId(),
+            "Registration_AdditionalFields" => json_encode($AdditionalFields)
         ]);
         if (!$db->isQuerySuccessful()){
             throw new Error();
@@ -97,9 +95,18 @@ class Registration extends Modal {
             "registration-email" => $email,
             "registration-tel" => $tel,
             "registration-amount" => $Amount,
-            "registration-payment-id" => $PaymentId
+            "registration-payment-id" => is_null($payment) ? null : $payment->getId(),
+            "registration-additional-fields" => $AdditionalFields
         ]);
         return new self($i);
+    }
+
+    /**
+     * @return bool
+     * @throws Error
+     */
+    protected function areTicketsMade(){
+        return (count($this->db->fetchAll("SELECT OrderedTicket_Hash FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id"=> $this->getId()])) > 0);
     }
 
     /**
@@ -117,7 +124,8 @@ class Registration extends Modal {
             "Registration_Email" => $this->getEmail(),
             "Registration_Tel" => $this->getTel(),
             "Registration_Amount" => $this->getAmount(),
-            "Registration_Payment_Id" => $this->getPayment()->getId()
+            "Registration_Payment_Id" => is_null($this->getPayment()) ? null : $this->getPayment()->getId(),
+            "Registration_AdditionalFields" => json_encode($this->getAdditionalFields())
         ];
     }
 
@@ -137,83 +145,66 @@ class Registration extends Modal {
             $CreationTime->setTimestamp($aRegistration["Registration_Timestamp"]);
             $this->setSignUpTime($CreationTime);
             $this->setAmount($aRegistration["Registration_Amount"]);
-            $this->setPayment(new Payment($aRegistration["Registration_Payment_Id"]));
+            $this->setPayment(is_null($aRegistration["Registration_Payment_Id"]) ? null : new Payment($aRegistration["Registration_Payment_Id"]));
+            $this->setAdditionalFields(json_decode($aRegistration["Registration_AdditionalFields"], true));
         }
     }
 
-    /**
-     * @param int $iTicketId
-     * @param float $fPrice
-     * @return bool|string
-     * @throws Error
-     */
-    protected function addTicket($iTicketId = 0, $fPrice = 0.0){
-        $sHash = getHash("tblEventOrderedTickets", "OrderedTicket_Hash");
-        $this->db->createRecord("tblEventOrderedTickets", [
-            "OrderedTicket_Hash" => $sHash,
-            "OrderedTicket_Ticket_Id" => $iTicketId,
-            "OrderedTicket_Registration_Id" => $this->getId(),
-            "OrderedTicket_Price" => $fPrice,
-            "OrderedTicket_LastValided_Timestamp" => 0
-        ]);
-        if ($this->db->isQuerySuccessful()){
-            return $sHash;
-        }
-        return $this->db->isQuerySuccessful();
-    }
+
 
     /**
      * @return bool
      * @throws Error
-     */
-    protected function areTicketsMade(){
-        return (count($this->db->fetchAll("SELECT OrderedTicket_Hash FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id"=> $this->getId()])) > 0);
-    }
-
-    /**
-     * @return array|bool
-     * @throws Error
      * @throws Exception
      */
-    protected function createTickets(){
-        $aTickets = [];
-        if (!empty($this->getPayment()->getId())){
-            if (isset($this->getPayment()->getMetadata()["Tickets"])){
-                foreach ($this->getPayment()->getMetadata()["Tickets"] as $i => $aTicket){
-                    $iAmount = (int)$aTicket["Amount"];
-                    unset($aTicket["Amount"]);
-                    for ($x =0; $x < $iAmount; $x++){
-                        $sTicket = $this->addTicket($aTicket["Ticket_Id"], (float)$aTicket["Ticket_Price"]);
-                        $aTickets[$sTicket] = $aTicket;
-                    }
-                }
-                return $aTickets;
-            }
-        }
-        return false;
+    public function needsRegistrationTickets(){
+        return $this->getEvent()->hasEventTickets();
     }
 
     /**
-     * @param $aTickets
-     * @return string
-     * @throws Error
      * @throws ApiException
+     * @throws Error
      * @throws MpdfException
      * @throws SmartyException
+     * @throws \PHPMailer\PHPMailer\Exception
      * @throws Exception
      */
-    protected function GeneratePDFs($aTickets){
+    public function sendEventDetails(){
+        $oMailer = new Mailer();
+        Mailer::getSmarty()->assign("Registration", $this);
+        Mailer::getSmarty()->assign("Event", $this->getEvent());
+        if ($this->needsRegistrationTickets()){
+            if (!$this->areTicketsMade()){
+                OrderedTicket::createTickets($this);
+            }
+            $sPdfFile = $this->GeneratePDFs();
+            $oMailer->addAttachment($sPdfFile, "Tickets voor " . $this->getEvent()->getName());
+            $oMailer->setBody(__RESOURCES__ . "Mails/event-paid.html");
+            $oMailer->setSubject("Tickets voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
+        } else {
+            $oMailer->setBody(__RESOURCES__ . "Mails/event.html");
+            $oMailer->setSubject("Aanmelding voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
+        }
+        $oMailer->addStringAttachment($this->getEvent()->getIcal($this)->get(), $this->getEvent()->getName().'.ics');
+
+
+        $oMailer->addBCC($this->getEmail());
+        $oMailer->send();
+        if ($this->needsRegistrationTickets()){
+            unlink($sPdfFile);
+        }
+    }
+
+    protected function GeneratePDFs(){
         $oPDF = new PDF();
         $oPDF->assign("aWebsite", Application::getAll()["website"]);
-        $oPDF->assign("aEvent", $this->getEvent()->__ToArray());
+        $oPDF->assign("Registration", $this);
         $oPDF->assign("btwPer", Application::get("plg.shop", "BtwPer"));
         if (is_file(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "style.css")){
             $oPDF->WriteHTML(file_get_contents(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "style.css"), HTMLParserMode::HEADER_CSS);
         } else {
             $oPDF->WriteHTML(file_get_contents(__STANDARD_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "style.css"), HTMLParserMode::HEADER_CSS);
         }
-        $oPDF->assign("aTickets", $this->getPayment()->getMetadata());
-        $oPDF->assign("aPayment", $this->getPayment()->__ToArray());
         if (is_file(__CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "footer.tpl")){
             $footer = __CUSTOM_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "footer.tpl";
         } else {
@@ -231,77 +222,29 @@ class Registration extends Modal {
             $oPDF->setTemplate(__STANDARD_MODULES__ . "Tickets" . DIRECTORY_SEPARATOR . "factuur.tpl");
         }
 
-        foreach ($aTickets as $sHash =>$aData){
-            $oPDF->AddPage();
-            $oPDF->assign("Qr", QR::Create($sHash));
-            $oPDF->assign("sHash", $sHash);
-            $oPDF->assign("aTicket", $aData);
+        foreach ($this->getOrderedTickets() as $orderedTicket){
+            $orderedTicket->addToPdf($oPDF);
             $oPDF->SetHTMLFooter($footer);
             $oPDF->setTemplate($main);
         }
-        $oPDF->Output(__APP_ROOT__ . "/Tickets/" . $sHash. ".pdf", "F");
-        return  __APP_ROOT__ . "/Tickets/" . $sHash. ".pdf";
+        $oPDF->Output(__APP_ROOT__ . "/Tickets/" . $this->getPayment()->getId(). ".pdf", "F");
+        return  __APP_ROOT__ . "/Tickets/" . $this->getPayment()->getId(). ".pdf";
     }
+
 
     /**
-     * @return bool
-     * @throws Error
-     * @throws Exception
-     */
-    public function needsRegistrationTickets(){
-        return $this->getEvent()->hasEventTickets();
-    }
-
-    /**
-     * @return array
+     * @return OrderedTicket[]
      * @throws Error
      */
-    public function getTickets(){
-        $aData = $this->db->fetchAll("SELECT OrderedTicket_Hash, Ticket_Id, Ticket_Name, Ticket_Price, Ticket_Capacity, Ticket_Description, Ticket_Event_Id FROM tblEventOrderedTickets JOIN tblEventTickets ON OrderedTicket_Ticket_Id = Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $this->getId()]);
-        $aList= [];
-        foreach ($aData as $aOrder){
-            $sHash = $aOrder["OrderedTicket_Hash"];
-            unset($aOrder["OrderedTicket_Hash"]);
-            $aList[$sHash] = $aOrder;
+    public function getOrderedTickets(){
+        $ids = $this->db->fetchAllColumn("SELECT * FROM tblEventOrderedTickets WHERE OrderedTicket_Registration_Id  = :Registration_Id", ["Registration_Id" => $this->getId()]);
+        $List = [];
+        foreach ($ids as $id){
+            $List[] = new OrderedTicket($id);
         }
-        return $aList;
+        return $List;
     }
 
-    /**
-     * @throws ApiException
-     * @throws Error
-     * @throws MpdfException
-     * @throws SmartyException
-     * @throws \PHPMailer\PHPMailer\Exception
-     * @throws Exception
-     */
-    public function sendEventDetails(){
-        $oMailer = new Mailer();
-        Mailer::getSmarty()->assign("aRegistration", $this->__ToArray());
-        Mailer::getSmarty()->assign("aEvent", $this->getEvent()->__ToArray());
-        if ($this->needsRegistrationTickets()){
-            if (!$this->areTicketsMade()){
-                $aTickets = $this->createTickets();
-            } else {
-                $aTickets = $this->getTickets();
-            }
-            $sFile = $this->GeneratePDFs($aTickets);
-            $oMailer->addAttachment($sFile, "Tickets voor " . $this->getEvent()->getName());
-            $oMailer->setBody(__RESOURCES__ . "Mails/event-paid.html");
-            $oMailer->setSubject("Tickets voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
-        } else {
-            $oMailer->setBody(__RESOURCES__ . "Mails/event.html");
-            $oMailer->setSubject("Aanmelding voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
-        }
-        $oMailer->addStringAttachment($this->getEvent()->getIcal($this)->get(), $this->getEvent()->getName().'.ics');
-
-
-        $oMailer->addBCC($this->getEmail());
-        $oMailer->send();
-        if ($this->needsRegistrationTickets()){
-            unlink($sFile);
-        }
-    }
 
     /**
      * @return mixed
@@ -447,7 +390,7 @@ class Registration extends Modal {
      * @return mixed
      * @throws Exception
      */
-    public function getPayment() : Payment
+    public function getPayment() : ?Payment
     {
         $this->load();
         return $this->payment;
@@ -456,9 +399,30 @@ class Registration extends Modal {
     /**
      * @param mixed $payment
      */
-    public function setPayment(Payment $payment)
+    public function setPayment(?Payment $payment)
     {
         $this->payment = $payment;
     }
+
+    /**
+     * @return array
+     */
+    public function getAdditionalFields(): array
+    {
+        $this->load();
+        return $this->AdditionalFields;
+    }
+
+    /**
+     * @param array $AdditionalFields
+     * @return Registration
+     */
+    public function setAdditionalFields(array $AdditionalFields): Registration
+    {
+        $this->AdditionalFields = $AdditionalFields;
+        return $this;
+    }
+
+
 
 }

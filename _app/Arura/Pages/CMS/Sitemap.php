@@ -76,7 +76,7 @@ class Sitemap
         /**
          * Event pages
          */
-        $aEvents = Event::getEvents();
+        $aEvents = Event::getEvents(null, false, true);
         foreach ($aEvents as $event) {
             $lastmod = new DateTime();
 

@@ -5,52 +5,72 @@
 {/block}
 
 {block content}
+
     <div class="card card-primary">
         <div class="card-header">
-            <h2 class="card-title">Evenementen</h2>
-            <div class="card-tools">
-                <button class="btn btn-primary" data-card-widget="collapse"><i class="fas fa-minus"></i></button>
+            <h2 class="card-title">Aankomende evenementen</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {foreach $UpcomingEvents as $Event}
+                    <div class="col-md-4 col-12">
+                        <div class="card card-body">
+                            <h4>{$Event->getName()} <span class="badge badge-info">{$Event->getStatus()}</span></h4>
+                            <small>
+                                {$Event->getStart()|date_format:"%H:%M %d-%m-%y"} t/m {$Event->getEnd()|date_format:"%H:%M %d-%m-%y"}
+                            </small>
+                            <a href="/event/{$Event->getSlug()}" target="_blank">{$Event->getName()}</a>
+
+                            <a class="btn btn-primary btn-sm" href="/{$aArura.dir}/winkel/evenement/{$Event->getId()}">
+                                Meer
+                            </a>
+                        </div>
+                    </div>
+                {/foreach}
+                {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
+                    <div class="col-md-4 col-12">
+                        <div class="card card-body bg-primary">
+                            <h4>Nieuw evenement</h4>
+                            <small>
+                                Nieuw evenement aanmaken
+                            </small>
+                            <a class="btn btn-secondary" href="/dashboard/winkel/evenementen/aanmaken"><i class="fas fa-plus"></i></a>
+                        </div>
+                    </div>
+                {/if}
             </div>
         </div>
-        <div class="card-body table-responsive">
-            <table class="table Arura-Table table-hover">
-                <thead>
-                <tr>
-                    <th>Naam</th>
-                    <th>Status</th>
-                    <th>Slug</th>
-                    <th>Tijd</th>
-                    <th>Aanmeldingen</th>
-                    <th>
-                        {if $aPermissions.SHOP_EVENTS_MANAGEMENT}
-                        <div class="btn-group">
-                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenementen/aanmaken"><i class="fas fa-plus"></i></a>
-                        </div>
-                        {/if}
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                {foreach from=$Events key=$iKey item=Event}
-                    <tr {if !$Event->canEdit() || $Event->isCanceled()}disabled{/if}>
-                        <td>{$Event->getName()}</td>
-                        <td><span class="badge badge-info">{$Event->getStatus()}</span></td>
-                        <td>{$Event->getSlug()}</td>
-                        <td data-order="{$Event->getStart()->format("U")}">{$Event->getStart()->format("U")|date_format:"%H:%M %d-%m-%y"} t/m {$Event->getEnd()->format("U")|date_format:"%H:%M %d-%m-%y"}</td>
-                        <td>{$Event->getAmountSignIns()}</td>
-                        <td class="btn-group btn-group">
-                            <a class="btn btn-primary" href="/{$aArura.dir}/winkel/evenement/{$Event->getId()}">
-                                {if !$Event->canEdit() || $Event->isCanceled()}
-                                    <i class="fas fa-eye"></i>
-                                    {else}
-                                    <i class="fas fa-info"></i>
-                                {/if}
+    </div>
+
+
+    <div class="card collapsed-card">
+        <div class="card-header">
+            <h2 class="card-title">Afgeronden evenementen</h2>
+            <div class="card-tools">
+                <div class="btn-group">
+                    <button class="btn btn-secondary" data-card-widget="collapse"><i class="fas fa-plus"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body" style="display: none;">
+            <div class="row">
+                {foreach $Events as $Event}
+                    <div class="col-md-4 col-12">
+                        <div class="card card-body">
+                            <h4>{$Event->getName()} <span class="badge badge-info">{$Event->getStatus()}</span></h4>
+                            <small>
+                                {$Event->getStart()|date_format:"%H:%M %d-%m-%y"} t/m {$Event->getEnd()|date_format:"%H:%M %d-%m-%y"}
+                            </small>
+                            <a href="/event/{$Event->getSlug()}" target="_blank">{$Event->getName()}</a>
+
+                            <a class="btn btn-primary btn-sm" href="/{$aArura.dir}/winkel/evenement/{$Event->getId()}">
+                                Meer
                             </a>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 {/foreach}
-                </tbody>
-            </table>
+            </div>
         </div>
     </div>
 {/block}
