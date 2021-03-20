@@ -17,6 +17,7 @@ class SystemLogger{
     const System = "System";
     const Addon = "Addon";
     const Webhook = "Webhook";
+    const Event = "Event";
     const Security = "Security";
 
     protected static $Loggers  = [];

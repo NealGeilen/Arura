@@ -57,10 +57,24 @@
       "Extra": ""
     },
     "Registration_Payment_Id": {
-      "Type": "varchar(20)",
+      "Type": "varchar(255)",
       "Null": "YES",
       "Key": "",
       "Default": null,
+      "Extra": ""
+    },
+    "Registration_AdditionalFields": {
+      "Type": "longtext",
+      "Null": "YES",
+      "Key": "",
+      "Default": null,
+      "Extra": ""
+    },
+    "Registration_GDPRSafe": {
+      "Type": "tinyint(1)",
+      "Null": "YES",
+      "Key": "",
+      "Default": 0,
       "Extra": ""
     }
   }

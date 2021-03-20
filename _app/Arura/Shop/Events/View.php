@@ -1,10 +1,7 @@
 <?php
 namespace Arura\Shop\Events;
 
-use Arura\Client\RequestHandler;
-use Arura\Database;
 use Arura\Exceptions\Error;
-use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\NotFound;
 use Arura\Pages\Page;
 use Arura\Settings\Application;
@@ -94,6 +91,36 @@ class View extends Page{
         }
     }
 
+    public function signup(Form  $form, Request $request){
+        if ($form->validateRequest($request) && ($this->event->getIsActive() || $this->event->getIsVisible()) && $this->event->getCapacity() > $this->event->getRegisteredAmount()){
+            /**
+             * User registration
+             */
+            try {
+                $registration = Registration::Registrate(
+                    $this->event,
+                    $request->request->get("firstname"),
+                    $request->request->get("lastname"),
+                    $request->request->get("email"),
+                    $request->request->get("tel"),
+                    $request->request->get("amount"),
+                    null,
+                    $form->collectAdditionalFields($request)
+                );
+
+                $registration->sendEventDetails();
+
+            } catch (Exception $e){
+                SystemLogger::AddException(SystemLogger::Event, $e);
+                return false;
+            }
+
+        } else {
+            return false;
+        }
+        return true;
+    }
+
     /**
      * @param Request $request
      * @throws Error
@@ -126,7 +153,13 @@ class View extends Page{
 
                     $Payment = Payment::CreatePayment($PaymentId, $TotalAmount,Payment::METHOD_IDEAL,"Betaling tickets voor " . $this->event->getName(), $Issuer, ["Tickets" => json_encode($basket["Tickets"])]);
 
+                } catch (Exception $e){
+                    SystemLogger::AddException(SystemLogger::Payment, $e);
+                    return false;
+                }
 
+
+                try {
                     //Registrate contract info and payment
                     $registration = Registration::Registrate(
                         $this->event,
@@ -143,10 +176,10 @@ class View extends Page{
                         unset($_SESSION["EVENT-SHOP"][$this->event->getId()]);
                     }
                     $Payment->redirectToMollie();
+
                     return true;
-                } catch (Exception $e){
-                    dd($e);
-                    SystemLogger::AddException(SystemLogger::Payment, $e);
+                } catch (Exception $exception){
+                    SystemLogger::AddException(SystemLogger::Event, $exception);
                     return false;
                 }
             }
@@ -200,7 +233,8 @@ class View extends Page{
                             break;
                         case "payment":
                             if ($view->event->getIsActive() && !$view->event->isCanceled()){
-                                dd($view->payment($request));
+                                $result = $view->payment($request);
+                                self::getSmarty()->assign("isSuccess", $result);
                             }
                             break;
                         case "done":
@@ -220,32 +254,10 @@ class View extends Page{
                         default:
                             $form = new Form($view->event);
                             if ($request->request->has("Event-Signup")){
-                                if ($form->validateRequest($request)){
-                                    /**
-                                     * User registration
-                                     */
-                                    try {
-                                        $registration = Registration::Registrate(
-                                            $view->event,
-                                            $request->request->get("firstname"),
-                                            $request->request->get("lastname"),
-                                            $request->request->get("email"),
-                                            $request->request->get("tel"),
-                                            $request->request->get("amount"),
-                                            null,
-                                            $form->collectAdditionalFields($request)
-                                        );
-
-                                        $registration->sendEventDetails();
-
-                                    } catch (Exception $e){
-                                        //TODO show error
-                                    }
-
-                                } else {
-                                    //TODO show error
-                                }
+                                $result = $view->signup($form, $request);
+                                self::getSmarty()->assign("isSuccess", $result);
                             }
+
                             self::getSmarty()->assign("form", $form->renderHTMLForm());
                             $view->setTitle($view->event->getName());
                             $view->showPage();

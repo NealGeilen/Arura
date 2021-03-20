@@ -6,8 +6,9 @@ use Arura\Exceptions\Error;
 use Arura\Mailer\Mailer;
 use Arura\Modal;
 use Arura\PDF;
-use Arura\QR;
 use Arura\Settings\Application;
+use Arura\Shop\Events\Form\Field;
+use Arura\Shop\Events\Form\Form;
 use Arura\Shop\Events\Ticket\OrderedTicket;
 use Arura\Shop\Payment;
 use Arura\Database;
@@ -31,6 +32,7 @@ class Registration extends Modal {
     protected int $amount;
     protected ?Payment $payment = null;
     protected array $AdditionalFields = [];
+    protected bool $isGDPRSafe;
 
     /**
      * Registration constructor.
@@ -101,6 +103,58 @@ class Registration extends Modal {
         return new self($i);
     }
 
+    public static function cleanRegistrations(DateTime $cleanBeforeDate){
+        foreach (self::getRegistrationBeforeDate($cleanBeforeDate, true) as $registration){
+            $registration->load();
+            $registration
+                ->setEmail("XX@XX")
+                ->setFirstname("XXX")
+                ->setLastname("XXX")
+                ->setTel("XXX");
+
+            $additionalFields = $registration->getAdditionalFields();
+
+            foreach (Field::getFields($registration->getEvent()) as $field){
+                if ($field->isGDPRData() && isset($additionalFields[$field->getTag()])){
+                    $additionalFields[$field->getTag()] = "XXX";
+                }
+            }
+
+            $registration->setAdditionalFields($additionalFields);
+            $registration->setIsGDPRSafe(true);
+
+            $registration->save();
+
+
+        }
+    }
+
+    public function save():bool
+    {
+        $this->db->updateRecord("tblEventRegistration", $this->__ToArray(), "Registration_Id");
+        return $this->db->isQuerySuccessful();
+    }
+
+    /**
+     * @param DateTime $dateTime
+     * @return Registration[]
+     * @throws Error
+     */
+    public static function getRegistrationBeforeDate(DateTime $dateTime, $isNotGDPRSafe = false){
+        $db = new Database();
+        $where = "";
+        if ($isNotGDPRSafe){
+            $where .= " AND Registration_GDPRSafe = 0";
+        }
+        $ids = $db->fetchAllColumn("SELECT Registration_Id FROM tblEventRegistration JOIN tblEvents ON Event_Id = Registration_Event_Id WHERE tblEvents.Event_End_Timestamp <= :time {$where}", ["time" => $dateTime->getTimestamp()]);
+        $list = [];
+        foreach ($ids as $id){
+            $list[] = new Registration($id);
+        }
+        return $list;
+    }
+
+
     /**
      * @return bool
      * @throws Error
@@ -125,7 +179,8 @@ class Registration extends Modal {
             "Registration_Tel" => $this->getTel(),
             "Registration_Amount" => $this->getAmount(),
             "Registration_Payment_Id" => is_null($this->getPayment()) ? null : $this->getPayment()->getId(),
-            "Registration_AdditionalFields" => json_encode($this->getAdditionalFields())
+            "Registration_AdditionalFields" => json_encode($this->getAdditionalFields()),
+            "Registration_GDPRSafe" => (int)$this->isGDPRSafe()
         ];
     }
 
@@ -147,6 +202,7 @@ class Registration extends Modal {
             $this->setAmount($aRegistration["Registration_Amount"]);
             $this->setPayment(is_null($aRegistration["Registration_Payment_Id"]) ? null : new Payment($aRegistration["Registration_Payment_Id"]));
             $this->setAdditionalFields(json_decode($aRegistration["Registration_AdditionalFields"], true));
+            $this->setIsGDPRSafe((bool)$aRegistration["Registration_GDPRSafe"]);
         }
     }
 
@@ -245,6 +301,27 @@ class Registration extends Modal {
         return $List;
     }
 
+    /**
+     * @return bool
+     */
+    public function isGDPRSafe(): bool
+    {
+        $this->load();
+        return $this->isGDPRSafe;
+    }
+
+    /**
+     * @param bool $isGDPRSafe
+     * @return Registration
+     */
+    public function setIsGDPRSafe(bool $isGDPRSafe): Registration
+    {
+        $this->isGDPRSafe = $isGDPRSafe;
+        return $this;
+    }
+
+
+
 
     /**
      * @return mixed
@@ -314,6 +391,7 @@ class Registration extends Modal {
     public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
+        return $this;
     }
 
     /**
@@ -332,6 +410,7 @@ class Registration extends Modal {
     public function setLastname($lastname)
     {
         $this->lastname = $lastname;
+        return $this;
     }
 
     /**
@@ -350,6 +429,7 @@ class Registration extends Modal {
     public function setTel($tel)
     {
         $this->tel = $tel;
+        return $this;
     }
 
     /**
@@ -368,6 +448,7 @@ class Registration extends Modal {
     public function setEmail($email)
     {
         $this->email = $email;
+        return $this;
     }
 
     /**
@@ -384,6 +465,7 @@ class Registration extends Modal {
     public function setAmount($amount)
     {
         $this->amount = $amount;
+        return $this;
     }
 
     /**
@@ -402,6 +484,7 @@ class Registration extends Modal {
     public function setPayment(?Payment $payment)
     {
         $this->payment = $payment;
+        return $this;
     }
 
     /**

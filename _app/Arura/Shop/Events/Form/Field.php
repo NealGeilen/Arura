@@ -18,6 +18,7 @@ class Field extends Modal {
     protected string $title;
     protected string $value;
     protected array $attributes;
+    protected bool $isGDPRData;
 
     const DefaultTags = ["firstname", "lastname", "email", "tel"];
 
@@ -63,13 +64,14 @@ class Field extends Modal {
                 ->setValue((string)$aField["Field_Value"])
                 ->setSize($aField["Field_Size"])
                 ->setType($aField["Field_Type"])
+                ->setIsGDPRData((bool)$aField["Field_isGDPRData"])
                 ->setTag($aField["Field_Tag"]);
             $this -> isLoaded = true;
         }
     }
 
 
-    public static function addField(Event $event,string $type,string $tag,string $title, int $position, int $size, string $value = null){
+    public static function addField(Event $event,string $type,string $tag,string $title, int $position, int $size, string $value = null,bool $GDPR = false){
         $db = new Database();
         $id =  $db->createRecord("tblEventRegistrationField",[
             "Field_Event_Id" => $event->getId(),
@@ -79,6 +81,7 @@ class Field extends Modal {
             "Field_Type" => $type,
             "Field_Title" => $title,
             "Field_Value" => $value,
+            "Field_isGDPRData" => $GDPR
         ]);
         return new self($id);
     }
@@ -109,6 +112,7 @@ class Field extends Modal {
             "Field_Type" => $this->getType(),
             "Field_Title" => $this->getTitle(),
             "Field_Value" => $this->getValue(),
+            "Field_isGDPRData" => (int)$this->isGDPRData()
         ];
 
     }
@@ -129,11 +133,11 @@ class Field extends Modal {
             ->addRule(\Arura\Form::REQUIRED, "Dit veld is verplicht");
         $form->addText("Field_Tag", "Tag")
             ->addRule(\Arura\Form::REQUIRED, "Dit veld is verplicht");
-        $form->addTextArea("Field_Value", "Waarde")
-            ->addRule(\Arura\Form::REQUIRED, "Dit veld is verplicht");
+        $form->addTextArea("Field_Value", "Waarde");
         $form->addSelect("Field_Type", "Type")
             ->setItems($types)
             ->addRule(\Arura\Form::REQUIRED, "Dit veld is verplicht");
+        $form->addCheckbox("Field_isGDPRData", "Is data AVG gevoelig?");
         $form->addSubmit("submit", "Opslaan");
 
 
@@ -393,6 +397,27 @@ class Field extends Modal {
         $this->attributes = $attributes;
         return $this;
     }
+
+    /**
+     * @return bool
+     */
+    public function isGDPRData(): bool
+    {
+        $this->load();
+        return $this->isGDPRData;
+    }
+
+    /**
+     * @param bool $isGDPRData
+     * @return Field
+     */
+    public function setIsGDPRData(bool $isGDPRData): Field
+    {
+        $this->isGDPRData = $isGDPRData;
+        return $this;
+    }
+
+
 
 
 

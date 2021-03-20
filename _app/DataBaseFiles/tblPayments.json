@@ -1,7 +1,7 @@
 {
   "columns": {
     "Payment_Id": {
-      "Type": "varchar(20)",
+      "Type": "varchar(255)",
       "Null": "NO",
       "Key": "PRI",
       "Default": null,

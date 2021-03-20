@@ -1,6 +1,7 @@
 <?php
 namespace Arura\Updater;
 
+use Arura\Exceptions\Error;
 use Arura\Modal;
 
 /**
@@ -90,7 +91,7 @@ class DataBaseSync extends Modal {
     }
 
     /**
-     * @throws Exceptions\Error
+     * @throws Error
      */
     public function Reload(){
         foreach ($this->aTables as $sTable => $aData){
@@ -131,7 +132,7 @@ class DataBaseSync extends Modal {
 
     /**
      * @param string $sTableName
-     * @throws Exceptions\Error
+     * @throws Error
      */
     private function fillData($sTableName = ""){
         if (isset($this->aTables[$sTableName]["data"])){
@@ -145,7 +146,7 @@ class DataBaseSync extends Modal {
 
     /**
      * @param string $sTableName
-     * @throws Exceptions\Error
+     * @throws Error
      */
     private function createTable($sTableName = ""){
         $aTable = $this->aTables[$sTableName];
@@ -245,13 +246,18 @@ class DataBaseSync extends Modal {
      * @param array $aData
      * @return string
      */
-    private function ColDataToStr($aData = []){
+    private function ColDataToStr($aData = [], $sName = ""){
         $s ="";
         $s .= $aData["Type"] . " ";
         $s .= (($aData["Null"] === "NO") ? "NOT NULL " : null) ;
-        $s .= (($aData["Key"] === "PRI") ? "PRIMARY KEY " : null);
+        switch ($aData["Key"]){
+            case"PRI":
+                $s.= "PRIMARY KEY ";
+                break;
+        }
         $s .= (!empty($aData["Default"]))? "DEFAULT '" .$aData["Default"]."' " : null;
         $s .= $aData["Extra"];
+
         return $s;
 
     }
@@ -260,7 +266,7 @@ class DataBaseSync extends Modal {
      * @param string $sTable
      * @param bool $andData
      * @return array
-     * @throws Exceptions\Error
+     * @throws Error
      */
     public function getJsonFormat($sTable = "", $andData = false){
         $aColumns = $this->db->fetchAll("SHOW COLUMNS FROM `".$sTable."`");

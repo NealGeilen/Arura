@@ -6,14 +6,11 @@ use Arura\Exceptions\Error;
 use Arura\Modal;
 use Arura\PDF;
 use Arura\QR;
-use Arura\Settings\Application;
 use Arura\Shop\Events\Event;
 use Arura\Shop\Events\Registration;
-use Arura\Shop\Events\Ticket\Ticket;
 use Arura\Shop\Payment;
 use DateTime;
 use Exception;
-use Mpdf\HTMLParserMode;
 
 class OrderedTicket extends Modal {
     protected string $hash;

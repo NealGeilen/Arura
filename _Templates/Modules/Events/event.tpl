@@ -98,6 +98,17 @@
             {/if}
             <h2>Inschrijven</h2>
         <form class="event-signup">
+            {if isset($isSuccess)}
+                {if $isSuccess}
+                    <div class="alert alert-success">
+                        Inschrijving succesvol
+                    </div>
+                {else}
+                    <div class="alert alert-danger">
+                        Er is iets misgegaan. De aanmelding is niet succesvol
+                    </div>
+                {/if}
+            {/if}
             <input type="hidden" name="Event-Signup">
             <div class="form-row">
                 <div class="form-group col-6">

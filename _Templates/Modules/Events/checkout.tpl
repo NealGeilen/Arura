@@ -1,6 +1,17 @@
 <section>
     <form method="post" action="/event/{$Event->getSlug()}/payment" class="form-event-checkout">
         <h2>Gegevens</h2>
+        {if isset($isSuccess)}
+            {if $isSuccess}
+                <div class="alert alert-success">
+                    Inschrijving succesvol
+                </div>
+            {else}
+                <div class="alert alert-danger">
+                    Er is iets misgegaan. De aanmelding is niet succesvol
+                </div>
+            {/if}
+        {/if}
         <div class="form-row">
             <input type="hidden" name="id" required value="{$Event->getId()}">
             <div class="form-group col-6">

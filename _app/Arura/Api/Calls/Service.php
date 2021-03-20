@@ -3,6 +3,8 @@ namespace Arura\Api\Calls;
 
 use Arura\Api\Handler;
 use Arura\Database;
+use Arura\Shop\Events\Registration;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 
 class Service{
@@ -19,6 +21,14 @@ class Service{
                 "SystemLogs" => $SystemLogs["Amount"],
                 "UserLogs" => $UserLogs["Amount"]
             ];
+        });
+    }
+
+    public static function CleanEventRegistrations(){
+        Handler::Create([], function (Request $request){
+            $date = new DateTime();
+            $date->modify("-25 weeks");
+            Registration::cleanRegistrations($date);
         });
     }
 

@@ -1,7 +1,7 @@
 {
   "columns": {
     "Url_Token": {
-      "Type": "varchar(100)",
+      "Type": "varchar(255)",
       "Null": "NO",
       "Key": "PRI",
       "Default": null,
