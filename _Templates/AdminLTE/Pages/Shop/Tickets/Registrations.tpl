@@ -17,7 +17,7 @@
                     <th>E-mailadres</th>
                     <th>Telefoonnummer</th>
                     {foreach $Fields as $Field}
-                        <th>{$Field->getTitle()}</th>
+                        <th>{$Field->getTitle()|escape:'html'}</th>
                     {/foreach}
                     <th>Inschrijf datum</th>
                     <th>Aantal</th>
@@ -26,15 +26,15 @@
                 <tbody>
                 {foreach $Event->getRegistration() as $Registration}
                     <tr>
-                        <td>{$Registration->getFirstname()}</td>
-                        <td>{$Registration->getLastname()}</td>
-                        <td>{$Registration->getEmail()}</td>
-                        <td>{$Registration->getTel()}</td>
+                        <td>{$Registration->getFirstname()|escape:'html'}</td>
+                        <td>{$Registration->getLastname()|escape:'html'}</td>
+                        <td>{$Registration->getEmail()|escape:'html'}</td>
+                        <td>{$Registration->getTel()|escape:'html'}</td>
                         {foreach $Fields as $Field}
-                            <td>{$Registration->getAdditionalField($Field->getTag())}</td>
+                            <td>{$Registration->getAdditionalField($Field->getTag())|escape:'html'}</td>
                         {/foreach}
                         <td>{$Registration->getSignUpTime()->getTimestamp()|date_format:"%H:%M %d-%m-%Y"}</td>
-                        <td>{$Registration->getAmount()}</td>
+                        <td>{$Registration->getAmount()|escape:'html'}</td>
                         {$iRegistrationAmount = $iRegistrationAmount + $Registration->getAmount()}
                     </tr>
                 {/foreach}

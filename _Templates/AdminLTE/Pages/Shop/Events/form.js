@@ -146,8 +146,10 @@ var Builder = {
 };
 
 $(document).ready(function () {
-    Builder.Editor.sortable();
-    $(".field").each(function (i, element){
-        Builder.Field.Events($(element))
-    });
+    if ($(sSelectors.Editor).length){
+        Builder.Editor.sortable();
+        $(".field").each(function (i, element){
+            Builder.Field.Events($(element))
+        });
+    }
 });

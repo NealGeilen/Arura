@@ -77,5 +77,7 @@ var Scanner = {
 };
 
 $(document).ready(function () {
-Scanner.StartCamera();
+    if ($("#preview").length){
+        Scanner.StartCamera();
+    }
 });

@@ -31,7 +31,7 @@
                                             <td>{$aSetting.Setting_Name}</td>
                                             <td class="form-group">
                                                 {if $aSetting.Setting_Type === "file"}
-                                                    <input type="text" class="form-control file-selector" file-type="img" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value}"
+                                                    <input type="text" class="form-control file-selector" file-type="img" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value|escape:'html'}"
                                                             {if $aSetting.Setting_Required}
                                                                 required
                                                             {/if}
@@ -43,7 +43,7 @@
                                                             {/if}
                                                     >
                                                 {else}
-                                                    <input type="{$aSetting.Setting_Type}" class="form-control" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value}"
+                                                    <input type="{$aSetting.Setting_Type}" class="form-control" plg="{$aSetting.Setting_Plg}" name="{$aSetting.Setting_Name}" value="{$aSetting.Setting_Value|escape:'html'}"
                                                             {if $aSetting.Setting_Required}
                                                                 required
                                                             {/if}

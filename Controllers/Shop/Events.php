@@ -44,7 +44,6 @@ class Events extends AbstractController {
             throw new Forbidden();
         }
         $oEvent = new Event($id);
-        Router::getSmarty()->assign("iPageViews", Reports::getPageViews(25,"/event/{$oEvent->getSlug()}"));
         if (!Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) && !isset($_GET["t"])){
             $this->redirect("/dashboard/winkel/evenement/{$oEvent->getId()}?t=registrations");
         }
@@ -72,8 +71,6 @@ class Events extends AbstractController {
                     return $oTicket->Validate();
                 });
                 Router::getSmarty()->assign("Event", $oEvent);
-                Router::addSourceScriptJs("assets/vendor/Instascan/instascan.min.js");
-                Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Validation.js");
                 $this->render("AdminLTE/Pages/Shop/Events/Validation.tpl", [
                     "title" =>"Ticket controleren van {$oEvent->getName()}"
                 ]);
@@ -111,13 +108,16 @@ class Events extends AbstractController {
                 Router::getSmarty()->assign("Event", $oEvent);
                 Router::getSmarty()->assign("Fields", Field::getFields($oEvent));
                 Router::getSmarty()->assign("CreatFieldForm", Field::getForm($oEvent)->__ToString());
-                Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.js");
-                Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.css");
                 $this->render("AdminLTE/Pages/Shop/Events/form.tpl", [
                     "title" =>"Formulier registatie van {$oEvent->getName()}"
                 ]);
             });
         }
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.css");
+        Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/Instascan/instascan.min.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Validation.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Edit.js");
         $this->displayTab();
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($oEvent){
             $requestHandler->addType("delete-event", function ($aData) use ($oEvent){
@@ -129,10 +129,8 @@ class Events extends AbstractController {
             });
         });
         Logger::Create(Logger::READ, Event::class, $oEvent->getName());
-        $db = new Database();
         Router::getSmarty()->assign("Event", $oEvent);
         Router::getSmarty()->assign("eventForm", Event::getForm($oEvent));
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Edit.js");
         $this->render("AdminLTE/Pages/Shop/Events/Edit.tpl", [
             "CancelForm" => $oEvent->getCancelForm(),
             "title" =>"{$oEvent->getName()} aanpassen"
