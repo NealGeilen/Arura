@@ -45,20 +45,7 @@ Arura = {
     },
     Event: {
         RegisterEvent: function (oForm) {
-            oForm.validate({
-                submitHandler: function (oForm, event) {
-                    event.preventDefault();
-                    oForm = $(oForm);
-                    Arura.xhr({
-                        url: window.location.href,
-                        data: serializeArray(oForm),
-                        success:function () {
-                            oForm[0].reset();
-                            Arura.System.SuccessMessage("Ingeschreven");
-                        }
-                    });
-                }
-            });
+            oForm.validate({});
         },
         BankSelect: function () {
             if ($(".bank-select").length){

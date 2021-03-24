@@ -6,40 +6,37 @@
 {block content}
     {assign var="tabsType" value="tickets"}
     {include file="./../Events/tabs.tpl"}
-    <script>
-        aRegistrations = {$aRegistrations};
-    </script>
-
-
     <div class="card card-primary">
         <div class="card-body table-responsive">
-            <table class="table table-striped registrations-table">
-                <thead>
-                <tr>
-                    <th></th>
-                    <th>Voornaam</th>
-                    <th>Achternaam</th>
-                    <th>E-mailadres</th>
-                    <th>Telefoonnummer</th>
-                </tr>
-                </thead>
-            </table>
+
+
+            <ul class="list-group">
+                {foreach $Event->getRegistration() as $Registration}
+                    <li class="list-group-item">
+                        {$Registration->getFirstname()} {$Registration->getLastname()} | {$Registration->getEmail()}
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#Registration-{$Registration->getId()}">
+                            Meer
+                        </button>
+                        <div class="collapse" id="Registration-{$Registration->getId()}">
+                            <div class="row">
+                                <div class="col-md-3 col-12">
+                                    Telefoonnummer: <b>{$Registration->getTel()}</b>
+                                </div>
+                                {foreach $Fields as $Field}
+                                    <div class="col-md-3 col-12">
+                                        {$Field->getTitle()}: <b>{$Registration->getAdditionalField($Field->getTag())}</b>
+                                    </div>
+                                {/foreach}
+                                <small>Inschrijf datum: {$Registration->getSignUpTime()|date_format:"%H:%M %d-%m-%Y"}</small>
+                            </div>
+                        </div>
+                    </li>
+                {/foreach}
+            </ul>
+
         </div>
     </div>
 
-    <div class="template-ticket"  style="display: none">
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Ticket nummer</th>
-                <th>Naam</th>
-                <th>Omschrijving</th>
-                <th>Prijs</th>
-            </tr>
-            </thead>
-            <tbody>
 
-            </tbody>
-        </table>
-    </div>
+
 {/block}

@@ -97,7 +97,7 @@
                 </div>
             {/if}
             <h2>Inschrijven</h2>
-        <form class="event-signup">
+        <form class="event-signup" method="post" action="/event/{$Event->getSlug()}">
             {if isset($isSuccess)}
                 {if $isSuccess}
                     <div class="alert alert-success">

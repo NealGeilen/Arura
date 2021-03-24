@@ -497,6 +497,17 @@ class Registration extends Modal {
     }
 
     /**
+     * @return mixed
+     */
+    public function getAdditionalField($tag)
+    {
+        if (isset($this->getAdditionalFields()[$tag])){
+            return $this->getAdditionalFields()[$tag];
+        }
+        return false;
+    }
+
+    /**
      * @param array $AdditionalFields
      * @return Registration
      */

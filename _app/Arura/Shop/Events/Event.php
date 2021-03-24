@@ -503,23 +503,14 @@ class Event extends Modal implements iWebhookEntity{
     }
 
     /**
-     * @return mixed
+     * @return Registration[]
      * @throws Error
      */
     public function getRegistration(){
-        if ($this->hasEventTickets()){
-            $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
-            foreach ($aRegistrations as $i => $registration){
-                $aTickets = $this->db->fetchAll("SELECT * FROM tblEventOrderedTickets JOIN tblEventTickets ON Ticket_Id = OrderedTicket_Ticket_Id WHERE OrderedTicket_Registration_Id = :Registration_Id", ["Registration_Id" => $registration["Registration_Id"]]);
-                if (!empty($aTickets)){
-                    $aRegistrations[$i]["Tickets"] = $aTickets;
-                } else {
-                    unset($aRegistrations[$i]);
-                }
-
-            }
-        } else {
-            $aRegistrations = $this->db->fetchAll("SELECT * FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
+        $ids = $this->db->fetchAllColumn("SELECT Registration_Id FROM tblEventRegistration WHERE Registration_Event_Id = :Event_Id", ["Event_Id" => $this->getId()]);
+        $aRegistrations = [];
+        foreach ($ids as $id){
+            $aRegistrations[] = new Registration($id);
         }
         return $aRegistrations;
     }

@@ -51,17 +51,15 @@ class Events extends AbstractController {
         if (Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)){
             $this->addTab("registrations", function () use ($oEvent){
                 Router::getSmarty()->assign("Event", $oEvent);
+                Router::getSmarty()->assign("Fields", Field::getFields($oEvent));
                 if($oEvent->hasEventTickets()){
-                    Router::getSmarty()->assign("aRegistrations", json_encode($oEvent->getRegistration()));
-                    Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Tickets/Tickets.js");
-                    Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Tickets/Tickets.css");
+                    Router::getSmarty()->assign("Registrations", $oEvent->getRegistration());
                     $this->render("AdminLTE/Pages/Shop/Tickets/Tickets.tpl", [
                         "title" =>"Tickets van {$oEvent->getName()}"
                     ]);
                 } else {
-                    Router::getSmarty()->assign("aRegistrations", $oEvent->getRegistration());
                     $this->render("AdminLTE/Pages/Shop/Tickets/Registrations.tpl", [
-                        "title" =>"Tickets van {$oEvent->getName()}"
+                        "title" =>"Registraties van {$oEvent->getName()}"
                     ]);
                 }
             });
