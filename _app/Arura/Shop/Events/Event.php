@@ -382,12 +382,12 @@ class Event extends Modal implements iWebhookEntity{
         $this->load();
         if (!$this->isCanceled() && is_file(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . "event-cancel.html")){
             $this->setCancelReason($sReason);
-            foreach ($this->getRegistration() as $aRegistration){
+            foreach ($this->getRegistration() as $Registration){
                 $oMailer = new Mailer();
                 $oMailer->addReplyTo($this->getOrganizer()->getEmail());
-                $oMailer->addBCC($aRegistration["Registration_Email"], "{$aRegistration["Registration_Firstname"]} {$aRegistration["Registration_Lastname"]}");
-                Mailer::getSmarty()->assign("aEvent", $this->__ToArray());
-                Mailer::getSmarty()->assign("aRegistration", $aRegistration);
+                $oMailer->addBCC($Registration->getEmail(), "{$Registration->getFirstname()} {$Registration->getLastname()}");
+                Mailer::getSmarty()->assign("Event", $this);
+                Mailer::getSmarty()->assign("Registration", $Registration);
                 $oMailer->setBody(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . "event-cancel.html");
                 $oMailer->send();
             }

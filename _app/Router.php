@@ -36,7 +36,6 @@ try {
                 case "composer.json":
                 case "composer.phar":
                 case ".htaccess":
-                case "vendor":
                 case "_config.php":
                 case "templates_c":
                 case "_Addons":
