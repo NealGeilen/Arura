@@ -203,7 +203,7 @@ class View extends Page{
             $view->event = Event::fromUrl($sUrl);
             if ($view->event instanceof Event){
 
-                if ($view->event->getIsVisible()){
+                if ($view->event->isOpen()){
                     $request = Page::getRequest();
                     switch ($sType){
                         case "json":
