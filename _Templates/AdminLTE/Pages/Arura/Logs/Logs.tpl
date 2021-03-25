@@ -19,24 +19,24 @@
                         <h4 class="m-0">{$Log.channel} <span class="badge {if $Log.level >= 100} badge-secondary{/if}{if $Log.level >= 200} badge-info{/if}{if $Log.level >= 300} badge-warning{/if}{if $Log.level >= 500} badge-danger{/if}">{$Levels[{$Log.level}]}</span></h4>
                     </div>
                     <div class="col-md-8 col-12">
-                        <span class="text-truncate w-75 d-block">{$Log.message}</span>
+                        <span class="text-truncate w-75 d-block">{$Log.message|escape:'html'}</span>
                     </div>
                 </div>
                 <div class="collapse" id="Log-{$Log.id}">
                     <div class="p-3 text-red">
-                        {$Log.message}
+                        {$Log.message|escape:'html'}
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <ul class="list-group">
                                 <li class="list-group-item">
-                                    <b>Url</b> {$Log.Requested_Url}
+                                    <b>Url</b> {$Log.Requested_Url|escape:'html'}
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Session id</b> {$Log.Session_Id}
+                                    <b>Session id</b> {$Log.Session_Id|escape:'html'}
                                 </li>
                                 <li class="list-group-item">
-                                    <b>Ip</b> {$Log.Request_Ip}
+                                    <b>Ip</b> {$Log.Request_Ip|escape:'html'}
                                 </li>
                             </ul>
                         </div>
