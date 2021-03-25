@@ -11,7 +11,7 @@
         <li class="nav-item">
             <a class="nav-link" data-toggle="tab" href="#delete-event-tap" role="tab">Verwijderen</a>
         </li>
-        {if $Event->hasEventRegistrations()}
+        {if !$Event->hasEventRegistrations()}
             <li class="nav-item">
                 <a class="nav-link{if $tabsType=== "form"} active{/if}"  href="?t=form" role="tab">Registartie formulier <span class="badge badge-beta">Beta</span></a>
             </li>
