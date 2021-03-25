@@ -38,6 +38,9 @@ class Field extends Modal {
         "email" => [
             "name" => "Email"
         ],
+        "select" => [
+            "name" => "Dropdown"
+        ],
 
     ];
 
@@ -188,6 +191,19 @@ class Field extends Modal {
         $result .= "<label for='#form-{$this->getEvent()->getId()}-{$this->getTag()}'>{$this->getTitle()}</label>";
 
         switch ($this->getType()){
+            case "select":
+                $result .= "<select name='{$this->getTag()}' id='form-{$this->getEvent()->getId()}-{$this->getTag()}' class='form-control' required>";
+                $result.="<option value>-Selecteer-</option>";
+
+                if (isJson($this->getValue())){
+                    foreach (json_array_decode($this->getValue()) as $key => $value){
+                        $result .= "<option name='{$key}' value='{$value}'>$value</option>";
+                    }
+                }
+
+
+                $result.="</select>";
+                break;
             default:
                 $result .= "<input type='{$this->getType()}' name='{$this->getTag()}' id='form-{$this->getEvent()->getId()}-{$this->getTag()}' class='form-control' required value='{$this->getValue()}'>";
                 break;
