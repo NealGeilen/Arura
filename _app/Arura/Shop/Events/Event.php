@@ -173,7 +173,7 @@ class Event extends Modal implements iWebhookEntity{
             [
                 $sUrl
             ]);
-        if ($i === []){
+        if (empty($i)){
             return null;
         }
         return new self($i["Event_Id"]);
