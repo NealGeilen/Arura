@@ -83,63 +83,62 @@
             </div>
         </form>
     {elseif $Event->getStart()->getTimestamp() >= $smarty.now && $Event->getEndRegistration()->getTimestamp() >= $smarty.now}
-            {if !$Event->getIsActive() || !$Event->getIsVisible()}
-                <div class="event-signup-holdup">
-                    <div class="alert alert-info">
-                        Inschrijven nog niet mogelijk.
-                    </div>
+            {if !$Event->getIsActive()}
+                <div class="alert alert-info">
+                    Inschrijven nog niet mogelijk.
                 </div>
             {elseif $Event->getCapacity() <= $Event->getRegisteredAmount()}
-                <div class="event-signup-holdup">
-                    <div class="alert alert-info">
-                        Inschrijven niet meer mogelijk, Evenment is vol
-                    </div>
+                <div class="alert alert-info">
+                    Inschrijven niet meer mogelijk, Evenment is vol
                 </div>
+            {else}
+                <h2>Inschrijven</h2>
+                <form class="event-signup" method="post" action="/event/{$Event->getSlug()}">
+                    {if isset($isSuccess)}
+                        {if $isSuccess}
+                            <div class="alert alert-success">
+                                Inschrijving succesvol
+                            </div>
+                        {else}
+                            <div class="alert alert-danger">
+                                Er is iets misgegaan. De aanmelding is niet succesvol
+                            </div>
+                        {/if}
+                    {/if}
+                    <input type="hidden" name="Event-Signup">
+                    <div class="form-row">
+                        <div class="form-group col-6">
+                            <label>Voornaam</label>
+                            <input type="text" name="firstname" class="form-control" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Achternaam</label>
+                            <input type="text" name="lastname" class="form-control" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group col-6">
+                            <label>Telefoonnummer</label>
+                            <input type="text" name="tel" class="form-control" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group col-12">
+                            <label>Aantal deelnemers</label>
+                            <input type="number" name="amount" class="form-control" min="1" value="1" required max="{$Event->getCapacity() - $Event->getRegisteredAmount()}">
+                            <div class="help-block with-errors"></div>
+                        </div>
+                    </div>
+                    {$form}
+                    <input type="submit" class="btn btn-primary" value="Inschrijven">
+                </form>
             {/if}
-            <h2>Inschrijven</h2>
-        <form class="event-signup" method="post" action="/event/{$Event->getSlug()}">
-            {if isset($isSuccess)}
-                {if $isSuccess}
-                    <div class="alert alert-success">
-                        Inschrijving succesvol
-                    </div>
-                {else}
-                    <div class="alert alert-danger">
-                        Er is iets misgegaan. De aanmelding is niet succesvol
-                    </div>
-                {/if}
-            {/if}
-            <input type="hidden" name="Event-Signup">
-            <div class="form-row">
-                <div class="form-group col-6">
-                    <label>Voornaam</label>
-                    <input type="text" name="firstname" class="form-control" required>
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group col-6">
-                    <label>Achternaam</label>
-                    <input type="text" name="lastname" class="form-control" required>
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group col-6">
-                    <label>Email</label>
-                    <input type="email" name="email" class="form-control" required>
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group col-6">
-                    <label>Telefoonnummer</label>
-                    <input type="text" name="tel" class="form-control" required>
-                    <div class="help-block with-errors"></div>
-                </div>
-                <div class="form-group col-12">
-                    <label>Aantal deelnemers</label>
-                    <input type="number" name="amount" class="form-control" min="1" value="1" required max="{$Event->getCapacity() - $Event->getRegisteredAmount()}">
-                    <div class="help-block with-errors"></div>
-                </div>
-            </div>
-            {$form}
-            <input type="submit" class="btn btn-primary" value="Inschrijven">
-        </form>
+
+
     {else}
         <div class="alert alert-info text-center">
             Inschrijving gesloten

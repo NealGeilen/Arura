@@ -164,7 +164,7 @@ class Event extends Modal implements iWebhookEntity{
 
     /**
      * @param $sUrl
-     * @return Event|bool
+     * @return Event|null
      * @throws Exception
      */
     public static function fromUrl($sUrl){
@@ -174,7 +174,7 @@ class Event extends Modal implements iWebhookEntity{
                 $sUrl
             ]);
         if ($i === []){
-            return false;
+            return null;
         }
         return new self($i["Event_Id"]);
     }

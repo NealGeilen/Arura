@@ -84,7 +84,7 @@ class Field extends Modal {
             "Field_Type" => $type,
             "Field_Title" => $title,
             "Field_Value" => $value,
-            "Field_isGDPRData" => $GDPR
+            "Field_isGDPRData" => (int)$GDPR
         ]);
         return new self($id);
     }
@@ -155,8 +155,9 @@ class Field extends Modal {
             $data = $form->getValues("array");
             if ($field instanceof Field){
                 $db = new Database();
+                $data["Field_isGDPRData"] = (int)$data["Field_isGDPRData"];
                 $db->updateRecord("tblEventRegistrationField", $data, "Field_Id");
-                if ($db->isQuerySuccessful()){
+                if (!$db->isQuerySuccessful()){
                     $form->addError("Opslaan mislukt");
                 }
             } else {
