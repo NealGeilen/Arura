@@ -29,7 +29,7 @@ class Registration extends Modal {
     protected string $lastname;
     protected string $email;
     protected string $tel;
-    protected int $amount;
+    protected ?int $amount;
     protected ?Payment $payment = null;
     protected array $AdditionalFields = [];
     protected bool $isGDPRSafe;
@@ -104,9 +104,11 @@ class Registration extends Modal {
     }
 
     public static function cleanRegistrations(DateTime $cleanBeforeDate){
+        $Counter = 0;
         foreach (self::getRegistrationBeforeDate($cleanBeforeDate, true) as $registration){
-            $registration->load();
+
             $registration
+                ->load()
                 ->setEmail("XX@XX")
                 ->setFirstname("XXX")
                 ->setLastname("XXX")
@@ -119,14 +121,16 @@ class Registration extends Modal {
                     $additionalFields[$field->getTag()] = "XXX";
                 }
             }
-
             $registration->setAdditionalFields($additionalFields);
             $registration->setIsGDPRSafe(true);
 
-            $registration->save();
+            if ($registration->save()){
+                $Counter++;
+            }
 
 
         }
+        return $Counter;
     }
 
     public function save():bool
@@ -146,7 +150,7 @@ class Registration extends Modal {
         if ($isNotGDPRSafe){
             $where .= " AND Registration_GDPRSafe = 0";
         }
-        $ids = $db->fetchAllColumn("SELECT Registration_Id FROM tblEventRegistration JOIN tblEvents ON Event_Id = Registration_Event_Id WHERE tblEvents.Event_End_Timestamp <= :time {$where}", ["time" => $dateTime->getTimestamp()]);
+        $ids = $db->fetchAllColumn("SELECT Registration_Id FROM tblEventRegistration JOIN tblEvents ON Event_Id = Registration_Event_Id WHERE tblEvents.Event_End_Timestamp >= :time {$where}", ["time" => $dateTime->getTimestamp()]);
         $list = [];
         foreach ($ids as $id){
             $list[] = new Registration($id);
@@ -201,9 +205,11 @@ class Registration extends Modal {
             $this->setSignUpTime($CreationTime);
             $this->setAmount($aRegistration["Registration_Amount"]);
             $this->setPayment(is_null($aRegistration["Registration_Payment_Id"]) ? null : new Payment($aRegistration["Registration_Payment_Id"]));
-            $this->setAdditionalFields(json_decode($aRegistration["Registration_AdditionalFields"], true));
+            $this->setAdditionalFields($aRegistration["Registration_AdditionalFields"]);
             $this->setIsGDPRSafe((bool)$aRegistration["Registration_GDPRSafe"]);
+            $this->isLoaded = true;
         }
+        return $this;
     }
 
 
@@ -511,9 +517,17 @@ class Registration extends Modal {
      * @param array $AdditionalFields
      * @return Registration
      */
-    public function setAdditionalFields(array $AdditionalFields): Registration
+    public function setAdditionalFields($AdditionalFields): Registration
     {
-        $this->AdditionalFields = $AdditionalFields;
+        if (is_string($AdditionalFields)){
+            $this->AdditionalFields = json_decode($AdditionalFields, true);
+        }
+         else if (is_array($AdditionalFields)){
+            $this->AdditionalFields =$AdditionalFields;
+        }
+         else {
+            $this->AdditionalFields = [];
+        }
         return $this;
     }
 

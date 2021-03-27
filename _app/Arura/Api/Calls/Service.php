@@ -28,7 +28,7 @@ class Service{
         Handler::Create([], function (Request $request){
             $date = new DateTime();
             $date->modify("-25 weeks");
-            Registration::cleanRegistrations($date);
+            return ["ClearedRegistrations" =>  Registration::cleanRegistrations($date)];
         });
     }
 

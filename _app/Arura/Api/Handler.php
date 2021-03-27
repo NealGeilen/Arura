@@ -7,6 +7,7 @@ use Arura\Settings\Application;
 use Arura\SystemLogger\SystemLogger;
 use Arura\User\Password;
 use Arura\User\User;
+use DateTime;
 use Exception;
 use Monolog\Logger;
 
@@ -41,7 +42,7 @@ class Handler{
             $this->setException($e);
         }
         if ($this->getException() === null){
-            echo json_encode(["data" => $this->getResponse(), "code" => 200, "Message" => "success", "time" => time()]);
+            echo json_encode(["data" => $this->getResponse(), "code" => 200, "Message" => "success", "time" => (new DateTime())->format(DATE_RFC3339)]);
         } else {
             SystemLogger::addRecord(SystemLogger::Api, Logger::WARNING, "Api Exception");
             echo json_encode(["data" => [], "code" => $this->getException()->getCode(), "Message" => $this->getException()->getMessage()]);
