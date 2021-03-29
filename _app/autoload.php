@@ -16,7 +16,7 @@ require_once __ROOT__ . "/_config.php";
 
 define("__ARURA__DIR_NAME__", "dashboard");
 
-define('__WEB__ROOT__',         $_SERVER['DOCUMENT_ROOT']);
+define('__WEB__ROOT__',         __ROOT__);
 
 
 
