@@ -167,6 +167,7 @@ class Webhook extends Modal {
         curl_setopt( $ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt( $ch, CURLOPT_HEADER, 0);
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
         $response =  curl_exec( $ch );
         $HttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         curl_close($ch);
