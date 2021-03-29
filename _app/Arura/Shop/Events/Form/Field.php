@@ -194,7 +194,6 @@ class Field extends Modal {
         switch ($this->getType()){
             case "select":
                 $result .= "<select name='{$this->getTag()}' id='form-{$this->getEvent()->getId()}-{$this->getTag()}' class='form-control' required>";
-                $result.="<option value>-Selecteer-</option>";
 
                 if (isJson($this->getValue())){
                     foreach (json_array_decode($this->getValue()) as $key => $value){
