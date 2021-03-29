@@ -45,6 +45,9 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    {foreach $Fields as $Field}
+                        <td></td>
+                    {/foreach}
                     <td>Totaal:</td>
                     <td><b>{$iRegistrationAmount}</b></td>
                 </tr>
