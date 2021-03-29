@@ -167,8 +167,9 @@ class Webhook extends Modal {
         curl_setopt( $ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt( $ch, CURLOPT_HEADER, 0);
-        $HttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $response =  curl_exec( $ch );
+        $HttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
         if (!($HttpCode >= 200 && $HttpCode <= 399) || $response === false){
             throw new Exception("Webhook failed {$this->getUrl()}: {$HttpCode}"  , $HttpCode);
         }
