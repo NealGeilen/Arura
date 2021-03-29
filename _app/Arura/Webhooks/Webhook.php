@@ -2,13 +2,13 @@
 namespace Arura\Webhooks;
 
 use Arura\Database;
-use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
 use Arura\SystemLogger\SystemLogger;
 use Arura\User\Logger;
+use Error;
 use Exception;
 
 class Webhook extends Modal {
@@ -171,7 +171,7 @@ class Webhook extends Modal {
         $HttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $response =  curl_exec( $ch );
         if (!($HttpCode >= 200 && $HttpCode <= 399) || $response === false){
-            throw new Error("Webhook failed {$this->getUrl()}: {$response}"  , $HttpCode);
+            throw new Error("Webhook failed {$this->getUrl()}: {$response} {$HttpCode}"  , $HttpCode);
         }
         return $response;
     }
