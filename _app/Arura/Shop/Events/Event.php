@@ -549,7 +549,7 @@ class Event extends Modal implements iWebhookEntity{
         return [
             "id" => $this->getId(),
             "name" => $this->getName(),
-            "description" => strip_tags($this->getDescription()),
+            "description" => strip_tags(substr($this->getDescription(), 0, 200)),
             "start" => $this->getStart()->getTimestamp(),
             "end" => $this->getEnd()->getTimestamp(),
             "location" => $this->getLocation(),
