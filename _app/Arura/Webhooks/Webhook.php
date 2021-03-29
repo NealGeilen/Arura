@@ -2,13 +2,13 @@
 namespace Arura\Webhooks;
 
 use Arura\Database;
+use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Modal;
 use Arura\SystemLogger\SystemLogger;
 use Arura\User\Logger;
-use Error;
 use Exception;
 
 class Webhook extends Modal {
@@ -167,11 +167,10 @@ class Webhook extends Modal {
         curl_setopt( $ch, CURLOPT_POSTFIELDS, $data);
         curl_setopt( $ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt( $ch, CURLOPT_HEADER, 0);
-        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1);
         $HttpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $response =  curl_exec( $ch );
         if (!($HttpCode >= 200 && $HttpCode <= 399) || $response === false){
-            throw new Error("Webhook failed {$this->getUrl()}: {$response} {$HttpCode}"  , $HttpCode);
+            throw new Exception("Webhook failed {$this->getUrl()}: {$HttpCode}"  , $HttpCode);
         }
         return $response;
     }
