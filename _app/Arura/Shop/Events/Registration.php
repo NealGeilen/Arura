@@ -90,17 +90,23 @@ class Registration extends Modal {
         if (!$db->isQuerySuccessful()){
             throw new Error();
         }
-        $oEvent->TriggerWebhook(Trigger::EVENT_REGISTRATION, [
-            "registration-timestamp" => time(),
-            "registration-firstname" => $firstname,
-            "registration-lastname" => $lastname,
-            "registration-email" => $email,
-            "registration-tel" => $tel,
-            "registration-amount" => $Amount,
-            "registration-payment-id" => is_null($payment) ? null : $payment->getId(),
-            "registration-additional-fields" => $AdditionalFields
-        ]);
-        return new self($i);
+        $registration = new self($i);
+        $oEvent->TriggerWebhook(Trigger::EVENT_REGISTRATION, $registration->serialize());
+        return $registration;
+    }
+
+    public function serialize():array{
+        $this->load();
+        return [
+            "timestamp" => $this->getSignUpTime()->getTimestamp(),
+            "firstname" => $this->getFirstname(),
+            "lastname" => $this->getLastname(),
+            "email" => $this->getEmail(),
+            "tel" => $this->getTel(),
+            "amount" => $this->getAmount(),
+            "payment-id" => is_null($this->getPayment()) ? null : $this->getPayment()->getId(),
+            "additional-fields" => json_encode($this->getAdditionalFields())
+        ];
     }
 
     public static function cleanRegistrations(DateTime $cleanBeforeDate){
