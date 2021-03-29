@@ -194,15 +194,14 @@ class Page extends Modal implements PageEnum{
      * @throws Exception
      */
     public function showPage($httpResponseCode = 200){
+        http_response_code($httpResponseCode);
         $smarty = self::getSmarty();
         $smarty->assign('aResourceFiles', $this->loadResourceFiles());
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $smarty->assign("app", Application::getAll());
         $smarty->assign("page", $this);
-
         $smarty->display(self::TemplatePath. self::$MasterPage);
-        http_response_code($httpResponseCode);
         exit;
     }
 
