@@ -3,6 +3,7 @@ namespace Arura\Gallery;
 
 use Arura\Database;
 use Arura\Exceptions\Error;
+use Arura\Exceptions\NotFound;
 use Arura\Flasher;
 use Arura\Form;
 use Arura\Pages\Page;
@@ -267,6 +268,9 @@ class Gallery extends Page implements iWebhookEntity {
     public function load($force = false){
         if (!$this->isLoaded || $force) {
             $aGallery = $this->db->fetchRow("SELECT * FROM tblGallery WHERE Gallery_Id = :id", ["id" =>$this->getId()]);
+            if(empty($aGallery)){
+                throw new NotFound("Gallary not found: {$this->getId()}");
+            }
             $this->setDescription($aGallery["Gallery_Description"]);
             $this->setIsPublic($aGallery["Gallery_Public"]);
             $this->setName($aGallery["Gallery_Name"]);
