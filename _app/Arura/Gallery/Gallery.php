@@ -269,7 +269,7 @@ class Gallery extends Page implements iWebhookEntity {
         if (!$this->isLoaded || $force) {
             $aGallery = $this->db->fetchRow("SELECT * FROM tblGallery WHERE Gallery_Id = :id", ["id" =>$this->getId()]);
             if(empty($aGallery)){
-                throw new NotFound("Gallary not found: {$this->getId()}");
+                throw new NotFound("Gallery not found: {$this->getId()}");
             }
             $this->setDescription($aGallery["Gallery_Description"]);
             $this->setIsPublic($aGallery["Gallery_Public"]);

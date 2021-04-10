@@ -237,7 +237,7 @@ class Event extends Modal implements iWebhookEntity{
         $form->addInteger("Event_Capacity", "Capaciteit")
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
         $aUsers = [];
-        foreach (User::getAllUsers() as $oUser){
+        foreach (User::getAllUsers(true) as $oUser){
             $aUsers[$oUser->getId()] = "{$oUser->getFirstname()} {$oUser->getLastname()} | {$oUser->getEmail()}";
         }
         $form->addSelect("Event_Organizer_User_Id", "Organizator", $aUsers)

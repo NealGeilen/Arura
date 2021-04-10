@@ -187,9 +187,13 @@ class User
      * @return self[]
      * @throws Error
      */
-    public static function getAllUsers(){
+    public static function getAllUsers($OnlyActiveUsers = false){
         $db = new Database();
-        $aUserIds = $db -> fetchAll('SELECT User_Id FROM ' .self::$tblUser);
+        $sWhere = "";
+        if ($OnlyActiveUsers){
+            $sWhere .= " WHERE User_IsActive = 1 ";
+        }
+        $aUserIds = $db -> fetchAll('SELECT User_Id FROM ' .self::$tblUser . " {$sWhere}");
         $aUsers = [];
         foreach ($aUserIds as $aUserId){
             $aUsers[] = new self($aUserId['User_Id']);

@@ -5,10 +5,12 @@ use Arura\Exceptions\Forbidden;
 use Arura\Exceptions\NotFound;
 use Arura\Settings\Application;
 use Arura\User\User;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractController{
 
     private $aTabs;
+    private ?Request $request = null;
 
     public function addTab(string $key, callable $callback){
         $this->aTabs[$key] = $callback;
@@ -80,6 +82,22 @@ abstract class AbstractController{
 
     protected final function redirect($url = ""){
         redirect($url);
+    }
+
+
+    public function getRequest(): Request
+    {
+        if (empty($this->request)){
+            $this->request = new Request(
+                $_GET,
+                $_POST,
+                [],
+                $_COOKIE,
+                $_FILES,
+                $_SERVER
+            );
+        }
+        return $this->request;
     }
 
 

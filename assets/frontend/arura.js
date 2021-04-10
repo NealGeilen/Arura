@@ -297,6 +297,13 @@ Arura = {
                         tPrev: 'Vorige',
                         tNext: 'Volgende',
                         tCounter: '<span class="mfp-counter">%curr% van %total%</span>' // markup of counter
+                    },
+                    callbacks: {
+                        change: function() {
+                            src = $(this.content).find(".mfp-img").attr("src");
+                            $(this.content).find(".mfp-title").append("<a class='btn btn-primary' href='"+src+"/download' target='_blank'><i class='fas fa-download'></i></a>")
+                        },
+
                     }
                 });
             }
