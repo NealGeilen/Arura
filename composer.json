@@ -10,13 +10,13 @@
     }
   ],
   "autoload": {
-    "psr-4": {"Arura\\": "_app/Arura","App\\Controllers\\": "Controllers"},
+    "psr-4": {"Arura\\": "App/Arura","App\\Controllers\\": "App/Controllers"},
     "files": [
-      "_app/Rights.php",
-      "_app/Roles.php",
-      "_app/Functions.php",
-      "_app/autoload.php",
-      "_app/Router.php"
+      "App/Rights.php",
+      "App/Roles.php",
+      "App/Functions.php",
+      "App/autoload.php",
+      "App/Router.php"
     ]
   },
   "require" : {
