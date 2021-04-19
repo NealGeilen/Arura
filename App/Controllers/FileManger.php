@@ -4,11 +4,8 @@ use Arura\AbstractController;
 use Arura\Client\Request;
 use Arura\Client\RequestHandler;
 use Arura\Client\ResponseHandler;
-use Arura\Database;
 use Arura\Flasher;
-use Arura\Permissions\Right;
 use Arura\Router;
-use Arura\User\Logger;
 
 class FileManger extends AbstractController {
 

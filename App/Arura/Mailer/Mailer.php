@@ -52,8 +52,8 @@ class Mailer extends PHPMailer{
         if (is_file($sFile)){
             self::getSmarty()->assign("aWebsite", Application::getAll()["website"]);
             self::getSmarty()->assign("sContent", self::getSmarty()->fetch($sFile));
-            if (is_file(__RESOURCES__ . "Mails/index.html")){
-                $this->Body = self::getSmarty()->fetch(__RESOURCES__ . "Mails/index.html");
+            if (is_file(__WEB__ROOT__ . "/_app/Resources/Mails/index.html")){
+                $this->Body = self::getSmarty()->fetch(__WEB__ROOT__ . "/_app/Resources/Mails/index.html");
             } else {
                 throw new Error("Master template not set");
             }
