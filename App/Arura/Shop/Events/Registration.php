@@ -246,10 +246,10 @@ class Registration extends AbstractModal {
             }
             $sPdfFile = $this->GeneratePDFs();
             $oMailer->addAttachment($sPdfFile, "Tickets voor " . $this->getEvent()->getName());
-            $oMailer->setBody(__RESOURCES__ . "Mails/event-paid.html");
+            $oMailer->setBody(__WEB__ROOT__ . "/_app/Resources/Mails/event-paid.html");
             $oMailer->setSubject("Tickets voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
         } else {
-            $oMailer->setBody(__RESOURCES__ . "Mails/event.html");
+            $oMailer->setBody(__WEB__ROOT__ . "/_app/Resources/Mails/event.html");
             $oMailer->setSubject("Aanmelding voor " .$this->getEvent()->getName() . " van " . Application::get("website", "name"));
         }
         $oMailer->addStringAttachment($this->getEvent()->getIcal($this)->get(), $this->getEvent()->getName().'.ics');

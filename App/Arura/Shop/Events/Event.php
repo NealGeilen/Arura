@@ -369,7 +369,7 @@ class Event extends AbstractModal implements iWebhookEntity{
 
     public function cancel(string $sReason){
         $this->load();
-        if (!$this->isCanceled() && is_file(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . "event-cancel.html")){
+        if (!$this->isCanceled() && is_file(__WEB__ROOT__ . "/_app/Resources/Mails" . DIRECTORY_SEPARATOR . "event-cancel.html")){
             $this->setCancelReason($sReason);
             foreach ($this->getRegistration() as $Registration){
                 $oMailer = new Mailer();
@@ -377,7 +377,7 @@ class Event extends AbstractModal implements iWebhookEntity{
                 $oMailer->addBCC($Registration->getEmail(), "{$Registration->getFirstname()} {$Registration->getLastname()}");
                 Mailer::getSmarty()->assign("Event", $this);
                 Mailer::getSmarty()->assign("Registration", $Registration);
-                $oMailer->setBody(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . "event-cancel.html");
+                $oMailer->setBody(__WEB__ROOT__ . "/_app/Resources/Mails" . DIRECTORY_SEPARATOR . "event-cancel.html");
                 $oMailer->send();
             }
             return $this->save();

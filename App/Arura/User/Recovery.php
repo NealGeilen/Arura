@@ -110,7 +110,7 @@ class Recovery extends AbstractModal {
         $oMailer->isHTML(true);
         Mailer::getSmarty()->assign("TOKEN", $this->getToken());
         Mailer::getSmarty()->assign("aUser", $this->getUser()->__toArray());
-        $oMailer->setBody(__RESOURCES__ . "Mails" . DIRECTORY_SEPARATOR . Application::get('plg.recovery','template'));
+        $oMailer->setBody(__WEB__ROOT__ . "/_app/Resources/Mails/" . Application::get('plg.recovery','template'));
         $oMailer->setSubject("Wachtwoord herstel");
         $oMailer->addAddress($this->getUser()->getEmail());
         return $oMailer->send();
