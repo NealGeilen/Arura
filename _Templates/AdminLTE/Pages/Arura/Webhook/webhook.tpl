@@ -23,7 +23,7 @@
                 <tbody>
                 {foreach $Webhooks as $Webhook}
                     <tr>
-                        <td>{$Webhook->getTrigger()}</td>
+                        <td>{$Triggers[$Webhook->getTrigger()]}</td>
                         <td>{$Webhook->getUrl()}</td>
                         <td>
                             <a class="btn btn-primary" href="/dashboard/arura/webhook/{$Webhook->getId()}/edit">

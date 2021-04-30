@@ -71,6 +71,7 @@ class Webhook extends AbstractModal {
 
             $this->setTrigger($webhook["Webhook_Trigger"]);
             $this->setUrl($webhook["Webhook_Url"]);
+            $this->isLoaded = true;
         }
     }
 
@@ -107,6 +108,7 @@ class Webhook extends AbstractModal {
                 Flasher::addFlash("Webhook {$webhook->getUrl()} aangemaakt");
             } else {
                 $response = $form->getValues("array");
+                $webhook->load();
                 $webhook->setUrl($response["Webhook_Url"])
                     ->setUrl($response["Webhook_Trigger"]);
                 if (!$webhook->save()){
