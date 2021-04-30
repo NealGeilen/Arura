@@ -57,7 +57,7 @@ class Webhook extends AbstractModal {
         return [
           "Webhook_Id" => $this->getId(),
           "Webhook_Url" => $this->getUrl(),
-          "Webhook_trigger" => $this->getTrigger()
+          "Webhook_Trigger" => $this->getTrigger()
         ];
     }
 
@@ -84,8 +84,7 @@ class Webhook extends AbstractModal {
         $form = new Form("Webhook-form-" . $webhook, Form::OneColumnRender);
 
 
-        $form->addSelect("Webhook_Trigger", "Event")
-            ->setItems(Trigger::getTriggers())
+        $form->addSelect("Webhook_Trigger", "Event", Trigger::getTriggers())
             ->addRule(Form::REQUIRED, "Dit veld is verplicht");
 
         $form->addText("Webhook_Url", "Url")
