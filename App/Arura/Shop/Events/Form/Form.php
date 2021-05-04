@@ -3,6 +3,7 @@ namespace Arura\Shop\Events\Form;
 
 use Arura\AbstractModal;
 use Arura\Shop\Events\Event;
+use DateTime;
 use Symfony\Component\HttpFoundation\Request;
 
 class Form extends AbstractModal {
@@ -28,7 +29,8 @@ class Form extends AbstractModal {
                 return false;
             }
         }
-        return true;
+        return $this->event->getIsActive()
+            && $this->event->getEndRegistration()->getTimestamp() <= (new DateTime())->getTimestamp();
 
     }
 

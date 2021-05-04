@@ -12,6 +12,7 @@ use Arura\SystemLogger\SystemLogger;
 use Exception;
 use Mollie\Api\Exceptions\ApiException;
 use Mollie\Api\Exceptions\IncompatiblePlatform;
+use Monolog\Logger;
 use Rights;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -92,7 +93,7 @@ class View extends Page{
     }
 
     public function signup(Form  $form, Request $request){
-        if ($form->validateRequest($request) && ($this->event->getIsActive() || $this->event->getIsVisible()) && $this->event->getCapacity() > $this->event->getRegisteredAmount()){
+        if ($form->validateRequest($request) && $this->event->getCapacity() > $this->event->getRegisteredAmount()){
             /**
              * User registration
              */
@@ -116,6 +117,7 @@ class View extends Page{
             }
 
         } else {
+            SystemLogger::addRecord(SystemLogger::Event, Logger::NOTICE, "Registration request failed");
             return false;
         }
         return true;

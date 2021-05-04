@@ -39,6 +39,7 @@ try {
                 case "_config.php":
                 case "templates_c":
                 case "_Addons":
+                case "_app":
                 case "App":
                     SystemLogger::addRecord(SystemLogger::Website, Logger::WARNING, "Secure file requested: {$aPath[1]}");
                     Page::pageNotFound();
@@ -152,9 +153,9 @@ try {
 
 } catch (Unauthorized $unauthorized){
     if (User::isLogged()){
-        redirect("/dashboard/login");
-    } else {
         redirect("/dashboard/home");
+    } else {
+        redirect("/dashboard/login");
     }
 }  catch (Forbidden $forbidden) {
     redirect("/dashboard/home");
