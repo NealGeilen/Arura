@@ -966,7 +966,7 @@ class Addon extends AbstractModal{
         if ($form->isSuccess()){
             self::CacheAllAddons();
             Logger::Create(Logger::UPDATE, Addon::class,  "All Addons");
-            Flasher::addFlash("Alle cahc vernieuwed");
+            Flasher::addFlash("Alle cach vernieuwed");
         }
         return$form;
     }

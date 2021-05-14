@@ -15,6 +15,7 @@ use Mollie\Api\Exceptions\IncompatiblePlatform;
 use Monolog\Logger;
 use Rights;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class View extends Page{
 
@@ -162,7 +163,7 @@ class View extends Page{
 
 
                 try {
-                    //Registrate contract info and payment
+                    //Registrant contract info and payment
                     $registration = Registration::Registrate(
                         $this->event,
                         $request->request->get("firstname"),
@@ -229,19 +230,18 @@ class View extends Page{
                             exit;
                             break;
                         case "checkout":
-                            if ($view->event->getIsActive() && !$view->event->isCanceled()){
+                            if ($view->event->getIsActive() && !$view->event->isCanceled() && $view->event->hasEventTickets()){
                                 $view->checkout($request);
                             }
                             break;
                         case "payment":
-                            if ($view->event->getIsActive() && !$view->event->isCanceled()){
+                            if ($view->event->getIsActive() && !$view->event->isCanceled() && $view->event->hasEventTickets()){
                                 $result = $view->payment($request);
                                 self::getSmarty()->assign("isSuccess", $result);
                             }
                             break;
                         case "done":
-
-                            if ($view->event->getIsActive() && !$view->event->isCanceled() && $request->query->has("i")){
+                            if ($view->event->getIsActive() && !$view->event->isCanceled() && $request->query->has("i") && $view->event->hasEventTickets()){
                                 $payment = new Payment($request->query->get("i"));
                                 self::getSmarty()->assign("sStatus", $payment->getStatus());
                                 $view->setTitle("Voltooid | ". $view->event->getName());
@@ -258,6 +258,9 @@ class View extends Page{
                             if ($request->request->has("Event-Signup")){
                                 $result = $view->signup($form, $request);
                                 self::getSmarty()->assign("isSuccess", $result);
+                                if ($result){
+                                    unset($_POST);
+                                }
                             }
 
                             self::getSmarty()->assign("form", $form->renderHTMLForm());

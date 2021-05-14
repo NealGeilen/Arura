@@ -20,17 +20,17 @@ class Form extends AbstractModal {
     public function validateRequest(Request $request){
         $Fields = Field::getFields($this->getEvent());
         foreach ($Fields as $field){
-            if (is_null($request->request->get($field->getTag(), null))){
+            if (is_null($request->request->get($field->getTag()))){
                 return false;
             }
         }
         foreach (Field::DefaultTags as $tag){
-            if (is_null($request->request->get($tag, null))){
+            if (is_null($request->request->get($tag))){
                 return false;
             }
         }
         return $this->event->getIsActive()
-            && $this->event->getEndRegistration()->getTimestamp() <= (new DateTime())->getTimestamp();
+            && $this->event->getEndRegistration()->getTimestamp() >= (new DateTime())->getTimestamp();
 
     }
 

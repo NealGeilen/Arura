@@ -324,7 +324,9 @@ class Page extends Pages\Page{
                         case "custom":
                         case 'widget':
                             $Addon = new Addon($aContentBlock["Content_Addon_Id"]);
-                            $aContentBlock['Template'] = $Addon->Display($aContentBlock['Content_Value'], $aContentBlock,self::getSmarty());
+                            if ($Addon->isActive()){
+                                $aContentBlock['Template'] = $Addon->Display($aContentBlock['Content_Value'], $aContentBlock,self::getSmarty());
+                            }
                             break;
                     }
                     if ($aContentBlock["Template"] !== null){
