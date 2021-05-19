@@ -40,18 +40,18 @@
                                 </li>
                             </ul>
                         </div>
-                        {if $Log.User_Id}
-                            <div class="col-md-6">
-                                <ul class="list-group">
-                                    <li class="list-group-item">
-                                        {$Log.User_Firstname} {$Log.User_Lastname}
-                                    </li>
-                                    <li class="list-group-item">
-                                        {$Log.User_Email}
-                                    </li>
-                                </ul>
-                            </div>
-                        {/if}
+                            {if $Log.User_Id}
+                                <div class="col-md-6">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                            {$Log.User_Firstname} {$Log.User_Lastname}
+                                        </li>
+                                        <li class="list-group-item">
+                                            {$Log.User_Email}
+                                        </li>
+                                    </ul>
+                                </div>
+                            {/if}
                     </div>
                 </div>
             </div>

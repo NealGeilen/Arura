@@ -41,9 +41,7 @@ class Logs
                 $query .= " WHERE Logger_User_Id = :User_Id ";
                 $params["User_Id"] = $request->request->getInt("User");
             }
-            if ($request->request->has("Limit")){
-                $query .= " LIMIT {$request->request->getInt("Limit", 20)} ";
-            }
+            $query .= " LIMIT {$request->request->getInt("Limit", 20)} ";
             if ($request->request->has("Offset")){
                 $query .= " Offset {$request->request->getInt("Offset", 0)} ";
             }
