@@ -3,6 +3,7 @@ namespace Arura\Shop\Events;
 
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
+use Arura\Flasher;
 use Arura\Pages\Page;
 use Arura\Settings\Application;
 use Arura\Shop\Events\Form\Form;
@@ -255,12 +256,16 @@ class View extends Page{
                             break;
                         default:
                             $form = new Form($view->event);
-                            if ($request->request->has("Event-Signup")){
+                            if ($request->request->has("Event-Signup") && !$view->event->hasEventTickets()){
                                 $result = $view->signup($form, $request);
-                                self::getSmarty()->assign("isSuccess", $result);
+                                self::getSmarty()->assign("isSuccess", false);
                                 if ($result){
-                                    unset($_POST);
+                                    Flasher::addFlash("Aanmelding voor {$view->event->getName()} succesvol.", Flasher::Success, Flasher::Frontend);
+                                } else {
+                                    Flasher::addFlash("Aanmelding mislukt, Probeer het later opnieuw", Flasher::Error, Flasher::Frontend);
+                                    SystemLogger::addRecord(SystemLogger::Event, Logger::WARNING, "Aanmelding mislukt event: " . json_encode([$view->event->__ToArray(), $request->request->all()]));
                                 }
+                                redirect("/event/{$view->event->getSlug()}");
                             }
 
                             self::getSmarty()->assign("form", $form->renderHTMLForm());
