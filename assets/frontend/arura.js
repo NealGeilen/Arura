@@ -123,16 +123,16 @@ Arura = {
                 var oSettings = {
                     type: type,
                     icon_type: 'class',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
                     z_index: 1050,
                     newest_on_top: true,
-                    showProgressbar: true,
                     template: '<div data-notify="container" class="alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
                         '<span data-notify="icon" class="text-white"></span> ' +
                         '<span data-notify="title" class="text-bold">{1}: </span>' +
                         '<span data-notify="message">{2}</span>' +
-                        '<div class="progress" data-notify="progressbar">' +
-                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                        '</div>' +
                         '</div>'
                 };
                 $.notify({title: title,message:message, icon: icon},oSettings);
