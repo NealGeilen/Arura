@@ -201,7 +201,7 @@ class Page extends AbstractModal implements PageEnum{
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $smarty->assign("app", Application::getAll());
-        $smarty->assign("Flashes", Flasher::getFlashes(Flasher::Frontend));
+        $smarty->assign("Flashes", json_encode(Flasher::getFlashes(Flasher::Frontend)));
         $smarty->assign("page", $this);
         $smarty->display(self::TemplatePath. self::$MasterPage);
         exit;
