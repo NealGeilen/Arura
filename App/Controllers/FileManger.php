@@ -24,19 +24,20 @@ class FileManger extends AbstractController {
                 return $Manger->loadDir($sDir, $aData['itemType']);
             });
         });
-        Flasher::addFlash("Bestanden hier geplaatst zijn openbaar.", Flasher::Info);
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/FileManger/Home.js");
-        $this->render("AdminLTE/Pages/FileManger/Home.tpl", [
+        $this->render("AdminKit/Pages/FileManger/Home.tpl", [
             "title" =>"Bestanden"
         ]);
     }
 
     /**
-     * @Route("/files/connection")
+     * @Route("/files/frame")
      * @Right("FILES_EDIT")
      */
     public function connection(){
-        require_once __APP__ . "Elfinder/connector.minimal.php";
+        define('FM_EMBED', true);
+        define('FM_SELF_URL', "/dashboard/files/frame");
+        require __APP__ . "TinyFileManager" . DIRECTORY_SEPARATOR . "tinyfilemanager.php";
+        exit;
     }
 
 }

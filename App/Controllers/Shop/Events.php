@@ -31,7 +31,7 @@ class Events extends AbstractController {
         Router::getSmarty()->assign("UpcomingEvents", Event::getEvents(null, true));
         Router::getSmarty()->assign("Events", Event::getEvents(null, false, false, true));
 
-        $this->render("AdminLTE/Pages/Shop/Events/Management.tpl", [
+        $this->render("AdminKit/Pages/Shop/Events/Management.tpl", [
             "title" =>"Evenementen"
         ]);
     }
@@ -53,11 +53,11 @@ class Events extends AbstractController {
                 Router::getSmarty()->assign("Fields", Field::getFields($oEvent));
                 if($oEvent->hasEventTickets()){
                     Router::getSmarty()->assign("Registrations", $oEvent->getRegistration());
-                    $this->render("AdminLTE/Pages/Shop/Tickets/Tickets.tpl", [
+                    $this->render("AdminKit/Pages/Shop/Tickets/Tickets.tpl", [
                         "title" =>"Tickets van {$oEvent->getName()}"
                     ]);
                 } else {
-                    $this->render("AdminLTE/Pages/Shop/Tickets/Registrations.tpl", [
+                    $this->render("AdminKit/Pages/Shop/Tickets/Registrations.tpl", [
                         "title" =>"Registraties van {$oEvent->getName()}"
                     ]);
                 }
@@ -71,14 +71,14 @@ class Events extends AbstractController {
                     return $oTicket->Validate();
                 });
                 Router::getSmarty()->assign("Event", $oEvent);
-                $this->render("AdminLTE/Pages/Shop/Events/Validation.tpl", [
+                $this->render("AdminKit/Pages/Shop/Events/Validation.tpl", [
                     "title" =>"Ticket controleren van {$oEvent->getName()}"
                 ]);
             });
         }
         if (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT)){
             $this->addTab("analytics", function () use ($oEvent){
-                $this->render("AdminLTE/Pages/Shop/Events/Analytics.tpl", [
+                $this->render("AdminKit/Pages/Shop/Events/Analytics.tpl", [
                     "title" =>"Analytics: {$oEvent->getName()}",
                     "Event" => $oEvent,
                     "Dashboard" => PageDashboard::getDashboard("/event/".$oEvent->getSlug())
@@ -108,17 +108,17 @@ class Events extends AbstractController {
                 Router::getSmarty()->assign("Event", $oEvent);
                 Router::getSmarty()->assign("Fields", Field::getFields($oEvent));
                 Router::getSmarty()->assign("CreatFieldForm", Field::getForm($oEvent)->__ToString());
-                $this->render("AdminLTE/Pages/Shop/Events/form.tpl", [
+                $this->render("AdminKit/Pages/Shop/Events/form.tpl", [
                     "title" =>"Formulier registatie van {$oEvent->getName()}"
                 ]);
             });
         }
-        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.css");
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminKit/Pages/Shop/Events/form.css");
         Router::addSourceScriptJs(__ARURA__ROOT__ . "assets/vendor/Instascan/instascan.min.js");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Validation.js");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/form.js");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Events/Edit.js");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Page.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Shop/Events/Validation.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Shop/Events/form.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Shop/Events/Edit.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Analytics/Page.js");
         $this->displayTab();
         Request::handleXmlHttpRequest(function (RequestHandler $requestHandler, ResponseHandler $responseHandler) use ($oEvent){
             $requestHandler->addType("delete-event", function ($aData) use ($oEvent){
@@ -132,7 +132,7 @@ class Events extends AbstractController {
         Logger::Create(Logger::READ, Event::class, $oEvent->getName());
         Router::getSmarty()->assign("Event", $oEvent);
         Router::getSmarty()->assign("eventForm", Event::getForm($oEvent));
-        $this->render("AdminLTE/Pages/Shop/Events/Edit.tpl", [
+        $this->render("AdminKit/Pages/Shop/Events/Edit.tpl", [
             "CancelForm" => $oEvent->getCancelForm(),
             "title" =>"{$oEvent->getName()} aanpassen"
         ]);
@@ -143,7 +143,7 @@ class Events extends AbstractController {
      * @Right("SHOP_EVENTS_MANAGEMENT")
      */
     public function Create(){
-        $this->render("AdminLTE/Pages/Shop/Events/Create.tpl", [
+        $this->render("AdminKit/Pages/Shop/Events/Create.tpl", [
             "eventForm" => Event::getForm(),
             "title" =>"Evenement aanmaken"
         ]);

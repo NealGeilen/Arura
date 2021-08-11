@@ -32,66 +32,11 @@ var Filemanger = {
                     "dataType" : "json",
                 },
             }
-        }).bind("move_node.jstree", function (e, data) {
-            nodeDir = data.node.original.dir;
-            parentDir = Filemanger.oFileThree.jstree(true).get_node(data.parent).original.dir;
-            $.ajax({
-                url: "/dashboard/files",
-                type: 'post',
-                dataType: 'json',
-                data: ({
-                    type : 'move-item',
-                    item: nodeDir,
-                    dir: parentDir,
-                }),
-                success: function (response) {
-                    Filemanger.oFileThree.jstree(true).get_node(data.node.id).original.dir = response.data;
-                },
-                error: function () {
-                    Filemanger.loadDirThree();
-                }
-            })
         });
         this.oFileThree.click(function (e) {
             var nodes = Filemanger.oFileThree.jstree('get_selected',true);
             $('.node-options button').prop('disabled', !(nodes.length >= 1));
         });
-    },
-    uploadItem(){
-        var nodes = Filemanger.oFileThree.jstree('get_selected',true);
-
-        if (nodes.length > 1){
-            Modals.Inform({
-                Title: 'Teveel mappen geslecteerd',
-                Message :'Er zijn te veel mappgen geslecteerd. Selecteer een map'
-            });
-        } else if (nodes.length < 1) {
-            Modals.Inform({
-                Title: 'Geen map geslecteerd',
-                Message: 'Selecteer eerst een map om een niewe map toetevoegen'
-            });
-        } else if (nodes[0].original.type !== "dir") {
-            Modals.Inform({
-                Title: 'Geen map geslecteerd',
-                Message: 'Selecteer eerst een map om een niewe map toetevoegen'
-            });
-        }  else {
-            var eModalContent = $($('.modal-template-fileupload').html());
-            eModalContent.find('form').dropzone({
-                url: "/dashboard/files",
-                params: {
-                    dir : nodes[0].original.dir
-                }
-            });
-            Modals.Custom({
-                Title: "Betand Uploaden",
-                Message: eModalContent,
-                Size: "large",
-                onConfirm: function () {
-                   Filemanger.loadDirThree();
-                }
-            });
-        }
     },
     DirThreeFunctions: {
         DeleteItems: function () {
@@ -217,6 +162,7 @@ var Filemanger = {
     },
 
     Selector: function (sType = 'img', callback = function () {}) {
+        console.log(sType, callback, this.oFileThree);
         oThree = this.oFileThree;
         this.loadDirThree(sType);
         Modals.Custom({

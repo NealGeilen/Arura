@@ -7,15 +7,12 @@ var Dashboard = {
                     icon_type: 'class',
                     z_index: 1050,
                     newest_on_top: true,
-                    showProgressbar: true,
-                    template: '<div data-notify="container" class="alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
+                    showProgressbar: false,
+                    template: '<div data-notify="container" class="alert alert-{0} bg-{0} rounded border-0 text-white" style="padding: 2px" role="alert"><div class="alert-message">' +
                         '<span data-notify="icon" class="text-white"></span> ' +
                         '<span data-notify="title" class="text-bold">{1}: </span>' +
                         '<span data-notify="message">{2}</span>' +
-                        '<div class="progress" data-notify="progressbar">' +
-                        '<div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div>' +
-                        '</div>' +
-                        '</div>'
+                        '</div></div>'
                 };
                 $.notify({title: title,message:message, icon: icon},oSettings);
             },
@@ -30,11 +27,24 @@ var Dashboard = {
             }
         },
         PageLoad: {
-            Start: function () {
-                $('body').append('<div class="loader-container"><div class="loader"></div></div>');
+            Start: function (){
+                this.End();
+                $("body").append("<div class='loader'><div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div></div>")
             },
-            End: function () {
-                $('.loader-container').remove();
+            End: function (){
+                $(".loader").remove();
+            }
+        },
+        CardLoader : {
+            Start: function (card){
+                if (card.find(".card-loader").length === 0){
+                    card.append("<div class='card-loader'><div class=\"lds-ring\"><div></div><div></div><div></div><div></div></div></div>")
+                    return true;
+                }
+                return false;
+            },
+            End: function (card){
+                card.find(".card-loader").remove();
             }
         }
     },
@@ -135,6 +145,7 @@ urlParams = new URLSearchParams(window.location.search)
 
 startPageLoad();
 $(document).ready(function () {
+    $(".sidebar-item.active ul").addClass("show");
     endPageLoad();
 });
 Dropzone.autoDiscover = false;
@@ -229,27 +240,6 @@ function validateUser(){
     });
 }
 
-
-var ControlSidebar = $('.control-sidebar');
-var Toolbar = $('.page-toolbar');
-$(window).scroll(function(){
-    if (ControlSidebar.length !== 0){
-        if($(window).scrollTop() > 40){
-            ControlSidebar.css('top','0').css("height", "100%");
-        } else {
-            ControlSidebar.attr("style", null);
-        }
-    }
-    if (Toolbar.length !== 0){
-        if($(window).scrollTop() > Toolbar.offset().top){
-            var ToolbarWidth = Toolbar.parents(".card").find(".card-body").innerWidth();
-            Toolbar.addClass("active").css("width", ToolbarWidth);
-        } else if($(window).scrollTop() < 100){
-            Toolbar.attr("style", null).removeClass("active");
-        }
-    }
-});
-
 $.each(JSON.parse(FLASHES), function (type, messages) {
     Dashboard.System.Alerts[(type.charAt(0).toUpperCase() + type.slice(1))](messages);
 });
@@ -291,3 +281,8 @@ if (location.hash !== ""){
     $("[href='"+location.hash+"']").parents(".nav-tabs").find(".active").removeClass("active")
     $("[href='"+location.hash+"']").addClass("active");
 }
+
+
+$("a:not([target=_blank]):not([data-bs-toggle]):not(.sidebar-toggle):not([data-toggle])").on("click", function (){
+    Dashboard.System.PageLoad.Start();
+});

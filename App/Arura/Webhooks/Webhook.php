@@ -109,7 +109,7 @@ class Webhook extends AbstractModal {
                 $response = $form->getValues("array");
                 $webhook->load();
                 $webhook->setUrl($response["Webhook_Url"])
-                    ->setUrl($response["Webhook_Trigger"]);
+                    ->setTrigger($response["Webhook_Trigger"]);
                 if (!$webhook->save()){
                     $form->addError("Opslaan mislukt");
                 } else {

@@ -26,7 +26,7 @@ class Gallery extends AbstractController {
                 $Gallery->Save();
                 Logger::Create(Logger::UPDATE, \Arura\Gallery\Gallery::class, $Gallery->getName());
                 Router::getSmarty()->assign("Gallery", $Gallery);
-                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery-card.tpl");
+                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Gallery-card.tpl");
             });
         });
         $iPage = (isset($_GET["p"]) ? (int)$_GET["p"] : 1);
@@ -36,9 +36,9 @@ class Gallery extends AbstractController {
         $smarty->assign("aGalleries", $Galleries);
         $smarty->assign("iCurrentPage", $iPage);
         $smarty->assign("iAmountPages", $iPages);
-        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Home.css");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Home.js");
-        $this->render("AdminLTE/Pages/Gallery/Home.tpl", [
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Home.css");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Home.js");
+        $this->render("AdminKit/Pages/Gallery/Home.tpl", [
             "title" =>"Album's",
             "createForm" => \Arura\Gallery\Gallery::getForm()
         ]);
@@ -56,7 +56,7 @@ class Gallery extends AbstractController {
                 $image = $gallery->Upload();
                 Router::getSmarty()->assign("Image", $image);
                 Logger::Create(Logger::CREATE, Image::class, $image->getId() . " Gallery: " . $image->getGallery()->getId());
-                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
+                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Image-card.tpl");
             });
             $requestHandler->addType("order", function ($aData) use ($gallery){
                 $img = new Image($aData["Image_Id"]);
@@ -68,7 +68,7 @@ class Gallery extends AbstractController {
                 $image->Save();
                 Logger::Create(Logger::UPDATE, Image::class, $image->getId() . " Gallery: " . $image->getGallery()->getId());
                 Router::getSmarty()->assign("Image", $image);
-                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
+                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Image-card.tpl");
             });
             $requestHandler->addType("cover", function ($aData){
                 $image = new Image($aData["Image_Id"]);
@@ -76,13 +76,13 @@ class Gallery extends AbstractController {
                 $image->Save();
                 Logger::Create(Logger::UPDATE, Image::class, $image->getId() . " Gallery: " . $image->getGallery()->getId());
                 Router::getSmarty()->assign("Image", $image);
-                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Image-card.tpl");
+                return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Image-card.tpl");
             });
         });
         Logger::Create(Logger::READ, \Arura\Gallery\Gallery::class, $gallery->getId());
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery.js");
-        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Gallery/Gallery.css");
-        $this->render("AdminLTE/Pages/Gallery/Gallery.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Gallery.js");
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminKit/Pages/Gallery/Gallery.css");
+        $this->render("AdminKit/Pages/Gallery/Gallery.tpl", [
             "title" =>$gallery->getName(),
             "Gallery" => $gallery,
             "iPageViews" => Reports::getPageViews(25, "/album/{$gallery->getId()}")
@@ -96,7 +96,7 @@ class Gallery extends AbstractController {
     public function Settings($id){
         $gallery = new \Arura\Gallery\Gallery($id);
         Logger::Create(Logger::READ, \Arura\Gallery\Gallery::class, $gallery->getId());
-        $this->render("AdminLTE/Pages/Gallery/Settings.tpl", [
+        $this->render("AdminKit/Pages/Gallery/Settings.tpl", [
             "title" =>"Instellingen: {$gallery->getName()}",
             "Gallery" => $gallery,
             "editForm" => \Arura\Gallery\Gallery::getForm($gallery),
@@ -110,7 +110,7 @@ class Gallery extends AbstractController {
      */
     public function Analytics($id){
         $gallery = new \Arura\Gallery\Gallery($id);
-        $this->render("AdminLTE/Pages/Gallery/Analytics.tpl", [
+        $this->render("AdminKit/Pages/Gallery/Analytics.tpl", [
             "title" =>"Analytics: {$gallery->getName()}",
             "Gallery" => $gallery,
             "Dashboard" => PageDashboard::getDashboard("/album/{$gallery->getId()}")
@@ -125,7 +125,7 @@ class Gallery extends AbstractController {
         $Image = new Image($Image_Id);
         $Image->load(true);
         Logger::Create(Logger::READ, Image::class, $Image->getId() . " Gallery: " . $Image->getGallery()->getId());
-        $this->render("AdminLTE/Pages/Gallery/Image.tpl", [
+        $this->render("AdminKit/Pages/Gallery/Image.tpl", [
             "title" =>$Image->getName(),
             "Image" => $Image
         ]);
