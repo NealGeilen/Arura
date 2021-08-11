@@ -9,10 +9,8 @@
     "assets/vendor/summernote/summernote-bs4.min.js",
     "assets/vendor/summernote/lang/summernote-nl-NL.js",
     "assets/vendor/datatables/jquery.dataTables.js",
-    "assets/vendor/datatables-bs4/js/dataTables.bootstrap4.js",
+    "assets/vendor/datatables-bs5/dataTables.bootstrap5.min.js",
     "assets/vendor/dropzone/dropzone.min.js",
-    "assets/vendor/elfinder/js/elfinder.min.js",
-    "assets/vendor/elfinder/js/i18n/elfinder.nl.js",
     "assets/vendor/Chart/Chart.bundle.js",
     "assets/vendor/Chart/driver.js",
     "assets/vendor/bootstrap-notify/bootstrap-notify.js",
@@ -21,18 +19,17 @@
     "assets/vendor/jquery-validation/localization/messages_nl.js",
     "assets/js/Modals.js",
     "assets/js/Filemanger.js",
-    "assets/js/adminlte.js",
+    "assets/js/AdminKit.js",
     "assets/js/Arura.js"
   ],
   "Css" : [
-    "assets/css/adminlte.css",
+    "assets/css/AdminKit.css",
     "assets/vendor/bootstrap-iconpicker/bootstrap-iconpicker.min.css",
     "assets/vendor/dropzone/dropzone.min.css",
     "assets/vendor/fontawesome-free/css/all.min.css",
     "assets/vendor/summernote/summernote-bs4.css",
     "assets/vendor/jstree/themes/default/style.css",
-    "assets/vendor/datatables-bs4/css/dataTables.bootstrap4.css",
-    "assets/vendor/elfinder/css/elfinder.min.css",
+    "assets/vendor/datatables-bs5/dataTables.bootstrap5.min.css",
     "assets/css/Arura.css"
   ]
 }

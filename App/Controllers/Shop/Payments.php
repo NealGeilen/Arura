@@ -35,8 +35,8 @@ class Payments extends AbstractController {
         $oSmarty->assign("sPaymentValue", Payment::getMollie(true)->settlements->open()->amount->value);
         $oSmarty->assign("aPayments",$db->fetchAll("SELECT * FROM tblPayments"));
 
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Shop/Payments/Management.js");
-        $this->render("AdminLTE/Pages/Shop/Payments/Management.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Shop/Payments/Management.js");
+        $this->render("AdminKit/Pages/Shop/Payments/Management.tpl", [
             "title" =>"Betalingen"
         ]);
     }

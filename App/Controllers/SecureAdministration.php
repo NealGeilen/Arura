@@ -20,7 +20,7 @@ class SecureAdministration extends AbstractController {
      */
     public function Home(){
         Router::getSmarty()->assign("aTables", SecureAdmin::getAllTablesForUser(User::activeUser()));
-        $this->render("AdminLTE/Pages/SecureAdministration/Home.tpl", [
+        $this->render("AdminKit/Pages/SecureAdministration/Home.tpl", [
             "title" =>"Beveiligde administratie"
         ]);
     }
@@ -70,8 +70,8 @@ class SecureAdministration extends AbstractController {
             Router::getSmarty()->assign("aTable", $oTable->__toArray());
             Router::getSmarty()->assign("aUsersTable", $oTable->getUserShares());
             Router::getSmarty()->assign("aUsers", $db -> fetchAll("SELECT User_Id, User_Username FROM tblUsers WHERE User_Id != :User_Id", ["User_Id" => $oTable->getOwner()->getId()]));
-            Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/SecureAdministration/Settings.js");
-            $this->render("AdminLTE/Pages/SecureAdministration/Settings.tpl", [
+            Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/SecureAdministration/Settings.js");
+            $this->render("AdminKit/Pages/SecureAdministration/Settings.tpl", [
                 "title" =>"Beveiligde administratie Instellingen"
             ]);
         }
@@ -88,7 +88,7 @@ class SecureAdministration extends AbstractController {
             Router::getSmarty()->assign("sCrud", (string)$oTable->getCrud());
             Router::getSmarty()->assign("aTable", $oTable->__toArray());
             Router::getSmarty()->assign("bCanExport", $oTable->hasUserRight(User::activeUser(), SecureAdmin::EXPORT));
-            $this->render("AdminLTE/Pages/SecureAdministration/Crud.tpl", [
+            $this->render("AdminKit/Pages/SecureAdministration/Crud.tpl", [
                 "title" =>"Beveiligde administratie Bewerken"
             ]);
         }
@@ -107,7 +107,7 @@ class SecureAdministration extends AbstractController {
                 }
             }
         });
-        $this->render("AdminLTE/Pages/SecureAdministration/Create.tpl", [
+        $this->render("AdminKit/Pages/SecureAdministration/Create.tpl", [
             "title" =>"Beveiligde administratie Aanmaken"
         ]);
     }

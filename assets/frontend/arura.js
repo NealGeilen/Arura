@@ -118,6 +118,35 @@ Arura = {
         }
     },
     System: {
+        Alerts: {
+            modal: function (type,title,icon, message) {
+                var oSettings = {
+                    type: type,
+                    icon_type: 'class',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    z_index: 1050,
+                    newest_on_top: true,
+                    template: '<div data-notify="container" class="alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
+                        '<span data-notify="icon" class="text-white"></span> ' +
+                        '<span data-notify="title" class="text-bold">{1}: </span>' +
+                        '<span data-notify="message">{2}</span>' +
+                        '</div>'
+                };
+                $.notify({title: title,message:message, icon: icon},oSettings);
+            },
+            Success: function (message) {
+                this.modal("success", "Succes", '<i class="fas fa-check"></i>', message);
+            },
+            Info: function (message) {
+                this.modal("info", "Opgelet", '<i class="fas fa-info"></i>', message);
+            },
+            Error: function (message) {
+                this.modal("danger", "Mislukt", '<i class="fas fa-exclamation-triangle"></i>', message);
+            }
+        },
         StartPageLoad: function () {
             $('body').append('<div class="loader-container"><div class="loader"></div></div>');
         },
@@ -125,36 +154,10 @@ Arura = {
             $('.loader-container').remove()
         },
         SuccessMessage: function (sMessage) {
-            var oSettings = {
-                placement: {
-                    from: "bottom",
-                    align: "right"
-                },
-                type:'success',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            };
-            $.notify({message:sMessage},oSettings);
+            this.Alerts.Success(sMessage);
         },
         ErrorMessage: function (sMessage) {
-            var oSettings = {
-                placement: {
-                    from: "bottom",
-                    align: "right"
-                },
-                type:'danger',
-                template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0} bg-{0} rounded border-0 text-white" role="alert">' +
-                    '<span data-notify="icon"></span> ' +
-                    '<span data-notify="title">{1}</span> ' +
-                    '<span data-notify="message">{2}</span>' +
-                    '<a href="{3}" target="{4}" data-notify="url"></a>' +
-                    '</div>'
-            };
-            $.notify({message:sMessage},oSettings);
+            this.Alerts.Error(sMessage)
         }
     },
     Cms : {
@@ -310,5 +313,10 @@ Arura = {
         }
     }
 };
+
+
+$.each(JSON.parse(FLASHES), function (type, messages) {
+    Arura.System.Alerts[(type.charAt(0).toUpperCase() + type.slice(1))](messages);
+});
 
 

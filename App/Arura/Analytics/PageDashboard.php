@@ -41,8 +41,8 @@ class PageDashboard {
         $page = new self($url);
         $page->HandleRequest();
         Router::getSmarty()->assign("sPageUrl", $url);
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Page.js");
-        return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Page.tpl");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Analytics/Page.js");
+        return Router::getSmarty()->fetch(__ARURA_TEMPLATES__ . "AdminKit/Pages/Analytics/Page.tpl");
     }
 
 

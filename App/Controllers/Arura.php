@@ -32,8 +32,8 @@ class Arura extends AbstractController {
         $db= new Database();
         Router::getSmarty() -> assign('aUsers', $db ->fetchAll('SELECT * FROM tblUsers'));
         Router::getSmarty() -> assign('aSessions', $db ->fetchAll('SELECT * FROM tblSessions JOIN tblUsers ON User_Id = Session_User_Id'));
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Users.js");
-        $this->render("AdminLTE/Pages/Arura/Users.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Arura/Users.js");
+        $this->render("AdminKit/Pages/Arura/Users.tpl", [
             "title" =>"Gebruikers"
         ]);
     }
@@ -47,7 +47,7 @@ class Arura extends AbstractController {
         if ($form->isValid()){
             $this->redirect("/dashboard/arura/users");
         }
-        $this->render("AdminLTE/Pages/Arura/Users/Create.tpl" , [
+        $this->render("AdminKit/Pages/Arura/Users/Create.tpl" , [
             "title" =>"Gebruiker aanmaken",
             "form" => $form
         ]);
@@ -61,7 +61,7 @@ class Arura extends AbstractController {
         $oUser= new User($id);
         Logger::Create(Logger::READ, User::class, $oUser->getUsername());
         $db = new Database();
-        $this->render("AdminLTE/Pages/Arura/Users/info.tpl", [
+        $this->render("AdminKit/Pages/Arura/Users/info.tpl", [
             "User" => $oUser,
             "title" =>"Gebruiker: ".$oUser->getUsername(),
             "editForm" => User::getProfileForm($oUser),
@@ -99,8 +99,8 @@ class Arura extends AbstractController {
             $aList[$setting["Setting_Plg"]][] = $setting;
         }
         Router::getSmarty() -> assign('aSettings',$aList);
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Settings.js");
-        $this->render("AdminLTE/Pages/Arura/Settings.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Arura/Settings.js");
+        $this->render("AdminKit/Pages/Arura/Settings.tpl", [
             "title" =>"Instellingen"
         ]);
     }
@@ -132,7 +132,7 @@ class Arura extends AbstractController {
                 $smarty->assign("Status", $repo->getStatus());
             }
             $smarty->assign("bGit", $repo->isGit());
-            $this->render("AdminLTE/Pages/Arura/Updater/Git.tpl",[
+            $this->render("AdminKit/Pages/Arura/Updater/Git.tpl",[
                 "title" => "Git"
             ]);
         });
@@ -148,7 +148,7 @@ class Arura extends AbstractController {
             }
 
             $smarty->assign("aDBChanges", $DB->getChanges());
-            $this->render("AdminLTE/Pages/Arura/Updater/Data.tpl",[
+            $this->render("AdminKit/Pages/Arura/Updater/Data.tpl",[
                 "title" => "Database"
             ]);
         });
@@ -168,11 +168,11 @@ class Arura extends AbstractController {
                     return $updater->updateAllPackages();
                 });
             });
-            $this->render("AdminLTE/Pages/Arura/Updater/Composer.tpl",[
+            $this->render("AdminKit/Pages/Arura/Updater/Composer.tpl",[
                 "title" => "Composer"
             ]);
         });
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Arura/Updater/Updater.js");
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Arura/Updater/Updater.js");
 
         $this->displayTab();
     }
@@ -182,7 +182,7 @@ class Arura extends AbstractController {
      * @Right("ARURA_WEBHOOK")
      */
     public function Webhook(){
-        $this->render("AdminLTE/Pages/Arura/Webhook/webhook.tpl", [
+        $this->render("AdminKit/Pages/Arura/Webhook/webhook.tpl", [
             "createForm" => Webhook::getForm(),
             "Webhooks" => Webhook::getWebHooks(),
             "Triggers" => Trigger::getTriggers(),
@@ -196,7 +196,7 @@ class Arura extends AbstractController {
      */
     public function WebhookItem($id){
         $Webhook = new Webhook($id);
-        $this->render("AdminLTE/Pages/Arura/Webhook/edit.tpl", [
+        $this->render("AdminKit/Pages/Arura/Webhook/edit.tpl", [
             "form"=> Webhook::getForm($Webhook),
             "webhook" => $Webhook,
             "title" =>"Webhooks"
@@ -210,7 +210,7 @@ class Arura extends AbstractController {
      */
     public function Logs(){
         $db = new Database();
-        $this->render("AdminLTE/Pages/Arura/Logs/Logs.tpl", [
+        $this->render("AdminKit/Pages/Arura/Logs/Logs.tpl", [
             "Logs" => $db->fetchAll("SELECT * FROM tblSystemLog LEFT JOIN tblUsers tU on tblSystemLog.User_Id = tU.User_Id ORDER BY time DESC "),
             "title" =>"Logs",
             "Levels" => SystemLogger::Levels

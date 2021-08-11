@@ -42,16 +42,10 @@ class Router{
         foreach (Rights::getConstants() as $sName => $iValue){
             $aPermissions[$sName] = Restrict::Validation($iValue);
         }
-        Router::getSmarty()->assign("aPermissions", $aPermissions);
+        Router::getSmarty()->assign("Permissions", $aPermissions);
         Router::getSmarty()->assign("sRequestUrl", str_replace("/dashboard","", $oRouter->getCurrentUri()));
         $aNavBarPages =
             [
-                "/home" => [
-                    "Title" => "Home",
-                    "Function" => "Pages@Home",
-                    "Right" => User::isLogged(),
-                    "Icon" => "fas fa-home"
-                ],
                 "/content" => [
                     "Right" => Restrict::Validation(Rights::CMS_MENU) || Restrict::Validation(Rights::CMS_PAGES),
                     "Title" => "Content",
@@ -78,16 +72,6 @@ class Router{
                             ]
                         ]
                 ],
-                "/files" => [
-                    "Title" => "Bestanden",
-                    "Right" => (
-                        Restrict::Validation(Rights::FILES_UPLOAD) &&
-                        Restrict::Validation(Rights::FILES_READ) &&
-                        Restrict::Validation(Rights::FILES_EDIT)
-                    ),
-                    "Icon" => "fas fa-folder",
-                    "Function" => "FileManger@Home",
-                ],
                 "/redirects" => [
                     "Title" => "Omleidingen",
                     "Right" => (
@@ -105,63 +89,32 @@ class Router{
                         ],
                     ]
                 ],
-                "/gallery" => [
-                    "Title" => "Albums",
-                    "Right" => (
-                    Restrict::Validation(Rights::GALLERY_MANGER)
+            '/winkel/betalingen' => [
+                "Right" =>
+                    (
+                    Restrict::Validation(Rights::SHOP_PAYMENTS)
                     ),
-                    "Icon" => "fas fa-images",
-                    "Function" => "Gallery@Home",
-                ],
-                '/administration' => [
-                    "Right" =>
-                        (
-                        Restrict::Validation(Rights::SECURE_ADMINISTRATION)
-                        ),
-                    "Title" => "Beveiligde administratie",
-                    "Icon" => "fas fa-shield-alt",
-                    "Function" => "SecureAdministration@Home",
-                ],
-                '/winkel' => [
-                    "Right" =>
-                        (
-                            Restrict::Validation(Rights::SHOP_PAYMENTS) ||
-                            Restrict::Validation(Rights::SHOP_PRODUCTS_MANAGEMENT) ||
-                            Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||
-                            Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)
-                        ),
-                    "Title" => "Webshop",
-                    "Icon" => "fas fa-shopping-bag",
-                    "Children" =>
-                        [
-                            '/winkel/betalingen' => [
-                                "Right" =>
-                                    (
-                                    Restrict::Validation(Rights::SHOP_PAYMENTS)
-                                    ),
-                                "Title" => "Betalingen",
-                                "Function" => "Shop\Payments@Management",
-                                "Icon" => "fas fa-money-bill-wave-alt",
-                            ],
-                            '/winkel/evenementen' => [
-                                "Right" =>
-                                    (
-                                    Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)||Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
-                                    ),
-                                "Title" => "Evenementen",
-                                "Icon" => "far fa-calendar-alt"
-                            ]
-                        ]
-                ],
-                "/analytics" => [
-                    "Right" =>
-                        (
-                        Restrict::Validation(Rights::ANALYTICS)
-                        ),
-                    "Title" => "Analytics",
-                    "Icon" => "fas fa-chart-line",
-                    "Function" => "Analytics@Home",
-                ],
+                "Title" => "Betalingen",
+                "Function" => "Shop\Payments@Management",
+                "Icon" => "fas fa-money-bill-wave-alt",
+            ],
+            '/winkel/evenementen' => [
+                "Right" =>
+                    (
+                        Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ||Restrict::Validation(Rights::SHOP_EVENTS_REGISTRATION)||Restrict::Validation(Rights::SHOP_EVENTS_VALIDATION)
+                    ),
+                "Title" => "Evenementen",
+                "Icon" => "far fa-calendar-alt"
+            ],
+//                "/analytics" => [
+//                    "Right" =>
+//                        (
+//                        Restrict::Validation(Rights::ANALYTICS)
+//                        ),
+//                    "Title" => "Analytics",
+//                    "Icon" => "fas fa-chart-line",
+//                    "Function" => "Analytics@Home",
+//                ],
                 '/arura' => [
                     "Right" =>
                         (

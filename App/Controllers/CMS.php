@@ -38,7 +38,7 @@ class CMS extends AbstractController {
             \Arura\Pages\CMS\Page::Create($form->getValues('array'));
             Flasher::addFlash("Pagina aangemaakt");
         }
-        $this->render("AdminLTE/Pages/CMS/Pages.tpl", [
+        $this->render("AdminKit/Pages/CMS/Pages.tpl", [
             "title" =>"Pagina's",
             "createForm" => (string)$form,
             "createFormError" =>$form->hasErrors(),
@@ -70,8 +70,8 @@ class CMS extends AbstractController {
         });
         Router::addSourceScriptJs(__ARURA__ROOT__ . "/assets/vendor/Nestable2-1.6.0/dist/jquery.nestable.min.js");
         Router::addSourceScriptCss(__ARURA__ROOT__ ."/assets/vendor/Nestable2-1.6.0/dist/jquery.nestable.min.css");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Menu.js");
-        $this->render("AdminLTE/Pages/CMS/Menu.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/CMS/Menu.js");
+        $this->render("AdminKit/Pages/CMS/Menu.tpl", [
             "title" =>"Menu"
         ]);
     }
@@ -99,9 +99,9 @@ class CMS extends AbstractController {
         });
         Logger::Create(Logger::READ, \Arura\Pages\CMS\Page::class, $p->getTitle());
         Router::getSmarty() -> assign('aCmsPage', $p->__toArray());
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Content.js");
-        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Content.css");
-        $this->render("AdminLTE/Pages/CMS/Content.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/CMS/Content.js");
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminKit/Pages/CMS/Content.css");
+        $this->render("AdminKit/Pages/CMS/Content.tpl", [
             "title" =>"Pagina content",
         ]);
     }
@@ -122,7 +122,7 @@ class CMS extends AbstractController {
             $p->load(true);
             Flasher::addFlash("Pagina {$p->getTitle()} opgeslagen");
         }
-        $this->render("AdminLTE/Pages/CMS/Settings.tpl", [
+        $this->render("AdminKit/Pages/CMS/Settings.tpl", [
             "title" =>"Pagina instellingen",
             "form" => (string) $form,
             "aCmsPage" => $p->__toArray(),
@@ -136,7 +136,7 @@ class CMS extends AbstractController {
      */
     public function Analytics($id){
         $p = new \Arura\Pages\CMS\Page($id);
-        $this->render("AdminLTE/Pages/CMS/Analytics.tpl", [
+        $this->render("AdminKit/Pages/CMS/Analytics.tpl", [
             "title" =>"Pagina instellingen",
             "Dashboard" => PageDashboard::getDashboard($p->getUrl()),
             "CmsPage" => $p
@@ -157,7 +157,7 @@ class CMS extends AbstractController {
                 }
             }
         });
-        $this->render("AdminLTE/Pages/CMS/Addons/index.tpl",
+        $this->render("AdminKit/Pages/CMS/Addons/index.tpl",
             [
                 "Addons" => Addon::getAllAddons(false),
                 "AddonCachForm" => Addon::CacheAllAddonsForm(),
@@ -170,7 +170,7 @@ class CMS extends AbstractController {
      * @Right("CMS_ADDONS")
      */
     public function AddonCreate(){
-        $this->render("AdminLTE/Pages/CMS/Addons/create.tpl",
+        $this->render("AdminKit/Pages/CMS/Addons/create.tpl",
             [
                 "Form" => Addon::getForm(),
                 "title" => "Nieuwe addon"
@@ -183,7 +183,7 @@ class CMS extends AbstractController {
      */
     public function AddonSettings($id){
         $Addon = new Addon($id);
-        $this->render("AdminLTE/Pages/CMS/Addons/settings.tpl",
+        $this->render("AdminKit/Pages/CMS/Addons/settings.tpl",
             [
                 "Addon" => $Addon,
                 "Form" => Addon::getForm($Addon),
@@ -226,8 +226,8 @@ class CMS extends AbstractController {
         /**
          * Custom page assets
          */
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Addons/layout.js");
-        $this->render("AdminLTE/Pages/CMS/Addons/layout.tpl",
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/CMS/Addons/layout.js");
+        $this->render("AdminKit/Pages/CMS/Addons/layout.tpl",
             [
                 "Addon" => $Addon,
                 "AssetAddForm" => $Addon->addAssetsForm(),
@@ -260,9 +260,9 @@ class CMS extends AbstractController {
                 $block->set($aBlock, false);
             });
         });
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Block/Content.js");
-        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminLTE/Pages/CMS/Block/Content.css");
-        $this->render("AdminLTE/Pages/CMS/Block/Content.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/CMS/Block/Content.js");
+        Router::addSourceScriptCss(__ARURA_TEMPLATES__ . "AdminKit/Pages/CMS/Block/Content.css");
+        $this->render("AdminKit/Pages/CMS/Block/Content.tpl", [
             "title" =>"Content block",
             "Block" => $block,
             "Addon" => $block->getAddon(),

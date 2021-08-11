@@ -41,7 +41,7 @@ class Pages extends AbstractController {
             }
         }
         $recoverForm = Recovery::getRequestForm();
-        $this->render("Clean/Pages/Login/Login.tpl", [
+        $this->render("AdminKit/Pages/Login/Login.tpl", [
             "title" => "Login",
             "recoverForm" => $recoverForm,
             "recoverFormHasError" => $recoverForm->hasErrors(),
@@ -62,8 +62,8 @@ class Pages extends AbstractController {
         $oSmarty->assign("JSONEventRegistrations", (Restrict::Validation(Rights::SHOP_EVENTS_MANAGEMENT) ? json_encode($db->fetchAll("SELECT COUNT(Registration_Id) AS Amount, FROM_UNIXTIME(Registration_Timestamp, '%d-%m-%Y') AS Date FROM tblEventRegistration WHERE Registration_Timestamp >= (UNIX_TIMESTAMP() - 7 * 84500) GROUP BY FROM_UNIXTIME(Registration_Timestamp, '%M %d %Y') ORDER BY Registration_Timestamp")) : null));
         $oSmarty->assign("JSONPayments", (Restrict::Validation(Rights::SHOP_PAYMENTS) ? json_encode($db->fetchAll("SELECT COUNT(Payment_Id) AS Amount, FROM_UNIXTIME(Payment_Timestamp, '%d-%m-%Y') AS Date FROM tblPayments WHERE Payment_Timestamp >= (UNIX_TIMESTAMP() - 7 * 84500) GROUP BY FROM_UNIXTIME(Payment_Timestamp, '%M %d %Y') ORDER BY Payment_Timestamp")) : null));
         $oSmarty->assign("JSONLogs", (Restrict::Validation(Rights::ARURA_LOGS) ? json_encode($db->fetchAll("SELECT COUNT(id) AS Amount, FROM_UNIXTIME(time, '%d-%m-%Y') AS Date FROM tblSystemLog WHERE time >= (UNIX_TIMESTAMP() - 7 * 84500) GROUP BY FROM_UNIXTIME(time, '%M %d %Y') ORDER BY time")) : null));
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Pages/Home.js");
-        $this->render("AdminLTE/Pages/Pages/Home.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Pages/Home.js");
+        $this->render("AdminKit/Pages/Pages/Home.tpl", [
             "title" => "Home"
         ]);
     }
@@ -73,7 +73,7 @@ class Pages extends AbstractController {
      * @Right("USER_LOGGED")
      */
     public function Profile(){
-        $this->render("AdminLTE/Pages/Pages/Profile.tpl", [
+        $this->render("AdminKit/Pages/Pages/Profile.tpl", [
             "title" => "Profiel",
             "roles" => User::activeUser()->getRoles(),
             "allRoles" => Roles::ROLES,
@@ -87,7 +87,7 @@ class Pages extends AbstractController {
      * @Right("USER_LOGGED")
      */
     public function Activities(){
-        $this->render("AdminLTE/Pages/Pages/Activities.tpl", [
+        $this->render("AdminKit/Pages/Pages/Activities.tpl", [
             "title" => "Activiteiten",
             "Logs" => Logger::getLogsUser(User::activeUser()),
         ]);
@@ -146,7 +146,7 @@ class Pages extends AbstractController {
             $recovery->getUser()->logInUser();
             $this->redirect("/dashboard/home");
         }
-        $this->render("Clean/Pages/Password/Password.tpl", [
+        $this->render("AdminKit/Pages/Password/Password.tpl", [
             "title" => "Wachtwoord vergeten",
             "form" => $form,
             "user" => $recovery->getUser()->__toArray()

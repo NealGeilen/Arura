@@ -60,6 +60,11 @@ class Logs
             $params = [];
             $query = "SELECT * FROM tblSystemLog LEFT JOIN tblUsers tU on tblSystemLog.User_Id = tU.User_Id ";
 
+            if ($request->request->has("OldestRecord")){
+                $query .= " WHERE time >= :time";
+                $params["time"] = $request->request->getInt("OldestRecord", time());
+            }
+
             switch ($request->request->get("Filter", "Date")){
                 default:
                 case "Date":
@@ -79,9 +84,11 @@ class Logs
                     $query .= " DESC ";
                     break;
             }
-            $query .= " LIMIT {$request->request->getInt("Limit", 20)}";
+            if ($request->request->has("Limit")){
+                $query .= " LIMIT {$request->request->getInt("Limit", 20)} ";
+            }
             if ($request->request->has("Offset")){
-                $query .= " Offset {$request->request->getInt("Offset", 0)}";
+                $query .= " Offset {$request->request->getInt("Offset", 0)} ";
             }
             $db = new Database();
             $result = $db->fetchAll($query, $params);

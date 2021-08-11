@@ -49,8 +49,8 @@ class Analytics extends AbstractController {
         Router::addSourceScriptJs( "assets/vendor/jquery-mapael/jquery.mapael.js");
         Router::addSourceScriptJs( "assets/vendor/jquery-mapael/maps/eu.js");
         Router::addSourceScriptJs( "assets/vendor/jquery-mapael/maps/netherlands.min.js");
-        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminLTE/Pages/Analytics/Home.js");
-        $this->render("AdminLTE/Pages/Analytics/Home.tpl", [
+        Router::addSourceScriptJs(__ARURA_TEMPLATES__ . "AdminKit/Pages/Analytics/Home.js");
+        $this->render("AdminKit/Pages/Analytics/Home.tpl", [
             "title" =>"Analytics"
         ]);
     }

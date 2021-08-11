@@ -4,6 +4,7 @@ namespace Arura\Pages;
 use Arura\AbstractModal;
 use Arura\Exceptions\Error;
 use Arura\Exceptions\NotFound;
+use Arura\Flasher;
 use Arura\Permissions\Restrict;
 use Arura\Settings\Application;
 use Arura\SystemLogger\SystemLogger;
@@ -200,6 +201,7 @@ class Page extends AbstractModal implements PageEnum{
         $smarty->assign('aMainNav', Menu::getMenuStructure());
         $smarty->assign('aWebsite', Application::getAll()['website']);
         $smarty->assign("app", Application::getAll());
+        $smarty->assign("Flashes", json_encode(Flasher::getFlashes(Flasher::Frontend)));
         $smarty->assign("page", $this);
         $smarty->display(self::TemplatePath. self::$MasterPage);
         exit;
