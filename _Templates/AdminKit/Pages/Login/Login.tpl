@@ -2,7 +2,7 @@
 {block content}
   <div class="container">
       <img src="{$aWebsite.logo}" style="max-width: 100%; max-height: 100px; margin: 0 auto; display: block">
-      <h1 class="text-center w-100 text-white m-1">{$aWebsite.name}</h1>
+      <h1 class="text-center text-white m-1">{$aWebsite.name}</h1>
       <div class="card">
           <div class="card-body">
               {if $canUserLogin}

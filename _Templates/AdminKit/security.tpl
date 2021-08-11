@@ -4,8 +4,8 @@
 {include "./Sections/head.tpl"}
 
 <body>
-<main class="w-100 h-100 security-page background" style="background-image: url('{$aWebsite.banner}')">
-    <div class="h-100 position-absolute p-5" style="min-width: 200px; right: 0; background-color: rgba(0,0,0,.6);">
+<main class="w-100 h-100 security-page background position-relative" style="background-image: url('{$aWebsite.banner}')">
+    <div class="security-content">
         {block content}
 
         {/block}

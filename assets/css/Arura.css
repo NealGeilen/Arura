@@ -201,3 +201,22 @@ section.content>.container,.content-header>.container{
 .background{
     background: center center/cover no-repeat;
 }
+.security-page{
+    position: relative;
+}
+
+.security-page .security-content{
+    position: absolute;
+    right: 0;
+    left: 70%;
+    bottom: 0;
+    top:0;
+    background-color: rgba(0,0,0,.6);
+    padding: 5%;
+}
+
+@media only screen and (max-width: 600px) {
+    .security-page .security-content{
+        left: 0;
+    }
+}
