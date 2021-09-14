@@ -5,7 +5,7 @@
     <li class="breadcrumb-item active">{$Gallery->getName()}</li>
 {/block}
 
-{block contentHeader}
+{block content}
     <div class="row">
         <div class="col-md-4">
             <button class="btn btn-primary" data-toggle="modal" data-target="#uploadImage"><i class="fas fa-upload"></i></button>
@@ -14,9 +14,6 @@
             <a href="{$aWebsite.url}/album/{$Gallery->getId()}" target="_blank" class="btn btn-secondary"><i class="fas fa-eye"></i></a>
         </div>
     </div>
-{/block}
-
-{block content}
     <div class="row images">
         {foreach $Gallery->getImages(false) as $Image}
             {include file='./Image-card.tpl'}

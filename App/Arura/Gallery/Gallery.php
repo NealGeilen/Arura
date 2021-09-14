@@ -17,6 +17,7 @@ use DateTime;
 use Rights;
 use RuntimeException;
 use Spatie\ImageOptimizer\OptimizerChainFactory;
+use ZipArchive;
 
 class Gallery extends Page implements iWebhookEntity {
 
@@ -296,6 +297,22 @@ class Gallery extends Page implements iWebhookEntity {
         if ($this->isLoaded){
             $this->db->updateRecord("tblGallery", $this->__toArray(), "Gallery_Id");
         }
+    }
+
+    public function Export(Bool $PublicImagesOnly = false){
+        $Zip = new ZipArchive();
+        $fileName = self::__IMAGES__ . $this->getId() .DIRECTORY_SEPARATOR . str_replace([" ", "/"], "-", $this->getName()) . ".zip";
+        if( $Zip -> open($fileName, ZipArchive::CREATE)){
+
+            foreach ($this->getImages($PublicImagesOnly, true) as $Image){
+                $Zip->addFile($Image->getImage(), $Image->getName() . ".{$Image->getType()}");
+            }
+            $Zip->close();
+
+            return $fileName;
+
+        }
+        throw new Error("Zip export could not be created: {$this->getName()}", 500);
     }
 
     /**

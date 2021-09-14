@@ -4,7 +4,7 @@
     <li class="breadcrumb-item active">Albums</li>
 {/block}
 
-{block contentHeader}
+{block content}
     <div class="row">
         <div class="col-md-4">
             <button class="btn btn-primary" data-toggle="modal" data-target="#createGallery">Nieuw album</button>
@@ -21,9 +21,6 @@
             </form>
         </div>
     </div>
-{/block}
-
-{block content}
     <div class="row galleries">
         {foreach $aGalleries as $Gallery}
             {include file='./Gallery-Card.tpl'}

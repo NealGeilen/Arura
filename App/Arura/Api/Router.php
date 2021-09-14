@@ -69,6 +69,9 @@ class Router{
                         $router->get("/cleanlogs", function (){
                             Service::CleanLogs();
                         });
+                        $router->post("/delete-arura-registration", function (){
+                            Service::DeleteAruraRegistration();
+                        });
                         $router->get("/cleanregistrations", function (){
                             Service::CleanEventRegistrations();
                         });

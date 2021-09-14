@@ -118,6 +118,19 @@ class Gallery extends AbstractController {
     }
 
     /**
+     * @Route("/gallery/([^/]+)/export")
+     * @Right("GALLERY_MANGER")
+     */
+    public function Export($id){
+        $gallery = new \Arura\Gallery\Gallery($id);
+        $sFile = $gallery->Export();
+        header('Content-disposition: attachment; filename=' . basename($sFile));
+        header('Content-type: application/zip');
+        readfile($sFile);
+        exit;
+    }
+
+    /**
      * @Route("/image/([^/]+)")
      * @Right("GALLERY_MANGER")
      */

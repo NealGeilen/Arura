@@ -60,4 +60,16 @@ class Updater{
             return $exitCode = $command->getExitCode();
         }
     }
+
+    public function removePackage(string $packageName){
+        $command = new Command(self::COMPOSER." remove " . $packageName);
+        $command->procCwd = self::$MAIN_DIR;
+        $command->procEnv = getenv();
+        if ($command->execute()) {
+            deleteItem(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached");
+            return (string)$command->getOutput();
+        } else {
+            return $exitCode = $command->getExitCode();
+        }
+    }
 }
