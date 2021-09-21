@@ -53,7 +53,7 @@ try {
                 case "dashboard":
                     $oRouter->mount("/dashboard", function () use ($oRouter, $aPath){
                         $oRouter->get("/", function () use ($aPath){
-                            dd($aPath);
+
                             if (User::isLogged()){
                                 redirect("/dashboard/home");
                             } else {
