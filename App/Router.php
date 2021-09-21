@@ -29,7 +29,6 @@ try {
         Page::pageNotFound();
     });
     $aUrl = parse_url($_SERVER["REQUEST_URI"]);
-    dd($aUrl);
     if (isset($aUrl["path"])){
         $aPath = explode("/", $aUrl["path"]);
         if (isset($aPath[1])){
@@ -52,6 +51,7 @@ try {
                     }
                     break;
                 case "dashboard":
+                    dd($aPath);
                     $oRouter->mount("/dashboard", function () use ($oRouter){
                         $oRouter->get("/", function (){
                             if (User::isLogged()){
