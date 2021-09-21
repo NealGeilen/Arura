@@ -143,8 +143,7 @@ try {
                     break;
                 default:
                     $oRouter->mount("/", function () use ($oRouter){
-                        dd(__ROOT__ .$oRouter->getCurrentUri());
-                        Cache::Display(__ROOT__ .$oRouter->getCurrentUri());
+                        Cache::Display(__ROOT__ .$_SERVER["REQUEST_URI"]);
                         Page::Display($oRouter->getCurrentUri());
                     });
                     break;
