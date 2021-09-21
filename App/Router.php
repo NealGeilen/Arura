@@ -51,8 +51,8 @@ try {
                     }
                     break;
                 case "dashboard":
-                    dd($aPath);
                     $oRouter->mount("/dashboard", function () use ($oRouter){
+                        dd($aPath);
                         $oRouter->get("/", function (){
                             if (User::isLogged()){
                                 redirect("/dashboard/home");
