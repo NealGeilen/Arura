@@ -52,8 +52,8 @@ try {
                     break;
                 case "dashboard":
                     $oRouter->mount("/dashboard", function () use ($oRouter, $aPath){
-                        dd($aPath);
-                        $oRouter->get("/", function (){
+                        $oRouter->get("/", function () use ($aPath){
+                            dd($aPath);
                             if (User::isLogged()){
                                 redirect("/dashboard/home");
                             } else {
@@ -143,6 +143,7 @@ try {
                     break;
                 default:
                     $oRouter->mount("/", function () use ($oRouter){
+                        dd(__ROOT__ .$oRouter->getCurrentUri());
                         Cache::Display(__ROOT__ .$oRouter->getCurrentUri());
                         Page::Display($oRouter->getCurrentUri());
                     });
