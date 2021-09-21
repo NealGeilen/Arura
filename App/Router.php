@@ -28,6 +28,7 @@ try {
     $oRouter->set404(function (){
         Page::pageNotFound();
     });
+    dd($oRouter->getCurrentUri());
     $aUrl = parse_url($_SERVER["REQUEST_URI"]);
     if (isset($aUrl["path"])){
         $aPath = explode("/", $aUrl["path"]);
