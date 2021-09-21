@@ -22,7 +22,7 @@ use Monolog\Logger;
 
 try {
     $oRouter = new \Bramus\Router\Router();
-
+    $oRouter->setBasePath("/");
     Page::forceHTTPS();
 
     $oRouter->set404(function (){
