@@ -29,6 +29,7 @@ try {
         Page::pageNotFound();
     });
     $aUrl = parse_url($_SERVER["REQUEST_URI"]);
+    dd($aUrl);
     if (isset($aUrl["path"])){
         $aPath = explode("/", $aUrl["path"]);
         if (isset($aPath[1])){
