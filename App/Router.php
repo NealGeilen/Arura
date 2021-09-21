@@ -51,7 +51,7 @@ try {
                     }
                     break;
                 case "dashboard":
-                    $oRouter->mount("/dashboard", function () use ($oRouter){
+                    $oRouter->mount("/dashboard", function () use ($oRouter, $aPath){
                         dd($aPath);
                         $oRouter->get("/", function (){
                             if (User::isLogged()){
