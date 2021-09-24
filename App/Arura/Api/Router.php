@@ -66,9 +66,6 @@ class Router{
                     break;
                 case "service":
                     $router->mount("/service", function () use ($router){
-                        $router->get("/cleanlogs", function (){
-                            Service::CleanLogs();
-                        });
                         $router->post("/delete-arura-registration", function (){
                             Service::DeleteAruraRegistration();
                         });

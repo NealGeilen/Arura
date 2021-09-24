@@ -22,7 +22,7 @@ use Monolog\Logger;
 
 try {
     $oRouter = new \Bramus\Router\Router();
-
+    $oRouter->setBasePath("/");
     Page::forceHTTPS();
 
     $oRouter->set404(function (){
@@ -51,8 +51,9 @@ try {
                     }
                     break;
                 case "dashboard":
-                    $oRouter->mount("/dashboard", function () use ($oRouter){
-                        $oRouter->get("/", function (){
+                    $oRouter->mount("/dashboard", function () use ($oRouter, $aPath){
+                        $oRouter->get("/", function () use ($aPath){
+
                             if (User::isLogged()){
                                 redirect("/dashboard/home");
                             } else {
@@ -142,7 +143,7 @@ try {
                     break;
                 default:
                     $oRouter->mount("/", function () use ($oRouter){
-                        Cache::Display(__ROOT__ .$oRouter->getCurrentUri());
+                        Cache::Display(__ROOT__ .$_SERVER["REQUEST_URI"]);
                         Page::Display($oRouter->getCurrentUri());
                     });
                     break;
