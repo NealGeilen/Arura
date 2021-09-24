@@ -155,7 +155,7 @@ class Registration extends AbstractModal {
         if ($isNotGDPRSafe){
             $where .= " AND (Registration_GDPRSafe = 0 OR Registration_GDPRSafe IS NULL)";
         }
-        $ids = $db->fetchAllColumn("SELECT Registration_Id FROM tblEventRegistration JOIN tblEvents ON Event_Id = Registration_Event_Id WHERE tblEvents.Event_End_Timestamp >= :time {$where}", ["time" => $dateTime->getTimestamp()]);
+        $ids = $db->fetchAllColumn("SELECT Registration_Id FROM tblEventRegistration JOIN tblEvents ON Event_Id = Registration_Event_Id WHERE tblEvents.Event_End_Timestamp <= :time {$where}", ["time" => $dateTime->getTimestamp()]);
         $list = [];
         foreach ($ids as $id){
             $list[] = new Registration($id);
