@@ -177,7 +177,7 @@ function postToUrl($url = "", $postParams = []){
  */
 function NotifyNeal(string $message, int $priority = 0):bool
 {
-    $state =  (bool)postToUrl("https://cronjobs.nealgeilen.nl/notify/me", [
+    $state =  (bool)postToUrl("https://orion.nealgeilen.nl/service/93A4DC545F6745B89A2658DAC78793A2/AJwI2PZHhiJxU5LYuS7T5g6TV", [
         "title" => "Melding van: " . Application::get("website", "url"),
         "message" => $message,
         "priority" => $priority
@@ -188,26 +188,6 @@ function NotifyNeal(string $message, int $priority = 0):bool
     }
 
     return $state;
-}
-
-/**
- * @param Exception $exception
- * @return bool
- */
-function NotifyException(Exception $exception, $priority = 1){
-    try {
-        return NotifyNeal(json_encode([
-            "message" => $exception->getMessage(),
-            "code" => $exception->getCode(),
-            "line" => $exception->getLine(),
-            "file" => $exception->getFile(),
-            "request" => file_get_contents('php://input'),
-            "user-ip" => $_SERVER["REMOTE_ADDR"],
-            "request-uri" => $_SERVER["REQUEST_URI"]
-        ], JSON_PRETTY_PRINT), $priority);
-    }catch (Exception $e){
-        return false;
-    }
 }
 
 /**

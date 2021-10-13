@@ -2,6 +2,9 @@
 namespace Arura\Updater;
 
 use Arura\Exceptions\Error;
+use Arura\Pages\CMS\Addon;
+use Arura\Pages\Page;
+use Arura\Router;
 use Arura\Settings\Application;
 use mikehaertl\shellcommand\Command;
 
@@ -42,7 +45,7 @@ class Updater{
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
         if ($command->execute()) {
-            deleteItem(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached");
+            $this->createNewAssets();
             return (string)$command->getOutput();
         } else {
             return $exitCode = $command->getExitCode();
@@ -54,7 +57,7 @@ class Updater{
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
         if ($command->execute()) {
-            deleteItem(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached");
+            $this->createNewAssets();
             return (string)$command->getOutput();
         } else {
             return $exitCode = $command->getExitCode();
@@ -66,10 +69,22 @@ class Updater{
         $command->procCwd = self::$MAIN_DIR;
         $command->procEnv = getenv();
         if ($command->execute()) {
-            deleteItem(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached");
+            $this->createNewAssets();
             return (string)$command->getOutput();
         } else {
             return $exitCode = $command->getExitCode();
         }
+    }
+
+
+    protected function createNewAssets(){
+        deleteItem(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached");
+        if (mkdir(__WEB__ROOT__ . DIRECTORY_SEPARATOR . "cached")){
+            Addon::CacheAllAddons();
+            Page::getCacher()->getMinifyedFiles();
+            (new Router(null))->readDir();
+            return true;
+        }
+        return false;
     }
 }
