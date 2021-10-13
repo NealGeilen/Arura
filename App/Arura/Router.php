@@ -28,7 +28,7 @@ class Router{
     const AssetsCache = __WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR . "cached.json";
     const RoutCache = __WEB__ROOT__ . DIRECTORY_SEPARATOR. "cached" . DIRECTORY_SEPARATOR . "rout.json";
 
-    public function __construct(\Bramus\Router\Router $router)
+    public function __construct(?\Bramus\Router\Router $router)
     {
         $this->router = $router;
         self::$smarty = new Smarty();
@@ -356,7 +356,7 @@ class Router{
      * @param $sDir
      * @throws ReflectionException
      */
-    protected function readDir($sDir){
+    public function readDir($sDir = __CONTROLLERS__){
         foreach (scandir($sDir) as $file){
             if (strlen($file) > 3){
                 if (is_file($sDir .DIRECTORY_SEPARATOR . $file)){
