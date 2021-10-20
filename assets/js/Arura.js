@@ -283,6 +283,6 @@ if (location.hash !== ""){
 }
 
 
-$("a:not([target=_blank]):not([data-bs-toggle]):not(.sidebar-toggle):not([data-toggle])").on("click", function (){
+$("a:not([target=_blank]):not([data-bs-toggle]):not(.sidebar-toggle):not([data-toggle]):not([href=#])").on("click", function (){
     Dashboard.System.PageLoad.Start();
 });
