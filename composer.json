@@ -20,8 +20,7 @@
     ]
   },
   "require" : {
-    "php": "^7.4",
-    "smarty/smarty": "^3",
+    "php": "^8",
     "spatie/image-optimizer": "^1",
     "monolog/monolog": "^2",
     "mollie/mollie-api-php": "^2",
@@ -31,9 +30,8 @@
     "google/apiclient": "^2",
     "endroid/qr-code": "^4",
     "theiconic/php-ga-measurement-protocol": "^2.0",
-    "mpdf/mpdf": "^8.0",
     "nette/forms": "^v3",
-    "nealg/cacher" :  "^1",
+    "nealg/cacher" :  "^2",
     "bramus/router": "^1.5",
     "mikehaertl/php-shellcommand": "^1.6",
     "symfony/var-dumper": "^5",
@@ -48,8 +46,8 @@
     "ext-dom": "*",
     "ext-libxml": "*",
     "ext-mbstring": "*",
-    "ext-exif": "*",
     "ext-openssl": "*",
-    "ext-json": "*"
+    "ext-json": "*",
+    "smarty/smarty": "^4"
   }
 }

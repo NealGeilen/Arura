@@ -56,7 +56,7 @@ class SystemLogger{
      */
     public static function AddException(string $LoggerType, Exception $exception) : bool
     {
-        return self::getLogger($LoggerType)->addRecord(self::HttpCodeToLogLevel($exception->getCode()), "{$exception->getMessage()} {$exception->getFile()}:{$exception->getLine()} {$exception->getCode()}");
+        return self::getLogger($LoggerType)->addRecord(self::HttpCodeToLogLevel((int)$exception->getCode()), "{$exception->getMessage()} {$exception->getFile()}:{$exception->getLine()} {$exception->getCode()}");
     }
 
     public static function ErrorHandler(string $LoggerType = self::System)
@@ -64,7 +64,11 @@ class SystemLogger{
         return ErrorHandler::register(self::getLogger($LoggerType), [E_ALL]);
     }
 
-    public static function HttpCodeToLogLevel(int $code) : string
+    /**
+     * @param int $code
+     * @return int
+     */
+    public static function HttpCodeToLogLevel(int $code) : int
     {
         $lvl = Logger::DEBUG;
 

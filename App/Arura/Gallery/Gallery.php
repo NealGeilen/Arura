@@ -153,6 +153,7 @@ class Gallery extends Page implements iWebhookEntity {
     public static function getAllGalleries(bool $needsPublic = true,int $iLimit = 0,int $iOffset = 0,string $search = "",string $orderBy = "Gallery_CreatedDate"){
         $db = new Database();
         $aGalleries = [];
+        $aParameters = [];
         $sWhereSql = null;
         if ($needsPublic){
             $sWhereSql = "WHERE Gallery_Public = 1";
@@ -165,6 +166,7 @@ class Gallery extends Page implements iWebhookEntity {
                 $sWhereSql .= " AND";
             }
             $sWhereSql .= " Gallery_Id LIKE :search OR Gallery_Name LIKE :search OR Gallery_Description LIKE :search";
+            $aParameters = ["search" => $search];
         }
         $limit = null;
         if ($iLimit > 0){
@@ -174,7 +176,7 @@ class Gallery extends Page implements iWebhookEntity {
         if ($iOffset > 0){
             $offset = "OFFSET {$iOffset}";
         }
-        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY {$orderBy} DESC {$limit} {$offset}", ["search" => $search]);
+        $aIds = $db->fetchAllColumn("SELECT Gallery_Id FROM tblGallery {$sWhereSql} ORDER BY {$orderBy} DESC {$limit} {$offset}",$aParameters);
         foreach ($aIds as $sId){
             $aGalleries[] = new self($sId);
         }
